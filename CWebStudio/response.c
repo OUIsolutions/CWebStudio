@@ -1,10 +1,12 @@
 
 
 char *create_response(int status_code,const char *content_type,size_t content_length,const char *content){
-    char *response = (char*)malloc(content_length + 70);
+    char *response = (char*)malloc(content_length + 200);
     sprintf(
         response, 
-        "HTTP/1.1 %d OK\r\nContent-Type: %s\r\nContent-Length: %ld\r\n\r\n%s",
+        "HTTP/1.1 %d OK\r\n\
+        Content-Type: %s\r\n\
+        Content-Length: %ld\r\n\r\n%s",
         status_code, 
         content_type,
         content_length,

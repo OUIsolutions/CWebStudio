@@ -8,19 +8,19 @@ char *main_sever(char *raw_entrys){
             "captura1.png",
             &size
         );
-        printf("Tamanho: %d\n", size);
-
+        printf("size: %d\n", size);
         char *response = create_response(
             200,
             "image/png",
             size,
-            (char*)imagem
+            imagem
         );
+        printf("response: %s\n", response);
         return response;
 }
 
 int main(){
 
 
-    cweb_run_sever(8084, main_sever);
+    cweb_run_sever(8085, main_sever);
 }
