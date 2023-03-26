@@ -8,7 +8,8 @@
 #include "headers/key_val.h"
 #include "headers/dict.h"
 #include "headers/sever.h"
-#include "headers/response.h"
+#include "headers/struct_response.h"
+
 
 
 #include "structs/key_val.c"
