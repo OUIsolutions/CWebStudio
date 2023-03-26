@@ -14,7 +14,7 @@ struct CwebDict *cweb_create_dict(){
     return dict;
 }
 
-void private_cweb_dict_set(struct CwebDict *dict, char *key, char *value){
+void private_cweb_dict_set(struct CwebDict *dict,const char *key,const char *value){
     struct CwebKeyVal *key_val = cweb_key_val_constructor(key, value);
     dict->keys_vals[dict->size] = key_val;
     dict->size++;

@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "type_traits": "c"
+        "type_traits": "c",
+        "server.h": "c",
+        "key_val.h": "c",
+        "response_functions.h": "c"
     }
 }

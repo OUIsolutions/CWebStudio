@@ -8,10 +8,13 @@
 #include "headers/key_val.h"
 #include "headers/dict.h"
 #include "headers/response.h"
+#include "headers/response_functions.h"
 #include "headers/server.h"
 
 
+#include "response_functions.c"
 #include "structs/key_val.c"
 #include "structs/dict.c"
 #include "structs/response.c"
+
 #include "server.c"

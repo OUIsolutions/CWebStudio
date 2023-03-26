@@ -7,7 +7,7 @@ struct CwebHttpResponse{
     bool exist_content;
     unsigned char *content;
     void (*set_content)(struct CwebHttpResponse *response, unsigned char *content, int content_length);
-    void (*add_header)(struct CwebHttpResponse *response, char *key, char *value);
+    void (*add_header)(struct CwebHttpResponse *response,const char *key,const  char *value);
     char *(*generate_response)(struct CwebHttpResponse *response);
     void (*free)(struct CwebHttpResponse *response);
 };
@@ -28,8 +28,8 @@ void private_cweb_http_set_content(
 
 void private_cweb_http_add_header(
     struct CwebHttpResponse *response, 
-    char *key, 
-    char *value
+    const char *key, 
+    const char *value
 );
 
 void private_cweb_http_response_free(struct CwebHttpResponse *response);

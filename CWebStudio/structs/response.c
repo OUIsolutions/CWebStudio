@@ -47,6 +47,6 @@ void private_cweb_http_set_content(struct CwebHttpResponse *response, unsigned c
     response->content_length = content_length;
 }
 
-void private_cweb_http_add_header(struct CwebHttpResponse *response, char *key, char *value){
+void private_cweb_http_add_header(struct CwebHttpResponse *response,const char *key,const  char *value){
     response->headers->set(response->headers, key, value);
 }

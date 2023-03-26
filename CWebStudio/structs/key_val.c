@@ -1,6 +1,6 @@
 
 
-struct CwebKeyVal* cweb_key_val_constructor(char *key, char *value){
+struct CwebKeyVal* cweb_key_val_constructor(const char *key,const  char *value){
     struct CwebKeyVal *key_val = (struct CwebKeyVal*)malloc(sizeof(struct CwebKeyVal));
     key_val->key = (char*)malloc(strlen(key)+1);
     strcpy(key_val->key,key);
