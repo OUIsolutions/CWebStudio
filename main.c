@@ -9,5 +9,9 @@ char *main_sever(char *entrys){
 }
 
 int main(){
-    cweb_run_sever(8082, main_sever);
+
+    struct Cweb_KeyVal *key_val = cweb_key_val_constructor("nome","João");
+    key_val->represent(key_val);
+    key_val->free(key_val);
+    //cweb_run_sever(8082, main_sever);
 }
