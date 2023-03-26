@@ -4,9 +4,25 @@ void interpret_raw_entrys(char *raw_entrys){
     struct DtwStringArray *lines = dtw_constructor_string_array();
 
     size_t raw_entrys_size = strlen(raw_entrys);
-    char last_string[1000]= "";
+    char last_string[10000]= {0};
     int line_index = 0;
-    for (int i = 0; i < raw_entrys_size; i++){
+    int i = 0;
+    
+    while (true){
+
+        if(
+            raw_entrys[i]  == '\r' &&
+            raw_entrys[i+1] == '\n' &&
+            raw_entrys[i+2] == '\r' &&
+            raw_entrys[i+3] == '\n'
+        ){
+            puts("identificou o fim do header");
+            last_string[line_index] = '\0';
+            lines->add_string(lines, last_string);
+
+            break;
+        }
+        
         if (raw_entrys[i] == '\r' && raw_entrys[i+1] == '\n'){
             last_string[line_index] = '\0';
             lines->add_string(lines, last_string);
@@ -17,7 +33,20 @@ void interpret_raw_entrys(char *raw_entrys){
             last_string[line_index] = raw_entrys[i];
             line_index++;
         }    
+        i++;
+
     }
+    char teste[10000]= "";
+    
+    for(int i = 0; i < lines->size; i++){
+
+        //cocacat ----------------------- into test
+        strcat(teste, "----------------------------------\n");
+        strcat(teste, lines->strings[i]);
+        strcat(teste, "\n");
+
+    }
+    dtw_write_string_file_content("teste.txt", teste);
     /*
     puts("---Original---"); 
     printf("%s\n", raw_entrys);

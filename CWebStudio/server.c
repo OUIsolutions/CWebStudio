@@ -45,7 +45,7 @@ void cweb_run_sever(
 
         // Lendo a solicitação HTTP do cliente
         valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
-        dtw_write_string_file_content("saida.txt",buffer);
+
 
         // Verificando se a solicitação HTTP é válida
         if (strstr(buffer, "HTTP/1.") == NULL) {
