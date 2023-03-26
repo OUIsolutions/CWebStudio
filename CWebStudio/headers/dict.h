@@ -12,7 +12,7 @@ struct CwebDict {
 
 
 struct CwebDict *cweb_create_dict();
-void private_cweb_dict_set(struct CwebDict *dict,const  char *key,const char *value);
-char *private_cweb_dict_get(struct CwebDict *dict, char *key);
+void private_cweb_dict_set(struct CwebDict *self,const  char *key,const char *value);
+char *private_cweb_dict_get(struct CwebDict *self, char *key);
 void private_cweb_dict_represent(struct CwebDict *dict);
-void private_cweb_free_dict(struct CwebDict *dict);
+void private_cweb_free_dict(struct CwebDict *self);

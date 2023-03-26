@@ -9,9 +9,11 @@
 #include "headers/dict.h"
 #include "headers/response.h"
 #include "headers/response_functions.h"
+
 #include "headers/server.h"
 
 
+#include "request_interpretation.c"
 #include "response_functions.c"
 #include "structs/key_val.c"
 #include "structs/dict.c"

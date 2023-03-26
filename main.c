@@ -4,7 +4,8 @@
 
 struct CwebHttpResponse *main_sever(char *raw_entrys){
         // Enviando uma resposta HTTP ao cliente
-
+         interpret_raw_entrys(raw_entrys);
+        
         return cew_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, CWEB_OK);
 }
 

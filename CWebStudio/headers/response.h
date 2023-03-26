@@ -15,22 +15,22 @@ struct CwebHttpResponse{
 struct CwebHttpResponse *create_http_response();
 
 
-char *private_cweb_generate_response(struct CwebHttpResponse*response);
+char *private_cweb_generate_response(struct CwebHttpResponse*self);
 
 
 
 void private_cweb_http_set_content(
-    struct CwebHttpResponse *response, 
+    struct CwebHttpResponse *self, 
     unsigned char *content,
     int content_length
 );
 
 
 void private_cweb_http_add_header(
-    struct CwebHttpResponse *response, 
+    struct CwebHttpResponse *self, 
     const char *key, 
     const char *value
 );
 
-void private_cweb_http_response_free(struct CwebHttpResponse *response);
+void private_cweb_http_response_free(struct CwebHttpResponse *self);
 
