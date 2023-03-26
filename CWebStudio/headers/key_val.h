@@ -8,5 +8,5 @@ struct Cweb_KeyVal{
 };
 
 struct Cweb_KeyVal* cweb_key_val_constructor(char *key, char *value);
-void private_cwebrepresent_key_val(struct Cweb_KeyVal *key_val);
-void private_cwebfree_key_val(struct Cweb_KeyVal *key_val);
+void private_cweb_represent_key_val(struct Cweb_KeyVal *key_val);
+void private_cweb_free_key_val(struct Cweb_KeyVal *key_val);
