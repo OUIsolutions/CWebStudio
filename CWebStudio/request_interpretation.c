@@ -27,6 +27,7 @@ void interpret_raw_entrys(char *raw_entrys){
         printf("%s\n", lines->strings[i]);
     }
     */
+   /*
     char *last_line = lines->strings[lines->size-2];
     printf("last line: %s\n", last_line);
     int content_length = 0;
@@ -37,6 +38,7 @@ void interpret_raw_entrys(char *raw_entrys){
         content[i] = raw_entrys[raw_entrys_size - content_length + i];
     }
     printf("content: %s\n", content);
+    */
     lines->free_string_array(lines);
 
 }
