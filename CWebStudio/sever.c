@@ -1,6 +1,6 @@
 #define MAX_REQUEST_SIZE 1024
 
-void cweb_run_sever(int port, char*(*request_handle)(char* entrys)){
+void cweb_run_sever(int port,char*(*request_handle)(char* raw_entry)){
 
     int server_fd, new_socket, valread;
     struct sockaddr_in address;
@@ -47,7 +47,7 @@ void cweb_run_sever(int port, char*(*request_handle)(char* entrys)){
             fprintf(stderr, "Solicitation HTTP invalid\n");
             exit(EXIT_FAILURE);
         }
-
+        
         char *response = request_handle(buffer);
         send(new_socket, response, strlen(response), 0);
         free(response);
