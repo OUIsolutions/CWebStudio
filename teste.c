@@ -12,10 +12,14 @@
 void send_file_response(int socket_fd, unsigned char *file_content, int file_size) {
     char *response = (char *) malloc(MAX_REQUEST_SIZE * sizeof(char));
     memset(response, 0, MAX_REQUEST_SIZE);
-    sprintf(response, "HTTP/1.1 200 OK\r\n"
-                       "Content-Type: image/png\r\n"
-                       "Content-Length: %d\r\n"
-                       "\r\n", file_size);
+    sprintf(response, 
+    "HTTP/1.1 200 OK\r\n"
+    "Content-Type: image/png\r\n"
+    "Content-Length: %d\r\n"
+    "\r\n",
+     file_size
+     );
+
     send(socket_fd, response, strlen(response), 0);
     send(socket_fd, file_content, file_size, 0);
     free(response);

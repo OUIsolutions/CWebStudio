@@ -21,6 +21,7 @@ char *main_sever(char *raw_entrys){
 
 int main(){
 
-
-    cweb_run_sever(8085, main_sever);
+    struct CwebKeyVal *key_val = cweb_key_val_constructor("key3", "value3");
+    key_val->represent(key_val);
+    key_val->free(key_val);
 }
