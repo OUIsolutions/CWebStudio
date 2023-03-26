@@ -56,7 +56,9 @@ void cweb_run_sever(
 
         char *response_str = response->generate_response(response);
         send(new_socket, response_str,strlen(response_str) , 0);
-  
+        if(response->exist_content){
+            send(new_socket, response->content, response->content_length, 0);
+        }
         free(response_str);
         response->free(response);
         //Closing the connection with the client

@@ -21,15 +21,16 @@ char *private_cweb_generate_response(struct CwebHttpResponse*response){
     sprintf(response_string, "HTTP/1.1 %d OK\r", response->status_code);
     struct CwebDict *headers = response->headers;
 
+    sprintf(response_string, "%s\r\nContent-Length: %d\r\n", response_string, response->content_length);
+    
     for(int i = 0; i < headers->size; i++){
         struct CwebKeyVal *key_val = headers->keys_vals[i];
         char *key = key_val->key;
         char *value = key_val->value;
         sprintf(response_string, "%s\r%s: %s\r\n", response_string, key, value);
     }
-    sprintf(response_string, "%s\r\nContent-Length: %d\r\n", response_string, response->content_length);
+    sprintf(response_string, "%s\r\n", response_string);
         
-    
     return response_string;
 }
 
