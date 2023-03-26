@@ -20,8 +20,9 @@ char *main_sever(char *raw_entrys){
 }
 
 int main(){
-
-    struct CwebKeyVal *key_val = cweb_key_val_constructor("key3", "value3");
-    key_val->represent(key_val);
-    key_val->free(key_val);
+    struct CwebDict *dict = cweb_create_dict();
+    dict->set_key(dict, "key1", "value1");
+    dict->set_key(dict, "key2", "value2");
+    dict->represent(dict);
+;
 }

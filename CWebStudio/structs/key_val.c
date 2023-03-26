@@ -1,7 +1,7 @@
 
 
 struct CwebKeyVal* cweb_key_val_constructor(char *key, char *value){
-    struct CwebKeyVal *key_val = (struct CwebKeyVal*)malloc(1);
+    struct CwebKeyVal *key_val = (struct CwebKeyVal*)malloc(sizeof(struct CwebKeyVal));
     key_val->key = (char*)malloc(strlen(key)+1);
     strcpy(key_val->key,key);
     key_val->value = (char*)malloc(strlen(value)+1);
@@ -12,8 +12,7 @@ struct CwebKeyVal* cweb_key_val_constructor(char *key, char *value){
 }
 
 void private_cweb_represent_key_val(struct CwebKeyVal *key_val){
-    printf("Key: %s\n",key_val->key);
-    printf("Value: %s\n",key_val->value);
+    printf("%s : %s\n",key_val->key,key_val->value);
 }
 
 void private_cweb_free_key_val(struct CwebKeyVal *key_val){

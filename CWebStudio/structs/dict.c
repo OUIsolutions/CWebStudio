@@ -31,7 +31,6 @@ char * private_cweb_dict_get(struct CwebDict *dict, char *key){
 
 void private_cweb_dict_represent(struct CwebDict *dict){
     for(int i = 0; i < dict->size; i++){
-        puts("------------------------");
         dict->keys_vals[i]->represent(dict->keys_vals[i]);
     }
 }
@@ -41,6 +40,6 @@ void private_cweb_free_dict(struct CwebDict *dict){
         struct CwebKeyVal *key_val = dict->keys_vals[i];
          key_val->free(key_val);
     }
-    //free(dict->keys_vals);
-    //free(dict);
+    free(dict->keys_vals);
+    free(dict);
 }
