@@ -1,5 +1,5 @@
 GET /favicon.ico HTTP/1.1
-Host: localhost:8083
+Host: localhost:8084
 Connection: keep-alive
 sec-ch-ua: "Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"
 DNT: 1
@@ -10,7 +10,7 @@ Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Dest: image
-Referer: http://localhost:8083/
+Referer: http://localhost:8084/
 Accept-Encoding: gzip, deflate, br
 Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 

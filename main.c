@@ -5,14 +5,18 @@ struct CwebHttpResponse *main_sever(char *raw_entrys){
         // Enviando uma resposta HTTP ao cliente
         dtw_write_string_file_content("saida.txt", raw_entrys);
         struct CwebHttpResponse *response = create_http_response();
-        response->set_content(response, "Hello World", 11);
-        response->add_header(response, "Content-Type", "text/html");
+
+        int size = 0;
+        char *content = dtw_load_binary_content("captura1.png", &size);
+        response->set_content(response, content, size);
+        response->add_header(response, "Content-Type", "image/png");
+
         return response;
 }
 
 int main(){
     
 
-    cweb_run_sever(8083, main_sever);
+    cweb_run_sever(8084, main_sever);
     return 0;
 }
