@@ -22,10 +22,10 @@ char *main_sever(char *raw_entrys){
 */
 int main(){
     struct CwebHttpResponse *response = create_http_response();
-    response->set_content(response, "Hello World", 11);
+    response->set_string_content(response, "Hello World", 11);
     response->add_header(response, "Content-Type", "text/plain");
     response->add_header(response, "Content-Length", "11");
-    char *text = response->generate_response(response, true);
+    char *text = response->generate_response(response);
 
     printf("text: %s\n", text);
     response->free(response);
