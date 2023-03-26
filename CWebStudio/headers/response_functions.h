@@ -1,6 +1,6 @@
 
 
-#define CWEB_AUTO_SET_CONTENT true 
+#define CWEB_AUTO_SET_CONTENT NULL 
 #define CWEB_OK  200
 #define CWEB_NOT_FOUND 404
 #define CWEB_BAD_REQUEST 400
@@ -16,13 +16,29 @@ struct CwebHttpResponse * cweb_send_any(
     int status_code
 );
 
+#ifdef __cplusplus
+
+struct CwebHttpResponse * cew_send_text(
+    const char *content,
+    int status_code=CWEB_OK
+);
+#else
 struct CwebHttpResponse * cew_send_text(
     const char *content,
     int status_code
 );
+#endif
 
+#ifdef __cplusplus
+struct CwebHttpResponse * cew_send_file(
+    const char *file_path,
+    const char *content_type=CWEB_AUTO_SET_CONTENT,
+    int status_code=CWEB_OK
+);
+#else
 struct CwebHttpResponse * cew_send_file(
     const char *file_path,
     const char *content_type,
     int status_code
 );
+#endif

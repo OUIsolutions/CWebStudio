@@ -5,6 +5,8 @@ struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_l
     struct CwebHttpResponse *response = create_http_response();
     response->add_header(response, "Content-Type", content_type);
     response->set_content(response, content, content_length);
+    response->status_code = status_code;
+    return response;
 }
 
 
@@ -18,8 +20,13 @@ struct CwebHttpResponse* cew_send_file(const char *file_path,const char *content
     int size = 0;
     unsigned char *content = dtw_load_binary_content(file_path, &size);
     if(content == NULL){
-        return  NULL;
+        char *mensage = (char*)malloc(100);
+        sprintf(mensage, "File not found: %s", file_path);
+        struct CwebHttpResponse* response =  cew_send_text(mensage, CWEB_NOT_FOUND);
+        free(mensage);
+        return response;
     }
+
 
     struct DtwPath *path = dtw_constructor_path(file_path);
     char *content_type_created = (char*)malloc(100);
