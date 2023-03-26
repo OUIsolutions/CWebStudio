@@ -25,5 +25,8 @@ int main(){
     response->set_content(response, "Hello World", 11);
     response->add_header(response, "Content-Type", "text/plain");
     response->add_header(response, "Content-Length", "11");
+    char *text = response->generate_response(response, true);
+
+    printf("text: %s\n", text);
     response->free(response);
 }
