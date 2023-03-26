@@ -18,6 +18,7 @@ void interpret_raw_entrys(char *raw_entrys){
             line_index++;
         }    
     }
+    /*
     puts("---Original---"); 
     printf("%s\n", raw_entrys);
     puts("---Geracao de linhas concluida---");
@@ -25,7 +26,17 @@ void interpret_raw_entrys(char *raw_entrys){
         puts("----------------------");
         printf("%s\n", lines->strings[i]);
     }
-    
+    */
+    char *last_line = lines->strings[lines->size-2];
+    printf("last line: %s\n", last_line);
+    int content_length = 0;
+    sscanf(last_line, "Content-Length: %d", &content_length);
+    //iterate over the raw_entrys and get the content
+    char *content = malloc(content_length);
+    for(int i = 0; i < content_length; i++){
+        content[i] = raw_entrys[raw_entrys_size - content_length + i];
+    }
+    printf("content: %s\n", content);
     lines->free_string_array(lines);
 
 }

@@ -1,13 +1,14 @@
 GET /teste?aa=20 HTTP/1.1
 b: x
 c: valor do header C\r\nfff:
-Content-Type: text/plain
 User-Agent: PostmanRuntime/7.31.3
 Accept: */*
-Postman-Token: 3a897a67-89fa-4b9b-9d3b-8438939ac335
-Host: localhost:8082
+Postman-Token: 2a283aa7-7a72-4c39-8aa8-30c271bc28da
+Host: localhost:8081
 Accept-Encoding: gzip, deflate, br
 Connection: keep-alive
-Content-Length: 8
+Content-Length: 15036
+Content-Type: image/png
 
-mensagem
+‰PNG
+
