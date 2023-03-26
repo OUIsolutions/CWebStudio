@@ -55,7 +55,8 @@ void cweb_run_sever(
         struct CwebHttpResponse *response = request_handle(buffer);
 
         char *response_str = response->generate_response(response);
-        send(new_socket, response_str, 12400, 0);
+        send(new_socket, response_str,strlen(response_str) , 0);
+  
         free(response_str);
         response->free(response);
         //Closing the connection with the client

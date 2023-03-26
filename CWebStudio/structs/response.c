@@ -8,10 +8,9 @@ struct CwebHttpResponse *create_http_response(){
     response->headers = cweb_create_dict();
     response->content_length = 0;
     response->exist_content = false;
-    response->is_binary = false;
     response->content = NULL;
     response->free = private_cweb_http_response_free;
-    response->set_string_content = private_cweb_http_set_string_content;
+    response->set_content = private_cweb_http_set_content;
     response->generate_response = private_cweb_generate_response;
     response->add_header = private_cweb_http_add_header;
     return response;
@@ -21,15 +20,16 @@ char *private_cweb_generate_response(struct CwebHttpResponse*response){
     char *response_string = (char*)malloc(1000);
     sprintf(response_string, "HTTP/1.1 %d OK\r", response->status_code);
     struct CwebDict *headers = response->headers;
+
     for(int i = 0; i < headers->size; i++){
         struct CwebKeyVal *key_val = headers->keys_vals[i];
         char *key = key_val->key;
         char *value = key_val->value;
         sprintf(response_string, "%s\r%s: %s\r\n", response_string, key, value);
     }
-    if(response->exist_content && response->is_binary== false){
-        sprintf(response_string, "%s\r%s", response_string, response->content);
-    }
+    sprintf(response_string, "%s\r\nContent-Length: %d\r\n", response_string, response->content_length);
+        
+    
     return response_string;
 }
 
@@ -39,11 +39,10 @@ void private_cweb_http_response_free(struct CwebHttpResponse *response){
     free(response);
 }
 
-void private_cweb_http_set_string_content(struct CwebHttpResponse *response, const char *content,int content_length){
+void private_cweb_http_set_content(struct CwebHttpResponse *response, unsigned char *content,int content_length){
     response->content = (unsigned char*)malloc(content_length);
     memcpy(response->content, content, content_length);
     response->exist_content = true;
-    response->is_binary = false;
     response->content_length = content_length;
 }
 
