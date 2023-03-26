@@ -1,4 +1,5 @@
-#define MAX_REQUEST_SIZE 15000
+
+
 
 
 void cweb_run_sever(
@@ -9,7 +10,7 @@ void cweb_run_sever(
     int server_fd, new_socket, valread;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
-    char buffer[MAX_REQUEST_SIZE] = {0};
+    char buffer[CEW_MAX_REQUEST_SIZE] = {0};
 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
@@ -43,7 +44,7 @@ void cweb_run_sever(
         }
 
         // Lendo a solicitação HTTP do cliente
-        valread = read(new_socket, buffer, MAX_REQUEST_SIZE);
+        valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
         dtw_write_string_file_content("saida.txt",buffer);
 
         // Verificando se a solicitação HTTP é válida
