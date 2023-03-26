@@ -7,11 +7,11 @@
 #include "dependencies/doTheWorld.c"
 #include "headers/key_val.h"
 #include "headers/dict.h"
-#include "headers/sever.h"
-#include "headers/struct_response.h"
+#include "headers/response.h"
+#include "headers/server.h"
+
 
 #include "structs/key_val.c"
 #include "structs/dict.c"
-#include "structs/struct_response.c"
-
-#include "sever.c"
+#include "structs/response.c"
+#include "server.c"

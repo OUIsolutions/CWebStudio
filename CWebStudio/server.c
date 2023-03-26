@@ -1,7 +1,10 @@
 #define MAX_REQUEST_SIZE 15000
 
 
-void cweb_run_sever(int port,char*(*request_handle)(char* raw_entry)){
+void cweb_run_sever(
+    int port,
+    struct CwebHttpResponse*(*request_handle)(char* raw_entry)
+){
 
     int server_fd, new_socket, valread;
     struct sockaddr_in address;
@@ -49,9 +52,12 @@ void cweb_run_sever(int port,char*(*request_handle)(char* raw_entry)){
             exit(EXIT_FAILURE);
         }
         
-        char *response = request_handle(buffer);
-        send(new_socket, response, 12400, 0);
-        free(response);
+        struct CwebHttpResponse *response = request_handle(buffer);
+
+        char *response_str = response->generate_response(response);
+        send(new_socket, response_str, 12400, 0);
+        free(response_str);
+        response->free(response);
         //Closing the connection with the client
         close(new_socket);
     }
