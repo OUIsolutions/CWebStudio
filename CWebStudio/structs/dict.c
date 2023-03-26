@@ -7,7 +7,7 @@ struct CwebDict *cweb_create_dict(){
     struct CwebDict *dict = (struct CwebDict *)malloc(sizeof(struct CwebDict));
     dict->keys_vals = (struct CwebKeyVal**)malloc(1);
     dict->size = 0;
-    dict->set_key = private_cweb_dict_set;
+    dict->set = private_cweb_dict_set;
     dict->get_value = private_cweb_dict_get;
     dict->free = private_cweb_free_dict;
     dict->represent = private_cweb_dict_represent;

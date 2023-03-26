@@ -3,19 +3,21 @@
 struct CwebHttpResponse{
     int status_code;
     struct CwebDict *headers;
-    int content_size;
+    int content_length;
     unsigned char *content;
+    void (*set_content)(struct CwebHttpResponse *response, unsigned char *content, int content_length);
+    void (*add_header)(struct CwebHttpResponse *response, char *key, char *value);
+    void (*free)(struct CwebHttpResponse *response);
 };
 
-struct CwebHttpResponse *cweb_http_response_new();
+struct CwebHttpResponse *create_http_response();
 
-void private_cweb_http_response_free(struct CwebHttpResponse *response);
 
 
 void private_cweb_http_set_content(
     struct CwebHttpResponse *response, 
     unsigned char *content,
-    int content_size
+    int content_length
 );
 
 void private_cweb_http_add_header(
@@ -23,4 +25,6 @@ void private_cweb_http_add_header(
     char *key, 
     char *value
 );
+
+void private_cweb_http_response_free(struct CwebHttpResponse *response);
 

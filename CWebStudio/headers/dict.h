@@ -3,7 +3,7 @@
 struct CwebDict {
   int size;
   struct CwebKeyVal **keys_vals;
-  void (*set_key)(struct CwebDict *dict, char *key, char *value);
+  void (*set)(struct CwebDict *dict, char *key, char *value);
   char*(*get_value)(struct CwebDict *dict, char *key);
   void (*free)(struct CwebDict *dict);
   void (*represent)(struct CwebDict *dict);

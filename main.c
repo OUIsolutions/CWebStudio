@@ -1,5 +1,6 @@
 
 #include "CWebStudio/CwebStudio.c"
+/*
 char *main_sever(char *raw_entrys){
         // Enviando uma resposta HTTP ao cliente
         dtw_write_string_file_content("saida.txt", raw_entrys);
@@ -18,11 +19,11 @@ char *main_sever(char *raw_entrys){
         printf("response: %s\n", response);
         return response;
 }
-
+*/
 int main(){
-    struct CwebDict *dict = cweb_create_dict();
-    dict->set_key(dict, "key1", "value1");
-    dict->set_key(dict, "key2", "value2");
-    dict->represent(dict);
-;
+    struct CwebHttpResponse *response = create_http_response();
+    response->set_content(response, "Hello World", 11);
+    response->add_header(response, "Content-Type", "text/plain");
+    response->add_header(response, "Content-Length", "11");
+    response->free(response);
 }

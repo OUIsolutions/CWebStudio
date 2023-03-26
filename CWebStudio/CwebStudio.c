@@ -10,9 +10,8 @@
 #include "headers/sever.h"
 #include "headers/struct_response.h"
 
-
-
 #include "structs/key_val.c"
 #include "structs/dict.c"
-#include "response.c"
+#include "structs/struct_response.c"
+
 #include "sever.c"
