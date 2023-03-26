@@ -7,7 +7,7 @@ struct Cweb_KeyVal* cweb_key_val_constructor(char *key, char *value){
     key_val->value = malloc(strlen(value)+1);
     strcpy(key_val->value,value);
     key_val->represent = private_cwebrepresent_key_val;
-    key_val->free = private_cwebrepresent_key_val;
+    key_val->free = private_cwebfree_key_val;
     return key_val;
 }
 
