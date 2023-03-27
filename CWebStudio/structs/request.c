@@ -1,6 +1,7 @@
 
-void interpret_raw_entrys(char *raw_entrys){
-    //splite lines by "\r\n"
+
+struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys){
+        //splite lines by "\r\n"
     struct DtwStringArray *lines = dtw_constructor_string_array();
 
     size_t raw_entrys_size = strlen(raw_entrys);
@@ -71,5 +72,4 @@ void interpret_raw_entrys(char *raw_entrys){
     printf("content: %s\n", content);
     */
     lines->free_string_array(lines);
-
 }
