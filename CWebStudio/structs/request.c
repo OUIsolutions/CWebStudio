@@ -11,16 +11,16 @@ struct CwebHttpRequest *private_cwe_request_constructor(){
     self->headers = cweb_create_dict();
     self->content_length = 0;
     self->content = NULL;
-    self->interpret_first_line = private_cwe_interpret_first_line;
-    self->interpret_headders = private_cwe_interpret_headders;
-    self->free = private_cwe_free_http_request;
-    self->represent = private_cwe_represent_http_request;
+    self->interpret_first_line = private_cweb_interpret_first_line;
+    self->interpret_headders = private_cweb_interpret_headders;
+    self->free = private_cweb_free_http_request;
+    self->represent = private_cweb_represent_http_request;
     
     return self;
     
 }   
 
-void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
     char method[1000] = {0};
     char url[1000] = {0};
 
@@ -78,7 +78,7 @@ void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_
 }
 
 
-void private_cwe_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
+void private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
     
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
@@ -165,7 +165,7 @@ struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys){
 }
 
 
-void private_cwe_represent_http_request(struct CwebHttpRequest *self){
+void private_cweb_represent_http_request(struct CwebHttpRequest *self){
     printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
     printf("method: %s\n", self->method);
@@ -177,7 +177,7 @@ void private_cwe_represent_http_request(struct CwebHttpRequest *self){
     printf("content: %s\n", self->content);
 }
 
-void private_cwe_free_http_request(struct CwebHttpRequest *self){
+void private_cweb_free_http_request(struct CwebHttpRequest *self){
     if(self->url != NULL){
         free(self->url);
     }

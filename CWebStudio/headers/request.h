@@ -21,13 +21,13 @@ struct CwebHttpRequest *private_cwe_request_constructor();
 
 
 struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys);
-void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
+void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
 
-void private_cwe_interpret_headders(
+void private_cweb_interpret_headders(
     struct CwebHttpRequest *self,
     struct DtwStringArray *line_headers
 );
 
-void private_cwe_free_http_request(struct CwebHttpRequest *self);
-void private_cwe_represent_http_request(struct CwebHttpRequest *self);
+void private_cweb_free_http_request(struct CwebHttpRequest *self);
+void private_cweb_represent_http_request(struct CwebHttpRequest *self);
 
