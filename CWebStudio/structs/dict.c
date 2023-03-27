@@ -36,6 +36,7 @@ void private_cweb_dict_represent(struct CwebDict *self){
 }
 
 void private_cweb_free_dict(struct CwebDict *self){
+    
     for(int i = 0; i < self->size; i++){
         struct CwebKeyVal *key_val = self->keys_vals[i];
          key_val->free(key_val);

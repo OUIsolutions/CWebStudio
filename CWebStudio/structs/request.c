@@ -26,11 +26,11 @@ void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_
 
     sscanf(first_line, "%s %s", method, url);
     
-    self->method = malloc(strlen(method)+1);
+    self->method = (char*)malloc(strlen(method)+1);
     strcpy(self->method, method);
 
     
-    self->url = malloc(strlen(url)+1);
+    self->url = (char*)malloc(strlen(url)+1);
     strcpy(self->url, url);
     
     char route[1000] = {0};
@@ -38,7 +38,7 @@ void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_
 
     sscanf(url, "%[^?]%s", route, params);
 
-    self->route = malloc(strlen(route)+1);
+    self->route = (char*)malloc(strlen(route)+1);
     strcpy(self->route, route);
 
 
@@ -80,31 +80,38 @@ void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_
 
 void private_cwe_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
     
-
-
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
         int line_size = strlen(current_line);
         char key[1000] = {0};
         char value[3000] = {0};
         bool key_found = false;
-        
+        int value_start_point = 0;
         for(int j = 0; j<line_size;j++){
             
-            if(current_line[j] == ':'){
+            if(current_line[j] == ':' && key_found == false){
                 key_found = true;
+                j+=1;
+                value_start_point = j;
                 continue;
             }
 
             if(key_found == false){
                 key[j] = current_line[j];
             }
+
             if(key_found == true){
-                value[j-strlen(key)-1] = current_line[j];
+                int size_point = j - value_start_point -1;
+               value[size_point] = current_line[j];
             }
         }
+
         if(key_found){
-            self->headers->set(self->headers, key, value);
+            puts("\n------------------------------\n");
+            printf("set key:%s\nvalue:%s\n",key,value);
+            printf("key size:%li\nvalue size:%li\n",strlen(key),strlen(value));
+            self->params->set(self->params, key, value);
+
         }
     }
 
@@ -187,6 +194,7 @@ void private_cwe_free_http_request(struct CwebHttpRequest *self){
         free(self->content);
     }
     self->params->free(self->params);
+
     self->headers->free(self->headers);
     free(self);
 
