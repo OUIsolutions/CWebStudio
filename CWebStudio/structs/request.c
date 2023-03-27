@@ -4,13 +4,15 @@
 
 struct CwebHttpRequest *private_cweb_request_constructor(){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
+    
     self->url = NULL;
     self->method = NULL;
     self->route = NULL;
+    self->content = NULL;
+    self->content_length = 0;
+
     self->params = cweb_create_dict();
     self->headers = cweb_create_dict();
-    self->content_length = 0;
-    self->content = NULL;
     self->interpret_first_line = private_cweb_interpret_first_line;
     self->interpret_headders = private_cweb_interpret_headders;
     self->free = private_cweb_free_http_request;
@@ -166,6 +168,7 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
 
 
 void private_cweb_represent_http_request(struct CwebHttpRequest *self){
+    
     printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
     printf("method: %s\n", self->method);
@@ -175,6 +178,7 @@ void private_cweb_represent_http_request(struct CwebHttpRequest *self){
     self->headers->represent(self->headers);
     printf("content_length: %d\n", self->content_length);
     printf("content: %s\n", self->content);
+
 }
 
 void private_cweb_free_http_request(struct CwebHttpRequest *self){
