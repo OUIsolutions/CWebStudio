@@ -47,18 +47,21 @@ void cweb_run_sever(
         valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
 
 
-        // Verificando se a solicitação HTTP é válida
-        if (strstr(buffer, "HTTP/1.") == NULL) {
-            fprintf(stderr, "Solicitation HTTP invalid\n");
-            exit(EXIT_FAILURE);
-        }
-
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
                 buffer
         );
-        struct CwebHttpResponse *response = request_handle(request);
-        char *response_str = response->generate_response(response);
+         struct CwebHttpResponse *response;
+        response = request_handle(request);
         
+        if(response == NULL){
+            response = cweb_send_text(
+                "Error 404",
+                404
+            );
+        };
+        
+        char *response_str = response->generate_response(response);
+
         send(new_socket, response_str,strlen(response_str) , 0);
         if(response->exist_content){
             send(new_socket, response->content, response->content_length, 0);

@@ -7,8 +7,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         // Enviando uma resposta HTTP ao cliente
         //dtw_write_string_file_content("saida.txt", raw_entrys);
         //char teste[5];
-        //memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",10);
-        return NULL;
+        //memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        return cweb_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, CWEB_OK);
 
 }
 
