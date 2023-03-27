@@ -1,6 +1,6 @@
 
 #define CEW_MAX_REQUEST_SIZE 15000
-#include "CWebStudio/CwebStudio.c"
+#include "CWebStudio.c"
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
