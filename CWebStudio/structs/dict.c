@@ -16,6 +16,7 @@ struct CwebDict *cweb_create_dict(){
 
 void private_cweb_dict_set(struct CwebDict *self,const char *key,const char *value){
     struct CwebKeyVal *key_val = cweb_key_val_constructor(key, value);
+    self->keys_vals = (struct CwebKeyVal**)realloc(self->keys_vals, (self->size+1)*sizeof(struct CwebKeyVal*));
     self->keys_vals[self->size] = key_val;
     self->size++;
 }

@@ -107,10 +107,7 @@ void private_cwe_interpret_headders(struct CwebHttpRequest *self,struct DtwStrin
         }
 
         if(key_found){
-            puts("\n------------------------------\n");
-            printf("set key:%s\nvalue:%s\n",key,value);
-            printf("key size:%li\nvalue size:%li\n",strlen(key),strlen(value));
-            self->params->set(self->params, key, value);
+            self->headers->set(self->headers, key, value);
 
         }
     }
