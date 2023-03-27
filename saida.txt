@@ -1,0 +1,13 @@
+GET /awww?teste=30&teste2=nada HTTP/1.1
+b: x
+c: valor do header C\r\nfff:
+Content-Type: text/plain
+User-Agent: PostmanRuntime/7.31.3
+Accept: */*
+Postman-Token: 875eaf15-0136-4efa-821f-1cb17540737d
+Host: localhost:8082
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Content-Length: 11
+
+salve parsa
