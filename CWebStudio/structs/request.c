@@ -41,7 +41,37 @@ void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_
     strcpy(self->route, route);
 
 
+    int paramns_size = strlen(params);
+    char key[1000] = {0};
+    char value[1000] = {0};
+    bool key_found = false;
 
+    for(int i=1; i<paramns_size; i++){
+
+        if(params[i] == '='){
+            key_found = true;
+            continue;
+        }
+
+        if(params[i] == '&'){
+            key_found = false;
+            self->params->set(self->params, key, value);
+            memset(key, 0, 1000);
+            memset(value, 0, 1000);
+            continue;
+        }
+        
+        if(key_found){
+            value[strlen(value)] = params[i];
+        }
+        
+        else{
+            key[strlen(key)] = params[i];
+        }
+    }
+    if(key_found){
+        self->params->set(self->params, key, value);
+    }
 
     
     
@@ -103,9 +133,9 @@ void private_cwe_represent_http_request(struct CwebHttpRequest *self){
     printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
     printf("method: %s\n", self->method);
-    printf("params:\n");
+    printf("params:-----------------------------\n");
     self->params->represent(self->params);
-    printf("headers:\n");
+    printf("headers:----------------------------\n");
     self->headers->represent(self->headers);
     printf("content_length: %d\n", self->content_length);
     printf("content: %s\n", self->content);
