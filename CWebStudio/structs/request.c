@@ -2,7 +2,7 @@
 
 
 
-struct CwebHttpRequest *private_cwe_request_constructor(){
+struct CwebHttpRequest *private_cweb_request_constructor(){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
     self->url = NULL;
     self->method = NULL;
@@ -114,10 +114,10 @@ void private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStri
 
 }
 
-struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys){
+struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
         //splite lines by "\r\n"
 
-    struct CwebHttpRequest *self = private_cwe_request_constructor();
+    struct CwebHttpRequest *self = private_cweb_request_constructor();
     self->raw_entrys = raw_entrys;
     
     struct DtwStringArray *lines = dtw_constructor_string_array();
