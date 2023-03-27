@@ -53,7 +53,7 @@ void cweb_run_sever(
             exit(EXIT_FAILURE);
         }
 
-        struct CwebHttpRequest *request  = private_cwe_create_http_request(
+        struct CwebHttpRequest *request  = private_cweb_create_http_request(
                 buffer
         );
         struct CwebHttpResponse *response = request_handle(request);
