@@ -4,11 +4,13 @@ void interpret_raw_entrys(char *raw_entrys){
     struct DtwStringArray *lines = dtw_constructor_string_array();
 
     size_t raw_entrys_size = strlen(raw_entrys);
+    
+    
     char last_string[10000]= {0};
     int line_index = 0;
     int i = 0;
-    
     while (true){
+        
 
         if(
             raw_entrys[i]  == '\r' &&
