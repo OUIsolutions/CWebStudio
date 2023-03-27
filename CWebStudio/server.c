@@ -4,7 +4,7 @@
 
 void cweb_run_sever(
     int port,
-    struct CwebHttpResponse*(*request_handle)(char* raw_entry)
+    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
 ){
 
     int server_fd, new_socket, valread;
@@ -52,16 +52,21 @@ void cweb_run_sever(
             fprintf(stderr, "Solicitation HTTP invalid\n");
             exit(EXIT_FAILURE);
         }
-        
-        struct CwebHttpResponse *response = request_handle(buffer);
 
+        struct CwebHttpRequest *request  = private_cwe_create_http_request(
+                buffer
+        );
+        struct CwebHttpResponse *response = request_handle(request);
         char *response_str = response->generate_response(response);
+        
         send(new_socket, response_str,strlen(response_str) , 0);
         if(response->exist_content){
             send(new_socket, response->content, response->content_length, 0);
         }
         free(response_str);
+        
         response->free(response);
+        request->free(request);
         //Closing the connection with the client
         close(new_socket);
     }

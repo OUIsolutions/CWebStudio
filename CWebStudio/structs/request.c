@@ -74,8 +74,6 @@ void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_
     }
 
     
-    
-    
 }
 
 
