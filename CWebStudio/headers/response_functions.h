@@ -18,25 +18,25 @@ struct CwebHttpResponse * cweb_send_any(
 
 #ifdef __cplusplus
 
-struct CwebHttpResponse * cew_send_text(
+struct CwebHttpResponse * cweb_send_text(
     const char *content,
     int status_code=CWEB_OK
 );
 #else
-struct CwebHttpResponse * cew_send_text(
+struct CwebHttpResponse * cweb_send_text(
     const char *content,
     int status_code
 );
 #endif
 
 #ifdef __cplusplus
-struct CwebHttpResponse * cew_send_file(
+struct CwebHttpResponse * cweb_send_file(
     const char *file_path,
     const char *content_type=CWEB_AUTO_SET_CONTENT,
     int status_code=CWEB_OK
 );
 #else
-struct CwebHttpResponse * cew_send_file(
+struct CwebHttpResponse * cweb_send_file(
     const char *file_path,
     const char *content_type,
     int status_code

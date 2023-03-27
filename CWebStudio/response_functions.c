@@ -10,19 +10,19 @@ struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_l
 }
 
 
-struct CwebHttpResponse* cew_send_text(const char *content,int status_code){
+struct CwebHttpResponse* cweb_send_text(const char *content,int status_code){
     return cweb_send_any("text/plain", strlen(content), (unsigned char*)content, status_code);
 }
 
 
-struct CwebHttpResponse* cew_send_file(const char *file_path,const char *content_type,int status_code){
+struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,int status_code){
     
     int size = 0;
     unsigned char *content = dtw_load_binary_content(file_path, &size);
     if(content == NULL){
         char *mensage = (char*)malloc(100);
         sprintf(mensage, "File not found: %s", file_path);
-        struct CwebHttpResponse* response =  cew_send_text(mensage, CWEB_NOT_FOUND);
+        struct CwebHttpResponse* response =  cweb_send_text(mensage, CWEB_NOT_FOUND);
         free(mensage);
         return response;
     }
