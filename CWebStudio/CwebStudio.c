@@ -13,7 +13,7 @@
 #include "headers/server.h"
 
 
-#include "request.c"
+#include "structs/request.c"
 #include "response_functions.c"
 #include "structs/key_val.c"
 #include "structs/dict.c"
