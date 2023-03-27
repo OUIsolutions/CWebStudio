@@ -16,6 +16,7 @@ int main(){
     struct CwebHttpRequest *request = private_cwe_create_http_request(
         content
     );
+
     request->represent(request);    
     request->free(request);
     

@@ -11,5 +11,5 @@ Connection: keep-alive
 ntent-Length: 15036
 Content-Type: image/png
 
-‰PNG
+ï¿½PNG
 

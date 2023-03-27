@@ -4,12 +4,14 @@
 
 struct CwebHttpRequest *private_cwe_request_constructor(){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
-    self->route = NULL;
+    self->url = NULL;
     self->method = NULL;
+    self->route = NULL;
     self->params = cweb_create_dict();
     self->headers = cweb_create_dict();
     self->content_length = 0;
     self->content = NULL;
+    self->interpret_first_line = private_cwe_interpret_first_line;
     self->free = private_cwe_free_http_request;
     self->represent = private_cwe_represent_http_request;
     
@@ -17,12 +19,41 @@ struct CwebHttpRequest *private_cwe_request_constructor(){
     
 }   
 
+void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+    char method[1000] = {0};
+    char url[1000] = {0};
+
+    sscanf(first_line, "%s %s", method, url);
+    
+    self->method = malloc(strlen(method)+1);
+    strcpy(self->method, method);
+
+    
+    self->url = malloc(strlen(url)+1);
+    strcpy(self->url, url);
+    
+    char route[1000] = {0};
+    char params[30000] = {0};
+
+    sscanf(url, "%[^?]%s", route, params);
+
+    self->route = malloc(strlen(route)+1);
+    strcpy(self->route, route);
+
+
+
+
+    
+    
+    
+}
+
 
 struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys){
         //splite lines by "\r\n"
 
     struct CwebHttpRequest *self = private_cwe_request_constructor();
-    
+    self->raw_entrys = raw_entrys;
     
     struct DtwStringArray *lines = dtw_constructor_string_array();
 
@@ -62,13 +93,14 @@ struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys){
         i++;
 
     }
-
+    self->interpret_first_line(self, lines->strings[0]);
     lines->free_string_array(lines);
     return self;
 }
 
 
 void private_cwe_represent_http_request(struct CwebHttpRequest *self){
+    printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
     printf("method: %s\n", self->method);
     printf("params:\n");
@@ -80,6 +112,9 @@ void private_cwe_represent_http_request(struct CwebHttpRequest *self){
 }
 
 void private_cwe_free_http_request(struct CwebHttpRequest *self){
+    if(self->url != NULL){
+        free(self->url);
+    }
     if(self->route != NULL){
         free(self->route);
     }
