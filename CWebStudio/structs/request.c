@@ -12,6 +12,7 @@ struct CwebHttpRequest *private_cwe_request_constructor(){
     self->content_length = 0;
     self->content = NULL;
     self->interpret_first_line = private_cwe_interpret_first_line;
+    self->interpret_headders = private_cwe_interpret_headders;
     self->free = private_cwe_free_http_request;
     self->represent = private_cwe_represent_http_request;
     
@@ -77,6 +78,38 @@ void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_
 }
 
 
+void private_cwe_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
+    
+
+
+    for(int i = 1;i< line_headers->size;i++){
+        char *current_line = line_headers->strings[i];
+        int line_size = strlen(current_line);
+        char key[1000] = {0};
+        char value[3000] = {0};
+        bool key_found = false;
+        
+        for(int j = 0; j<line_size;j++){
+            
+            if(current_line[j] == ':'){
+                key_found = true;
+                continue;
+            }
+
+            if(key_found == false){
+                key[j] = current_line[j];
+            }
+            if(key_found == true){
+                value[j-strlen(key)-1] = current_line[j];
+            }
+        }
+        if(key_found){
+            self->headers->set(self->headers, key, value);
+        }
+    }
+
+}
+
 struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys){
         //splite lines by "\r\n"
 
@@ -122,6 +155,7 @@ struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys){
 
     }
     self->interpret_first_line(self, lines->strings[0]);
+    self->interpret_headders(self, lines);
     lines->free_string_array(lines);
     return self;
 }

@@ -1,6 +1,6 @@
 
 #define CEW_MAX_REQUEST_SIZE 15000
-#include "CWebStudio.c"
+#include "CWebStudio/CwebStudioMain.c"
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -13,6 +13,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 int main(){
 
-    cweb_run_sever(8082, main_sever);
+    char *content = dtw_load_string_file_content("saida.txt");
+    struct CwebHttpRequest *request = private_cwe_create_http_request(content);
+    request->represent(request);
+    request->free(request);
     return 0;
 }
