@@ -46,8 +46,7 @@ void private_cweb_send_error_mensage(int new_socket){
 
 void cweb_run_sever(
     int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
-    bool safe_mode
+    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
 ){
 
     int server_fd, new_socket;
@@ -86,28 +85,24 @@ void cweb_run_sever(
             exit(EXIT_FAILURE);
         }
 
-        if(safe_mode == false){
+    
+        pid_t pid = fork();
+        if(pid == 0){
+            //means that the process is the child
             private_cweb_execute_request(new_socket, buffer, request_handle);
-        
+            exit(0);
+        }
+        else if(pid < 0){
+            perror("Faluire to create a new process");
+            exit(EXIT_FAILURE);
         }
         else{
-            pid_t pid = fork();
-            if(pid == 0){
-                //means that the process is the child
-                private_cweb_execute_request(new_socket, buffer, request_handle);
-                exit(0);
-            }
-            else if(pid < 0){
-                perror("Faluire to create a new process");
-                exit(EXIT_FAILURE);
-            }
-            else{
-                //means that the process fallure
-                wait(NULL);
-                private_cweb_send_error_mensage(new_socket);
-                close(new_socket);
-            }
+            //means that the process fallure
+            wait(NULL);
+            private_cweb_send_error_mensage(new_socket);
+            close(new_socket);
         }
+    
         
 
     }
