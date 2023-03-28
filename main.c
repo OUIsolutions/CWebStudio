@@ -10,6 +10,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 
         request->represent(request);
+        dtw_write_any_content("saida.png", request->content, request->content_length);
         //char teste[5];
         //memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         return cweb_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, 200);
@@ -26,6 +27,6 @@ int main(){
     free(content);
     */
 
-    cweb_run_sever(8080, main_sever, 10);
+    cweb_run_sever(8081, main_sever, 10);
     return 0;
 }
