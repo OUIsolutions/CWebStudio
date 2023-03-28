@@ -1,4 +1,6 @@
-
+#ifndef CEW_MAX_REQUEST_SIZE 
+#define CEW_MAX_REQUEST_SIZE 50000
+#endif
 
 struct CwebHttpRequest{
     char *raw_entrys;

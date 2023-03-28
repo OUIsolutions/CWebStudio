@@ -1,5 +1,4 @@
 
-#define CEW_MAX_REQUEST_SIZE 15000
 #include "CWebStudio/CwebStudioMain.c"
 
 
@@ -10,7 +9,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 
         request->represent(request);
-        dtw_write_any_content("saida.png", request->content, request->content_length);
+        dtw_write_any_content("body.png", request->content, request->content_length);
         //char teste[5];
         //memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         return cweb_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, 200);
