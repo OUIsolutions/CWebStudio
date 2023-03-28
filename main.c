@@ -1,4 +1,5 @@
 
+#define CWEB_DEBUG
 #include "CWebStudio/CwebStudioMain.c"
 
 
@@ -8,8 +9,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         //dtw_write_string_file_content("saida.txt", raw_entrys);
 
 
-        request->represent(request);
-        dtw_write_any_content("body.png", request->content, request->content_length);
+        //request->represent(request);
+        ///dtw_write_any_content("body.png", request->content, request->content_length);
         //char teste[5];
         //memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         return cweb_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, 200);

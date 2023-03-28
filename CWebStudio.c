@@ -6447,6 +6447,13 @@ void  private_dtw_free_transaction(struct DtwTransactionReport *report){
 }
 
 
+#ifdef CWEB_DEBUG
+#define cweb_print(...) printf(__VA_ARGS__)
+#else 
+#define cweb_print(...) NULL;
+#endif 
+
+
 struct CwebKeyVal{
     char *key;
     char *value;
@@ -6463,7 +6470,7 @@ struct CwebDict {
   int size;
   struct CwebKeyVal **keys_vals;
   void (*set)(struct CwebDict *dict,const char *key,const char *value);
-  char*(*get_value)(struct CwebDict *dict, char *key);
+  char*(*get_value)(struct CwebDict *dict,const char *key);
   void (*free)(struct CwebDict *dict);
   void (*represent)(struct CwebDict *dict);
 };
@@ -6472,7 +6479,7 @@ struct CwebDict {
 
 struct CwebDict *cweb_create_dict();
 void private_cweb_dict_set(struct CwebDict *self,const  char *key,const char *value);
-char *private_cweb_dict_get(struct CwebDict *self, char *key);
+char *private_cweb_dict_get(struct CwebDict *self,const char *key);
 void private_cweb_dict_represent(struct CwebDict *dict);
 void private_cweb_free_dict(struct CwebDict *self);
 
@@ -6531,31 +6538,33 @@ struct CwebHttpResponse * cweb_send_any(
 
 #ifdef __cplusplus
 
-struct CwebHttpResponse * cew_send_text(
+struct CwebHttpResponse * cweb_send_text(
     const char *content,
     int status_code=CWEB_OK
 );
 #else
-struct CwebHttpResponse * cew_send_text(
+struct CwebHttpResponse * cweb_send_text(
     const char *content,
     int status_code
 );
 #endif
 
 #ifdef __cplusplus
-struct CwebHttpResponse * cew_send_file(
+struct CwebHttpResponse * cweb_send_file(
     const char *file_path,
     const char *content_type=CWEB_AUTO_SET_CONTENT,
     int status_code=CWEB_OK
 );
 #else
-struct CwebHttpResponse * cew_send_file(
+struct CwebHttpResponse * cweb_send_file(
     const char *file_path,
     const char *content_type,
     int status_code
 );
 #endif
-
+#ifndef CEW_MAX_REQUEST_SIZE 
+#define CEW_MAX_REQUEST_SIZE 50000
+#endif
 
 struct CwebHttpRequest{
     char *raw_entrys;
@@ -6567,58 +6576,80 @@ struct CwebHttpRequest{
     int content_length;
     unsigned char *content;
     void (*interpret_first_line)(struct CwebHttpRequest *self, char *first_line);
+    void (*interpret_headders)(struct CwebHttpRequest *self, struct DtwStringArray *line_headers);
     void (*free)(struct CwebHttpRequest *request);
     void (*represent)(struct CwebHttpRequest *request);
 };
 //algorithm functions
 
 
-struct CwebHttpRequest *private_cwe_request_constructor();
+struct CwebHttpRequest *private_cweb_request_constructor();
 
 
-struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys);
-void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
-void private_cwe_free_http_request(struct CwebHttpRequest *self);
-void private_cwe_represent_http_request(struct CwebHttpRequest *self);
+struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys);
+void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
 
 
-void cweb_run_sever(
-    int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
+void private_cweb_interpret_headders(
+    struct CwebHttpRequest *self,
+    struct DtwStringArray *line_headers
 );
 
+void private_cweb_free_http_request(struct CwebHttpRequest *self);
+void private_cweb_represent_http_request(struct CwebHttpRequest *self);
+
+
+static size_t actual_request = 0;
+
+#ifdef __cplusplus
+void cweb_run_sever(
+    int port,
+    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
+    int timeout=30
+);
+#else
+void cweb_run_sever(
+    int port,
+    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
+    int timeout
+);
+#endif
 
 
 
 
-struct CwebHttpRequest *private_cwe_request_constructor(){
+
+struct CwebHttpRequest *private_cweb_request_constructor(){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
+    
     self->url = NULL;
     self->method = NULL;
     self->route = NULL;
+    self->content = NULL;
+    self->content_length = 0;
+
     self->params = cweb_create_dict();
     self->headers = cweb_create_dict();
-    self->content_length = 0;
-    self->content = NULL;
-    self->interpret_first_line = private_cwe_interpret_first_line;
-    self->free = private_cwe_free_http_request;
-    self->represent = private_cwe_represent_http_request;
+    self->interpret_first_line = private_cweb_interpret_first_line;
+    self->interpret_headders = private_cweb_interpret_headders;
+    self->free = private_cweb_free_http_request;
+    self->represent = private_cweb_represent_http_request;
     
     return self;
     
 }   
 
-void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
     char method[1000] = {0};
     char url[1000] = {0};
 
     sscanf(first_line, "%s %s", method, url);
     
-    self->method = malloc(strlen(method)+1);
+    self->method = (char*)malloc(strlen(method)+1);
     strcpy(self->method, method);
 
     
-    self->url = malloc(strlen(url)+1);
+    self->url = (char*)malloc(strlen(url)+1);
     strcpy(self->url, url);
     
     char route[1000] = {0};
@@ -6626,7 +6657,7 @@ void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_
 
     sscanf(url, "%[^?]%s", route, params);
 
-    self->route = malloc(strlen(route)+1);
+    self->route = (char*)malloc(strlen(route)+1);
     strcpy(self->route, route);
 
 
@@ -6666,10 +6697,46 @@ void private_cwe_interpret_first_line(struct CwebHttpRequest *self, char *first_
 }
 
 
-struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys){
+void private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
+    
+    for(int i = 1;i< line_headers->size;i++){
+        char *current_line = line_headers->strings[i];
+        int line_size = strlen(current_line);
+        char key[1000] = {0};
+        char value[3000] = {0};
+        bool key_found = false;
+        int value_start_point = 0;
+        for(int j = 0; j<line_size;j++){
+            
+            if(current_line[j] == ':' && key_found == false){
+                key_found = true;
+                j+=1;
+                value_start_point = j;
+                continue;
+            }
+
+            if(key_found == false){
+                key[j] = current_line[j];
+            }
+
+            if(key_found == true){
+                int size_point = j - value_start_point -1;
+               value[size_point] = current_line[j];
+            }
+        }
+
+        if(key_found){
+            self->headers->set(self->headers, key, value);
+
+        }
+    }
+
+}
+
+struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
         //splite lines by "\r\n"
 
-    struct CwebHttpRequest *self = private_cwe_request_constructor();
+    struct CwebHttpRequest *self = private_cweb_request_constructor();
     self->raw_entrys = raw_entrys;
     
     struct DtwStringArray *lines = dtw_constructor_string_array();
@@ -6711,12 +6778,26 @@ struct CwebHttpRequest *private_cwe_create_http_request(char *raw_entrys){
 
     }
     self->interpret_first_line(self, lines->strings[0]);
+    self->interpret_headders(self, lines);
+
+    char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
+    
+    if(content_lenght_str != NULL){
+        self->content_length = atoi(content_lenght_str);
+        self->content = (unsigned char *)malloc(self->content_length);
+        int content_start = i+4;
+        for(int j = 0; j<self->content_length; j++){
+            self->content[j] = raw_entrys[content_start+j];
+        }
+    }
+
     lines->free_string_array(lines);
     return self;
 }
 
 
-void private_cwe_represent_http_request(struct CwebHttpRequest *self){
+void private_cweb_represent_http_request(struct CwebHttpRequest *self){
+    
     printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
     printf("method: %s\n", self->method);
@@ -6726,9 +6807,10 @@ void private_cwe_represent_http_request(struct CwebHttpRequest *self){
     self->headers->represent(self->headers);
     printf("content_length: %d\n", self->content_length);
     printf("content: %s\n", self->content);
+
 }
 
-void private_cwe_free_http_request(struct CwebHttpRequest *self){
+void private_cweb_free_http_request(struct CwebHttpRequest *self){
     if(self->url != NULL){
         free(self->url);
     }
@@ -6742,6 +6824,7 @@ void private_cwe_free_http_request(struct CwebHttpRequest *self){
         free(self->content);
     }
     self->params->free(self->params);
+
     self->headers->free(self->headers);
     free(self);
 
@@ -6758,19 +6841,19 @@ struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_l
 }
 
 
-struct CwebHttpResponse* cew_send_text(const char *content,int status_code){
+struct CwebHttpResponse* cweb_send_text(const char *content,int status_code){
     return cweb_send_any("text/plain", strlen(content), (unsigned char*)content, status_code);
 }
 
 
-struct CwebHttpResponse* cew_send_file(const char *file_path,const char *content_type,int status_code){
+struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,int status_code){
     
     int size = 0;
     unsigned char *content = dtw_load_binary_content(file_path, &size);
     if(content == NULL){
         char *mensage = (char*)malloc(100);
         sprintf(mensage, "File not found: %s", file_path);
-        struct CwebHttpResponse* response =  cew_send_text(mensage, CWEB_NOT_FOUND);
+        struct CwebHttpResponse* response =  cweb_send_text(mensage, CWEB_NOT_FOUND);
         free(mensage);
         return response;
     }
@@ -6850,11 +6933,12 @@ struct CwebDict *cweb_create_dict(){
 
 void private_cweb_dict_set(struct CwebDict *self,const char *key,const char *value){
     struct CwebKeyVal *key_val = cweb_key_val_constructor(key, value);
+    self->keys_vals = (struct CwebKeyVal**)realloc(self->keys_vals, (self->size+1)*sizeof(struct CwebKeyVal*));
     self->keys_vals[self->size] = key_val;
     self->size++;
 }
 
-char * private_cweb_dict_get(struct CwebDict *self, char *key){
+char * private_cweb_dict_get(struct CwebDict *self,const  char *key){
     for(int i = 0; i < self->size; i++){
         if(strcmp(self->keys_vals[i]->key, key) == 0){
             return self->keys_vals[i]->value;
@@ -6870,6 +6954,7 @@ void private_cweb_dict_represent(struct CwebDict *self){
 }
 
 void private_cweb_free_dict(struct CwebDict *self){
+    
     for(int i = 0; i < self->size; i++){
         struct CwebKeyVal *key_val = self->keys_vals[i];
          key_val->free(key_val);
@@ -6897,18 +6982,24 @@ struct CwebHttpResponse *create_http_response(){
 
 char *private_cweb_generate_response(struct CwebHttpResponse*self){
     char *response_string = (char*)malloc(1000);
-    sprintf(response_string, "HTTP/1.1 %d OK\r", self->status_code);
+    sprintf(response_string, "HTTP/1.1 %d OK\r\n", self->status_code);
     struct CwebDict *headers = self->headers;
+    char content_length_str[1000] = {0};
+    sprintf(content_length_str, "Content-Length: %d\r\n",self->content_length);
+    strcat(response_string, content_length_str);
 
-    sprintf(response_string, "%s\r\nContent-Length: %d\r\n", response_string, self->content_length);
-    
     for(int i = 0; i < headers->size; i++){
         struct CwebKeyVal *key_val = headers->keys_vals[i];
         char *key = key_val->key;
         char *value = key_val->value;
-        sprintf(response_string, "%s\r%s: %s\r\n", response_string, key, value);
+        char header[1000] = {0};
+        sprintf(header, "%s: %s\r\n", key, value);
+        strcat(response_string, header);
     }
-    sprintf(response_string, "%s\r\n", response_string);
+    if(self->headers->size == 0){
+        strcat(response_string, "\r\n");
+    }
+    strcat(response_string, "\r\n");
         
     return response_string;
 }
@@ -6932,13 +7023,58 @@ void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,
 
 
 
+void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
+        // Lendo a solicitação HTTP do cliente
+        int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
+
+        struct CwebHttpRequest *request  = private_cweb_create_http_request(
+                buffer
+        );
+
+         struct CwebHttpResponse *response;
+        response = request_handle(request);
+        
+        if(response == NULL){
+            response = cweb_send_text(
+                "Error 404",
+                404
+            );
+        };
+        
+        char *response_str = response->generate_response(response);
+
+        send(new_socket, response_str,strlen(response_str) , 0);
+        if(response->exist_content){
+            send(new_socket, response->content, response->content_length, 0);
+        }
+        dtw_write_string_file_content("response.txt", response_str);
+        free(response_str);
+        response->free(response);
+        request->free(request);
+}
+
+void private_cweb_send_error_mensage(int new_socket){
+   
+    struct CwebHttpResponse *response = cweb_send_text(
+        "Error 500 Internal Server Error",
+        500
+    );
+    char *response_str = response->generate_response(response);
+    send(new_socket, response_str,strlen(response_str) , 0);
+    send(new_socket, response->content, response->content_length, 0);
+
+    free(response_str);
+    response->free(response);
+
+}
 
 void cweb_run_sever(
     int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
+    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
+    int timeout
 ){
 
-    int server_fd, new_socket, valread;
+    int server_fd, new_socket;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
     char buffer[CEW_MAX_REQUEST_SIZE] = {0};
@@ -6968,38 +7104,68 @@ void cweb_run_sever(
 
     // Main loop
     while(1) {
+        actual_request++;
         // Accepting a new connection
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
 
-        // Lendo a solicitação HTTP do cliente
-        valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
-
-
-        // Verificando se a solicitação HTTP é válida
-        if (strstr(buffer, "HTTP/1.") == NULL) {
-            fprintf(stderr, "Solicitation HTTP invalid\n");
+        pid_t pid = fork();
+        if(pid == 0){
+            //means that the process is the child
+            alarm(timeout);
+            private_cweb_execute_request(new_socket, buffer, request_handle);
+            alarm(0);
+            exit(0);
+        }
+        else if(pid < 0){
+            perror("Faluire to create a new process");
             exit(EXIT_FAILURE);
         }
+        else{
+            cweb_print("----------------------------------------\n");
+            cweb_print("New request %ld\n", actual_request);
+            cweb_print("Waiting for child process\n");
+             pid_t wpid;
+            int status = 0;
+            while(wpid = wait(&status) > 0);
+                      
+            if(WIFEXITED(status)){
+                cweb_print("Sucess\n");
+                
+            }else{
+                pid_t pid2 = fork();
+                if(pid2 == 0){
+                    cweb_print("Sending error mensage\n");
+                    alarm(2);
+                    private_cweb_send_error_mensage(new_socket);
+                    alarm(0);
+                    exit(0);
+                }
+                else if(pid2 < 0){
+                    perror("Faluire to create a new process");
+                    exit(EXIT_FAILURE);
+                }
+                else{
+                    pid_t wpid2;
+                    int status2 = 0;
+                    while(wpid2 = wait(&status2) > 0);
+                    if(WIFEXITED(status2)){
+                        cweb_print("Mensage sent\n");
+                    }else{
+                        cweb_print("Error sending mensage\n");
+                    }
 
-        struct CwebHttpRequest *request  = private_cwe_create_http_request(
-                buffer
-        );
-        struct CwebHttpResponse *response = request_handle(request);
-        char *response_str = response->generate_response(response);
-        
-        send(new_socket, response_str,strlen(response_str) , 0);
-        if(response->exist_content){
-            send(new_socket, response->content, response->content_length, 0);
+                }
+            }
+            
+            buffer[0] = '\0';
+            close(new_socket);
         }
-        free(response_str);
+    
         
-        response->free(response);
-        request->free(request);
-        //Closing the connection with the client
-        close(new_socket);
+
     }
     
 }
