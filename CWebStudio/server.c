@@ -39,7 +39,9 @@ void private_cweb_send_error_mensage(int new_socket){
    );
    char *response_str = request->generate_response(request);
    send(new_socket, response_str,strlen(response_str) , 0);
+   send(new_socket, request->content, request->content_length, 0);
    free(response_str);
+   close(new_socket);
   request->free(request);
 
 }
@@ -99,8 +101,9 @@ void cweb_run_sever(
         else{
             //means that the process fallure
             wait(NULL);
+            puts("Process fallure");
             private_cweb_send_error_mensage(new_socket);
-            close(new_socket);
+    
         }
     
         
