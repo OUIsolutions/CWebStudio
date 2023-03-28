@@ -1,3 +1,4 @@
-HTTP/1.1 200 OKContent-Length: 283
-Content-Type: text/html
+HTTP/1.1 200 OK
+Content-Length: 12020
+Content-Type: image/png
 

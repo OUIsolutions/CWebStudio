@@ -23,7 +23,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         }
         //char teste[5];
         //memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        return cweb_send_file("saida.html", CWEB_AUTO_SET_CONTENT, 200);
+        return cweb_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, 200);
 
 }
 
@@ -38,6 +38,6 @@ int main(){
     */
 
 
-    cweb_run_sever(8083, main_sever);
+    cweb_run_sever(8082, main_sever);
     return 0;
 }

@@ -1,13 +1,16 @@
-GET /teste2sss HTTP/1.1
-b: x
-c: valor do header C\r\nfff:
-Content-Type: text/plain
-User-Agent: PostmanRuntime/7.31.3
-Accept: */*
-Postman-Token: ccd59bc6-9f82-42f2-a008-d21a48315d45
-Host: localhost:8083
-Accept-Encoding: gzip, deflate, br
+GET /favicon.ico HTTP/1.1
+Host: localhost:8082
 Connection: keep-alive
-Content-Length: 11
+sec-ch-ua: "Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"
+DNT: 1
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer: http://localhost:8082/teste2sss
+Accept-Encoding: gzip, deflate, br
+Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7
 
-salve parsa

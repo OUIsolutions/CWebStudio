@@ -18,7 +18,7 @@ struct CwebHttpResponse *create_http_response(){
 
 char *private_cweb_generate_response(struct CwebHttpResponse*self){
     char *response_string = (char*)malloc(1000);
-    sprintf(response_string, "HTTP/1.1 %d OK\r", self->status_code);
+    sprintf(response_string, "HTTP/1.1 %d OK\r\n", self->status_code);
     struct CwebDict *headers = self->headers;
     char content_length_str[1000] = {0};
     sprintf(content_length_str, "Content-Length: %d\r\n",self->content_length);
@@ -32,7 +32,10 @@ char *private_cweb_generate_response(struct CwebHttpResponse*self){
         sprintf(header, "%s: %s\r\n", key, value);
         strcat(response_string, header);
     }
-    sprintf(response_string, "%s\r\n", response_string);
+    if(self->headers->size == 0){
+        strcat(response_string, "\r\n");
+    }
+    strcat(response_string, "\r\n");
         
     return response_string;
 }
