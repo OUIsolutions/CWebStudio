@@ -36,7 +36,6 @@ int main(){
     free(content);
     */
 
-  
-    cweb_run_sever(8081, main_sever);
+    cweb_run_sever(8081, main_sever, 10);
     return 0;
 }

@@ -48,7 +48,8 @@ void private_cweb_send_error_mensage(int new_socket){
 
 void cweb_run_sever(
     int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
+    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
+    int timeout
 ){
 
     int server_fd, new_socket;
@@ -91,7 +92,7 @@ void cweb_run_sever(
         pid_t pid = fork();
         if(pid == 0){
             //means that the process is the child
-            alarm(10);
+            alarm(timeout);
             private_cweb_execute_request(new_socket, buffer, request_handle);
             alarm(0);
             exit(0);
