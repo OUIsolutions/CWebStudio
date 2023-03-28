@@ -1,8 +1,10 @@
 
 
+
 void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
         // Lendo a solicitação HTTP do cliente
         int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
+
 
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
                 buffer
@@ -76,18 +78,16 @@ void cweb_run_sever(
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
     }
-    int count = 0;
 
     // Main loop
     while(1) {
-        count++;
+        actual_request++;
         // Accepting a new connection
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
 
-    
         pid_t pid = fork();
         if(pid == 0){
             //means that the process is the child
@@ -102,11 +102,13 @@ void cweb_run_sever(
         }
         else{
             puts("----------------------------------------");
-            printf("count %d\n", count);
+            printf("New request %ld\n", actual_request);
             puts("Waiting for child process ");
              pid_t wpid;
             int status = 0;
             while ((wpid = wait(&status)) > 0);
+            
+            printf("Child process %d finished\n", status);
 
             if(status != 0){
                 puts("Error");
@@ -116,6 +118,7 @@ void cweb_run_sever(
             }else{
                 puts("Sucess");
             }
+            buffer[0] = '\0';
             close(new_socket);
         }
     
