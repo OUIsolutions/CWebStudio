@@ -16,7 +16,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
         if(strcmp(request->route, "/teste") == 0){
             char teste[5];
-            memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",100);
+            memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaa",200);
+
             return cweb_send_text("Hello World", 200);
         }
         if(strcmp(request->route, "/teste2") == 0){
@@ -40,6 +41,6 @@ int main(){
     */
 
 
-    cweb_run_sever(8081, main_sever);
+    cweb_run_sever(8080, main_sever);
     return 0;
 }

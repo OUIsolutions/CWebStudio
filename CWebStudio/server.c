@@ -106,19 +106,17 @@ void cweb_run_sever(
             puts("Waiting for child process ");
              pid_t wpid;
             int status = 0;
-            while ((wpid = wait(&status)) > 0);
-            
-            printf("Child process %d finished\n", status);
-
-            if(status != 0){
-                puts("Error");
-                private_cweb_send_error_mensage(new_socket);
-                //kill the child process
+            while(wpid = wait(&status) > 0);
+                      
+            if(WIFEXITED(status)){
+                puts("Sucess");
                 
             }else{
-                puts("Sucess");
+                puts("Error");
+                private_cweb_send_error_mensage(new_socket);
             }
-            buffer[0] = '\0';
+            
+   
             close(new_socket);
         }
     
