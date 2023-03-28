@@ -18,7 +18,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
             return cweb_send_text("Hello World", 200);
         }
         if(strcmp(request->route, "/teste2") == 0){
-            sleep(10);
+            sleep(15);
             return cweb_send_text("ffff", 200);
         }
         //char teste[5];

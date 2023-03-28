@@ -112,8 +112,29 @@ void cweb_run_sever(
                 puts("Sucess");
                 
             }else{
-                puts("Error");
-                private_cweb_send_error_mensage(new_socket);
+                pid_t pid2 = fork();
+                if(pid2 == 0){
+                    puts("Sending error mensage");
+                    alarm(2);
+                    private_cweb_send_error_mensage(new_socket);
+                    alarm(0);
+                    exit(0);
+                }
+                else if(pid2 < 0){
+                    perror("Faluire to create a new process");
+                    exit(EXIT_FAILURE);
+                }
+                else{
+                    pid_t wpid2;
+                    int status2 = 0;
+                    while(wpid2 = wait(&status2) > 0);
+                    if(WIFEXITED(status2)){
+                        puts("Mensage sent");
+                    }else{
+                        puts("Error sending mensage");
+                    }
+
+                }
             }
             
             buffer[0] = '\0';
