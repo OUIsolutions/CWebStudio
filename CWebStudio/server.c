@@ -23,8 +23,8 @@ void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpRe
         if(response->exist_content){
             send(new_socket, response->content, response->content_length, 0);
         }
+        dtw_write_string_file_content("response.txt", response_str);
         free(response_str);
-        
         response->free(response);
         request->free(request);
 }
@@ -38,6 +38,7 @@ void private_cweb_send_error_mensage(int new_socket){
     char *response_str = response->generate_response(response);
     send(new_socket, response_str,strlen(response_str) , 0);
     send(new_socket, response->content, response->content_length, 0);
+
     free(response_str);
     response->free(response);
 

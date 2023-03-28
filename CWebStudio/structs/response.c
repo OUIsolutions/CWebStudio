@@ -20,14 +20,17 @@ char *private_cweb_generate_response(struct CwebHttpResponse*self){
     char *response_string = (char*)malloc(1000);
     sprintf(response_string, "HTTP/1.1 %d OK\r", self->status_code);
     struct CwebDict *headers = self->headers;
+    char content_length_str[1000] = {0};
+    sprintf(content_length_str, "Content-Length: %d\r\n",self->content_length);
+    strcat(response_string, content_length_str);
 
-    sprintf(response_string, "%s\r\nContent-Length: %d\r\n", response_string, self->content_length);
-    
     for(int i = 0; i < headers->size; i++){
         struct CwebKeyVal *key_val = headers->keys_vals[i];
         char *key = key_val->key;
         char *value = key_val->value;
-        sprintf(response_string, "%s\r%s: %s\r\n", response_string, key, value);
+        char header[1000] = {0};
+        sprintf(header, "%s: %s\r\n", key, value);
+        strcat(response_string, header);
     }
     sprintf(response_string, "%s\r\n", response_string);
         
