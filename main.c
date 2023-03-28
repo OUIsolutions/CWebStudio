@@ -10,9 +10,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         // Enviando uma resposta HTTP ao cliente
         //dtw_write_string_file_content("saida.txt", raw_entrys);
 
-        char caminho[100];
-        sprintf(caminho, "requisicao/%ld.txt", actual_request);
-        dtw_write_string_file_content(caminho, request->raw_entrys);
 
         if(strcmp(request->route, "/teste") == 0){
             char teste[5];
@@ -41,6 +38,6 @@ int main(){
     */
 
 
-    cweb_run_sever(8080, main_sever);
+    cweb_run_sever(8081, main_sever);
     return 0;
 }
