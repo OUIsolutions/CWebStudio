@@ -1,4 +1,7 @@
 
+#define CWEB_ERROR_PAGE "#error#"
+#define CWEB_ERROR_PAGE_SIZE 7
+
 
 void cweb_run_sever(
     int port,

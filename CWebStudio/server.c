@@ -32,17 +32,13 @@ void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpRe
 }
 
 void private_cweb_send_error_mensage(int new_socket){
-
-   struct CwebHttpResponse *request = cweb_send_text(
-        "Error 500 - Internal Server Error",
-        500
-   );
-   char *response_str = request->generate_response(request);
+   const char *response_str = "HTTP/1.1 500 Internal Server Error\r\n"
+    "Content-Type: text/html\r\n"
+    "Content-Length: 7\r\n"
+    "\r\n\r\n";
    send(new_socket, response_str,strlen(response_str) , 0);
-   send(new_socket, request->content, request->content_length, 0);
-   free(response_str);
+   send(new_socket, CWEB_ERROR_PAGE, CWEB_ERROR_PAGE_SIZE, 0);
    close(new_socket);
-  request->free(request);
 
 }
 
@@ -101,9 +97,9 @@ void cweb_run_sever(
         else{
             //means that the process fallure
             wait(NULL);
-            puts("Process fallure");
-            private_cweb_send_error_mensage(new_socket);
-    
+            //puts("Process fallure");
+            //private_cweb_send_error_mensage(new_socket);
+            close(new_socket);
         }
     
         
