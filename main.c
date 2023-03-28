@@ -13,13 +13,14 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         if(strcmp(request->route, "/teste") == 0){
             char teste[5];
             memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaa",200);
-
             return cweb_send_text("Hello World", 200);
         }
+
         if(strcmp(request->route, "/teste2") == 0){
             sleep(15);
             return cweb_send_text("ffff", 200);
         }
+        
         //char teste[5];
         //memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         return cweb_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, 200);
