@@ -31,16 +31,7 @@ void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpRe
         close(new_socket);
 }
 
-void private_cweb_send_error_mensage(int new_socket){
-   const char *response_str = "HTTP/1.1 500 Internal Server Error\r\n"
-    "Content-Type: text/html\r\n"
-    "Content-Length: 7\r\n"
-    "\r\n\r\n";
-   send(new_socket, response_str,strlen(response_str) , 0);
-   send(new_socket, CWEB_ERROR_PAGE, CWEB_ERROR_PAGE_SIZE, 0);
-   close(new_socket);
 
-}
 
 void cweb_run_sever(
     int port,
