@@ -1,5 +1,7 @@
 
 //#define CWEB_DEBUG
+#define CWEB_SINGLE_PROCESS
+
 #include "CWebStudio/CwebStudioMain.c"
 
 
@@ -13,6 +15,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 int main(){
 
-    cweb_run_sever(8081, main_sever);
+    cweb_run_sever(8080, main_sever);
     return 0;
 }

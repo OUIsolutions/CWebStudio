@@ -88,60 +88,65 @@ void cweb_run_sever(
             exit(EXIT_FAILURE);
         }
 
-        pid_t pid = fork();
-        if(pid == 0){
-            //means that the process is the child
-            alarm(CWEB_TIMEOUT);
+        #ifdef CWEB_SINGLE_PROCESS
             private_cweb_execute_request(new_socket, buffer, request_handle);
-            alarm(0);
-            exit(0);
-        }
-        else if(pid < 0){
-            perror("Faluire to create a new process");
-            exit(EXIT_FAILURE);
-        }
-        else{
-            cweb_print("----------------------------------------\n");
-            cweb_print("New request %ld\n", actual_request);
-            cweb_print("Waiting for child process\n");
-             pid_t wpid;
-            int status = 0;
-            while(wpid = wait(&status) > 0);
-                      
-            if(WIFEXITED(status)){
-                cweb_print("Sucess\n");
-                
-            }else{
-                pid_t pid2 = fork();
-                if(pid2 == 0){
-                    cweb_print("Sending error mensage\n");
-                    alarm(2);
-                    private_cweb_send_error_mensage(new_socket);
-                    alarm(0);
-                    exit(0);
-                }
-                else if(pid2 < 0){
-                    perror("Faluire to create a new process");
-                    exit(EXIT_FAILURE);
-                }
-                else{
-                    pid_t wpid2;
-                    int status2 = 0;
-                    while(wpid2 = wait(&status2) > 0);
-                    if(WIFEXITED(status2)){
-                        cweb_print("Mensage sent\n");
-                    }else{
-                        cweb_print("Error sending mensage\n");
-                    }
-
-                }
-            }
-            
-            buffer[0] = '\0';
             close(new_socket);
-        }
-    
+        #else
         
+            pid_t pid = fork();
+            if(pid == 0){
+                //means that the process is the child
+                alarm(CWEB_TIMEOUT);
+                private_cweb_execute_request(new_socket, buffer, request_handle);
+                alarm(0);
+                exit(0);
+            }
+            else if(pid < 0){
+                perror("Faluire to create a new process");
+                exit(EXIT_FAILURE);
+            }
+            else{
+                cweb_print("----------------------------------------\n");
+                cweb_print("New request %ld\n", actual_request);
+                cweb_print("Waiting for child process\n");
+                pid_t wpid;
+                int status = 0;
+                while(wpid = wait(&status) > 0);
+                        
+                if(WIFEXITED(status)){
+                    cweb_print("Sucess\n");
+                    
+                }else{
+                    pid_t pid2 = fork();
+                    if(pid2 == 0){
+                        cweb_print("Sending error mensage\n");
+                        alarm(2);
+                        private_cweb_send_error_mensage(new_socket);
+                        alarm(0);
+                        exit(0);
+                    }
+                    else if(pid2 < 0){
+                        perror("Faluire to create a new process");
+                        exit(EXIT_FAILURE);
+                    }
+                    else{
+                        pid_t wpid2;
+                        int status2 = 0;
+                        while(wpid2 = wait(&status2) > 0);
+                        if(WIFEXITED(status2)){
+                            cweb_print("Mensage sent\n");
+                        }else{
+                            cweb_print("Error sending mensage\n");
+                        }
+
+                    }
+                }
+                
+                buffer[0] = '\0';
+                close(new_socket);
+            }
+    
+        #endif
 
     }
     

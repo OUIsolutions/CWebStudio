@@ -11,6 +11,7 @@ struct CwebHttpRequest{
     struct CwebDict *headers;
     int content_length;
     unsigned char *content;
+    void (*interpret_query_params)(struct CwebHttpRequest *self,const char *query_params);
     void (*interpret_first_line)(struct CwebHttpRequest *self, char *first_line);
     void (*interpret_headders)(struct CwebHttpRequest *self, struct DtwStringArray *line_headers);
     void (*free)(struct CwebHttpRequest *request);
@@ -23,6 +24,9 @@ struct CwebHttpRequest *private_cweb_request_constructor();
 
 
 struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys);
+
+void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params);
+
 void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
 
 

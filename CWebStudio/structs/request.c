@@ -13,6 +13,7 @@ struct CwebHttpRequest *private_cweb_request_constructor(){
 
     self->params = cweb_create_dict();
     self->headers = cweb_create_dict();
+    self->interpret_query_params = private_cweb_interpret_query_params;
     self->interpret_first_line = private_cweb_interpret_first_line;
     self->interpret_headders = private_cweb_interpret_headders;
     self->free = private_cweb_free_http_request;
@@ -21,7 +22,40 @@ struct CwebHttpRequest *private_cweb_request_constructor(){
     return self;
     
 }   
+void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params){
+    int paramns_size = strlen(query_params);
+    char key[1000] = {0};
+    char value[1000] = {0};
+    bool key_found = false;
 
+    for(int i=1; i<paramns_size; i++){
+
+        if(query_params[i] == '='){
+            key_found = true;
+            continue;
+        }
+
+        if(query_params[i] == '&'){
+            key_found = false;
+            self->params->set(self->params, key, value);
+            memset(key, 0, 1000);
+            memset(value, 0, 1000);
+            continue;
+        }
+        
+        if(key_found){
+            value[strlen(value)] = query_params[i];
+        }
+        
+        else{
+            key[strlen(key)] = query_params[i];
+        }
+    }
+    if(key_found){
+        self->params->set(self->params, key, value);
+    }
+
+}
 void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
     char method[1000] = {0};
     char url[1000] = {0};
@@ -43,38 +77,8 @@ void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first
     self->route = (char*)malloc(strlen(route)+1);
     strcpy(self->route, route);
 
-
-    int paramns_size = strlen(params);
-    char key[1000] = {0};
-    char value[1000] = {0};
-    bool key_found = false;
-
-    for(int i=1; i<paramns_size; i++){
-
-        if(params[i] == '='){
-            key_found = true;
-            continue;
-        }
-
-        if(params[i] == '&'){
-            key_found = false;
-            self->params->set(self->params, key, value);
-            memset(key, 0, 1000);
-            memset(value, 0, 1000);
-            continue;
-        }
-        
-        if(key_found){
-            value[strlen(value)] = params[i];
-        }
-        
-        else{
-            key[strlen(key)] = params[i];
-        }
-    }
-    if(key_found){
-        self->params->set(self->params, key, value);
-    }
+    self->interpret_query_params(self, params);
+    
 
     
 }
@@ -163,8 +167,9 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     self->interpret_first_line(self, lines->strings[0]);
     self->interpret_headders(self, lines);
 
-    char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
     
+
+    char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
         self->content = (unsigned char *)malloc(self->content_length);
@@ -172,7 +177,15 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
         for(int j = 0; j<self->content_length; j++){
             self->content[j] = raw_entrys[content_start+j];
         }
+        //extracting url encoded data
+        char *content_type = self->headers->get_value(self->headers, "Content-Type");
+        if(content_type != NULL){
+            if(strcmp(content_type, "application/x-www-form-urlencoded") == 0){
+                self->interpret_query_params(self, (char*)self->content);
+            }
+        }
     }
+
 
     lines->free_string_array(lines);
     return self;
