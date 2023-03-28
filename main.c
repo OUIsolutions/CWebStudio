@@ -6,9 +6,15 @@
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         // Enviando uma resposta HTTP ao cliente
         //dtw_write_string_file_content("saida.txt", raw_entrys);
+        if(strcmp(request->route, "/teste") == 0){
+            char teste[5];
+            memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",100);
+            return cweb_send_text("Hello World", 200);
+        }
+
         //char teste[5];
         //memcpy(teste, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        return cweb_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, CWEB_OK);
+        return cweb_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, 200);
 
 }
 
@@ -22,6 +28,6 @@ int main(){
     free(content);
     */
 
-    cweb_run_sever(8080, main_sever);
+    cweb_run_sever(8082, main_sever,SAFTY_MODE);
     return 0;
 }
