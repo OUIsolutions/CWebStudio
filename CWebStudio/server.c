@@ -101,7 +101,7 @@ void cweb_run_sever(
             exit(EXIT_FAILURE);
         }
         else{
-            cweb_print("----------------------------------------");
+            cweb_print("----------------------------------------\n");
             cweb_print("New request %ld\n", actual_request);
             cweb_print("Waiting for child process\n");
              pid_t wpid;

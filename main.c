@@ -5,7 +5,6 @@
 
 
 
-
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         // Enviando uma resposta HTTP ao cliente
         //dtw_write_string_file_content("saida.txt", raw_entrys);
