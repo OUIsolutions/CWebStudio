@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "dependencies/doTheWorld/doTheWorldMain.c"
+#include "headers/debug.h"
 #include "headers/key_val.h"
 #include "headers/dict.h"
 #include "headers/response.h"

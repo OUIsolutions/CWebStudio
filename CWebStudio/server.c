@@ -101,20 +101,20 @@ void cweb_run_sever(
             exit(EXIT_FAILURE);
         }
         else{
-            puts("----------------------------------------");
-            printf("New request %ld\n", actual_request);
-            puts("Waiting for child process ");
+            cweb_print("----------------------------------------");
+            cweb_print("New request %ld\n", actual_request);
+            cweb_print("Waiting for child process\n");
              pid_t wpid;
             int status = 0;
             while(wpid = wait(&status) > 0);
                       
             if(WIFEXITED(status)){
-                puts("Sucess");
+                cweb_print("Sucess\n");
                 
             }else{
                 pid_t pid2 = fork();
                 if(pid2 == 0){
-                    puts("Sending error mensage");
+                    cweb_print("Sending error mensage\n");
                     alarm(2);
                     private_cweb_send_error_mensage(new_socket);
                     alarm(0);
@@ -129,9 +129,9 @@ void cweb_run_sever(
                     int status2 = 0;
                     while(wpid2 = wait(&status2) > 0);
                     if(WIFEXITED(status2)){
-                        puts("Mensage sent");
+                        cweb_print("Mensage sent\n");
                     }else{
-                        puts("Error sending mensage");
+                        cweb_print("Error sending mensage\n");
                     }
 
                 }

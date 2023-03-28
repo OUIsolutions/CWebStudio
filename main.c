@@ -1,6 +1,6 @@
 
 #define CEW_MAX_REQUEST_SIZE 15000
-
+#define CWEB_DEBUG
 #include "CWebStudio/CwebStudioMain.c"
 
 
@@ -37,7 +37,7 @@ int main(){
     free(content);
     */
 
-
+  
     cweb_run_sever(8081, main_sever);
     return 0;
 }
