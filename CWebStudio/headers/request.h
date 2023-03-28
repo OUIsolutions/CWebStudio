@@ -23,6 +23,7 @@ struct CwebHttpRequest *private_cweb_request_constructor();
 struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys);
 void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
 
+
 void private_cweb_interpret_headders(
     struct CwebHttpRequest *self,
     struct DtwStringArray *line_headers

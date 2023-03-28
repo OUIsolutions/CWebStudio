@@ -21,7 +21,7 @@ void private_cweb_dict_set(struct CwebDict *self,const char *key,const char *val
     self->size++;
 }
 
-char * private_cweb_dict_get(struct CwebDict *self, char *key){
+char * private_cweb_dict_get(struct CwebDict *self,const  char *key){
     for(int i = 0; i < self->size; i++){
         if(strcmp(self->keys_vals[i]->key, key) == 0){
             return self->keys_vals[i]->value;

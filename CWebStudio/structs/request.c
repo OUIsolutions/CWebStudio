@@ -162,6 +162,18 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     }
     self->interpret_first_line(self, lines->strings[0]);
     self->interpret_headders(self, lines);
+
+    char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
+    
+    if(content_lenght_str != NULL){
+        self->content_length = atoi(content_lenght_str);
+        self->content = (unsigned char *)malloc(self->content_length);
+        int content_start = i+4;
+        for(int j = 0; j<self->content_length; j++){
+            self->content[j] = raw_entrys[content_start+j];
+        }
+    }
+
     lines->free_string_array(lines);
     return self;
 }
