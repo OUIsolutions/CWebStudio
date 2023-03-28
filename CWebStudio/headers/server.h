@@ -1,16 +1,12 @@
 
 static size_t actual_request = 0;
 
-#ifdef __cplusplus
+#ifndef CWEB_TIMEOUT
+#define CWEB_TIMEOUT 30
+#endif 
+
+
 void cweb_run_sever(
     int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
-    int timeout=30
+    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
 );
-#else
-void cweb_run_sever(
-    int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
-    int timeout
-);
-#endif
