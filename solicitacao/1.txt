@@ -1,0 +1,13 @@
+GET /teste2ccc HTTP/1.1
+b: x
+c: valor do header C\r\nfff:
+Content-Type: text/plain
+User-Agent: PostmanRuntime/7.31.3
+Accept: */*
+Postman-Token: 926e25c8-f63c-471f-9855-2c1136422b0c
+Host: localhost:8081
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Content-Length: 11
+
+salve parsa

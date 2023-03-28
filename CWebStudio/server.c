@@ -27,11 +27,21 @@ void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpRe
         
         response->free(response);
         request->free(request);
-        //Closing the connection with the client
-        close(new_socket);
 }
 
+void private_cweb_send_error_mensage(int new_socket){
+   
+    struct CwebHttpResponse *response = cweb_send_text(
+        "Error 500 Internal Server Error",
+        500
+    );
+    char *response_str = response->generate_response(response);
+    send(new_socket, response_str,strlen(response_str) , 0);
+    send(new_socket, response->content, response->content_length, 0);
+    free(response_str);
+    response->free(response);
 
+}
 
 void cweb_run_sever(
     int port,
@@ -65,9 +75,11 @@ void cweb_run_sever(
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
     }
+    int count = 0;
 
     // Main loop
     while(1) {
+        count++;
         // Accepting a new connection
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
             perror("Faluire to accept connection");
@@ -78,7 +90,9 @@ void cweb_run_sever(
         pid_t pid = fork();
         if(pid == 0){
             //means that the process is the child
+            alarm(2);
             private_cweb_execute_request(new_socket, buffer, request_handle);
+            alarm(0);
             exit(0);
         }
         else if(pid < 0){
@@ -86,10 +100,21 @@ void cweb_run_sever(
             exit(EXIT_FAILURE);
         }
         else{
-            //means that the process fallure
-            wait(NULL);
-            //puts("Process fallure");
-            //private_cweb_send_error_mensage(new_socket);
+            puts("----------------------------------------");
+            printf("count %d\n", count);
+            puts("Waiting for child process ");
+             pid_t wpid;
+            int status = 0;
+            while ((wpid = wait(&status)) > 0);
+
+            if(status != 0){
+                puts("Error");
+                private_cweb_send_error_mensage(new_socket);
+                //kill the child process
+                
+            }else{
+                puts("Sucess");
+            }
             close(new_socket);
         }
     
