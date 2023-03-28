@@ -28,6 +28,6 @@ int main(){
     free(content);
     */
 
-    cweb_run_sever(8082, main_sever,SAFE_MODE);
+    cweb_run_sever(8080, main_sever,SAFE_MODE);
     return 0;
 }
