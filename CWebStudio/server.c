@@ -1,10 +1,6 @@
 
 
-void private_cwe_execute_request(
-    int new_socket, 
-    char *buffer,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
-    ){
+void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
         // Lendo a solicitação HTTP do cliente
         int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
 
@@ -35,10 +31,23 @@ void private_cwe_execute_request(
         close(new_socket);
 }
 
+void private_cweb_send_error_mensage(int new_socket){
+
+   struct CwebHttpResponse *request = cweb_send_text(
+        "Error 500 - Internal Server Error",
+        500
+   );
+   char *response_str = request->generate_response(request);
+   send(new_socket, response_str,strlen(response_str) , 0);
+   free(response_str);
+  request->free(request);
+
+}
+
 void cweb_run_sever(
     int port,
     struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
-    bool safty_mode
+    bool safe_mode
 ){
 
     int server_fd, new_socket;
@@ -77,14 +86,15 @@ void cweb_run_sever(
             exit(EXIT_FAILURE);
         }
 
-        if(safty_mode == false){
-            private_cwe_execute_request(new_socket, buffer, request_handle);
+        if(safe_mode == false){
+            private_cweb_execute_request(new_socket, buffer, request_handle);
         
         }
         else{
             pid_t pid = fork();
             if(pid == 0){
-                private_cwe_execute_request(new_socket, buffer, request_handle);
+                //means that the process is the child
+                private_cweb_execute_request(new_socket, buffer, request_handle);
                 exit(0);
             }
             else if(pid < 0){
@@ -92,9 +102,9 @@ void cweb_run_sever(
                 exit(EXIT_FAILURE);
             }
             else{
-                //means that is the father process
-                //wait for the child process
+                //means that the process fallure
                 wait(NULL);
+                private_cweb_send_error_mensage(new_socket);
                 close(new_socket);
             }
         }
