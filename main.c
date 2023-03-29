@@ -3,9 +3,9 @@
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     unsigned char *body = request->content;
-    char size = request->content_length;
+    int size = request->content_length;
 
-    printf("body: %s",body);
+    dtw_write_any_content("test.png", body, size);
 
     return cweb_send_text("Hello World", 200);
     
