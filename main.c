@@ -1,15 +1,14 @@
 
 #include "CWebStudio.c"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+    int out_size;
+    unsigned char *content = dtw_load_binary_content("my_image.png", &out_size);
+    struct CwebHttpResponse *response = create_http_response();
+    response->add_header(response, "Content-Type", "image/png");
+    response->set_content(response, content, out_size);
+    return response;
 
-
-    return cweb_send_file(
-        "my_image.png",
-        CWEB_AUTO_SET_CONTENT,
-        200
-    );
-    
-}
+}  
 
 int main(){
 
