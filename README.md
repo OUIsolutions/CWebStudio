@@ -314,7 +314,7 @@ int main(){
 ~~~
 # Flags 
 With flags you can define comportaments of the sever, each flags define one atributes
-<b>NOTE : ALWAYS PASS YOUR FLAGS BEFORE IMPORT,FOR THE LIB UNDERSTAND IT <b><br>
+<b>NOTE : ALWAYS PASS YOUR FLAGS BEFORE IMPORT,FOR THE LIB UNDERSTAND IT </b><br>
 
 ### CWEB_DEBUG
 with cweb debug, it will print stages of aplications , like requests, and each stages 
@@ -389,7 +389,7 @@ int main(){
 ~~~
 
 ### CEW_MAX_REQUEST_SIZE
-You cann Set the max request size, the defaults is 50000 chars, the aplication won read 
+You can set the max request size, the defaults is 50000 chars, the aplication won read 
 more than that size  but probably , it won crash if you pass more than 1000
  
 ~~~c
