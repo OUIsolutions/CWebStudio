@@ -138,3 +138,27 @@ int main(){
 ~~~
 
 ## Reading body Content 
+you can acess the body content in these way 
+
+~~~c
+#include "CWebStudio.c"
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    unsigned char *body = request->content;
+    char size = request->content_length;
+
+    printf("body: %s",body);
+
+    return cweb_send_text("Hello World", 200);
+    
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
+
+or even wth binary files 
