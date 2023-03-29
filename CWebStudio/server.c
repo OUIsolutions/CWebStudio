@@ -2,18 +2,17 @@
 
 
 void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
-        cweb_print("iniciou o request");
+
         // Lendo a solicitação HTTP do cliente
         int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
-        cweb_print("criou a estrutura");
+
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
                 buffer
         );
-
+        cweb_print("criou a estrutura\n");
          struct CwebHttpResponse *response;
-        cweb_print("executou a lambda");
         response = request_handle(request);
-        
+        cweb_print("executou a lambda\n");        
         if(response == NULL){
             response = cweb_send_text(
                 "Error 404",
@@ -22,15 +21,16 @@ void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpRe
         };
         
         char *response_str = response->generate_response(response);
-        cweb_print("resposta gerada");
+        cweb_print("resposta gerada\n");
         send(new_socket, response_str,strlen(response_str) , 0);
         if(response->exist_content){
             send(new_socket, response->content, response->content_length, 0);
         }
-        cweb_print("resposta enviada");
         free(response_str);
         response->free(response);
         request->free(request);
+        cweb_print("Limpou A memória\n");
+
 }
 
 void private_cweb_send_error_mensage(int new_socket){
@@ -91,8 +91,12 @@ void cweb_run_sever(
         }
 
         #ifdef CWEB_SINGLE_PROCESS
+            cweb_print("----------------------------------------\n");
+            cweb_print("Executando Request\n");
             private_cweb_execute_request(new_socket, buffer, request_handle);
+            cweb_print("Request executado\n");
             close(new_socket);
+            cweb_print("Conexão fechada\n");
         #else
         
             pid_t pid = fork();
