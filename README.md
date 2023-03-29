@@ -191,7 +191,7 @@ int main(){
 }
 ~~~
 
-or even wth binary files 
+## Reading binary Content
 
 ~~~c
 
