@@ -291,13 +291,17 @@ if you want to make an custon http response , you can construct the struct buy y
 ~~~c
 
 #include "CWebStudio.c"
+
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
     int out_size;
     unsigned char *content = dtw_load_binary_content("my_image.png", &out_size);
     struct CwebHttpResponse *response = create_http_response();
     response->add_header(response, "Content-Type", "image/png");
     response->set_content(response, content, out_size);
     return response;
+    
+
 
 }  
 
@@ -308,4 +312,56 @@ int main(){
    return 0;
 }
 ~~~
-# Flags
+# Flags 
+With flags you can define comportaments of the sever, each flags define one atributes
+Note : ALWAYS PASS YOUR FLAGS BEFORE IMPORT,FOR THE LIB UNDERSTAND IT 
+
+### CWEB_DEBUG
+with cweb debug, it will print stages of aplications , like requests, and each stages 
+~~~c 
+
+#define CWEB_DEBUG
+#include "CWebStudio.c"
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    return cweb_send_text("Hello World", 200);
+    
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
+
+### CWEB_SINGLE_PROCESS 
+<b style="color:red">DONT USE THESE FLAG IF YOU DONT NEED </b>
+the single process flag will execute your code in an single process, and if happen some 
+error , your aplicantion will break, so, if you will use these flag, ensure there is no error on your aplication, and use only if you are on an embed system that dont allow multprocess
+
+~~~c
+
+#define CWEB_DEBUG
+#define CWEB_SINGLE_PROCESS
+#include "CWebStudio.c"
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    if(strcmp(request->route, "/test") == 0){
+        ///making an error 
+        int x = 1/0;
+        //Your application will crash here if you are using single process 
+        //because the error is not handled
+    }
+    return cweb_send_text("Hello World", 200);
+    
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
