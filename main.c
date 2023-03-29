@@ -1,14 +1,23 @@
-
 #include "CWebStudio.c"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    int out_size;
-    unsigned char *content = dtw_load_binary_content("my_image.png", &out_size);
-    struct CwebHttpResponse *response = create_http_response();
-    response->add_header(response, "Content-Type", "image/png");
-    response->set_content(response, content, out_size);
-    return response;
 
-}  
+    unsigned char *body = request->content;
+    int size = request->content_length;
+
+    //parse with cJson the body 
+
+    cJSON *json = cJSON_Parse(body);
+    cJSON *name = cJSON_GetObjectItemCaseSensitive(json, "name");
+    cJSON *age = cJSON_GetObjectItemCaseSensitive(json, "age");
+
+
+    printf("Name: %s\n", name->valuestring);
+    printf("Age: %d\n", age->valueint);
+
+
+    return cweb_send_text("Hello World", 200);
+    
+}
 
 int main(){
 
