@@ -313,7 +313,7 @@ int main(){
 }
 ~~~
 # Flags 
-With flags you can define comportaments of the sever, each flags define one atributes
+With flags you can define comportaments of the sever, each flags define one atributes<br>
 <b>NOTE : ALWAYS PASS YOUR FLAGS BEFORE IMPORT,FOR THE LIB UNDERSTAND IT </b><br>
 
 ### CWEB_DEBUG
