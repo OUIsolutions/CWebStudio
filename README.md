@@ -367,7 +367,7 @@ int main(){
 
 ### CWEB_TIMEOUT 
 you can set the max timeout your aplication will deal, if is the function takes more 
-than that time , the sever will return 500
+than that time , the sever will return 500, the default time its 30 seconds
 ~~~c 
 
 #define CWEB_DEBUG
@@ -377,6 +377,30 @@ than that time , the sever will return 500
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
    //it will return 500 on these aplication
    sleep(10);
+   return cweb_send_text("Hello World", 200);
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
+
+### CEW_MAX_REQUEST_SIZE
+You cann Set the max request size, the defaults is 50000 chars, the aplication won read 
+more than that size  but probably , it won crash if you pass more than 1000
+ 
+~~~c
+
+#define CWEB_DEBUG
+
+#define CEW_MAX_REQUEST_SIZE 1000
+#include "CWebStudio.c"
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+   //it will return 500 on these aplication
+
    return cweb_send_text("Hello World", 200);
 }
 
