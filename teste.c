@@ -3,20 +3,20 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
-int main(int argc, char ** argv)
-{
-    pid_t pid = fork();
-    int x = 0;
-    if (pid == 0) { // we are in the child process
-        printf("Hello from the child process!\n");
-        x = 1;
-        exit (0); // terminates the child process
-    } else {
-        // now in the parent process
-        waitpid(pid, NULL, 0);
-        printf("x = %d\n", x);
-        printf("The child process has exited. Hello from the parent!\n");
-    }
+
+int main(int argc, char ** argv){
+
+    int teste_val = 20;
+
+    void teste(){
+        teste_val = 10;
+    };
     
+    printf("teste %d\n", teste_val);
+    teste();
+    printf("teste %d\n", teste_val);
+
+
+ 
     return 0;
 }
