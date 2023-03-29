@@ -28,3 +28,19 @@ int main(){
 ## Full Folder 
 or you can download the entier **CWebStudio** folder to your project and run with 
 **#include "CWebStudio/CwebStudioMain.c"** header
+~~~c
+
+#include "CWebStudio/CwebStudioMain.c"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    return cweb_send_text("Hello World", 200);
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
