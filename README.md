@@ -337,7 +337,7 @@ int main(){
 ~~~
 
 ### CWEB_SINGLE_PROCESS 
-<b style="color:red">DONT USE THESE FLAG IF YOU DONT NEED </b>
+<b style="color:red;">DONT USE THESE FLAG IF YOU DONT NEED </b><br>
 the single process flag will execute your code in an single process, and if happen some 
 error , your aplicantion will break, so, if you will use these flag, ensure there is no error on your aplication, and use only if you are on an embed system that dont allow multprocess
 
