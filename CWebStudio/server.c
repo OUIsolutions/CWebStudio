@@ -2,14 +2,16 @@
 
 
 void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
+        cweb_print("iniciou o request");
         // Lendo a solicitação HTTP do cliente
         int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
-
+        cweb_print("criou a estrutura");
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
                 buffer
         );
 
          struct CwebHttpResponse *response;
+        cweb_print("executou a lambda");
         response = request_handle(request);
         
         if(response == NULL){
@@ -20,12 +22,12 @@ void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpRe
         };
         
         char *response_str = response->generate_response(response);
-
+        cweb_print("resposta gerada");
         send(new_socket, response_str,strlen(response_str) , 0);
         if(response->exist_content){
             send(new_socket, response->content, response->content_length, 0);
         }
-        dtw_write_string_file_content("response.txt", response_str);
+        cweb_print("resposta enviada");
         free(response_str);
         response->free(response);
         request->free(request);
