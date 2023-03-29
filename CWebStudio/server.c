@@ -18,10 +18,10 @@ void  private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpR
         cweb_print("created request\n");
         cweb_print("Request method: %s\n",request->method);
         cweb_print("Request url: %s\n",request->url);
-        
+
          struct CwebHttpResponse *response;
         response = request_handle(request);
-        cweb_print("executou a lambda\n");        
+        cweb_print("executed client lambda\n");        
         if(response == NULL){
             response = cweb_send_text(
                 "Error 404",
@@ -162,11 +162,11 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
     
         #endif
             close(new_socket);
-            cweb_print("Conexão fechada\n");
+            cweb_print("Closed Conection\n");
 
             //clear the buffer 
             memset(buffer, 0, CEW_MAX_REQUEST_SIZE);
-            cweb_print("Buffer limpo\n");
+            cweb_print("Cleared Buffer\n");
     }
     
 }

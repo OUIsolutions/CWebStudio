@@ -7,7 +7,7 @@ query paramns, returning files and text.
 
 ## Single File
 CWebSudio is made to be as dumb as possible, and adopt the idea of single file lib,
-for instalation you can just copy the **CWebStudio.c** into your project, and start using 
+for instalation you can just copy the **CWebStudio.c** into your project, and execute an normal copilation with gcc/g++ or clang 
 
 ~~~c
 
@@ -35,6 +35,69 @@ or you can download the entier **CWebStudio** folder to your project and run wit
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     return cweb_send_text("Hello World", 200);
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
+
+# Getting Entrys
+
+## Route an Method
+
+for getting the "url" paramns , its very easy, follow the program above 
+
+~~~c
+
+#include "CWebStudio.c"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    char *url = request->url;
+    char *method = request->method;
+    char *route = request->route;
+
+    printf("URL: %s\n", url);
+    printf("Method: %s\n", method);
+    printf("Route: %s\n", route);
+    return cweb_send_text("Hello World", 200);
+    
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
+## Iterating over query Paramns 
+
+for iterating over paramns, you can use the object **CwebDict** , note that
+even urlencoded is consider as paramn, so you dont need to care about it 
+
+~~~c
+
+
+
+#include "CWebStudio.c"
+
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    struct CwebDict *query_paramns = request->params;
+    for(int i = 0; i < query_paramns->size; i++){
+        struct CwebKeyVal *key_val = query_paramns->keys_vals[i];
+        char *key = key_val->key;
+        char *value = key_val->value;
+        printf("%s : %s\n", key, value);
+    }
+    return cweb_send_text("Hello World", 200);
+    
 }
 
 int main(){
