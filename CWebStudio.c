@@ -6575,6 +6575,7 @@ struct CwebHttpRequest{
     struct CwebDict *headers;
     int content_length;
     unsigned char *content;
+    void (*interpret_query_params)(struct CwebHttpRequest *self,const char *query_params);
     void (*interpret_first_line)(struct CwebHttpRequest *self, char *first_line);
     void (*interpret_headders)(struct CwebHttpRequest *self, struct DtwStringArray *line_headers);
     void (*free)(struct CwebHttpRequest *request);
@@ -6587,6 +6588,9 @@ struct CwebHttpRequest *private_cweb_request_constructor();
 
 
 struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys);
+
+void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params);
+
 void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
 
 
@@ -6601,19 +6605,16 @@ void private_cweb_represent_http_request(struct CwebHttpRequest *self);
 
 static size_t actual_request = 0;
 
-#ifdef __cplusplus
+#ifndef CWEB_TIMEOUT
+#define CWEB_TIMEOUT 30
+#endif 
+
+
+
 void cweb_run_sever(
     int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
-    int timeout=30
+    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
 );
-#else
-void cweb_run_sever(
-    int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
-    int timeout
-);
-#endif
 
 
 
@@ -6630,6 +6631,7 @@ struct CwebHttpRequest *private_cweb_request_constructor(){
 
     self->params = cweb_create_dict();
     self->headers = cweb_create_dict();
+    self->interpret_query_params = private_cweb_interpret_query_params;
     self->interpret_first_line = private_cweb_interpret_first_line;
     self->interpret_headders = private_cweb_interpret_headders;
     self->free = private_cweb_free_http_request;
@@ -6638,7 +6640,40 @@ struct CwebHttpRequest *private_cweb_request_constructor(){
     return self;
     
 }   
+void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params){
+    int paramns_size = strlen(query_params);
+    char key[1000] = {0};
+    char value[1000] = {0};
+    bool key_found = false;
 
+    for(int i=1; i<paramns_size; i++){
+
+        if(query_params[i] == '='){
+            key_found = true;
+            continue;
+        }
+
+        if(query_params[i] == '&'){
+            key_found = false;
+            self->params->set(self->params, key, value);
+            memset(key, 0, 1000);
+            memset(value, 0, 1000);
+            continue;
+        }
+        
+        if(key_found){
+            value[strlen(value)] = query_params[i];
+        }
+        
+        else{
+            key[strlen(key)] = query_params[i];
+        }
+    }
+    if(key_found){
+        self->params->set(self->params, key, value);
+    }
+
+}
 void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
     char method[1000] = {0};
     char url[1000] = {0};
@@ -6660,38 +6695,8 @@ void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first
     self->route = (char*)malloc(strlen(route)+1);
     strcpy(self->route, route);
 
-
-    int paramns_size = strlen(params);
-    char key[1000] = {0};
-    char value[1000] = {0};
-    bool key_found = false;
-
-    for(int i=1; i<paramns_size; i++){
-
-        if(params[i] == '='){
-            key_found = true;
-            continue;
-        }
-
-        if(params[i] == '&'){
-            key_found = false;
-            self->params->set(self->params, key, value);
-            memset(key, 0, 1000);
-            memset(value, 0, 1000);
-            continue;
-        }
-        
-        if(key_found){
-            value[strlen(value)] = params[i];
-        }
-        
-        else{
-            key[strlen(key)] = params[i];
-        }
-    }
-    if(key_found){
-        self->params->set(self->params, key, value);
-    }
+    self->interpret_query_params(self, params);
+    
 
     
 }
@@ -6780,8 +6785,9 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     self->interpret_first_line(self, lines->strings[0]);
     self->interpret_headders(self, lines);
 
-    char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
     
+
+    char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
         self->content = (unsigned char *)malloc(self->content_length);
@@ -6789,7 +6795,15 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
         for(int j = 0; j<self->content_length; j++){
             self->content[j] = raw_entrys[content_start+j];
         }
+        //extracting url encoded data
+        char *content_type = self->headers->get_value(self->headers, "Content-Type");
+        if(content_type != NULL){
+            if(strcmp(content_type, "application/x-www-form-urlencoded") == 0){
+                self->interpret_query_params(self, (char*)self->content);
+            }
+        }
     }
+
 
     lines->free_string_array(lines);
     return self;
@@ -7023,17 +7037,23 @@ void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,
 
 
 
-void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
-        // Lendo a solicitação HTTP do cliente
-        int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
+void  private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
 
+        // Lendo a solicitação HTTP do cliente
+        cweb_print("Lendo a solicitação\n");
+        int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
+        //check if the request is valid
+        if(valread <= 0){
+            cweb_print("Erro ao ler a solicitação\n");
+            return;
+        }
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
                 buffer
         );
-
+        cweb_print("criou a estrutura\n");
          struct CwebHttpResponse *response;
         response = request_handle(request);
-        
+        cweb_print("executou a lambda\n");        
         if(response == NULL){
             response = cweb_send_text(
                 "Error 404",
@@ -7042,15 +7062,17 @@ void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpRe
         };
         
         char *response_str = response->generate_response(response);
-
+        cweb_print("resposta gerada\n");
+        
         send(new_socket, response_str,strlen(response_str) , 0);
         if(response->exist_content){
             send(new_socket, response->content, response->content_length, 0);
         }
-        dtw_write_string_file_content("response.txt", response_str);
         free(response_str);
         response->free(response);
         request->free(request);
+        cweb_print("Limpou A memória\n");
+        return ;
 }
 
 void private_cweb_send_error_mensage(int new_socket){
@@ -7065,14 +7087,10 @@ void private_cweb_send_error_mensage(int new_socket){
 
     free(response_str);
     response->free(response);
-
+    
 }
 
-void cweb_run_sever(
-    int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
-    int timeout
-){
+void cweb_run_sever(int port,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
 
     int server_fd, new_socket;
     struct sockaddr_in address;
@@ -7111,61 +7129,76 @@ void cweb_run_sever(
             exit(EXIT_FAILURE);
         }
 
-        pid_t pid = fork();
-        if(pid == 0){
-            //means that the process is the child
-            alarm(timeout);
-            private_cweb_execute_request(new_socket, buffer, request_handle);
-            alarm(0);
-            exit(0);
-        }
-        else if(pid < 0){
-            perror("Faluire to create a new process");
-            exit(EXIT_FAILURE);
-        }
-        else{
-            cweb_print("----------------------------------------\n");
-            cweb_print("New request %ld\n", actual_request);
-            cweb_print("Waiting for child process\n");
-             pid_t wpid;
-            int status = 0;
-            while(wpid = wait(&status) > 0);
-                      
-            if(WIFEXITED(status)){
-                cweb_print("Sucess\n");
-                
-            }else{
-                pid_t pid2 = fork();
-                if(pid2 == 0){
-                    cweb_print("Sending error mensage\n");
-                    alarm(2);
-                    private_cweb_send_error_mensage(new_socket);
-                    alarm(0);
-                    exit(0);
-                }
-                else if(pid2 < 0){
-                    perror("Faluire to create a new process");
-                    exit(EXIT_FAILURE);
-                }
-                else{
-                    pid_t wpid2;
-                    int status2 = 0;
-                    while(wpid2 = wait(&status2) > 0);
-                    if(WIFEXITED(status2)){
-                        cweb_print("Mensage sent\n");
-                    }else{
-                        cweb_print("Error sending mensage\n");
-                    }
-
-                }
-            }
-            
-            buffer[0] = '\0';
-            close(new_socket);
-        }
-    
+        cweb_print("----------------------------------------\n");
+        cweb_print("Executando Request:%ld\n",actual_request);
         
+        #ifdef CWEB_SINGLE_PROCESS
 
+            private_cweb_execute_request(new_socket, buffer, request_handle);
+            cweb_print("Request executado\n");
+
+        #else
+            cweb_print("Creating a new process\n");
+            pid_t pid = fork();
+            if(pid == 0){
+                //means that the process is the child
+                alarm(CWEB_TIMEOUT);
+                private_cweb_execute_request(new_socket, buffer, request_handle);
+                cweb_print("Request executado\n");
+                alarm(0);
+                exit(0);
+            }
+            else if(pid < 0){
+                perror("Faluire to create a new process");
+                exit(EXIT_FAILURE);
+            }
+            else{
+                cweb_print("----------------------------------------\n");
+                cweb_print("New request %ld\n", actual_request);
+                cweb_print("Waiting for child process\n");
+                pid_t wpid;
+                int status = 0;
+                while(wpid = wait(&status) > 0);
+                        
+                if(WIFEXITED(status)){
+                    cweb_print("Sucess\n");
+                    
+                }else{
+                    pid_t pid2 = fork();
+                    if(pid2 == 0){
+                        cweb_print("Sending error mensage\n");
+                        alarm(2);
+                        private_cweb_send_error_mensage(new_socket);
+                        alarm(0);
+                        exit(0);
+                    }
+                    else if(pid2 < 0){
+                        perror("Faluire to create a new process");
+                        exit(EXIT_FAILURE);
+                    }
+                    else{
+                        pid_t wpid2;
+                        int status2 = 0;
+                        while(wpid2 = wait(&status2) > 0);
+                        if(WIFEXITED(status2)){
+                            cweb_print("Mensage sent\n");
+                        }else{
+                            cweb_print("Error sending mensage\n");
+                        }
+
+                    }
+                }
+                
+         
+            }
+    
+        #endif
+            close(new_socket);
+            cweb_print("Conexão fechada\n");
+
+            //clear the buffer 
+            memset(buffer, 0, CEW_MAX_REQUEST_SIZE);
+            cweb_print("Buffer limpo\n");
     }
     
 }

@@ -1,11 +1,16 @@
 
 
 
-void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
+void  private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
 
         // Lendo a solicitação HTTP do cliente
+        cweb_print("Lendo a solicitação\n");
         int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
-
+        //check if the request is valid
+        if(valread <= 0){
+            cweb_print("Erro ao ler a solicitação\n");
+            return;
+        }
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
                 buffer
         );
@@ -22,6 +27,7 @@ void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpRe
         
         char *response_str = response->generate_response(response);
         cweb_print("resposta gerada\n");
+        
         send(new_socket, response_str,strlen(response_str) , 0);
         if(response->exist_content){
             send(new_socket, response->content, response->content_length, 0);
@@ -30,7 +36,7 @@ void private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpRe
         response->free(response);
         request->free(request);
         cweb_print("Limpou A memória\n");
-
+        return ;
 }
 
 void private_cweb_send_error_mensage(int new_socket){
@@ -45,13 +51,10 @@ void private_cweb_send_error_mensage(int new_socket){
 
     free(response_str);
     response->free(response);
-
+    
 }
 
-void cweb_run_sever(
-    int port,
-    struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
-){
+void cweb_run_sever(int port,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
 
     int server_fd, new_socket;
     struct sockaddr_in address;
@@ -90,20 +93,22 @@ void cweb_run_sever(
             exit(EXIT_FAILURE);
         }
 
+        cweb_print("----------------------------------------\n");
+        cweb_print("Executando Request:%ld\n",actual_request);
+        
         #ifdef CWEB_SINGLE_PROCESS
-            cweb_print("----------------------------------------\n");
-            cweb_print("Executando Request\n");
+
             private_cweb_execute_request(new_socket, buffer, request_handle);
             cweb_print("Request executado\n");
-            close(new_socket);
-            cweb_print("Conexão fechada\n");
+
         #else
-        
+            cweb_print("Creating a new process\n");
             pid_t pid = fork();
             if(pid == 0){
                 //means that the process is the child
                 alarm(CWEB_TIMEOUT);
                 private_cweb_execute_request(new_socket, buffer, request_handle);
+                cweb_print("Request executado\n");
                 alarm(0);
                 exit(0);
             }
@@ -148,12 +153,16 @@ void cweb_run_sever(
                     }
                 }
                 
-                buffer[0] = '\0';
-                close(new_socket);
+         
             }
     
         #endif
+            close(new_socket);
+            cweb_print("Conexão fechada\n");
 
+            //clear the buffer 
+            memset(buffer, 0, CEW_MAX_REQUEST_SIZE);
+            cweb_print("Buffer limpo\n");
     }
     
 }

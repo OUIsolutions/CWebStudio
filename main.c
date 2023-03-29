@@ -1,27 +1,18 @@
 
-//#define CWEB_DEBUG
-#define CWEB_SINGLE_PROCESS
-#define CWEB_DEBUG
 
-#include "CWebStudio/CwebStudioMain.c"
+
+#include "CWebStudio.c"
 
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
-
-    //request->represent(request);
-    dtw_write_any_content("request.txt", request->content, request->content_length);
-    return cweb_send_file("captura1.png", CWEB_AUTO_SET_CONTENT, 200);
-
+    return cweb_send_text("Hello World", 200);
 }
 
 int main(){
 
-
-   
-    cweb_run_sever(5002, main_sever); 
-
+   cweb_run_sever(5002, main_sever); 
 
    return 0;
 }
