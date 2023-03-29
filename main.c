@@ -1,7 +1,7 @@
 
 
 
-#include "CWebStudio.c"
+#include "CWebStudio/CwebStudioMain.c"
 
 
 
@@ -12,7 +12,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 int main(){
 
-   cweb_run_sever(5002, main_sever); 
+   cweb_run_server(5000, main_sever); 
 
    return 0;
 }

@@ -54,7 +54,7 @@ void private_cweb_send_error_mensage(int new_socket){
     
 }
 
-void cweb_run_sever(int port,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
+void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
 
     int server_fd, new_socket;
     struct sockaddr_in address;
