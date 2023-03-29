@@ -186,3 +186,74 @@ int main(){
 ~~~
 
 # Returning Values
+## Plain Text
+For returning plain text , you can return with the function  
+**cweb_send_text** 
+
+~~~c
+
+#include "CWebStudio.c"
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+
+    return cweb_send_text("Exemple of Return", 200);
+    
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
+
+## Other Formats 
+You can return other formats like these 
+~~~c
+
+#include "CWebStudio.c"
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    char *json = "{\"name\":\"CWebStudio\",\"version\":\"1.0.0\"}";
+    return cweb_send_any(
+        "application/json",
+        strlen(json),
+        json,
+        200
+    );
+    
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
+## Returning Files 
+if you know the path of your file , you can directly send files 
+
+~~~c
+
+#include "CWebStudio.c"
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    return cweb_send_file(
+        "my_image.png",
+        CWEB_AUTO_SET_CONTENT,
+        200
+    );
+    
+}
+
+int main(){
+
+   cweb_run_server(5000, main_sever); 
+
+   return 0;
+}
+~~~
+
+## An Low level aproach 
