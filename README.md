@@ -314,7 +314,7 @@ int main(){
 ~~~
 # Flags 
 With flags you can define comportaments of the sever, each flags define one atributes
-Note : ALWAYS PASS YOUR FLAGS BEFORE IMPORT,FOR THE LIB UNDERSTAND IT 
+<b>NOTE : ALWAYS PASS YOUR FLAGS BEFORE IMPORT,FOR THE LIB UNDERSTAND IT <b><br>
 
 ### CWEB_DEBUG
 with cweb debug, it will print stages of aplications , like requests, and each stages 
@@ -339,10 +339,9 @@ int main(){
 ### CWEB_SINGLE_PROCESS 
 <b style="color:red;">DONT USE THESE FLAG IF YOU DONT NEED </b><br>
 the single process flag will execute your code in an single process, and if happen some 
-error , your aplicantion will break, so, if you will use these flag, ensure there is no error on your aplication, and use only if you are on an embed system that dont allow multprocess
+error, your aplicantion will crash, so, if you will use these flag, ensure that there is no error on your aplication, and use only if you are on an embed system that dont allow multprocess
 
 ~~~c
-
 #define CWEB_DEBUG
 #define CWEB_SINGLE_PROCESS
 #include "CWebStudio.c"
