@@ -18,12 +18,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     return cweb_send_text("Hello World", 200);
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 ## Full Folder 
 or you can download the entier **CWebStudio** folder to your project and run with 
@@ -37,12 +32,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     return cweb_send_text("Hello World", 200);
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 # Getting Entrys
@@ -68,12 +58,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 ## Iterating over query Paramns 
 
@@ -100,12 +85,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 ## Iterating over Headders
@@ -129,12 +109,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 ## Reading body Content 
@@ -153,12 +128,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 ## Parsing Body Json 
 ~~~c
@@ -183,12 +153,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 ## Reading binary Content
@@ -207,12 +172,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 # Returning Values
@@ -230,12 +190,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 ## Other Formats 
@@ -255,12 +210,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 ## Returning Files 
 if you know the path of your file , you can directly send files 
@@ -278,12 +228,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 ## An Low level aproach 
@@ -305,12 +250,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 }  
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 # Flags 
 With flags you can define comportaments of the sever, each flags define one atributes<br>
@@ -328,12 +268,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 ### CWEB_SINGLE_PROCESS 
@@ -357,12 +292,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 ### CWEB_TIMEOUT 
@@ -380,12 +310,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
    return cweb_send_text("Hello World", 200);
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
 
 ### CEW_MAX_REQUEST_SIZE
@@ -404,10 +329,5 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
    return cweb_send_text("Hello World", 200);
 }
 
-int main(){
-
-   cweb_run_server(5000, main_sever); 
-
-   return 0;
-}
+cweb_start(5001, main_sever)
 ~~~
