@@ -6622,7 +6622,7 @@ void cweb_run_server(
     int port,
     struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
 );
-#define cweb_start(port, caller)\
+#define CWEB_START_MACRO(port, caller)\
 int main() {\
 cweb_run_server((port), (caller));\
 return 0;\
