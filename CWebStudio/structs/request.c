@@ -57,10 +57,12 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
 
 }
 void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+    
     char method[1000] = {0};
     char url[1000] = {0};
 
     sscanf(first_line, "%s %s", method, url);
+    
     
     self->method = (char*)malloc(strlen(method)+1);
     strcpy(self->method, method);

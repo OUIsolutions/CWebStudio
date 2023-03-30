@@ -45,6 +45,7 @@ SOFTWARE.
 #include "headers/response_functions.h"
 #include "headers/request.h"
 #include "headers/server.h"
+#include "headers/main_macro.h"
 
 #include "structs/request.c"
 #include "response_functions.c"
