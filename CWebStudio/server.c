@@ -1,19 +1,34 @@
 
 
 
-void  private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
+void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
+        
+        #ifdef BUFFER_IN_HEAP
+            void *buffer = malloc(CEW_MAX_REQUEST_SIZE);
+        
+        #else 
+            char buffer[CEW_MAX_REQUEST_SIZE];
+        #endif 
 
         // Lendo a solicitação HTTP do cliente
         cweb_print("Readding Solicitaiton\n");
+      
+
         int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
         //check if the request is valid
+
+        char *converted_buffer = (char *)buffer;
+        
         if(valread <= 0){
             cweb_print("Error sending request \n");
+            #ifdef BUFFER_IN_HEAP
+                free(buffer);
+            #endif
             return;
         }
         cweb_print("Executing client lambda\n");
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
-                buffer
+                converted_buffer
         );
         cweb_print("created request\n");
         cweb_print("Request method: %s\n",request->method);
@@ -39,6 +54,10 @@ void  private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpR
         free(response_str);
         response->free(response);
         request->free(request);
+        #ifdef BUFFER_IN_HEAP
+            free(buffer);
+        #endif
+    
         cweb_print("Cleared memory\n");
         return ;
 }
@@ -97,14 +116,14 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-        char buffer[CEW_MAX_REQUEST_SIZE] = {0};
+  
         cweb_print("----------------------------------------\n");
         cweb_print("Executing request:%ld\n",actual_request);
         cweb_print("Socket: %d\n", new_socket);
 
         #ifdef CWEB_SINGLE_PROCESS
 
-            private_cweb_execute_request(new_socket, buffer, request_handle);
+            private_cweb_execute_request(new_socket, request_handle);
             cweb_print("Request Executed\n");
 
         #else
@@ -166,7 +185,6 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
             cweb_print("Closed Conection\n");
 
             //clear the buffer 
-            memset(buffer, 0, CEW_MAX_REQUEST_SIZE);
             cweb_print("Cleared Buffer\n");
     }
     

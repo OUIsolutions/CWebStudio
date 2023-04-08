@@ -1,5 +1,6 @@
 
 #define CWEB_DEBUG 
+#define BUFFER_IN_HEAP
 #define CWEB_SINGLE_PROCESS
 #include "CWebStudio/CwebStudioMain.c"
 
@@ -10,4 +11,4 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 }
 
-CWEB_START_MACRO(5001, main_sever);
+CWEB_START_MACRO(5000, main_sever);
