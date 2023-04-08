@@ -1,6 +1,6 @@
 
 #define CWEB_DEBUG 
-
+#define CWEB_TIMEOUT 1
 #define CWEB_SINGLE_PROCESS
 #include "CWebStudio/CwebStudioMain.c"
 
