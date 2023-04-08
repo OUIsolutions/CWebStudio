@@ -11,7 +11,7 @@ void  private_cweb_execute_request(int new_socket, char *buffer,struct CwebHttpR
             cweb_print("Error sending request \n");
             return;
         }
-
+        cweb_print("Executing client lambda\n");
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
                 buffer
         );
@@ -63,7 +63,7 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
     int server_fd, new_socket;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
-    char buffer[CEW_MAX_REQUEST_SIZE] = {0};
+
 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
@@ -91,15 +91,17 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
     // Main loop
     while(1) {
         actual_request++;
+
         // Accepting a new connection
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-
+        char buffer[CEW_MAX_REQUEST_SIZE] = {0};
         cweb_print("----------------------------------------\n");
         cweb_print("Executing request:%ld\n",actual_request);
-        
+        cweb_print("Socket: %d\n", new_socket);
+
         #ifdef CWEB_SINGLE_PROCESS
 
             private_cweb_execute_request(new_socket, buffer, request_handle);
@@ -121,7 +123,6 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
                 exit(EXIT_FAILURE);
             }
             else{
-                cweb_print("----------------------------------------\n");
                 cweb_print("New request %ld\n", actual_request);
                 cweb_print("Waiting for child process\n");
                 pid_t wpid;
@@ -159,7 +160,7 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
                 
          
             }
-    
+
         #endif
             close(new_socket);
             cweb_print("Closed Conection\n");
