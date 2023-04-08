@@ -4,7 +4,7 @@
 void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
         
         #ifdef BUFFER_IN_HEAP
-            char *buffer = malloc(CEW_MAX_REQUEST_SIZE);
+            char *buffer = (char*)malloc(CEW_MAX_REQUEST_SIZE);
         
         #else 
             char buffer[CEW_MAX_REQUEST_SIZE];
@@ -12,19 +12,35 @@ void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*requ
 
         // Lendo a solicitação HTTP do cliente
         cweb_print("Readding Solicitaiton\n");
-      
-
-        int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
-        //check if the request is valid
-
         
+        int valread = 0;
+
+        struct timeval timeout;
+        timeout.tv_sec = CWEB_TIMEOUT;  // set the timeout to 5 seconds
+        timeout.tv_usec = 0;
+
+        fd_set read_fds;
+        FD_ZERO(&read_fds);
+        FD_SET(new_socket, &read_fds);
+
+        int ready = select(new_socket + 1, &read_fds, NULL, NULL, &timeout);
+        if (ready == -1) {
+            cweb_print("Error reading request\n");
+        } else if (ready == 0) {
+            cweb_print("Timeout reading request\n");
+        } else {
+            cweb_print("Reading request\n");
+            valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
+        }
+        //check if the request is valid        
         if(valread <= 0){
-            cweb_print("Error sending request \n");
+            cweb_print("Error Reading request \n");
             #ifdef BUFFER_IN_HEAP
                 free(buffer);
             #endif
             return;
         }
+
         cweb_print("Executing client lambda\n");
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
                 buffer
@@ -119,7 +135,7 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
         cweb_print("----------------------------------------\n");
         cweb_print("Executing request:%ld\n",actual_request);
         cweb_print("Socket: %d\n", new_socket);
-
+        
         #ifdef CWEB_SINGLE_PROCESS
 
             private_cweb_execute_request(new_socket, request_handle);
