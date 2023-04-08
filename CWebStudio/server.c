@@ -4,7 +4,7 @@
 void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
         
         #ifdef BUFFER_IN_HEAP
-            void *buffer = malloc(CEW_MAX_REQUEST_SIZE);
+            char *buffer = malloc(CEW_MAX_REQUEST_SIZE);
         
         #else 
             char buffer[CEW_MAX_REQUEST_SIZE];
@@ -17,7 +17,6 @@ void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*requ
         int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
         //check if the request is valid
 
-        char *converted_buffer = (char *)buffer;
         
         if(valread <= 0){
             cweb_print("Error sending request \n");
@@ -28,7 +27,7 @@ void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*requ
         }
         cweb_print("Executing client lambda\n");
         struct CwebHttpRequest *request  = private_cweb_create_http_request(
-                converted_buffer
+                buffer
         );
         cweb_print("created request\n");
         cweb_print("Request method: %s\n",request->method);
