@@ -183,8 +183,8 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
             close(new_socket);
             cweb_print("Closed Conection\n");
 
-            //clear the buffer 
-            cweb_print("Cleared Buffer\n");
+     
+     
     }
     
 }
