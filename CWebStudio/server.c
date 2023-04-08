@@ -16,7 +16,7 @@ void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*requ
         int valread = 0;
 
         struct timeval timeout;
-        timeout.tv_sec = CWEB_TIMEOUT;  // set the timeout to 5 seconds
+        timeout.tv_sec = CWEB_TIMEOUT;  
         timeout.tv_usec = 0;
 
         fd_set read_fds;
@@ -25,7 +25,7 @@ void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*requ
 
         int ready = select(new_socket + 1, &read_fds, NULL, NULL, &timeout);
         if (ready == -1) {
-            cweb_print("Error reading request\n");
+           
         } else if (ready == 0) {
             cweb_print("Timeout reading request\n");
         } else {
@@ -139,15 +139,14 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
         #ifdef CWEB_SINGLE_PROCESS
 
             private_cweb_execute_request(new_socket, request_handle);
-            cweb_print("Request Executed\n");
-
+    
         #else
             cweb_print("Creating a new process\n");
             pid_t pid = fork();
             if(pid == 0){
                 //means that the process is the child
                 alarm(CWEB_TIMEOUT);
-                private_cweb_execute_request(new_socket, buffer, request_handle);
+                private_cweb_execute_request(new_socket, request_handle);
                 cweb_print("Request executado\n");
                 alarm(0);
                 exit(0);
