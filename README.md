@@ -301,7 +301,33 @@ int main(){
             );
 }
 ~~~
+If you dont need , is higly recomended you use the safify mode 
+~~~c 
+#define CWEB_DEBUG
+#include "CWebStudio.c"
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
+    if(strcmp(request->route, "/test") == 0){
+        ///making an error
+        int x = 1/0;
+        //Your application wont crash here if you are using safity mode
+        //because the error is not handled
+    }
+    return cweb_send_text("Hello World", 200);
+
+}
+
+int main(){
+    cweb_run_server(
+            5000,
+            main_sever,
+            CWEB_DEFAULT_TIMEOUT,
+            CWEB_MAX_REQUEST_SIZE,
+            CWEB_SAFTY_MODE,
+            1
+    );
+}
+~~~
 ### Timeout 
 you can set the max timeout your aplication will deal, if is the function takes more 
 than that time , the sever will return 500, the default time its 30 seconds
