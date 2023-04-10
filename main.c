@@ -1,8 +1,16 @@
 #define CWEB_DEBUG
 #include "CWebStudio/CwebStudioMain.c"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
- 
+     sleep(10);
      return cweb_send_text("test mensage",200);
 
 }
-CWEB_START_MACRO(5000,main_sever);
+int main(){
+    cweb_run_server(
+            5000,
+            main_sever,
+            CWEB_DEFAULT_TIMEOUT,
+            CWEB_DEFAULT_MAX_REQUEST,
+            CWEB_DANGEROUS_SINGLE_PROCESS
+            );
+}

@@ -295,7 +295,7 @@ int main(){
             5000,
             main_sever,
             CWEB_DEFAULT_TIMEOUT,
-            CWEB_MAX_REQUEST_SIZE,
+            CWEB_DEFAULT_MAX_REQUEST,
             CWEB_DANGEROUS_SINGLE_PROCESS
             );
 }
@@ -320,7 +320,7 @@ int main(){
             5000,
             main_sever,
             CWEB_DEFAULT_TIMEOUT,
-            CWEB_MAX_REQUEST_SIZE,
+            CWEB_DEFAULT_MAX_REQUEST,
             CWEB_SAFTY_MODE
     );
 }
@@ -343,7 +343,7 @@ int main(){
             5000,
             main_sever,
             timeout,
-            CWEB_MAX_REQUEST_SIZE,
+            CWEB_DEFAULT_MAX_REQUEST,
             CWEB_SAFTY_MODE
     );
 }
