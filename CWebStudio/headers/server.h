@@ -22,6 +22,5 @@ void cweb_run_server(
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
             int timeout,
             size_t max_request_size,
-            bool single_process,
-            int total_process
+            bool single_process
 );

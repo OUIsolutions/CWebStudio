@@ -148,14 +148,16 @@ void private_cweb_execut_request_in_safty_mode(
             }
         }
     }
+    close(new_socket);
+    cweb_print("Closed Conection with socket %d\n",new_socket);
+
 }
 void cweb_run_server(
         int port,
         struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
         int timeout,
         size_t max_request_size,
-        bool single_process,
-        int total_process
+        bool single_process
 ){
 
     int server_fd, new_socket;
@@ -190,30 +192,34 @@ void cweb_run_server(
     while(1) {
         actual_request++;
 
-        // Accepting a new connection
+        // Accepting a new connection in every socket 
+
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) {
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-  
+        
         cweb_print("----------------------------------------\n");
         cweb_print("Executing request:%ld\n",actual_request);
         cweb_print("Socket: %d\n", new_socket);
         
         if(single_process){
+
             private_cweb_execute_request(new_socket,max_request_size,timeout, request_handler);
+            close(new_socket);
+            cweb_print("Closed Conection with socket %d\n",new_socket);
         }
+
         else {
+
             private_cweb_execut_request_in_safty_mode(
-                    new_socket,
-                    max_request_size,
-                    timeout,
-                    request_handler
-                    );
+                new_socket,
+                max_request_size,
+                timeout,
+                request_handler
+            );
 
         }
-            close(new_socket);
-            cweb_print("Closed Conection\n");
 
     }
     
