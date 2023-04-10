@@ -252,12 +252,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 CWEB_START_MACRO(5001, main_sever);
 ~~~
-# Flags 
-With flags you can define comportaments of the sever, each flags define one atributes<br>
-<b>NOTE : ALWAYS PASS YOUR FLAGS BEFORE IMPORT,FOR THE LIB UNDERSTAND IT </b><br>
 
-### CWEB_DEBUG
-with cweb debug, it will print stages of aplications , like requests, and each stages 
+##  CWEB_DEBUG FLAG
+with cweb debug Flag, it will print stages of aplications , like requests, and each stages 
 ~~~c 
 
 #define CWEB_DEBUG
@@ -266,67 +263,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     return cweb_send_text("Hello World", 200);
     
-}
-
-CWEB_START_MACRO(5001, main_sever);
-~~~
-
-### CWEB_SINGLE_PROCESS 
-<b style="color:red;">DONT USE THESE FLAG IF YOU DONT NEED </b><br>
-the single process flag will execute your code in an single process, and if happen some 
-error, your aplicantion will crash, so, if you will use these flag, ensure that there is no error on your aplication, and use only if you are on an embed system that dont allow multprocess
-
-~~~c
-#define CWEB_DEBUG
-#define CWEB_SINGLE_PROCESS
-#include "CWebStudio.c"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-
-    if(strcmp(request->route, "/test") == 0){
-        ///making an error 
-        int x = 1/0;
-        //Your application will crash here if you are using single process 
-        //because the error is not handled
-    }
-    return cweb_send_text("Hello World", 200);
-    
-}
-
-CWEB_START_MACRO(5001, main_sever);
-~~~
-
-### CWEB_TIMEOUT 
-you can set the max timeout your aplication will deal, if is the function takes more 
-than that time , the sever will return 500, the default time its 30 seconds
-~~~c 
-
-#define CWEB_DEBUG
-//set the time to 5 seconds
-#define CWEB_TIMEOUT 5
-#include "CWebStudio.c"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-   //it will return 500 on these aplication
-   sleep(10);
-   return cweb_send_text("Hello World", 200);
-}
-
-CWEB_START_MACRO(5001, main_sever);
-~~~
-
-### CEW_MAX_REQUEST_SIZE
-You can set the max request size, the defaults is 50000 chars, the aplication won read 
-more than that size  but probably , it won crash if you pass more than 1000
- 
-~~~c
-
-#define CWEB_DEBUG
-
-#define CEW_MAX_REQUEST_SIZE 1000
-#include "CWebStudio.c"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-   //it will return 500 on these aplication
-
-   return cweb_send_text("Hello World", 200);
 }
 
 CWEB_START_MACRO(5001, main_sever);

@@ -1,14 +1,13 @@
 
 
 
-void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
-        
-        #ifdef BUFFER_IN_HEAP
-            char *buffer = (char*)malloc(CEW_MAX_REQUEST_SIZE);
-        
-        #else 
-            char buffer[CEW_MAX_REQUEST_SIZE];
-        #endif 
+void  private_cweb_execute_request(
+        int new_socket,
+        size_t max_request_size,
+        int time_limit,
+        struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)
+){
+        char *buffer = (char*)malloc(max_request_size);
 
         // Lendo a solicitação HTTP do cliente
         cweb_print("Readding Solicitaiton\n");
@@ -16,7 +15,7 @@ void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*requ
         int valread = 0;
 
         struct timeval timeout;
-        timeout.tv_sec = CWEB_TIMEOUT;  
+        timeout.tv_sec = time_limit;
         timeout.tv_usec = 0;
 
         fd_set read_fds;
@@ -35,9 +34,9 @@ void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*requ
         //check if the request is valid        
         if(valread <= 0){
             cweb_print("Error Reading request \n");
-            #ifdef BUFFER_IN_HEAP
-                free(buffer);
-            #endif
+
+            free(buffer);
+
             return;
         }
 
@@ -69,13 +68,11 @@ void  private_cweb_execute_request(int new_socket,struct CwebHttpResponse*(*requ
         free(response_str);
         response->free(response);
         request->free(request);
-        #ifdef BUFFER_IN_HEAP
-            free(buffer);
-        #endif
-    
+        free(buffer);
         cweb_print("Cleared memory\n");
         return ;
 }
+
 
 void private_cweb_send_error_mensage(int new_socket){
    
@@ -92,7 +89,14 @@ void private_cweb_send_error_mensage(int new_socket){
     
 }
 
-void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request)){
+void cweb_run_server(
+        int port,
+        struct CwebHttpResponse*(*request_handle)( struct CwebHttpRequest *request),
+        int timeout,
+        size_t max_request_size,
+        bool single_process,
+        int total_process
+){
 
     int server_fd, new_socket;
     struct sockaddr_in address;
@@ -136,65 +140,60 @@ void cweb_run_server(int port,struct CwebHttpResponse*(*request_handle)( struct 
         cweb_print("Executing request:%ld\n",actual_request);
         cweb_print("Socket: %d\n", new_socket);
         
-        #ifdef CWEB_SINGLE_PROCESS
-
-            private_cweb_execute_request(new_socket, request_handle);
-    
-        #else
+        if(single_process){
+            private_cweb_execute_request(new_socket,max_request_size,timeout, request_handle);
+        }
+        else {
             cweb_print("Creating a new process\n");
             pid_t pid = fork();
-            if(pid == 0){
+            if (pid == 0) {
                 //means that the process is the child
                 alarm(CWEB_TIMEOUT);
-                private_cweb_execute_request(new_socket, request_handle);
+                private_cweb_execute_request(new_socket,max_request_size,timeout, request_handle);
                 cweb_print("Request executado\n");
                 alarm(0);
                 exit(0);
-            }
-            else if(pid < 0){
+            } else if (pid < 0) {
                 perror("Faluire to create a new process");
                 exit(EXIT_FAILURE);
-            }
-            else{
+            } else {
                 cweb_print("New request %ld\n", actual_request);
                 cweb_print("Waiting for child process\n");
                 pid_t wpid;
                 int status = 0;
-                while(wpid = wait(&status) > 0);
-                        
-                if(WIFEXITED(status)){
+                while (wpid = wait(&status) > 0);
+
+                if (WIFEXITED(status)) {
                     cweb_print("Sucess\n");
-                    
-                }else{
+
+                } else {
                     pid_t pid2 = fork();
-                    if(pid2 == 0){
+                    if (pid2 == 0) {
                         cweb_print("Sending error mensage\n");
                         alarm(2);
                         private_cweb_send_error_mensage(new_socket);
                         alarm(0);
                         exit(0);
-                    }
-                    else if(pid2 < 0){
+                    } else if (pid2 < 0) {
                         perror("Faluire to create a new process");
                         exit(EXIT_FAILURE);
-                    }
-                    else{
+                    } else {
                         pid_t wpid2;
                         int status2 = 0;
-                        while(wpid2 = wait(&status2) > 0);
-                        if(WIFEXITED(status2)){
+                        while (wpid2 = wait(&status2) > 0);
+                        if (WIFEXITED(status2)) {
                             cweb_print("Mensage sent\n");
-                        }else{
+                        } else {
                             cweb_print("Error sending mensage\n");
                         }
 
                     }
                 }
-                
-         
+
+
             }
 
-        #endif
+        }
             close(new_socket);
             cweb_print("Closed Conection\n");
 
