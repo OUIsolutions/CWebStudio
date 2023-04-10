@@ -148,7 +148,7 @@ void cweb_run_server(
             pid_t pid = fork();
             if (pid == 0) {
                 //means that the process is the child
-                alarm(CWEB_TIMEOUT);
+                alarm(CWEB_DEFAULT_TIMEOUT);
                 private_cweb_execute_request(new_socket,max_request_size,timeout, request_handle);
                 cweb_print("Request executado\n");
                 alarm(0);
