@@ -4,14 +4,13 @@ static size_t actual_request = 0;
 
 
 #define CWEB_DEFAULT_TIMEOUT 30
-#define CWEB_MAX_REQUEST_SIZE 50000
+#define CWEB_MAX_REQUEST_SIZE 5000
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_SAFTY_MODE false
 
 void  private_cweb_execute_request(
     int new_socket,
     size_t max_request_size,
-    int time_limit,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request)
 );
 

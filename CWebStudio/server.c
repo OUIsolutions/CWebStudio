@@ -4,39 +4,20 @@
 void  private_cweb_execute_request(
         int new_socket,
         size_t max_request_size,
-        int time_limit,
         struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request)
 ){
         char *buffer = (char*)malloc(max_request_size);
 
         // Lendo a solicitação HTTP do cliente
-        cweb_print("Readding Solicitaiton\n");
-        
-        int valread = 0;
 
-        struct timeval timeout;
-        timeout.tv_sec = time_limit;
-        timeout.tv_usec = 0;
+        cweb_print("Reading request\n");
+        int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
 
-        fd_set read_fds;
-        FD_ZERO(&read_fds);
-        FD_SET(new_socket, &read_fds);
 
-        int ready = select(new_socket + 1, &read_fds, NULL, NULL, &timeout);
-        if (ready == -1) {
-           
-        } else if (ready == 0) {
-            cweb_print("Timeout reading request\n");
-        } else {
-            cweb_print("Reading request\n");
-            valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
-        }
-        //check if the request is valid        
+    //check if the request is valid
         if(valread <= 0){
             cweb_print("Error Reading request \n");
-
             free(buffer);
-
             return;
         }
 
@@ -61,15 +42,13 @@ void  private_cweb_execute_request(
         
         char *response_str = response->generate_response(response);
         cweb_print("Response created\n");
-
         send(new_socket, response_str,strlen(response_str) ,0);
 
 
         if(response->exist_content){
-
-
             send(new_socket, response->content, response->content_length, 0);
         }
+
         printf("Response sent\n");  
 
         free(response_str);
@@ -107,14 +86,15 @@ void private_cweb_execut_request_in_safty_mode(
     if (pid == 0) {
         //means that the process is the child
         alarm(CWEB_DEFAULT_TIMEOUT);
-        private_cweb_execute_request(new_socket,max_request_size,time_out, request_handler);
+        private_cweb_execute_request(new_socket,max_request_size, request_handler);
         cweb_print("Request executado\n");
         alarm(0);
         exit(0);
     } else if (pid < 0) {
         perror("Faluire to create a new process");
         exit(EXIT_FAILURE);
-    } else {
+    }
+    else {
         cweb_print("New request %ld\n", actual_request);
         cweb_print("Waiting for child process\n");
         pid_t wpid;
@@ -124,7 +104,8 @@ void private_cweb_execut_request_in_safty_mode(
         if (WIFEXITED(status)) {
             cweb_print("Sucess\n");
 
-        } else {
+        }
+        else {
             pid_t pid2 = fork();
             if (pid2 == 0) {
                 cweb_print("Sending error mensage\n");
@@ -132,10 +113,12 @@ void private_cweb_execut_request_in_safty_mode(
                 private_cweb_send_error_mensage(new_socket);
                 alarm(0);
                 exit(0);
-            } else if (pid2 < 0) {
+            }
+            else if (pid2 < 0) {
                 perror("Faluire to create a new process");
                 exit(EXIT_FAILURE);
-            } else {
+            }
+            else {
                 pid_t wpid2;
                 int status2 = 0;
                 while (wpid2 = wait(&status2) > 0);
@@ -205,7 +188,7 @@ void cweb_run_server(
         
         if(single_process){
 
-            private_cweb_execute_request(new_socket,max_request_size,timeout, request_handler);
+            private_cweb_execute_request(new_socket,max_request_size, request_handler);
             close(new_socket);
             cweb_print("Closed Conection with socket %d\n",new_socket);
         }
