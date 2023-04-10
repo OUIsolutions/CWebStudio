@@ -13,7 +13,7 @@ int main(){
             main_sever,
             CWEB_DEFAULT_TIMEOUT,
             max_size,
-            CWEB_DANGEROUS_SINGLE_PROCESS,
+            CWEB_SAFTY_MODE,
             1
             );
 }
