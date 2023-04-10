@@ -6,7 +6,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         ///making an error
         int x = 1/0;
         //Your application wont crash here if you are using safity mode
-        //because the error is not handled
     }
     return cweb_send_text("Hello World", 200);
 
