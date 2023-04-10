@@ -7085,7 +7085,7 @@ void  private_cweb_execute_request(
         cweb_print("Request method: %s\n",request->method);
         cweb_print("Request url: %s\n",request->url);
 
-         struct CwebHttpResponse *response;
+        struct CwebHttpResponse *response;
         response = request_handler(request);
         cweb_print("executed client lambda\n");        
        
@@ -7098,11 +7098,12 @@ void  private_cweb_execute_request(
         
         char *response_str = response->generate_response(response);
         cweb_print("Response created\n");
-        send(new_socket, response_str,strlen(response_str) ,0);
 
+
+        send(new_socket, response_str,strlen(response_str) ,MSG_NOSIGNAL);
 
         if(response->exist_content){
-            send(new_socket, response->content, response->content_length, 0);
+            send(new_socket, response->content, response->content_length, MSG_NOSIGNAL);
         }
 
         printf("Response sent\n");  
