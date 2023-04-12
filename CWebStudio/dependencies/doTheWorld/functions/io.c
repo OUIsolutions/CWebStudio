@@ -45,7 +45,7 @@ void dtw_remove_any(const char* path) {
         return;
     }
     
-    struct DtwStringArray *files = dtw_list_files_recursively(path);
+    struct DtwStringArray *files = dtw_list_files_recursively(path,DTW_CONCAT_PATH);
     int size = files->size;
     for(int i = 0; i < size; i++){
         remove(files->strings[i]);
@@ -53,7 +53,7 @@ void dtw_remove_any(const char* path) {
     files->free_string_array(files);
 
 
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     size = dirs->size;
     for(int i = dirs->size -1; i >=0; i--){
         rmdir(dirs->strings[i]);
@@ -132,7 +132,7 @@ bool dtw_write_any_content(const char *path,unsigned  char *content,int size){
     for(int i = strlen(path)-1;i > 0;i--){
         //runs in negative mode til / or \ is found
         if(path[i] == '\\' || path[i] == '/'){
-            char *dir_path =(char*)malloc(i);
+            char *dir_path =(char*)malloc(i +2);
             dir_path[i] = '\0';
             strncpy(dir_path,path,i);
             
@@ -205,7 +205,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
         dtw_remove_any(dest_path);
     }
     //creating dirs
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(src_path,DTW_CONCAT_PATH);
     
     int size = dirs->size;
     int src_path_size = strlen(src_path);
@@ -219,7 +219,7 @@ bool dtw_copy_any(const char* src_path,const  char* dest_path,bool merge) {
     dirs->free_string_array(dirs);
     
 
-    struct DtwStringArray *files = dtw_list_files_recursively(src_path);
+    struct DtwStringArray *files = dtw_list_files_recursively(src_path,DTW_CONCAT_PATH);
    
     for(int i = 0; i < files->size; i++){
         int file_size;

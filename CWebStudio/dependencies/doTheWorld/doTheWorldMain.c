@@ -59,6 +59,7 @@ SOFTWARE.
 #include "structs/tree_part/tree_part.c"
 #include "structs/tree_part/hardware_tree_part.c"
 #include "structs/tree/tree.c"
+#include "structs/tree/tree_finding.c"
 #include "structs/json_error.c"
 #include "structs/tree/json_tree.c"
 #include "structs/transaction_report.c"

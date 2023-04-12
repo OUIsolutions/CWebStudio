@@ -64,40 +64,22 @@ short private_dtw_convert_string_to_action(const char *action){
 
 void private_dtw_add_end_bar_to_dirs_string_array(struct DtwStringArray * dirs){
     for(int i = 0; i < dirs->size; i++){
-        #ifdef _WIN32
-            if(!dtw_ends_with(dirs->strings[i], "\\")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3); 
-                sprintf(formated_dir,"%s\\\0",dirs->strings[i]);
-                dirs->set_value(dirs,i,formated_dir);
-                free(formated_dir);
-            }
-        #else
-            if(!dtw_ends_with(dirs->strings[i], "/")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
-                sprintf(formated_dir,"%s/",dirs->strings[i]);
-                dirs->set_value(dirs,i,formated_dir);
-                free(formated_dir);
-            }
-        #endif
-       
+  
+        if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i],"\\")){
+            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 3);
+            sprintf(formated_dir,"%s/",dirs->strings[i]);
+            dirs->set_value(dirs,i,formated_dir);
+            free(formated_dir);
+        }    
             
-              
+         
     }
 }
 
 char *dtw_concat_path(const char *path1, const char *path2){
     char *path = (char *)malloc(strlen(path1) + strlen(path2) + 3);
-    #ifdef _WIN32
-        if(dtw_ends_with(path1, "\\")){
-            sprintf(path,"%s%s",path1,path2);
 
-        }
-        else{
-            sprintf(path,"%s\\%s",path1,path2);
-
-        }
-    #else 
-        if(dtw_ends_with(path1, "/")){
+        if(dtw_ends_with(path1, "/") || dtw_ends_with(path1, "\\")){
             sprintf(path,"%s%s",path1,path2);
 
         }
@@ -105,7 +87,55 @@ char *dtw_concat_path(const char *path1, const char *path2){
             sprintf(path,"%s/%s",path1,path2);
       
         }
-    #endif 
-
     return path;
+}
+
+struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove){
+    int size_to_remove = strlen(path_to_remove);
+    
+    if(dtw_ends_with(path_to_remove,"/")){
+        size_to_remove+=1;
+    }
+
+    struct DtwStringArray *new_array = dtw_constructor_string_array();
+
+    for(int i =0; i < paths->size; i++){
+
+        char *current_path_string = paths->strings[i];
+        int current_path_string_size = strlen(current_path_string);
+
+        char *new_string = (char*)malloc(current_path_string_size +2);
+        new_string[current_path_string_size] =0;
+
+        strcpy(new_string,current_path_string);
+        memmove(
+                new_string,
+                current_path_string+size_to_remove,
+                strlen(current_path_string) - size_to_remove +1
+        );
+        if(strcmp(new_string,"/") == 0){
+            free(new_string);
+            continue;
+        }
+        new_array->add_string(new_array,new_string);
+        free(new_string);
+
+    }
+    return new_array;
+}
+
+void private_dtw_remove_double_bars(struct DtwStringArray*path){
+    for(int i =0;i< path->size;i++){
+        char *current_string = path->strings[i];
+        int current_string_len = strlen(current_string);
+        if(current_string_len <2){
+            continue;
+        }
+
+        char last_char = current_string[current_string_len-1];
+        char last_last_char = current_string[current_string_len-2];
+        if(last_char == '/' && last_last_char =='/'){
+            current_string[current_string_len-1] ='\0';
+        }
+    }
 }

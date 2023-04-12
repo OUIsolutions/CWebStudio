@@ -47,6 +47,7 @@ struct DtwTreePart{
     bool(*hardware_modify)(struct DtwTreePart *self,bool set_as_action);
     bool(*hardware_commit)(struct DtwTreePart *self);
 
+
     void (*free_tree_part)(struct DtwTreePart *self);
     struct DtwTreePart *(*copy_tree_part)(struct DtwTreePart *self);
 };

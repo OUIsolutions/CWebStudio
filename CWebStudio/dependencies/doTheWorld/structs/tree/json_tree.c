@@ -100,6 +100,10 @@ char * private_dtw_dumps_tree_json(struct DtwTree *self,bool minify,bool preserv
         cJSON *json_tree_part = cJSON_CreateObject();
         struct DtwTreePart *tree_part = self->tree_parts[i];
         char *path_string = tree_part->path->get_path(tree_part->path);
+        if(!path_string){
+            cJSON_Delete(json_tree_part);
+            continue;
+        }
         if(consider_ignore == DTW_NOT_CONSIDER_IGNORE && tree_part->ignore){
             continue;
         }

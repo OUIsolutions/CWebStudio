@@ -1,5 +1,5 @@
 
-struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
+struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_path){
 
         struct  DtwStringArray *dirs  = dtw_constructor_string_array();
         //verify if the path is a directory
@@ -27,18 +27,21 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path){
                
         }
         //unsifth path in dirs 
-        
-        
-      
+    private_dtw_remove_double_bars(dirs);
+        if(!concat_path){
 
+            struct DtwStringArray *removed =  private_dtw_remove_start_path(dirs,path);
+            dirs->free_string_array(dirs);
+            return removed;
+        }
         return dirs;
 }
 
 
 
-struct DtwStringArray *  dtw_list_files_recursively(const char *path){
+struct DtwStringArray *  dtw_list_files_recursively(const char *path,bool concat_path){
     
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
     struct  DtwStringArray *files = dtw_constructor_string_array();
     
@@ -48,43 +51,48 @@ struct DtwStringArray *  dtw_list_files_recursively(const char *path){
         sub_files->free_string_array(sub_files);
     }
     dirs->free_string_array(dirs);
+
+    if(!concat_path){
+
+        struct DtwStringArray *removed =  private_dtw_remove_start_path(files,path);
+        files->free_string_array(files);
+        return removed;
+    }
+
     return files;
 }
 
 
-struct DtwStringArray * dtw_list_all_recursively(const char *path){
+struct DtwStringArray * dtw_list_all_recursively(const char *path,bool concat_path){
 
-    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path);
+    struct DtwStringArray *dirs = dtw_list_dirs_recursively(path,DTW_CONCAT_PATH);
     
     struct DtwStringArray *all = dtw_constructor_string_array();
     
     for(int i = 0; i < dirs->size; i++){
-        #ifdef _WIN32
-            if(!dtw_ends_with(dirs->strings[i], "\\")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2); 
-                sprintf(formated_dir,"%s\\",dirs->strings[i]);
-                all->add_string(all,formated_dir);
-                free(formated_dir);
-            }
-            else{
-                all->add_string(all,dirs->strings[i]);
-            }
-        #else
-            if(!dtw_ends_with(dirs->strings[i], "/")){
-                char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
-                sprintf(formated_dir,"%s/",dirs->strings[i]);
-                all->add_string(all,formated_dir);
-                free(formated_dir);
-            }
-            else{
-                all->add_string(all,dirs->strings[i]);
-            }
-        #endif
-    
+
+        if(!dtw_ends_with(dirs->strings[i], "/") || !dtw_ends_with(dirs->strings[i], "\\") ){
+            char *formated_dir =  (char*)malloc(strlen(dirs->strings[i]) + 2);
+            sprintf(formated_dir,"%s/",dirs->strings[i]);
+            all->add_string(all,formated_dir);
+            free(formated_dir);
+        }
+        else{
+            all->add_string(all,dirs->strings[i]);
+        }
+
+
         struct DtwStringArray *sub_files = dtw_list_basic(dirs->strings[i],DTW_FILE_TYPE,true);
         all->merge_string_array(all,sub_files);
         sub_files->free_string_array(sub_files);
     }
     dirs->free_string_array(dirs);
+    private_dtw_remove_double_bars(all);
+    if(!concat_path){
+
+        struct DtwStringArray *removed =  private_dtw_remove_start_path(all,path);
+        all->free_string_array(all);
+        return removed;
+    }
     return all;
 }

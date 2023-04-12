@@ -54,6 +54,8 @@ char* dtw_replace_string(const char *target, const char *old_element, const char
     return result;
 }
 
+
+
 char *private_dtw_change_beginning_of_string(const char *target,int start_element_to_remove_size, const char *new_element) {
     int target_size = strlen(target);
     int new_element_size = strlen(new_element);

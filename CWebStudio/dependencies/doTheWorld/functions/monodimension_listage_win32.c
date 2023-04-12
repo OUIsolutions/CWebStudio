@@ -64,11 +64,10 @@ struct DtwStringArray *  dtw_list_basic(const char *path,int expected_type,bool 
                 }
                 else{
                     char *generated_dir = (char*)malloc(strlen(path) + strlen(file_data.cFileName) + 2);
-                    #ifdef _WIN32
-                        sprintf(generated_dir, "%s\\%s", path, file_data.cFileName);
-                    #else
-                        sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
-                    #endif
+                    
+
+                    sprintf(generated_dir, "%s/%s", path, file_data.cFileName);
+                   
                     dirs->add_string(dirs, generated_dir);
                     free(generated_dir);
                 }

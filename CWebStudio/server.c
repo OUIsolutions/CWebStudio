@@ -88,7 +88,7 @@ void private_cweb_execut_request_in_safty_mode(
         //means that the process is the child
         alarm(CWEB_DEFAULT_TIMEOUT);
         private_cweb_execute_request(new_socket,max_request_size, request_handler);
-        cweb_print("Request executado\n");
+        cweb_print("Request executed\n");
         alarm(0);
         exit(0);
     } else if (pid < 0) {

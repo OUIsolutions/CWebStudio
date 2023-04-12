@@ -2,6 +2,7 @@
 
 
 struct  DtwTree * dtw_tree_constructor(){
+
     struct DtwTree *self = (struct DtwTree*)malloc(sizeof(struct DtwTree));
     self->size = 0;
     self->tree_parts = (struct DtwTreePart**)malloc(1);
@@ -12,7 +13,13 @@ struct  DtwTree * dtw_tree_constructor(){
     self->represent = private_dtw_represent_tree;
     self->add_tree_parts_from_string_array = private_dtw_add_tree_parts_from_string_array;
     self->add_tree_from_hardware = private_dtw_add_tree_from_hardware;
-   
+
+    self->map = private_dtw_map;
+    self->filter = private_dtw_filter;
+
+    self->find_part_by_function = private_dtw_find_by_function;
+    self->find_part_by_name  = private_dtw_find_tree_part_by_name;
+    self->find_part_by_path = private_dtw_find_tree_part_by_path;
     self->report = private_dtw_create_report;
     //{%if not  lite %}
     
@@ -107,11 +114,36 @@ void private_dtw_add_tree_parts_from_string_array(struct DtwTree *self,struct Dt
 }
 
 
-void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content){
-    
-    struct DtwStringArray *path_array = dtw_list_all_recursively(path);
+void private_dtw_add_tree_from_hardware(struct DtwTree *self,const char *path,bool load_content, bool preserve_content,bool preserve_path_start){
+
+    struct DtwStringArray *path_array = dtw_list_all_recursively(path,DTW_CONCAT_PATH);
     self->add_tree_parts_from_string_array(self,path_array,load_content,preserve_content);
     path_array->free_string_array(path_array);
+
+    if(preserve_path_start){
+        return;
+    }
+
+    int size_to_remove = strlen(path);
+    if(!dtw_ends_with(path,"/")){
+        size_to_remove+=1;
+    }
+
+    for(int i =0; i < self->size; i++){
+        struct DtwTreePart *current_part = self->tree_parts[i];
+        struct DtwPath *current_path = current_part->path;
+        char *current_path_string = current_path->get_path(current_path);
+        //remove the size toremove from string
+
+        memmove(
+                current_path_string,
+                current_path_string+size_to_remove,
+                strlen(current_path_string) - size_to_remove +1
+                );
+        current_path->set_path(current_path,current_path_string);
+        strcpy(current_path->original_path,current_path_string);
+        free(current_path_string);
+    }
 
 }
 
