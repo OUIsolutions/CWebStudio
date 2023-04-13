@@ -7166,7 +7166,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         strcpy(content_type_created, content_type);
     }
 
-    return cweb_send_any(content_type_created, size, content, status_code);
+    return cweb_send_any(content_type_created, (size_t)size, content, status_code);
     
 }
 
@@ -7287,7 +7287,7 @@ void private_cweb_http_response_free(struct CwebHttpResponse *self){
 }
 
 void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char *content,int content_length){
-    self->content = (unsigned char*)malloc(content_length +2);
+    self->content = (unsigned char*)malloc(content_length +3);
     memcpy(self->content, content, content_length);
     self->exist_content = true;
     self->content_length = content_length;
