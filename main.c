@@ -1,16 +1,15 @@
 #define CWEB_DEBUG
 #include "CWebStudio.c"
+
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-     sleep(10);
-     return cweb_send_text("test mensage",200);
+
+    unsigned char *body = request->content;
+    int size = request->content_length;
+
+    //dtw_write_any_content("test.png", body, size);
+
+    return cweb_send_file("test.png",CWEB_AUTO_SET_CONTENT, 200);
 
 }
-int main(){
-    cweb_run_server(
-            5000,
-            main_sever,
-            CWEB_DEFAULT_TIMEOUT,
-            CWEB_DEFAULT_MAX_REQUEST,
-            CWEB_DANGEROUS_SINGLE_PROCESS
-            );
-}
+
+CWEB_START_MACRO(8081, main_sever);

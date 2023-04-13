@@ -11,6 +11,11 @@ struct CwebHttpRequest *private_cweb_request_constructor(){
     self->content = NULL;
     self->content_length = 0;
 
+    self->set_url = private_cweb_set_url;
+    self->set_method = private_cweb_set_method;
+    self->set_route = private_cweb_set_route;
+    self->set_content_string = private_cweb_set_content_string;
+
     self->params = cweb_create_dict();
     self->headers = cweb_create_dict();
     self->interpret_query_params = private_cweb_interpret_query_params;
@@ -21,7 +26,34 @@ struct CwebHttpRequest *private_cweb_request_constructor(){
     
     return self;
     
-}   
+}
+
+void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
+    self->url = (char*) malloc(strlen(url)+2);
+    strcpy(self->url,url);
+}
+
+void private_cweb_set_route(struct CwebHttpRequest *self,const char *route){
+    self->route = (char*) malloc(strlen(route) +2);
+    strcpy(self->route,route);
+}
+
+void private_cweb_set_method(struct CwebHttpRequest *self,const char *method){
+    self->method = (char*) malloc(strlen(method));
+    strcpy(self->method,method);
+}
+
+void private_cweb_set_content_string(struct CwebHttpRequest *self,const char *content){
+    self->content_length = strlen(content);
+    self->content = (unsigned char*) malloc(strlen(content) +2);
+    for(int i =0;i<strlen(content);i++){
+        self->content[i] = content[i];
+    }
+}
+
+
+
+
 void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params){
     int paramns_size = strlen(query_params);
     char key[1000] = {0};
@@ -64,11 +96,11 @@ void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first
     sscanf(first_line, "%s %s", method, url);
     
     
-    self->method = (char*)malloc(strlen(method)+1);
+    self->method = (char*)malloc(strlen(method)+2);
     strcpy(self->method, method);
 
     
-    self->url = (char*)malloc(strlen(url)+1);
+    self->url = (char*)malloc(strlen(url)+2);
     strcpy(self->url, url);
     
     char route[1000] = {0};
@@ -136,10 +168,6 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     
     while (true){
 
-        //means its the last line
-        if(i > CEW_MAX_REQUEST_SIZE){
-            break;
-        }
 
         if(
             raw_entrys[i]  == '\r' &&

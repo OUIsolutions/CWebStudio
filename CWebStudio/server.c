@@ -11,7 +11,7 @@ void  private_cweb_execute_request(
         // Lendo a solicitação HTTP do cliente
 
         cweb_print("Reading request\n");
-        int valread = read(new_socket, buffer, CEW_MAX_REQUEST_SIZE);
+        int valread = read(new_socket, buffer, CWEB_DEFAULT_MAX_REQUEST);
 
 
     //check if the request is valid
