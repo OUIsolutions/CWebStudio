@@ -149,7 +149,7 @@ bool dtw_write_any_content(const char *path,unsigned  char *content,int size){
         return false;
     }
     
-    fwrite(content, sizeof(unsigned char),size, file);
+    fwrite(content, sizeof(char),size, file);
     
     fclose(file);
     return true;
