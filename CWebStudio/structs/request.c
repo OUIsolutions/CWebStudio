@@ -202,7 +202,7 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
     
     if(content_lenght_str != NULL){
-        self->content_length = atoi(content_lenght_str)+2000;
+        self->content_length = atoi(content_lenght_str)+3000;
         printf("tamanho : %i\n",self->content_length);
         self->content = (unsigned char *)malloc(self->content_length +3);
         //means is the end of \r\n\r\n
