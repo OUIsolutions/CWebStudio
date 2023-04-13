@@ -200,8 +200,10 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     
 
     char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
+    
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
+        printf("tamanho : %i\n",self->content_length);
         self->content = (unsigned char *)malloc(self->content_length +3);
         int content_start = i+4;
         for(int j = 0; j<self->content_length; j++){
