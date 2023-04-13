@@ -1,22 +1,12 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <sys/wait.h>
-
-
-int main(int argc, char ** argv){
-
-    int teste_val = 20;
-
-    void teste(){
-        teste_val = 10;
-    };
-    
-    printf("teste %d\n", teste_val);
-    teste();
-    printf("teste %d\n", teste_val);
-
-
- 
+#include <string.h>
+int main(){
+    char *teste = malloc(1000);
+    strcat(teste,"eai beleza\0");
+    char *teste2 = teste;
+    teste2+=1;
+    printf("%s\n",teste2);
+    free(teste);
     return 0;
 }
