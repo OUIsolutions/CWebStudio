@@ -19,7 +19,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     
     int size = 0;
     unsigned char *content = dtw_load_binary_content(file_path, &size);
-   
+    cweb_print("Writen size%i\n",size);
     if(content == NULL){
         char *mensage = (char*)malloc(100);
         sprintf(mensage, "File not found: %s", file_path);
