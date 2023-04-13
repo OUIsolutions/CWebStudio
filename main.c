@@ -21,4 +21,5 @@ int main(){
             1000000,
             CWEB_SAFTY_MODE
             );
+    return 0;
 }

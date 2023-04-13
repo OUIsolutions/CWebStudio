@@ -190,6 +190,9 @@ void cweb_run_server(
             private_cweb_execute_request(new_socket,max_request_size, request_handler);
             close(new_socket);
             cweb_print("Closed Conection with socket %d\n",new_socket);
+            #ifdef CWEB_ONCE
+                return;
+            #endif
         }
 
         else {
