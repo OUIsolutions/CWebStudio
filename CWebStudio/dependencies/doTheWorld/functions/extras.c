@@ -91,10 +91,12 @@ char *dtw_concat_path(const char *path1, const char *path2){
 }
 
 struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove){
-    int size_to_remove = strlen(path_to_remove);
-    
+
+
+    int size_to_remove = strlen(path_to_remove) +1;
+
     if(dtw_ends_with(path_to_remove,"/")){
-        size_to_remove+=1;
+        size_to_remove-=1;
     }
 
     struct DtwStringArray *new_array = dtw_constructor_string_array();
@@ -127,15 +129,8 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
 void private_dtw_remove_double_bars(struct DtwStringArray*path){
     for(int i =0;i< path->size;i++){
         char *current_string = path->strings[i];
-        int current_string_len = strlen(current_string);
-        if(current_string_len <2){
-            continue;
-        }
-
-        char last_char = current_string[current_string_len-1];
-        char last_last_char = current_string[current_string_len-2];
-        if(last_char == '/' && last_last_char =='/'){
-            current_string[current_string_len-1] ='\0';
-        }
+        char *result = dtw_replace_string(current_string,"//","/");
+        strcpy(current_string,result);
+        free(result);
     }
 }
