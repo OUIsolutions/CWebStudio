@@ -7166,7 +7166,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         strcpy(content_type_created, content_type);
     }
 
-    return cweb_send_any(content_type_created, size, content, status_code);
+    return cweb_send_any(content_type_created, size+1, content, status_code);
     
 }
 
@@ -7347,8 +7347,6 @@ void  private_cweb_execute_request(
         if(response->exist_content){
             send(new_socket, response->content, response->content_length, MSG_NOSIGNAL);
         }
-
-        printf("Response sent\n");  
 
         free(response_str);
         response->free(response);

@@ -50,8 +50,6 @@ void  private_cweb_execute_request(
             send(new_socket, response->content, response->content_length, MSG_NOSIGNAL);
         }
 
-        printf("Response sent\n");  
-
         free(response_str);
         response->free(response);
         request->free(request);
