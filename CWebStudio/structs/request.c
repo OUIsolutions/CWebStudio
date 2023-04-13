@@ -202,15 +202,21 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
     
     if(content_lenght_str != NULL){
-        self->content_length = atoi(content_lenght_str);
-        printf("tamanho : %i\n",self->content_length);
-        self->content = (unsigned char *)malloc(self->content_length +3);
+        //self->content_length = atoi(content_lenght_str);
+
         //means is the end of \r\n\r\n
         int content_start = i+4;
-        for(int j = 0; j<self->content_length; j++){
-            self->content[j] = raw_entrys[content_start+j];
+        self->content =(unsigned char*)raw_entrys;
+        self->content+=content_start;
+        int i = 0;
+        while(true){
+            if(self->content[i] == 0){
+                self->content_length = i;
+            }
+            i++;
         }
 
+        
         //extracting url encoded data
         char *content_type = self->headers->get_value(self->headers, "Content-Type");
         if(content_type != NULL){
@@ -250,9 +256,7 @@ void private_cweb_free_http_request(struct CwebHttpRequest *self){
     if(self->method != NULL){
         free(self->method);
     }
-    if(self->content != NULL){
-        free(self->content);
-    }
+
     self->params->free(self->params);
 
     self->headers->free(self->headers);
