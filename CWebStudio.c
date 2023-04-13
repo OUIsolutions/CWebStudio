@@ -4601,12 +4601,10 @@ char *dtw_concat_path(const char *path1, const char *path2){
 }
 
 struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *paths,const char *path_to_remove){
-
-
-    int size_to_remove = strlen(path_to_remove) +1;
-
+    int size_to_remove = strlen(path_to_remove);
+    
     if(dtw_ends_with(path_to_remove,"/")){
-        size_to_remove-=1;
+        size_to_remove+=1;
     }
 
     struct DtwStringArray *new_array = dtw_constructor_string_array();
@@ -4639,9 +4637,16 @@ struct DtwStringArray* private_dtw_remove_start_path(struct DtwStringArray *path
 void private_dtw_remove_double_bars(struct DtwStringArray*path){
     for(int i =0;i< path->size;i++){
         char *current_string = path->strings[i];
-        char *result = dtw_replace_string(current_string,"//","/");
-        strcpy(current_string,result);
-        free(result);
+        int current_string_len = strlen(current_string);
+        if(current_string_len <2){
+            continue;
+        }
+
+        char last_char = current_string[current_string_len-1];
+        char last_last_char = current_string[current_string_len-2];
+        if(last_char == '/' && last_last_char =='/'){
+            current_string[current_string_len-1] ='\0';
+        }
     }
 }
 
@@ -5182,8 +5187,7 @@ struct DtwStringArray * dtw_list_dirs_recursively(const char *path,bool concat_p
                
         }
         //unsifth path in dirs 
-        private_dtw_remove_double_bars(dirs);
-
+    private_dtw_remove_double_bars(dirs);
         if(!concat_path){
 
             struct DtwStringArray *removed =  private_dtw_remove_start_path(dirs,path);
@@ -7125,7 +7129,6 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     
     int size = 0;
     unsigned char *content = dtw_load_binary_content(file_path, &size);
-   
     if(content == NULL){
         char *mensage = (char*)malloc(100);
         sprintf(mensage, "File not found: %s", file_path);
@@ -7152,7 +7155,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
             strcpy(content_type_created, "image/png");
         }
         else if(strcmp(extension, "jpg") == 0){
-            strcpy(content_type_created, "image/jpeg");
+            strcpy(content_type_created, "image/jpg");
         }
         else if(strcmp(extension, "jpeg") == 0){
             strcpy(content_type_created, "image/jpeg");
@@ -7166,7 +7169,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         strcpy(content_type_created, content_type);
     }
 
-    return cweb_send_any(content_type_created, size+100000, content, status_code);
+    return cweb_send_any(content_type_created, size, content, status_code);
     
 }
 
@@ -7287,7 +7290,7 @@ void private_cweb_http_response_free(struct CwebHttpResponse *self){
 }
 
 void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char *content,int content_length){
-    self->content = (unsigned char*)malloc(content_length +3);
+    self->content = (unsigned char*)malloc(content_length +2);
     memcpy(self->content, content, content_length);
     self->exist_content = true;
     self->content_length = content_length;
@@ -7309,7 +7312,7 @@ void  private_cweb_execute_request(
         // Lendo a solicitação HTTP do cliente
 
         cweb_print("Reading request\n");
-        int valread = read(new_socket, buffer, max_request_size);
+        int valread = read(new_socket, buffer, CWEB_DEFAULT_MAX_REQUEST);
 
 
     //check if the request is valid
@@ -7347,6 +7350,8 @@ void  private_cweb_execute_request(
         if(response->exist_content){
             send(new_socket, response->content, response->content_length, MSG_NOSIGNAL);
         }
+
+        printf("Response sent\n");  
 
         free(response_str);
         response->free(response);
@@ -7488,9 +7493,6 @@ void cweb_run_server(
             private_cweb_execute_request(new_socket,max_request_size, request_handler);
             close(new_socket);
             cweb_print("Closed Conection with socket %d\n",new_socket);
-            #ifdef CWEB_ONCE
-                return;
-            #endif
         }
 
         else {
