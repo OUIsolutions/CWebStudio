@@ -46,9 +46,22 @@ void  private_cweb_execute_request(
 
         send(new_socket, response_str,strlen(response_str) ,MSG_NOSIGNAL);
 
-        if(response->exist_content){
-            send(new_socket, response->content, response->content_length, MSG_NOSIGNAL);
+        // Enviando conteúdo byte a byte
+        if (response->exist_content) {
+            size_t sent = 0;
+            while (sent < response->content_length) {
+                size_t chunk_size = response->content_length - sent;
+                if (chunk_size > max_request_size) {
+                    chunk_size = max_request_size;
+                }
+                ssize_t res = send(new_socket, response->content + sent, chunk_size, MSG_NOSIGNAL);
+                if (res < 0) {
+                    break;
+                }
+                sent += res;
+            }
         }
+
 
         free(response_str);
         response->free(response);
