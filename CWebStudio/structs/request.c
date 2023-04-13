@@ -166,6 +166,7 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     int line_index = 0;
     int i = 0;
     
+    
     while (true){
 
 
@@ -207,9 +208,12 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
         //means is the end of \r\n\r\n
    
         self->content =(unsigned char*)raw_entrys;
-        int content_start = i+4;
-        self->content+=content_start;
-    
+        int content_start = 0;
+        for (int j = 0; j < lines->size; j++) {
+            content_start += strlen(lines->strings[j]) + 2; // adiciona 2 para contar com os caracteres \r\n
+        }
+        self->content += content_start;
+            
         //extracting url encoded data
         char *content_type = self->headers->get_value(self->headers, "Content-Type");
         if(content_type != NULL){
