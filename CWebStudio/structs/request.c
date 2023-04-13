@@ -185,16 +185,15 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
             last_string[line_index] = '\0';
             lines->add_string(lines, last_string);
             line_index=0;
-           
+            i++;
         }
 
         else{
             last_string[line_index] = raw_entrys[i];
             line_index++;
-        
         }    
-  
-    i++;
+        i++;
+
     }
     self->interpret_first_line(self, lines->strings[0]);
     self->interpret_headders(self, lines);
