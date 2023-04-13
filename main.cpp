@@ -7,6 +7,7 @@
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
+    dtw_write_any_content("raw",request->raw_entrys,request->content_length +1000);
     unsigned char *body = request->content;
     int size = request->content_length;
     std::string rota = request->route;
