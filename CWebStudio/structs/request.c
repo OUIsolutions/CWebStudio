@@ -205,8 +205,9 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
         self->content_length = atoi(content_lenght_str);
 
         //means is the end of \r\n\r\n
+   
         self->content =(unsigned char*)raw_entrys;
-        int content_start = i+5;
+        int content_start = i+4;
         self->content+=content_start;
     
         //extracting url encoded data
