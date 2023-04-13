@@ -7166,7 +7166,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         strcpy(content_type_created, content_type);
     }
 
-    return cweb_send_any(content_type_created, size+1, content, status_code);
+    return cweb_send_any(content_type_created, size, content, status_code);
     
 }
 
