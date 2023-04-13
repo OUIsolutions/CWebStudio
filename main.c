@@ -1,5 +1,5 @@
 #define CWEB_DEBUG
-#include "CWebStudio.c"
+#include "CWebStudio/CwebStudioMain.c"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
@@ -8,8 +8,17 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     //dtw_write_any_content("test.png", body, size);
 
-    return cweb_send_file("test.png",CWEB_AUTO_SET_CONTENT, 200);
+    return cweb_send_file("teste2.png",CWEB_AUTO_SET_CONTENT, 200);
 
 }
 
-CWEB_START_MACRO(8081, main_sever);
+int main(){
+
+    cweb_run_server(
+            8081,
+            main_sever,
+            CWEB_DEFAULT_TIMEOUT,
+            1000000,
+            CWEB_SAFTY_MODE
+            );
+}
