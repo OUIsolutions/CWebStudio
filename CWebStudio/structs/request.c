@@ -193,7 +193,7 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
             last_string[line_index] = raw_entrys[i];
             line_index++;
             i++;
-a
+
         }    
 
     }
