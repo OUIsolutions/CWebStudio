@@ -28,4 +28,12 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-CWEB_START_MACRO(80, main_sever);
+int main(){
+    cweb_run_server(
+        80,
+        main_sever,
+        20,
+        1000000,
+        false
+    );
+}
