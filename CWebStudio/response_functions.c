@@ -19,6 +19,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     
     int size = 0;
     unsigned char *content = dtw_load_binary_content(file_path, &size);
+   
     if(content == NULL){
         char *mensage = (char*)malloc(100);
         sprintf(mensage, "File not found: %s", file_path);
@@ -45,7 +46,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
             strcpy(content_type_created, "image/png");
         }
         else if(strcmp(extension, "jpg") == 0){
-            strcpy(content_type_created, "image/jpg");
+            strcpy(content_type_created, "image/jpeg");
         }
         else if(strcmp(extension, "jpeg") == 0){
             strcpy(content_type_created, "image/jpeg");
@@ -59,6 +60,6 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         strcpy(content_type_created, content_type);
     }
 
-    return cweb_send_any(content_type_created, size, content, status_code);
+    return cweb_send_any(content_type_created, size+1000, content, status_code);
     
 }
