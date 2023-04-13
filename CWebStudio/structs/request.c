@@ -165,7 +165,7 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     char last_string[10000]= {0};
     int line_index = 0;
     int i = 0;
-    
+    int point = 0;
     
     while (true){
 
@@ -185,15 +185,13 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
             last_string[line_index] = '\0';
             lines->add_string(lines, last_string);
             line_index=0;
-            
+            i++;
         }
 
         else{
             last_string[line_index] = raw_entrys[i];
             line_index++;
-           
         }    
-
         i++;
 
     }
