@@ -40,6 +40,7 @@ SOFTWARE.
 
 
 #include "dependencies/doTheWorld/doTheWorldMain.c"
+#include "headers/extras.h"
 #include "headers/debug.h"
 #include "headers/key_val.h"
 #include "headers/dict.h"
@@ -49,6 +50,8 @@ SOFTWARE.
 #include "headers/server.h"
 #include "headers/main_macro.h"
 
+
+#include "extras.c"
 #include "structs/request.c"
 #include "response_functions.c"
 #include "structs/key_val.c"
