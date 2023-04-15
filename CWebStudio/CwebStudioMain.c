@@ -38,8 +38,12 @@ SOFTWARE.
 #include <arpa/inet.h>
 #include <unistd.h>
 
-
+#ifdef OUI_DEBUG
+#include "../../doTheWorld/doTheWorld/doTheWorldMain.c"
+#else 
 #include "dependencies/doTheWorld/doTheWorldMain.c"
+#endif 
+
 #include "headers/extras.h"
 #include "headers/debug.h"
 #include "headers/key_val.h"
