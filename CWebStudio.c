@@ -7014,6 +7014,7 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     char last_string[10000]= {0};
     int line_index = 0;
     int i = 0;
+    int point = 0;
     
     while (true){
 
@@ -7041,6 +7042,7 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
             line_index++;
         }    
         i++;
+    
 
     }
     self->interpret_first_line(self, lines->strings[0]);
@@ -7049,13 +7051,16 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     
 
     char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
+    
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
-        self->content = (unsigned char *)malloc(self->content_length +3);
+
+        //means is the end of \r\n\r\n
+   
+        self->content =(unsigned char*)raw_entrys;
         int content_start = i+4;
-        for(int j = 0; j<self->content_length; j++){
-            self->content[j] = raw_entrys[content_start+j];
-        }
+        self->content+=content_start;
+    
         //extracting url encoded data
         char *content_type = self->headers->get_value(self->headers, "Content-Type");
         if(content_type != NULL){
@@ -7095,9 +7100,7 @@ void private_cweb_free_http_request(struct CwebHttpRequest *self){
     if(self->method != NULL){
         free(self->method);
     }
-    if(self->content != NULL){
-        free(self->content);
-    }
+
     self->params->free(self->params);
 
     self->headers->free(self->headers);
@@ -7290,7 +7293,7 @@ void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char 
     self->content = (unsigned char*)malloc(content_length +3);
     memcpy(self->content, content, content_length);
     self->exist_content = true;
-    self->content_length = content_length;
+    self->content_length = content_length -1;
 }
 
 void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,const  char *value){
