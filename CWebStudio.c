@@ -7136,41 +7136,20 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         free(mensage);
         return response;
     }
-
-
-    struct DtwPath *path = dtw_constructor_path(file_path);
-    char *content_type_created = (char*)malloc(100);
+    char *content_type_created;
     if(content_type == NULL){
-        char *extension = path->get_extension(path);
-        if(strcmp(extension, "html") == 0){
-            strcpy(content_type_created, "text/html");
-        }
-        else if(strcmp(extension, "css") == 0){
-            strcpy(content_type_created, "text/css");
-        }
-        else if(strcmp(extension, "js") == 0){
-            strcpy(content_type_created, "text/javascript");
-        }
-        else if(strcmp(extension, "png") == 0){
-            strcpy(content_type_created, "image/png");
-        }
-        else if(strcmp(extension, "jpg") == 0){
-            strcpy(content_type_created, "image/jpeg");
-        }
-        else if(strcmp(extension, "jpeg") == 0){
-            strcpy(content_type_created, "image/jpeg");
-        }
-        else{
-            strcpy(content_type_created, "text/plain");
-        }
-        free(extension);
+        content_type_created  = (char*)cweb_generate_content_type(file_path);
     }
     else{
-        strcpy(content_type_created, content_type);
+        content_type_created = (char*)content_type;
     }
 
-    return cweb_send_any(content_type_created, size, content, status_code);
-    
+    struct CwebHttpResponse *response =  cweb_send_any(content_type_created, size, content, status_code);
+    if(content_type == NULL){
+        free(content_type_created);
+    }
+    return response;
+
 }
 
 

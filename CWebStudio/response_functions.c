@@ -29,7 +29,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     }
     char *content_type_created;
     if(content_type == NULL){
-        content_type_created  = (char*)generate_content_type(file_path);
+        content_type_created  = (char*)cweb_generate_content_type(file_path);
     }
     else{
         content_type_created = (char*)content_type;
