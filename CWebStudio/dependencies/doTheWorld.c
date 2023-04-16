@@ -5575,6 +5575,7 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->path = dtw_constructor_path(path);
     self->content_exist_in_memory = false;
     self->content_exist_in_hardware = false;
+    self->last_modification_time = 0;
     self->is_binary = false;
     self->ignore = false;
     self->pending_action = 0;
@@ -5582,6 +5583,8 @@ struct DtwTreePart * dtw_tree_part_constructor(const char *path,bool load_conten
     self->content = (unsigned char *)malloc(0);
     self->content_size = 0;
     self->hardware_content_size = 0;
+
+
     self->get_content_string_by_reference = private_dtw_get_content_string_by_reference;
     self->get_content_binary_by_reference = private_dtw_get_content_binary_by_reference;
     self->load_content_from_hardware = private_dtw_load_content_from_hardware;
@@ -5697,33 +5700,36 @@ void private_dtw_represent_tree_part(struct DtwTreePart *self){
     self->path->represent(self->path);
     printf("Content Exist in Memory: %s\n",self->content_exist_in_memory ? "true" : "false");
     printf("Ignore: %s\n",self->ignore ? "true" : "false");
-    
-    if(self->content_exist_in_memory == true || self->content_exist_in_hardware == true){
-        
+
+    printf("Content Exist In Hardware: %s\n",self->content_exist_in_hardware ? "true" : "false");
+    printf("Is Binary: %s\n",self->is_binary ? "true" : "false");
+
+    if(self->last_modification_time){
+        printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
         char *last_moditication_in_string = self->last_modification_time_in_string(self);
-
-        printf("Content Exist In Hardware: %s\n",self->content_exist_in_hardware ? "true" : "false");
-        printf("Is Binary: %s\n",self->is_binary ? "true" : "false");
-   
-        
-        printf("Content Size: %li\n",self->content_size);
-        if(self->content_exist_in_hardware == true){
-            printf("Last Modification Time in Unix: %li\n",self->last_modification_time);
-            printf("Last Modification Time: %s\n",last_moditication_in_string);
-            printf("Hardware SHA: %s\n",self->hawdware_content_sha);
-        }
-
-        if(self->content_exist_in_memory == true){
-            char *content_sha = self->get_content_sha(self);
-            printf("Content SHA:  %s\n",content_sha);
-            printf ("Content: %s\n",self->content);
-            free(content_sha);
-        }
-        
+        printf("Last Modification Time: %s\n",last_moditication_in_string);
         free(last_moditication_in_string);
     }
+
+    printf("Content Size: %li\n",self->content_size);
+
+    char *content_sha = self->get_content_sha(self);
+    if(content_sha){
+        printf("Content SHA:  %s\n",content_sha);
+        free(content_sha);
+    }
+    if(self->content_exist_in_memory && self->is_binary == false){
+        printf ("Content: %s\n",self->content);
+    }
+    if(self->is_binary == true){
+        printf("Content: Binary\n");
+    }
+    
     const char *action = private_dtw_convert_action_to_string(self->pending_action);
-    printf("Pending Action: %s\n",action);
+    if(action){
+        printf("Pending Action: %s\n",action);
+
+    }
     free(path);
 
 }
