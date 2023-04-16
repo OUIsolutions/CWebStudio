@@ -18,8 +18,11 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
        return cweb_send_file("test.png",CWEB_AUTO_SET_CONTENT,200);
     }
     
-    if(rota == "/set"){
-            dtw_write_any_content("test.png", body, size);
+    if(rota == "/set"){        
+            //transform body from bas64 to binary
+            size_t out_size = 0;
+            unsigned char *binary = dtw_base64_decode((char*)body,size,&out_size);
+            dtw_write_any_content("teste.png",binary,out_size);
             return cweb_send_text("uploaded",200);
     }
 
