@@ -14,17 +14,22 @@ void private_cweb_execute_request(
     size_t readed = 0;
     while (readed < max_request_size)
     {
-        ssize_t res = recv(new_socket, buffer + readed, 1, 0);
+        ssize_t res = read(new_socket, buffer + readed, 1);
+        
+        printf("readed %ld bytes\n", res);
+
+
         if (res < 0)
         {
             break;
         }
-    }
-    
+        readed += 1;
 
+       
+    }
     cweb_print("Readed %ld bytes\n", readed);
+
     cweb_print("Executing lambda\n");
-    
     struct CwebHttpRequest *request = private_cweb_create_http_request(
         buffer);
     cweb_print("created request\n");
