@@ -208,15 +208,16 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
 
         //means is the end of \r\n\r\n
    
-        int content_start = i+4;
-
-        self->content =(unsigned char*)malloc(self->content_length+2);
         
+        self->content =(unsigned char*)malloc(self->content_length+2);
+        int content_start = i+4;
+                
         //parse from the i to content length to content 
         for(int j = 0; j<self->content_length;j++){
             self->content[j] = raw_entrys[content_start+j];
         }
     
+
         //extracting url encoded data
         char *content_type = self->headers->get_value(self->headers, "Content-Type");
         if(content_type != NULL){
