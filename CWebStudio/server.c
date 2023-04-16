@@ -20,12 +20,13 @@ void private_cweb_execute_request(
             break;
         }
         readed += res;
-        printf("%c", buffer[readed - 1]);
-       
-    }
-    cweb_print("Readed %ld bytes\n", readed);
 
+    }
+    
+
+    cweb_print("Readed %ld bytes\n", readed);
     cweb_print("Executing lambda\n");
+    
     struct CwebHttpRequest *request = private_cweb_create_http_request(
         buffer);
     cweb_print("created request\n");
