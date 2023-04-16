@@ -9,19 +9,20 @@ void private_cweb_execute_request(
 
     // Lendo a solicitação HTTP do cliente
 
-     cweb_print("Reading request\n");
-    size_t total_read = 0;
-
-    while (total_read < max_request_size) {
-        ssize_t bytes_read = recv(new_socket, buffer + total_read, max_request_size - total_read, 0);
-        if (bytes_read < 1) {
+    cweb_print("Reading request\n");
+    //read byte to byte
+    size_t readed = 0;
+    while (readed < max_request_size)
+    {
+        ssize_t res = read(new_socket, buffer + readed, 1);
+        if (res < 0)
+        {
             break;
         }
-        total_read += bytes_read;
-        
-
+        readed += res;
+       
     }
-    cweb_print("Readed request:%ld\n", total_read);
+    cweb_print("Readed %d bytes\n", readed);
 
     cweb_print("Executing lambda\n");
     struct CwebHttpRequest *request = private_cweb_create_http_request(
