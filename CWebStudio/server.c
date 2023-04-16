@@ -21,7 +21,7 @@ void private_cweb_execute_request(
         
 
     }
-    cweb_print("Readed request:%d\n", bytes_read);
+    cweb_print("Readed request:%d\n", total_read);
 
     cweb_print("Executing lambda\n");
     struct CwebHttpRequest *request = private_cweb_create_http_request(
