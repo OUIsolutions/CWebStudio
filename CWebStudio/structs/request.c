@@ -216,7 +216,7 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
         for(int j = 0; j<self->content_length;j++){
             //jump if is 0 
             if(raw_entrys[content_start+j] == 0){
-                continue;
+                break;
             }
             
             self->content[bytes_read] = raw_entrys[content_start+j];
