@@ -41,7 +41,7 @@ int main(){
         80,
         main_sever,
         10,
-        1000000,
+        50000,
         CWEB_DANGEROUS_SINGLE_PROCESS
     );
 }
