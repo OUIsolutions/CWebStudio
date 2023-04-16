@@ -10,7 +10,7 @@ def send_file(element:bytes):
     #convert to base64
     #send the base64
     element_in_base64 = base64.b64encode(element)
-    requests.get(adress, data=element_in_base64)
+    requests.post(adress, data=element_in_base64)
     print('request executed')
 
 
