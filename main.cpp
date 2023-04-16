@@ -9,7 +9,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     unsigned char *body = request->content;
     int size = request->content_length;
-    std::string element = request->headers->get_value(request->headers,"name");
+    std::string element = request->params->get_value(request->headers,"name");
     std::string rota = request->route;
     
     if(rota == "/get"){
