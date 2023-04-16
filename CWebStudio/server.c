@@ -19,7 +19,7 @@ void private_cweb_execute_request(
         return;
     }
 
-    if(result == max_body_size){
+    if(result == MAX_BODY_SIZE){
         private_cweb_send_error_mensage("Max Request size",400,socket);
         return;
     }

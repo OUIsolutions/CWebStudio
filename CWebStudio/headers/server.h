@@ -8,7 +8,7 @@ static size_t actual_request = 0;
 
 void  private_cweb_execute_request(
     int socket,
-    size_t max_request_size,
+    size_t max_body_size,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request)
 );
 
@@ -18,6 +18,6 @@ void cweb_run_server(
     int port,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
             int timeout,
-            size_t max_request_size,
+            size_t max_body_size,
             bool single_process
 );
