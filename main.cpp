@@ -1,4 +1,5 @@
-#define CWEB_DEBUG
+
+
 
 #include "CWebStudio/CwebStudioMain.c"
 
@@ -21,7 +22,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
             dtw_write_any_content("test.png", body, size);
             return cweb_send_text("uploaded",200);
     }
-    
+
     else{
         return cweb_send_text("rota invalda",200);
     }
