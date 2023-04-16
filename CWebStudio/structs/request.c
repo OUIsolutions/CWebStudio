@@ -214,8 +214,9 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
 
         //parse from the i to content length to content 
         for(int j = 0; j<self->content_length;j++){
-            if(raw_entrys[content_start+j] == '\0'){
-                    continue;
+            //jump if is 0 
+            if(raw_entrys[content_start+j] == 0){
+                continue;
             }
               
             self->content[j] = raw_entrys[content_start+j];
