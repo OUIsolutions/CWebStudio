@@ -9,7 +9,12 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     unsigned char *body = request->content;
     int size = request->content_length;
-    std::string element = request->params->get_value(request->params,"name");
+
+    const char  *element_c = request->params->get_value(request->params,"name");
+    if(element_c == NULL){
+        return cweb_send_text("name not found",200);
+    }
+    std::string element = element_c;
     std::string rota = request->route;
     
     if(rota == "/get"){
@@ -17,7 +22,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     }
     
     if(rota == "/set"){
-            dtw_write_any_content(element.c_str(), body, size);
+            size_t out_size;
+            unsigned char *body_converted = dtw_base64_decode((char*)body,size,&out_size);
+            dtw_write_any_content(element.c_str(), body, out_size);
             return cweb_send_text("uploaded",200);
     }
 

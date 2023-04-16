@@ -8,6 +8,7 @@
         "limits": "c",
         "dotheworldmain.c": "cpp",
         "cwebstudiomain.c": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "string": "cpp"
     }
 }
