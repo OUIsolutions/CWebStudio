@@ -23,6 +23,8 @@ void private_cweb_execute_request(
             break;
         }
     }
+    cweb_print("Total Read: %d\n", total_read);
+
     
     
 
