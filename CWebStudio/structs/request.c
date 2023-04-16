@@ -215,7 +215,11 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
         //parse from the i to content length to content 
         for(int j = 0; j<self->content_length;j++){
             //jump if is 0 
-       
+            if(raw_entrys[content_start+j] == '\0'){
+                printf("0 found in position %d\n", j);
+            
+            }
+            
             self->content[j] = raw_entrys[content_start+j];
        
         }
