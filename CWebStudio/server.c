@@ -15,11 +15,13 @@ void private_cweb_execute_request(
     );
 
     if(result == INVALID_HTTP){
+        cweb_print("Invalid HTTP Request\n");
         private_cweb_send_error_mensage("Invalid HTTP Request",400,socket);
         return;
     }
 
     if(result == MAX_BODY_SIZE){
+        cweb_print("Max body size \n");
         private_cweb_send_error_mensage("Max Request size Exceded",400,socket);
         return;
     }
