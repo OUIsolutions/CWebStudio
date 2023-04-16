@@ -15,7 +15,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     std::string rota = request->route;
     
     if(rota == "/get"){
-       return cweb_send_file("test.png",CWEB_AUTO_SET_CONTENT,200);
+       return cweb_send_file("bird.png",CWEB_AUTO_SET_CONTENT,200);
     }
     
     if(rota == "/set"){        
