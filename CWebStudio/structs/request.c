@@ -204,22 +204,14 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
     
     if(content_lenght_str != NULL){
-        self->content_length = atoi(content_lenght_str) +1;
+        self->content_length = atoi(content_lenght_str);
 
         //means is the end of \r\n\r\n
    
-        
-        self->content =(unsigned char*)malloc(self->content_length);
+        self->content =(unsigned char*)raw_entrys;
         int content_start = i+4;
+        self->content+=content_start;
     
-        //parse from the i to content length to content 
-        for(int j = 0; j<self->content_length;j++){
-            //jump if is 0 
-            self->content[j] = raw_entrys[content_start+j];
-       
-        }
-    
-
         //extracting url encoded data
         char *content_type = self->headers->get_value(self->headers, "Content-Type");
         if(content_type != NULL){
