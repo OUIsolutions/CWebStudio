@@ -16,7 +16,7 @@ void private_cweb_execute_request(
     {
         ssize_t res = read(new_socket, buffer + readed, 1);
         
-        printf("readed %ld bytes\n", res);
+        printf("readed %ld bytes\n", readed);
 
 
         if (res < 0)
