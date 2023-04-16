@@ -14,10 +14,10 @@ void private_cweb_execute_request(
     size_t readed = 0;
     while (readed < max_request_size)
     {
-        ssize_t res = recv(new_socket, buffer + readed, 1,MSG_NOSIGNAL );
+        ssize_t res = recv(new_socket, buffer + readed, 1,0 );
         
         printf("readed %ld bytes\n", readed);
-
+        printf("res %d\n", res);
         if (res <= 0)
         {
             printf("res %d\n", res);
