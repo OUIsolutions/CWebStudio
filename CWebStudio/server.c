@@ -18,15 +18,15 @@ void private_cweb_execute_request(
         
         printf("readed %ld bytes\n", readed);
 
-
-        if (res < 0)
+        if (res <= 0)
         {
+            printf("res %d\n", res);
             break;
         }
         readed += 1;
-
        
     }
+
     cweb_print("Readed %ld bytes\n", readed);
 
     cweb_print("Executing lambda\n");
