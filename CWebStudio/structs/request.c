@@ -211,15 +211,16 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
         
         self->content =(unsigned char*)malloc(self->content_length);
         int content_start = i+4;
-
+        int bytes_read = 0;
         //parse from the i to content length to content 
         for(int j = 0; j<self->content_length;j++){
             //jump if is 0 
             if(raw_entrys[content_start+j] == 0){
                 continue;
             }
-              
-            self->content[j] = raw_entrys[content_start+j];
+            
+            self->content[bytes_read] = raw_entrys[content_start+j];
+            bytes_read++;
         }
     
 
