@@ -14,20 +14,15 @@ void private_cweb_execute_request(
     size_t readed = 0;
     while (readed < max_request_size)
     {
-        ssize_t res = recv(new_socket, buffer + readed, 1,MSG_DONTWAIT );
-        
-        printf("res %d\n", res);
-        printf("readed %ld bytes\n", readed);
-  
-        if (res <= 0)
+        ssize_t res = read(new_socket, buffer + readed, 1);
+        if (res < 0)
         {
-            printf("res %d\n", res);
             break;
         }
-        readed += 1;
+        readed += 'res';
+        printf("%c", buffer[readed - 1]);
        
     }
-
     cweb_print("Readed %ld bytes\n", readed);
 
     cweb_print("Executing lambda\n");
