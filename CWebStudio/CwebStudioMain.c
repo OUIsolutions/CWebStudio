@@ -56,7 +56,8 @@ SOFTWARE.
 
 
 #include "extras.c"
-#include "structs/request.c"
+#include "structs/request/request.c"
+#include "structs/request/request_parser.c"
 #include "response_functions.c"
 #include "structs/key_val.c"
 #include "structs/dict.c"

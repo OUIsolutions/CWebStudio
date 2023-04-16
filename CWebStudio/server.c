@@ -1,33 +1,29 @@
 
 
 void private_cweb_execute_request(
-    int new_socket,
+    int socket,
     size_t max_request_size,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request))
-{
-    char *buffer = (char *)malloc(max_request_size);
+            {
+    cweb_print("Parsing Request\n");
+    struct CwebHttpRequest *request = cweb_request_constructor();
 
-    // Lendo a solicitação HTTP do cliente
+    int result = request->parse_http_request(
+            request,
+            socket,
+            max_request_size
+    );
 
-    cweb_print("Reading request\n");
-    //read byte to byte
-    size_t readed = 0;
-    while (readed < max_request_size)
-    {
-        ssize_t res = read(new_socket, buffer + readed, 1);
-        if (res < 0)
-        {
-            break;
-        }
-        readed += 'res';
-        printf("%c", buffer[readed - 1]);
-       
+    if(result == INVALID_HTTP){
+        private_cweb_send_error_mensage("Invalid HTTP Request",400,socket);
+        return;
     }
-    cweb_print("Readed %ld bytes\n", readed);
 
-    cweb_print("Executing lambda\n");
-    struct CwebHttpRequest *request = private_cweb_create_http_request(
-        buffer);
+    if(result == MAX_REQUEST_SIZE){
+        private_cweb_send_error_mensage("Max Request size",400,socket);
+        return;
+    }
+
     cweb_print("created request\n");
     cweb_print("Request method: %s\n", request->method);
     cweb_print("Request url: %s\n", request->url);
@@ -36,8 +32,8 @@ void private_cweb_execute_request(
     response = request_handler(request);
     cweb_print("executed client lambda\n");
 
-    if (response == NULL)
-    {
+
+    if (response == NULL){
         response = cweb_send_text(
             "Error 404",
             404);
@@ -46,7 +42,7 @@ void private_cweb_execute_request(
     char *response_str = response->generate_response(response);
     cweb_print("Response created\n");
 
-    send(new_socket, response_str, strlen(response_str), MSG_NOSIGNAL);
+    send(socket, response_str, strlen(response_str), MSG_NOSIGNAL);
 
     // Enviando conteúdo byte a byte
 
@@ -60,7 +56,7 @@ void private_cweb_execute_request(
             {
                 chunk_size = max_request_size;
             }
-            ssize_t res = send(new_socket, response->content + sent, chunk_size, MSG_NOSIGNAL);
+            ssize_t res = send(socket, response->content + sent, chunk_size, MSG_NOSIGNAL);
             if (res < 0)
             {
                 break;
@@ -72,23 +68,19 @@ void private_cweb_execute_request(
     free(response_str);
     response->free(response);
     request->free(request);
-    free(buffer);
     cweb_print("Cleared memory\n");
     return;
 }
 
-void private_cweb_send_error_mensage(int new_socket)
+void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket)
 {
-
-    struct CwebHttpResponse *response = cweb_send_text(
-        "Error 500 Internal Server Error",
-        500);
+    struct CwebHttpResponse *response = cweb_send_text("Not Formated HTTP",400);
     char *response_str = response->generate_response(response);
-    send(new_socket, response_str, strlen(response_str), 0);
-    send(new_socket, response->content, response->content_length, 0);
+    send(socket, response_str, strlen(response_str), 0);
+    send(socket, response->content, response->content_length, 0);
 
     free(response_str);
-    response->free(response);
+
 }
 void private_cweb_execut_request_in_safty_mode(
     int new_socket,
@@ -134,7 +126,9 @@ void private_cweb_execut_request_in_safty_mode(
             {
                 cweb_print("Sending error mensage\n");
                 alarm(2);
-                private_cweb_send_error_mensage(new_socket);
+
+                private_cweb_send_error_mensage("Internal Sever Error",500,new_socket);
+
                 alarm(0);
                 exit(0);
             }
@@ -163,6 +157,8 @@ void private_cweb_execut_request_in_safty_mode(
     close(new_socket);
     cweb_print("Closed Conection with socket %d\n", new_socket);
 }
+
+
 void cweb_run_server(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
@@ -214,9 +210,17 @@ void cweb_run_server(
             exit(EXIT_FAILURE);
         }
 
+        struct timeval timer;
+        timer.tv_sec = timeout;  // tempo em segundos
+        timer.tv_usec = 0;  //
+
+        setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
+
+
         cweb_print("----------------------------------------\n");
         cweb_print("Executing request:%ld\n", actual_request);
         cweb_print("Socket: %d\n", new_socket);
+
 
         if (single_process)
         {
@@ -224,14 +228,13 @@ void cweb_run_server(
             private_cweb_execute_request(new_socket, max_request_size, request_handler);
             close(new_socket);
             cweb_print("Closed Conection with socket %d\n", new_socket);
-#ifdef CWEB_ONCE
-            return;
-#endif
+            #ifdef CWEB_ONCE
+                        return;
+            #endif
         }
 
         else
         {
-
             private_cweb_execut_request_in_safty_mode(
                 new_socket,
                 max_request_size,

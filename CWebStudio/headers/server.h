@@ -7,12 +7,12 @@ static size_t actual_request = 0;
 #define CWEB_SAFTY_MODE false
 
 void  private_cweb_execute_request(
-    int new_socket,
+    int socket,
     size_t max_request_size,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request)
 );
 
-void private_cweb_send_error_mensage(int new_socket);
+void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket);
 
 void cweb_run_server(
     int port,
