@@ -20,7 +20,7 @@ void private_cweb_execute_request(
     }
 
     if(result == MAX_BODY_SIZE){
-        private_cweb_send_error_mensage("Max Request size",400,socket);
+        private_cweb_send_error_mensage("Max Request size Exceded",400,socket);
         return;
     }
 
@@ -74,7 +74,7 @@ void private_cweb_execute_request(
 
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket)
 {
-    struct CwebHttpResponse *response = cweb_send_text("Not Formated HTTP",400);
+    struct CwebHttpResponse *response = cweb_send_text(mensage,status_code);
     char *response_str = response->generate_response(response);
     send(socket, response_str, strlen(response_str), 0);
     send(socket, response->content, response->content_length, 0);
