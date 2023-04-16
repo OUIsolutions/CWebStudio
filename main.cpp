@@ -1,6 +1,6 @@
 
 
-
+#define CWEB_DEBUG
 #include "CWebStudio/CwebStudioMain.c"
 
 #include <iostream>
@@ -39,7 +39,7 @@ int main(){
         80,
         main_sever,
         20,
-        1000000,
+        3000000,
         false
     );
 }
