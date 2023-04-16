@@ -6,12 +6,15 @@ const char *cweb_generate_content_type(const char *file_name){
         char *extension = path->get_extension(path);
 
         char *content_type_created = (char*)malloc(100);
+       
         if(strcmp(extension, "html") == 0){
             strcpy(content_type_created, "text/html");
         }
+       
         else if(strcmp(extension, "css") == 0){
             strcpy(content_type_created, "text/css");
         }
+       
         else if(strcmp(extension, "js") == 0){
             strcpy(content_type_created, "text/javascript");
         }

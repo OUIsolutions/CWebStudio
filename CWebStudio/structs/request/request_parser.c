@@ -2,7 +2,6 @@
 
 
 
-
 void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params){
     int paramns_size = strlen(query_params);
     char key[1000] = {0};
