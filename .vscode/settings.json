@@ -6,6 +6,7 @@
         "response_functions.h": "c",
         "wait.h": "c",
         "limits": "c",
-        "dotheworldmain.c": "cpp"
+        "dotheworldmain.c": "cpp",
+        "cwebstudiomain.c": "cpp"
     }
 }
