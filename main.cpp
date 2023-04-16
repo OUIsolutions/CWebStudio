@@ -3,7 +3,7 @@
 #define CWEB_DEBUG
 
 
-#include "CWebStudio/CwebStudioMain.c"
+#include "CWebStudio.c"
 
 int main(){
  
