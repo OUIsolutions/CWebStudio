@@ -9,7 +9,7 @@ def send_file(element:bytes):
     #send directly the bytes
     #convert to base64
     #send the base64
-    requests.post(adress, data=element)
+    requests.post(adress, data=element,stream=True)
     print('request executed')
 
 
