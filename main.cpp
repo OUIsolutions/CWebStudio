@@ -40,7 +40,7 @@ int main(){
     cweb_run_server(
         80,
         main_sever,
-        20,
+        10,
         1000000,
         CWEB_DANGEROUS_SINGLE_PROCESS
     );
