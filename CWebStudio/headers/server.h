@@ -2,7 +2,7 @@
 static size_t actual_request = 0;
 
 #define CWEB_DEFAULT_TIMEOUT 30
-#define CWEB_DEFAULT_MAX_REQUEST 50000
+#define CWEB_DEFAULT_MAX_BODY 50000
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_SAFTY_MODE false
 

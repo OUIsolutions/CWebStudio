@@ -93,6 +93,9 @@ void private_cweb_free_http_request(struct CwebHttpRequest *self){
     if(self->route != NULL){
         free(self->route);
     }
+    if(self->content != NULL){
+        free(self->content);
+    }
     if(self->method != NULL){
         free(self->method);
     }

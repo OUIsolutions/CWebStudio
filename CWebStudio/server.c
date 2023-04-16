@@ -2,7 +2,7 @@
 
 void private_cweb_execute_request(
     int socket,
-    size_t max_request_size,
+    size_t max_body_size,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request))
             {
     cweb_print("Parsing Request\n");
@@ -11,7 +11,7 @@ void private_cweb_execute_request(
     int result = request->parse_http_request(
             request,
             socket,
-            max_request_size
+            max_body_size
     );
 
     if(result == INVALID_HTTP){
@@ -19,7 +19,7 @@ void private_cweb_execute_request(
         return;
     }
 
-    if(result == MAX_REQUEST_SIZE){
+    if(result == max_body_size){
         private_cweb_send_error_mensage("Max Request size",400,socket);
         return;
     }
@@ -52,9 +52,9 @@ void private_cweb_execute_request(
         while (sent < response->content_length)
         {
             size_t chunk_size = response->content_length - sent;
-            if (chunk_size > max_request_size)
+            if (chunk_size > max_body_size)
             {
-                chunk_size = max_request_size;
+                chunk_size = max_body_size;
             }
             ssize_t res = send(socket, response->content + sent, chunk_size, MSG_NOSIGNAL);
             if (res < 0)
@@ -84,7 +84,7 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
 }
 void private_cweb_execut_request_in_safty_mode(
     int new_socket,
-    size_t max_request_size,
+    size_t max_body_size,
     int time_out,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
 
@@ -96,7 +96,7 @@ void private_cweb_execut_request_in_safty_mode(
     {
         // means that the process is the child
         alarm(CWEB_DEFAULT_TIMEOUT);
-        private_cweb_execute_request(new_socket, max_request_size, request_handler);
+        private_cweb_execute_request(new_socket, max_body_size, request_handler);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -163,7 +163,7 @@ void cweb_run_server(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
-    size_t max_request_size,
+    size_t max_body_size,
     bool single_process)
 {
 
@@ -225,7 +225,7 @@ void cweb_run_server(
         if (single_process)
         {
 
-            private_cweb_execute_request(new_socket, max_request_size, request_handler);
+            private_cweb_execute_request(new_socket, max_body_size, request_handler);
             close(new_socket);
             cweb_print("Closed Conection with socket %d\n", new_socket);
             #ifdef CWEB_ONCE
@@ -237,7 +237,7 @@ void cweb_run_server(
         {
             private_cweb_execut_request_in_safty_mode(
                 new_socket,
-                max_request_size,
+                max_body_size,
                 timeout,
                 request_handler);
         }

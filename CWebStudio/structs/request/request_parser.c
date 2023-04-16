@@ -105,7 +105,7 @@ void private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStri
 
 }
 
-int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,size_t max_request_size){
+int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,size_t max_body_size){
         //splite lines by "\r\n"
 
     unsigned char raw_entrys[200000];
@@ -162,19 +162,38 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     self->interpret_first_line(self, lines->strings[0]);
     self->interpret_headders(self, lines);    
 
-    char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
+    const char *content_lenght_str = self->get_header(self, "Content-Length");
 
-    return 0;
+
 
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
+        if(self->content_length > max_body_size){
+            self->free(self);
+            return MAX_BODY_SIZE;
+        }
 
         //means is the end of \r\n\r\n
    
-        self->content =(unsigned char*)raw_entrys;
-        int content_start = i+4;
-        self->content+=content_start;
-    
+        self->content =(unsigned char*) malloc(self->content_length+2);
+
+        
+        for(int j = 0; j<self->content_length;j++){
+
+            ssize_t res = read(socket,self->content+j,1);
+            if(res < 0){
+                self->free(self);
+                return INVALID_HTTP;
+            }
+
+            if(j > max_body_size){
+                self->free(self);
+                return MAX_BODY_SIZE;
+            }       
+
+        }
+        self->content[self->content_length]= '\0';
+
         //extracting url encoded data
         char *content_type = self->headers->get_value(self->headers, "Content-Type");
         if(content_type != NULL){
@@ -182,6 +201,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
                 self->interpret_query_params(self, (char*)self->content);
             }
         }
+
     }
 
 

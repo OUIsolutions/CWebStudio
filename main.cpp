@@ -14,7 +14,7 @@ int main(){
             8080,
             main_sever,
             5,
-            100000,
+            5,
             CWEB_DANGEROUS_SINGLE_PROCESS
             );
 }

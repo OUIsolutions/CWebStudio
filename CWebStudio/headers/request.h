@@ -1,6 +1,6 @@
 
 #define INVALID_HTTP -1
-#define MAX_REQUEST_SIZE -2
+#define MAX_BODY_SIZE -2
 
 struct CwebHttpRequest{
 
@@ -24,7 +24,7 @@ struct CwebHttpRequest{
 
     void (*set_content_string)(struct CwebHttpRequest *self,const char *content);
 
-    int (*parse_http_request)(struct CwebHttpRequest *self,int socket,size_t max_request_size);
+    int (*parse_http_request)(struct CwebHttpRequest *self,int socket,size_t max_body_size);
     void (*interpret_query_params)(struct CwebHttpRequest *self,const char *query_params);
     void (*interpret_first_line)(struct CwebHttpRequest *self, char *first_line);
     void (*interpret_headders)(struct CwebHttpRequest *self, struct DtwStringArray *line_headers);
@@ -47,7 +47,7 @@ void private_cweb_set_content_string(struct CwebHttpRequest *self,const char *co
 struct CwebHttpRequest *cweb_request_constructor();
 
 
-int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,size_t max_request_size);
+int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,size_t max_body_size);
 
 void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params);
 
