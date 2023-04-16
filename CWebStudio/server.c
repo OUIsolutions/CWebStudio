@@ -11,6 +11,8 @@ void private_cweb_execute_request(
 
     cweb_print("Reading request\n");
     int valread = read(new_socket, buffer, max_request_size);
+    
+    cweb_print("Request read:%d\n", valread);
 
     // check if the request is valid
     if (valread <= 0)
