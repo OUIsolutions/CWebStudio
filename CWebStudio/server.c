@@ -10,17 +10,21 @@ void private_cweb_execute_request(
     // Lendo a solicitação HTTP do cliente
 
     cweb_print("Reading request\n");
-    int valread = read(new_socket, buffer, max_request_size);
-    
-    cweb_print("Request read:%d\n", valread);
-
-    // check if the request is valid
-    if (valread <= 0)
-    {
-        cweb_print("Error Reading request \n");
-        free(buffer);
-        return;
+    size_t total_read = 0;
+    while (true){
+        char *current_buffer = buffer + total_read;
+        size_t current_buffer_size = max_request_size - total_read;
+        size_t valread = read(new_socket,current_buffer, current_buffer_size);
+        if (valread <= 0){
+            break;
+        }
+        total_read += valread;
+        if (total_read >= max_request_size){
+            break;
+        }
     }
+    
+    
 
     cweb_print("Executing lambda\n");
     struct CwebHttpRequest *request = private_cweb_create_http_request(
