@@ -169,7 +169,6 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
     
     while (true){
 
-
         if(
             raw_entrys[i]  == '\r' &&
             raw_entrys[i+1] == '\n' &&
@@ -197,9 +196,7 @@ struct CwebHttpRequest *private_cweb_create_http_request(char *raw_entrys){
 
     }
     self->interpret_first_line(self, lines->strings[0]);
-    self->interpret_headders(self, lines);
-
-    
+    self->interpret_headders(self, lines);    
 
     char *content_lenght_str = self->headers->get_value(self->headers, "Content-Length");
     
