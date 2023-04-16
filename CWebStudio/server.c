@@ -15,10 +15,11 @@ void private_cweb_execute_request(
     while (readed < max_request_size)
     {
         ssize_t res = read(new_socket, buffer + readed, 1);
-        if (res < 0)
+        if (res <= 0)
         {
             break;
         }
+    
         readed += res;
 
     }
