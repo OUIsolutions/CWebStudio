@@ -9,7 +9,7 @@ def sendBird(bird:bytes):
     #send directly the bytes
     #convert to base64
     #send the base64
-    requests.get(adress, data='aaaa')
+    requests.get(adress, data=bird, headers={'element': 'test.png'})
     print('request executed')
 with open('bird.png', 'rb') as f:
     bird = f.read()

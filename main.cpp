@@ -9,18 +9,18 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     unsigned char *body = request->content;
     int size = request->content_length;
-
+    std::string element = request->headers->get_value(request->headers,"name");
     std::string rota = request->route;
     
     if(rota == "/get"){
-       return cweb_send_file("test.png",CWEB_AUTO_SET_CONTENT,200);
+       return cweb_send_file(element.c_str(),CWEB_AUTO_SET_CONTENT,200);
     }
+    
     if(rota == "/set"){
-
-            dtw_write_any_content("test.png", body, size);
+            dtw_write_any_content(element.c_str(), body, size);
             return cweb_send_text("uploaded",200);
-
     }
+
     else{
         return cweb_send_text("rota invalda",200);
     }

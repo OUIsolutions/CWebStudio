@@ -7,6 +7,7 @@
         "wait.h": "c",
         "limits": "c",
         "dotheworldmain.c": "cpp",
-        "cwebstudiomain.c": "cpp"
+        "cwebstudiomain.c": "cpp",
+        "typeinfo": "cpp"
     }
 }
