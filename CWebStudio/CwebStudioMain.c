@@ -28,6 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+
 #include <sys/wait.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,7 +57,8 @@ SOFTWARE.
 
 
 #include "extras.c"
-#include "structs/request.c"
+#include "structs/request/request.c"
+#include "structs/request/request_parser.c"
 #include "response_functions.c"
 #include "structs/key_val.c"
 #include "structs/dict.c"

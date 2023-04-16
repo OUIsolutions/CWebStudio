@@ -275,6 +275,7 @@ With Paramns Flags you can define comportaments of the sever, each flags define 
 <b style="color:red;">DONT USE THESE FLAG IF YOU DONT NEED </b><br>
 the single process param will execute your code in an single process, and if happen some 
 error, your aplicantion will crash, so, if you will use these flag, ensure that there is no error on your aplication, and use only if you are on an embed system that dont allow multprocess
+
 ~~~c
 #define CWEB_DEBUG
 #include "CWebStudio.c"
@@ -295,12 +296,14 @@ int main(){
             5000,
             main_sever,
             CWEB_DEFAULT_TIMEOUT,
-            CWEB_DEFAULT_MAX_REQUEST,
+            CWEB_DEFAULT_MAX_BODY,
             CWEB_DANGEROUS_SINGLE_PROCESS
             );
 }
 ~~~
+
 If you dont need , is higly recomended you use the safify mode 
+
 ~~~c 
 #define CWEB_DEBUG
 #include "CWebStudio.c"
@@ -320,7 +323,7 @@ int main(){
             5000,
             main_sever,
             CWEB_DEFAULT_TIMEOUT,
-            CWEB_DEFAULT_MAX_REQUEST,
+            CWEB_DEFAULT_MAX_BODY,
             CWEB_SAFTY_MODE
     );
 }
@@ -343,16 +346,16 @@ int main(){
             5000,
             main_sever,
             timeout,
-            CWEB_DEFAULT_MAX_REQUEST,
+            CWEB_DEFAULT_MAX_BODY,
             CWEB_SAFTY_MODE
     );
 }
 ~~~
 
-### max request size
-You can set the max request size, the defaults is 50000 chars, the aplication won read 
-more than that size  but probably , it won crash if you pass more than 1000
- 
+### max body size
+You can set the max body size, the defaults is 50000 chars
+if an request were more than that value, the aplication will return 400 error
+
 ~~~c
 
 
