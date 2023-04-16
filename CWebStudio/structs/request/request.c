@@ -38,10 +38,12 @@ void private_cweb_set_route(struct CwebHttpRequest *self,const char *route){
     strcpy(self->route,route);
 }
 
+
 void private_cweb_set_method(struct CwebHttpRequest *self,const char *method){
     self->method = (char*) malloc(strlen(method));
     strcpy(self->method,method);
 }
+
 
 void private_cweb_set_content_string(struct CwebHttpRequest *self,const char *content){
     self->content_length = strlen(content);
