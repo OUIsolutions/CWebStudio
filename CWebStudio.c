@@ -7194,10 +7194,6 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     return 0;
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> dev-branch
 
 
 const char *cweb_generate_content_type(const char *file_name){
