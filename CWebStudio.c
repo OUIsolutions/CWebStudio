@@ -6798,8 +6798,8 @@ struct CwebHttpRequest{
     void (*set_method)(struct CwebHttpRequest *self,const char *method);
 
 
-    const char *(*get_header)(struct CwebHttpRequest *self,const char *key);
-    const char *(*get_param)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_header)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_param)(struct CwebHttpRequest *self,const char *key);
     void (*add_header)(struct CwebHttpRequest *self,const char *key,const char *value);
     void (*add_param)(struct CwebHttpRequest *self,const char *key,const char *value);
 
@@ -6814,8 +6814,8 @@ struct CwebHttpRequest{
 };
 //algorithm functions
 
-const char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key);
-const char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key);
+char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key);
+char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key);
 void private_cweb_set_url(struct CwebHttpRequest *self,const char *url);
 void private_cweb_set_route(struct CwebHttpRequest *self,const char *route);
 
@@ -6910,10 +6910,10 @@ struct CwebHttpRequest *cweb_request_constructor(){
     
 }
 
-const char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
+char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
     return self->headers->get_value(self->headers,key);
 }
-const char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key){
+char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key){
     return self->params->get_value(self->params,key);
 }
 
@@ -6931,7 +6931,7 @@ void private_cweb_add_param(struct CwebHttpRequest *self,const char *key,const c
 }
 
 void private_cweb_set_method(struct CwebHttpRequest *self,const char *method){
-    self->method = (char*) malloc(strlen(method));
+    self->method = (char*) malloc(strlen(method)+2);
     strcpy(self->method,method);
 }
 
@@ -7236,7 +7236,7 @@ const char *cweb_generate_content_type(const char *file_name){
 struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_length,unsigned char *content,int status_code){
     struct CwebHttpResponse *response = create_http_response();
     response->add_header(response, "Content-Type", content_type);
-    response->set_content(response, content, content_length+1);
+    response->set_content(response, content, content_length);
     response->status_code = status_code;
     return response;
 }
@@ -7251,6 +7251,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     
     int size = 0;
     unsigned char *content = dtw_load_binary_content(file_path, &size);
+    
     cweb_print("Writen size: %i\n",size);
     if(content == NULL){
         char *mensage = (char*)malloc(100);
@@ -7259,6 +7260,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         free(mensage);
         return response;
     }
+
     char *content_type_created;
     if(content_type == NULL){
         content_type_created  = (char*)cweb_generate_content_type(file_path);
@@ -7271,6 +7273,10 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     if(content_type == NULL){
         free(content_type_created);
     }
+    if(content != NULL){
+        free(content);
+    }
+
     return response;
 
 }
@@ -7362,7 +7368,7 @@ struct CwebHttpResponse *create_http_response(){
 }
 
 char *private_cweb_generate_response(struct CwebHttpResponse*self){
-    char *response_string = (char*)malloc(1000);
+    char *response_string = (char*)malloc(20000);
     sprintf(response_string, "HTTP/1.1 %d OK\r\n", self->status_code);
     struct CwebDict *headers = self->headers;
     char content_length_str[1000] = {0};
@@ -7392,10 +7398,10 @@ void private_cweb_http_response_free(struct CwebHttpResponse *self){
 }
 
 void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char *content,int content_length){
-    self->content = (unsigned char*)malloc(content_length +3);
+    self->content = (unsigned char*)malloc(content_length+2);
     memcpy(self->content, content, content_length);
     self->exist_content = true;
-    self->content_length = content_length -1;
+    self->content_length = content_length;
 }
 
 void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,const  char *value){
@@ -7603,12 +7609,13 @@ void cweb_run_server(
     }
 
     // Main loop
+    printf("Sever is running on port:%d\n", port);
+
     while (1)
     {
         actual_request++;
 
         // Accepting a new connection in every socket
-        printf("Sever is running on port:%d\n", port);
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
         {
             perror("Faluire to accept connection");
