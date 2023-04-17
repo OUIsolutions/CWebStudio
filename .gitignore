@@ -7,12 +7,11 @@
 *.obj
 *.elf
 requisicao
-trash
 # Linker output
 *.ilk
 *.map
 *.exp
-
+trash
 # Precompiled Headers
 *.gch
 *.pch
