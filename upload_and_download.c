@@ -1,4 +1,4 @@
-#define CWEB_ONCE
+
 #include "CWebStudio/CwebStudioMain.c"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
