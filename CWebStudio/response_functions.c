@@ -19,6 +19,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     
     int size = 0;
     unsigned char *content = dtw_load_binary_content(file_path, &size);
+    
     cweb_print("Writen size: %i\n",size);
     if(content == NULL){
         char *mensage = (char*)malloc(100);
@@ -27,6 +28,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         free(mensage);
         return response;
     }
+
     char *content_type_created;
     if(content_type == NULL){
         content_type_created  = (char*)cweb_generate_content_type(file_path);
@@ -39,6 +41,10 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     if(content_type == NULL){
         free(content_type_created);
     }
+    if(content != NULL){
+        free(content);
+    }
+    
     return response;
 
 }
