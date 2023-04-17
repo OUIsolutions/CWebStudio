@@ -26,10 +26,10 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(int argc, char *argv[]){
 
     cweb_run_server(
-        80,
+        8080,
         main_sever,
         CWEB_DEFAULT_TIMEOUT,
         CWEB_DEFAULT_MAX_BODY,
-        CWEB_DANGEROUS_SINGLE_PROCESS
+        CWEB_SAFTY_MODE
     );
 }
