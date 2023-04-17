@@ -84,81 +84,82 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
     free(response_str);
 
 }
+
+
+void private_cweb_treat_response(int new_socket){
+    cweb_print("New request %ld\n", actual_request);
+    cweb_print("Waiting for child process\n");
+    pid_t wpid;
+    int status = 0;
+    while (wpid = wait(&status) > 0);
+
+    if (WIFEXITED(status)){
+        cweb_print("Sucess\n");
+        return;
+    }
+
+    pid_t pid_error = fork();
+    if (pid_error == 0){
+        cweb_print("Sending error mensage\n");
+        alarm(2);
+        private_cweb_send_error_mensage("Internal Sever Error",500,new_socket);
+        alarm(0);
+        exit(0);
+    }
+
+    else if (pid_error < 0){
+                perror("Faluire to create a new process");
+                exit(EXIT_FAILURE);
+    }
+    else{
+        pid_t wpid2;
+        int status2 = 0;
+        /// Wait for the child process to finish
+        while (wpid2 = wait(&status2) > 0);
+        if (WIFEXITED(status2)){
+            cweb_print("Mensage sent\n");
+        }
+
+        else{
+            cweb_print("Error sending mensage\n");
+        }
+    }
+}
+
+
+
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
     size_t max_body_size,
     int time_out,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
-
 )
 {
     cweb_print("Creating a new process\n");
     pid_t pid = fork();
-    if (pid == 0)
-    {
+    if (pid == 0){
         // means that the process is the child
-        alarm(CWEB_DEFAULT_TIMEOUT);
+        alarm(time_out);
         private_cweb_execute_request(new_socket, max_body_size, request_handler);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
     }
-    else if (pid < 0)
-    {
+    
+    else if (pid < 0){
         perror("Faluire to create a new process");
         exit(EXIT_FAILURE);
     }
-    else
-    {
-        cweb_print("New request %ld\n", actual_request);
-        cweb_print("Waiting for child process\n");
-        pid_t wpid;
-        int status = 0;
-        while (wpid = wait(&status) > 0)
-            ;
 
-        if (WIFEXITED(status))
-        {
-            cweb_print("Sucess\n");
-        }
-        else
-        {
-            pid_t pid2 = fork();
-            if (pid2 == 0)
-            {
-                cweb_print("Sending error mensage\n");
-                alarm(2);
-
-                private_cweb_send_error_mensage("Internal Sever Error",500,new_socket);
-
-                alarm(0);
-                exit(0);
-            }
-            else if (pid2 < 0)
-            {
-                perror("Faluire to create a new process");
-                exit(EXIT_FAILURE);
-            }
-            else
-            {
-                pid_t wpid2;
-                int status2 = 0;
-                while (wpid2 = wait(&status2) > 0)
-                    ;
-                if (WIFEXITED(status2))
-                {
-                    cweb_print("Mensage sent\n");
-                }
-                else
-                {
-                    cweb_print("Error sending mensage\n");
-                }
-            }
-        }
+    else{
+        private_cweb_treat_response(new_socket);
     }
+    
     close(new_socket);
+    
     cweb_print("Closed Conection with socket %d\n", new_socket);
 }
+
 
 
 void cweb_run_server(
