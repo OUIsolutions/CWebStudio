@@ -37,7 +37,26 @@ CWEB_START_MACRO(5001, main_sever);
 # Runing with Main
 if you need to make, main configurations before run the sever, you can run the function **cweb_run_server** without an macro , like these 
 
+~~~c
 
+#include "CWebStudio.c"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    return cweb_send_text("Hello World", 200);
+}
+
+int main(int argc, char *argv[]){
+
+    cweb_run_server(
+        8080,
+        main_sever,
+        CWEB_DEFAULT_TIMEOUT,
+        CWEB_DEFAULT_MAX_BODY,
+        CWEB_SAFTY_MODE
+    );
+}
+~~~
 
 
 # Getting Entrys
