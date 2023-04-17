@@ -84,7 +84,7 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
     free(response_str);
 
 }
-void private_cweb_execut_request_in_safty_mode(
+void private_cweb_execute_request_in_safty_mode(
     int new_socket,
     size_t max_body_size,
     int time_out,
@@ -238,7 +238,7 @@ void cweb_run_server(
 
         else
         {
-            private_cweb_execut_request_in_safty_mode(
+            private_cweb_execute_request_in_safty_mode(
                 new_socket,
                 max_body_size,
                 timeout,
