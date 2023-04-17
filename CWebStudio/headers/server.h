@@ -12,8 +12,20 @@ void  private_cweb_execute_request(
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request)
 );
 
+
+
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket);
 
+void private_cweb_treat_response(int new_socket);
+
+
+void private_cweb_execute_request_in_safty_mode(
+    int new_socket,
+    size_t max_body_size,
+    int time_out,
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
+
+);
 void cweb_run_server(
     int port,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),

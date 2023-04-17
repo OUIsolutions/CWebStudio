@@ -13,10 +13,12 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     if(strcmp(route, "/get") == 0){
         return cweb_send_file(name,CWEB_AUTO_SET_CONTENT,200);
     }
+
     else if(strcmp(route, "/set") == 0){
         dtw_write_any_content(name,request->content,request->content_length);
         return cweb_send_text("uploaded",200);
     }
+    
     else{
         return cweb_send_text("not route passed",404);
     }
