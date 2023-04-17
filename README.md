@@ -34,6 +34,11 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 CWEB_START_MACRO(5001, main_sever);
 ~~~
+# Runing with Main
+if you need to make, main configurations before run the sever, you can run the function **cweb_run_server** without an macro , like these 
+
+
+
 
 # Getting Entrys
 
@@ -353,8 +358,8 @@ int main(){
 ~~~
 
 ### max body size
-You can set the max body size, the defaults is 50000 chars
-if an request were more than that value, the aplication will return 400 error
+You can set the max body size, the defaults is 10485760 bytes ,witch is equivalent 
+to 10mb if an request were more than that value, the aplication will return 400 error
 
 ~~~c
 

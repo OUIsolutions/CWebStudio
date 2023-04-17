@@ -1,9 +1,0 @@
-------WebKitFormBoundaryltOtxzAPFzxYuREA
-Content-Disposition: form-data; name="teste"
-
-qwe?
-------WebKitFormBoundaryltOtxzAPFzxYuREA
-Content-Disposition: form-data; name="teste2"
-
-123?
-------WebKitFormBoundaryltOtxzAPFzxYuREA--

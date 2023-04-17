@@ -6849,7 +6849,7 @@ void private_cweb_represent_http_request(struct CwebHttpRequest *self);
 static size_t actual_request = 0;
 
 #define CWEB_DEFAULT_TIMEOUT 30
-#define CWEB_DEFAULT_MAX_BODY 50000
+#define CWEB_DEFAULT_MAX_BODY 10485760
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_SAFTY_MODE false
 
@@ -7607,7 +7607,7 @@ void cweb_run_server(
         actual_request++;
 
         // Accepting a new connection in every socket
-
+        printf("Sever is running on port:%d\n", port);
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
         {
             perror("Faluire to accept connection");
