@@ -10,6 +10,10 @@
         "cwebstudiomain.c": "cpp",
         "typeinfo": "cpp",
         "string": "cpp",
+<<<<<<< HEAD
         "cwebstudio.c": "cpp"
+=======
+        "iostream": "cpp"
+>>>>>>> dev-branch
     }
 }

@@ -7,7 +7,7 @@
 *.obj
 *.elf
 requisicao
-
+trash
 # Linker output
 *.ilk
 *.map

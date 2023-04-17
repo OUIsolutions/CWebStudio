@@ -6849,7 +6849,11 @@ void private_cweb_represent_http_request(struct CwebHttpRequest *self);
 static size_t actual_request = 0;
 
 #define CWEB_DEFAULT_TIMEOUT 30
+<<<<<<< HEAD
 #define CWEB_DEFAULT_MAX_BODY 50000
+=======
+#define CWEB_DEFAULT_MAX_BODY 10485760
+>>>>>>> dev-branch
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_SAFTY_MODE false
 
@@ -7153,8 +7157,12 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
         if(self->content_length > max_body_size){
+<<<<<<< HEAD
   
             
+=======
+
+>>>>>>> dev-branch
             return MAX_BODY_SIZE;
         }
 
@@ -7194,7 +7202,10 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     return 0;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev-branch
 
 
 const char *cweb_generate_content_type(const char *file_name){
@@ -7609,7 +7620,11 @@ void cweb_run_server(
         actual_request++;
 
         // Accepting a new connection in every socket
+<<<<<<< HEAD
 
+=======
+        printf("Sever is running on port:%d\n", port);
+>>>>>>> dev-branch
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
         {
             perror("Faluire to accept connection");
