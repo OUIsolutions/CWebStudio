@@ -47,10 +47,10 @@ void private_cweb_http_response_free(struct CwebHttpResponse *self){
 }
 
 void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char *content,int content_length){
-    self->content = (unsigned char*)malloc(content_length +3);
+    self->content = (unsigned char*)malloc(content_length+2);
     memcpy(self->content, content, content_length);
     self->exist_content = true;
-    self->content_length = content_length -1;
+    self->content_length = content_length;
 }
 
 void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,const  char *value){

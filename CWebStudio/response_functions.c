@@ -4,7 +4,7 @@
 struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_length,unsigned char *content,int status_code){
     struct CwebHttpResponse *response = create_http_response();
     response->add_header(response, "Content-Type", content_type);
-    response->set_content(response, content, content_length+1);
+    response->set_content(response, content, content_length);
     response->status_code = status_code;
     return response;
 }
@@ -44,7 +44,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     if(content != NULL){
         free(content);
     }
-    
+
     return response;
 
 }
