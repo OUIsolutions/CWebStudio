@@ -9,6 +9,7 @@
         "dotheworldmain.c": "cpp",
         "cwebstudiomain.c": "cpp",
         "typeinfo": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "iostream": "cpp"
     }
 }
