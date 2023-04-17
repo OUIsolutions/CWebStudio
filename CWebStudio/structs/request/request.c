@@ -34,10 +34,10 @@ struct CwebHttpRequest *cweb_request_constructor(){
     
 }
 
-const char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
+char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
     return self->headers->get_value(self->headers,key);
 }
-const char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key){
+char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key){
     return self->params->get_value(self->params,key);
 }
 
@@ -55,7 +55,7 @@ void private_cweb_add_param(struct CwebHttpRequest *self,const char *key,const c
 }
 
 void private_cweb_set_method(struct CwebHttpRequest *self,const char *method){
-    self->method = (char*) malloc(strlen(method));
+    self->method = (char*) malloc(strlen(method)+2);
     strcpy(self->method,method);
 }
 

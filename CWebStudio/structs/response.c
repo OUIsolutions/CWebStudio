@@ -17,7 +17,7 @@ struct CwebHttpResponse *create_http_response(){
 }
 
 char *private_cweb_generate_response(struct CwebHttpResponse*self){
-    char *response_string = (char*)malloc(1000);
+    char *response_string = (char*)malloc(20000);
     sprintf(response_string, "HTTP/1.1 %d OK\r\n", self->status_code);
     struct CwebDict *headers = self->headers;
     char content_length_str[1000] = {0};
@@ -47,10 +47,10 @@ void private_cweb_http_response_free(struct CwebHttpResponse *self){
 }
 
 void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char *content,int content_length){
-    self->content = (unsigned char*)malloc(content_length +3);
+    self->content = (unsigned char*)malloc(content_length+2);
     memcpy(self->content, content, content_length);
     self->exist_content = true;
-    self->content_length = content_length -1;
+    self->content_length = content_length;
 }
 
 void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,const  char *value){

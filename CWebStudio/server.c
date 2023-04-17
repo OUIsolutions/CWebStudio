@@ -200,12 +200,13 @@ void cweb_run_server(
     }
 
     // Main loop
+    printf("Sever is running on port:%d\n", port);
+
     while (1)
     {
         actual_request++;
 
         // Accepting a new connection in every socket
-        printf("Sever is running on port:%d\n", port);
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
         {
             perror("Faluire to accept connection");

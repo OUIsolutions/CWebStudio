@@ -17,8 +17,8 @@ struct CwebHttpRequest{
     void (*set_method)(struct CwebHttpRequest *self,const char *method);
 
 
-    const char *(*get_header)(struct CwebHttpRequest *self,const char *key);
-    const char *(*get_param)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_header)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_param)(struct CwebHttpRequest *self,const char *key);
     void (*add_header)(struct CwebHttpRequest *self,const char *key,const char *value);
     void (*add_param)(struct CwebHttpRequest *self,const char *key,const char *value);
 
@@ -33,8 +33,8 @@ struct CwebHttpRequest{
 };
 //algorithm functions
 
-const char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key);
-const char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key);
+char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key);
+char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key);
 void private_cweb_set_url(struct CwebHttpRequest *self,const char *url);
 void private_cweb_set_route(struct CwebHttpRequest *self,const char *route);
 
