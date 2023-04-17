@@ -16,6 +16,8 @@ void  private_cweb_execute_request(
 
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket);
 
+void private_cweb_treat_response(int new_socket);
+
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
