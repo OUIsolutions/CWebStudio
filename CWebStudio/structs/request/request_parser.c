@@ -169,12 +169,8 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
         if(self->content_length > max_body_size){
-<<<<<<< HEAD
   
             
-=======
-
->>>>>>> dev-branch
             return MAX_BODY_SIZE;
         }
 
