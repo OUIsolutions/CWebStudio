@@ -78,7 +78,8 @@ void private_cweb_run_server_in_multiprocess(
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
     size_t max_body_size,
-    int max_process
+    int max_process,
+    int max_queue
 ){
 
     int port_socket;
@@ -105,7 +106,7 @@ void private_cweb_run_server_in_multiprocess(
     cweb_print("Port Socket %d\n", port_socket);
 
     // Waiting for connections
-    if (listen(port_socket, max_process) < 0)
+    if (listen(port_socket, max_queue) < 0)
     {
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);

@@ -26,6 +26,7 @@ void cweb_run_server(
             request_handler,
             timeout,
             max_body_size,
+            1,
             1
         );
     }
