@@ -11,6 +11,7 @@
         "typeinfo": "cpp",
         "string": "cpp",
         "iostream": "cpp",
-        "resource.h": "c"
+        "resource.h": "c",
+        "cstdlib": "c"
     }
 }

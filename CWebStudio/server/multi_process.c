@@ -89,7 +89,7 @@ void private_cweb_run_server_in_multiprocess(
     int max_process
 ){
 
-    int server_fd, main_socket;
+    int server_fd;
 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0){
@@ -128,20 +128,27 @@ void private_cweb_run_server_in_multiprocess(
         actual_request++;
 
         // Accepting a new connection in every socket
-        if ((main_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
-        {
+        int main_socket = accept(
+            server_fd,
+            (struct sockaddr *)&address, 
+            (socklen_t *)&addrlen
+        );
+        
+        if (main_socket <  0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-      
+        cweb_print("main_socket: %d\n", main_socket);
         long int memory_usage = private_cweb_get_memory_usage();
         printf("Memory usage: %ld\n", memory_usage);
 
         pid_t pid = fork();
         if (pid == 0){
-          
+            
+           
             // creates an new socket and parse the request to the new socket
             int new_socket = dup(main_socket);
+
             struct timeval timer;
             timer.tv_sec = timeout;  // tempo em segundos
             timer.tv_usec = 0;  //
@@ -166,6 +173,7 @@ void private_cweb_run_server_in_multiprocess(
 
 
         else if (pid < 0){
+
             perror("Faluire to create a new process");
             exit(EXIT_FAILURE);
         }
@@ -173,6 +181,7 @@ void private_cweb_run_server_in_multiprocess(
 
         else{
             close(main_socket);
+            cweb_print("Closed Conection with socket %d\n", main_socket);
             signal(SIGCHLD, SIG_IGN);
             continue;
         }

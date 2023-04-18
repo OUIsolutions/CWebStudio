@@ -7,7 +7,7 @@ void private_cweb_run_server_in_single_process(
     size_t max_body_size
 ){
 
-    int server_fd, new_socket;
+    int server_fd;
 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -46,8 +46,13 @@ void private_cweb_run_server_in_single_process(
         actual_request++;
 
         // Accepting a new connection in every socket
-        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
-        {
+        int new_socket = accept(
+            server_fd,
+            (struct sockaddr *)&address,
+            (socklen_t *)&addrlen
+        );
+        
+        if ( new_socket< 0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
