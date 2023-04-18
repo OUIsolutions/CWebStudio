@@ -63,4 +63,7 @@ SOFTWARE.
 #include "structs/key_val.c"
 #include "structs/dict.c"
 #include "structs/response.c"
-#include "server.c"
+#include "server/request_execution.c"
+#include "server/single_process.c"
+#include "server/multi_process.c"
+#include "server/server.c"
