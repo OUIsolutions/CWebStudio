@@ -22,6 +22,6 @@ int main(int argc, char *argv[]){
         main_sever,
         CWEB_DEFAULT_TIMEOUT,
         CWEB_DEFAULT_MAX_BODY,
-        CWEB_SAFTY_MODE
+        CWEB_DANGEROUS_SINGLE_PROCESS
     );
 }

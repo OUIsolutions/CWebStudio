@@ -15,7 +15,8 @@ void cweb_run_server(
             port,
             request_handler,
             timeout,
-            max_body_size
+            max_body_size,
+            1
         );
     }
 
@@ -25,7 +26,7 @@ void cweb_run_server(
             request_handler,
             timeout,
             max_body_size,
-            3
+            1
         );
     }
 }

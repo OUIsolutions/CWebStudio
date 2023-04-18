@@ -81,10 +81,10 @@ void private_cweb_run_server_in_multiprocess(
     int max_process
 ){
 
-    int server_fd;
+    int port_socket;
 
     // Creating socket file descriptor
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0){
+    if ((port_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0){
         perror("Faluire to create socket");
         exit(EXIT_FAILURE);
     }
@@ -98,14 +98,14 @@ void private_cweb_run_server_in_multiprocess(
     address.sin_port = htons(port);
 
     // Vinculando o socket à porta especificada
-    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0){
+    if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0){
         perror("Faluire to bind socket");
         exit(EXIT_FAILURE);
     }
-
+    cweb_print("Port Socket %d\n", port_socket);
 
     // Waiting for connections
-    if (listen(server_fd, 3) < 0)
+    if (listen(port_socket, max_process) < 0)
     {
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
@@ -120,24 +120,24 @@ void private_cweb_run_server_in_multiprocess(
         actual_request++;
 
         // Accepting a new connection in every socket
-        int main_socket = accept(
-            server_fd,
+        int client_socket = accept(
+            port_socket,
             (struct sockaddr *)&address, 
             (socklen_t *)&addrlen
         );
-        
-        if (main_socket <  0){
+
+        if (client_socket <  0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-        cweb_print("main_socket: %d\n", main_socket);
+        cweb_print("client_socket: %d\n", client_socket);
     
         pid_t pid = fork();
         if (pid == 0){
             
            
             // creates an new socket and parse the request to the new socket
-            int new_socket = dup(main_socket);
+            int new_socket = dup(client_socket);
 
             
             struct timeval timer;
@@ -171,8 +171,8 @@ void private_cweb_run_server_in_multiprocess(
 
 
         else{
-            close(main_socket);
-            cweb_print("Closed Conection with socket %d\n", main_socket);
+            close(client_socket);
+            cweb_print("Closed Conection with socket %d\n", client_socket);
             signal(SIGCHLD, SIG_IGN);
             continue;
         }

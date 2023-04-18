@@ -4,13 +4,14 @@ void private_cweb_run_server_in_single_process(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
-    size_t max_body_size
+    size_t max_body_size,
+    int max_queue
 ){
 
-    int server_fd;
+    int port_socket;
 
     // Creating socket file descriptor
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    if ((port_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
         perror("Faluire to create socket");
         exit(EXIT_FAILURE);
@@ -25,14 +26,14 @@ void private_cweb_run_server_in_single_process(
     address.sin_port = htons(port);
 
     // Vinculando o socket à porta especificada
-    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
+    if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
         perror("Faluire to bind socket");
         exit(EXIT_FAILURE);
     }
 
     // Waiting for connections
-    if (listen(server_fd, 3) < 0)
+    if (listen(port_socket, max_queue) < 0)
     {
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
@@ -46,13 +47,13 @@ void private_cweb_run_server_in_single_process(
         actual_request++;
 
         // Accepting a new connection in every socket
-        int new_socket = accept(
-            server_fd,
+        int client_socket = accept(
+            port_socket,
             (struct sockaddr *)&address,
             (socklen_t *)&addrlen
         );
         
-        if ( new_socket< 0){
+        if ( client_socket< 0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
@@ -61,18 +62,18 @@ void private_cweb_run_server_in_single_process(
         timer.tv_sec = timeout;  // tempo em segundos
         timer.tv_usec = 0;  //
 
-        setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
+        setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
 
         cweb_print("----------------------------------------\n");
         cweb_print("Executing request:%ld\n", actual_request);
-        cweb_print("Socket: %d\n", new_socket);
+        cweb_print("Socket: %d\n", client_socket);
 
 
     
-        private_cweb_execute_request(new_socket, max_body_size, request_handler);
-        close(new_socket);
-        cweb_print("Closed Conection with socket %d\n", new_socket);
+        private_cweb_execute_request(client_socket, max_body_size, request_handler);
+        close(client_socket);
+        cweb_print("Closed Conection with socket %d\n", client_socket);
         #ifdef CWEB_ONCE
                     return;
         #endif
