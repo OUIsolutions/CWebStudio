@@ -73,14 +73,6 @@ void private_cweb_execute_request_in_safty_mode(
     
 }
 
-long int private_cweb_get_memory_usage(){
-    struct rusage usage;
-    //get ram usage of self process and all its child 
-    getrusage(RUSAGE_SELF, &usage);
-
-    return usage.ru_maxrss;
-}
-
 void private_cweb_run_server_in_multiprocess(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
@@ -139,9 +131,7 @@ void private_cweb_run_server_in_multiprocess(
             exit(EXIT_FAILURE);
         }
         cweb_print("main_socket: %d\n", main_socket);
-        long int memory_usage = private_cweb_get_memory_usage();
-        printf("Memory usage: %ld\n", memory_usage);
-
+    
         pid_t pid = fork();
         if (pid == 0){
             
@@ -149,6 +139,7 @@ void private_cweb_run_server_in_multiprocess(
             // creates an new socket and parse the request to the new socket
             int new_socket = dup(main_socket);
 
+            
             struct timeval timer;
             timer.tv_sec = timeout;  // tempo em segundos
             timer.tv_usec = 0;  //
