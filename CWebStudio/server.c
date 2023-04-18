@@ -153,11 +153,9 @@ void private_cweb_execute_request_in_safty_mode(
 
     else{
         private_cweb_treat_response(new_socket);
+    
     }
     
-    close(new_socket);
-    
-    cweb_print("Closed Conection with socket %d\n", new_socket);
 }
 
 
