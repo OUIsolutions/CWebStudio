@@ -161,18 +161,16 @@ void private_cweb_execute_request_in_safty_mode(
 }
 
 
-
-void cweb_run_server(
+void private_cweb_run_server_in_single_process(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
-    size_t max_body_size,
-    bool single_process)
-{
+    size_t max_body_size
+){
+
 
     int server_fd, new_socket;
-    struct sockaddr_in address;
-    int addrlen = sizeof(address);
+
 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -180,6 +178,9 @@ void cweb_run_server(
         perror("Faluire to create socket");
         exit(EXIT_FAILURE);
     }
+    
+    struct sockaddr_in address;
+    int addrlen = sizeof(address);
 
     // Configurando a estrutura de endereço do servidor
     address.sin_family = AF_INET;
@@ -226,24 +227,106 @@ void cweb_run_server(
         cweb_print("Socket: %d\n", new_socket);
 
 
-        if (single_process)
-        {
+    
+        private_cweb_execute_request(new_socket, max_body_size, request_handler);
+        close(new_socket);
+        cweb_print("Closed Conection with socket %d\n", new_socket);
+        #ifdef CWEB_ONCE
+                    return;
+        #endif
+        
 
-            private_cweb_execute_request(new_socket, max_body_size, request_handler);
-            close(new_socket);
-            cweb_print("Closed Conection with socket %d\n", new_socket);
-            #ifdef CWEB_ONCE
-                        return;
-            #endif
+    }
+}
+
+
+void cweb_run_server(
+    int port,
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+    int timeout,
+    size_t max_body_size,
+    bool single_process
+    ){
+
+
+    if (single_process){
+
+        private_cweb_run_server_in_single_process(
+            port,
+            request_handler,
+            timeout,
+            max_body_size
+        );
+        return;
+    }
+
+    /*
+    #define TOTAL_CONNECTIONS 20
+
+    for(int i = 0; i < TOTAL_CONNECTIONS;i++){
+
+        pid_t pid = fork();
+
+        if(pid != 0){
+            continue;
         }
 
-        else
+        int server_fd, new_socket;
+        // Creating socket file descriptor
+        if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0){
+            perror("Faluire to create socket");
+            exit(EXIT_FAILURE);
+        }
+        //set socket to reuse address
+        int opt = 1;
+        if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
         {
-            private_cweb_execute_request_in_safty_mode(
-                new_socket,
-                max_body_size,
-                timeout,
-                request_handler);
+            perror("Faluire to set socket options");
+            exit(EXIT_FAILURE);
+        }
+
+        // Vinculando o socket à porta especificada
+        if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
+        {
+            perror("Faluire to bind socket");
+            exit(EXIT_FAILURE);
+        }
+
+        // Waiting for connections
+        if (listen(server_fd, 3) < 0)
+        {
+            perror("Faluire to listen connections");
+            exit(EXIT_FAILURE);
+        }
+
+        // Main loop
+        printf("Sever is running on port:%d\n", port);
+
+        while (1)
+        {
+            actual_request++;
+
+            // Accepting a new connection in every socket
+            if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
+            {
+                perror("Faluire to accept connection");
+                exit(EXIT_FAILURE);
+            }
+
+            struct timeval timer;
+            timer.tv_sec = timeout;  // tempo em segundos
+            timer.tv_usec = 0;  //
+
+            setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
+            
+                private_cweb_execute_request_in_safty_mode(
+                    new_socket,
+                    max_body_size,
+                    timeout,
+                    request_handler);
+            
         }
     }
+    while(true);
+    */
 }

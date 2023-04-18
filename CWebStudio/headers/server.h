@@ -26,6 +26,7 @@ void private_cweb_execute_request_in_safty_mode(
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
 
 );
+
 void cweb_run_server(
     int port,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),

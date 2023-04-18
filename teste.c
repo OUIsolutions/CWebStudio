@@ -1,8 +1,8 @@
 #define CWEB_DEBUG
-#include "CWebStudio.c"
+#include "CWebStudio/CwebStudioMain.c"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    sleep(5);
+    sleep(10);
     char *tag = request->get_param(request,"tag");
     if(tag == NULL){
         return cweb_send_text("not passed tag",200);
@@ -20,8 +20,8 @@ int main(int argc, char *argv[]){
     cweb_run_server(
         8080,
         main_sever,
-        2,
+        CWEB_DEFAULT_TIMEOUT,
         CWEB_DEFAULT_MAX_BODY,
-        CWEB_SAFTY_MODE
+        CWEB_DANGEROUS_SINGLE_PROCESS
     );
 }
