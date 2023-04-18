@@ -154,10 +154,8 @@ void private_cweb_execute_request_in_safty_mode(
     else{
         private_cweb_treat_response(new_socket);
     }
-    
     close(new_socket);
-    
-    cweb_print("Closed Conection with socket %d\n", new_socket);
+    cweb_print("Closed Conection with socket %d\n", new_socket);    
 }
 
 
@@ -168,9 +166,7 @@ void private_cweb_run_server_in_single_process(
     size_t max_body_size
 ){
 
-
     int server_fd, new_socket;
-
 
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -240,6 +236,101 @@ void private_cweb_run_server_in_single_process(
 }
 
 
+void private_cweb_run_server_in_multiprocess(
+    int port,
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+    int timeout,
+    size_t max_body_size,
+    int max_process
+){
+
+    int server_fd, main_socket;
+
+    // Creating socket file descriptor
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0){
+        perror("Faluire to create socket");
+        exit(EXIT_FAILURE);
+    }
+    
+    struct sockaddr_in address;
+    int addrlen = sizeof(address);
+
+    // Configurando a estrutura de endereço do servidor
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons(port);
+
+    // Vinculando o socket à porta especificada
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0){
+        perror("Faluire to bind socket");
+        exit(EXIT_FAILURE);
+    }
+
+
+    // Waiting for connections
+    if (listen(server_fd, 3) < 0)
+    {
+        perror("Faluire to listen connections");
+        exit(EXIT_FAILURE);
+    }
+
+    // Main loop
+    printf("Sever is running on port:%d\n", port);
+
+    while (1)
+    {
+        actual_request++;
+        cweb_print("Waiting for a new connection\n");
+        // Accepting a new connection in every socket
+        if ((main_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
+        {
+            perror("Faluire to accept connection");
+            exit(EXIT_FAILURE);
+        }
+
+        pid_t pid = fork();
+        if (pid == 0){
+            // creates an new socket and parse the request to the new socket
+            int new_socket = dup(main_socket);
+            close(main_socket);
+            cweb_print("Main socket closed: %d\n", main_socket);
+            struct timeval timer;
+            timer.tv_sec = timeout;  // tempo em segundos
+            timer.tv_usec = 0;  //
+            setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
+            
+            cweb_print("----------------------------------------\n");
+            cweb_print("Executing request:%ld\n", actual_request);
+            cweb_print("Socket: %d\n", new_socket);
+
+
+            private_cweb_execute_request_in_safty_mode(
+                new_socket,
+                max_body_size,
+                timeout,
+                request_handler
+            );
+
+    
+            exit(0);
+        }
+        
+        else if (pid < 0){
+
+            perror("Faluire to create a new process");
+            exit(EXIT_FAILURE);
+        }
+
+        else{
+
+            signal(SIGCHLD, SIG_IGN);
+        }
+        
+  
+
+    }
+}
+
 void cweb_run_server(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
@@ -257,76 +348,15 @@ void cweb_run_server(
             timeout,
             max_body_size
         );
-        return;
     }
 
-    /*
-    #define TOTAL_CONNECTIONS 20
-
-    for(int i = 0; i < TOTAL_CONNECTIONS;i++){
-
-        pid_t pid = fork();
-
-        if(pid != 0){
-            continue;
-        }
-
-        int server_fd, new_socket;
-        // Creating socket file descriptor
-        if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0){
-            perror("Faluire to create socket");
-            exit(EXIT_FAILURE);
-        }
-        //set socket to reuse address
-        int opt = 1;
-        if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
-        {
-            perror("Faluire to set socket options");
-            exit(EXIT_FAILURE);
-        }
-
-        // Vinculando o socket à porta especificada
-        if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
-        {
-            perror("Faluire to bind socket");
-            exit(EXIT_FAILURE);
-        }
-
-        // Waiting for connections
-        if (listen(server_fd, 3) < 0)
-        {
-            perror("Faluire to listen connections");
-            exit(EXIT_FAILURE);
-        }
-
-        // Main loop
-        printf("Sever is running on port:%d\n", port);
-
-        while (1)
-        {
-            actual_request++;
-
-            // Accepting a new connection in every socket
-            if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
-            {
-                perror("Faluire to accept connection");
-                exit(EXIT_FAILURE);
-            }
-
-            struct timeval timer;
-            timer.tv_sec = timeout;  // tempo em segundos
-            timer.tv_usec = 0;  //
-
-            setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
-            
-                private_cweb_execute_request_in_safty_mode(
-                    new_socket,
-                    max_body_size,
-                    timeout,
-                    request_handler);
-            
-        }
+    else{
+        private_cweb_run_server_in_multiprocess(
+            port,
+            request_handler,
+            timeout,
+            max_body_size,
+            3
+        );
     }
-    while(true);
-    */
 }
