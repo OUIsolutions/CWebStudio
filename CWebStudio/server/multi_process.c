@@ -53,6 +53,7 @@ void private_cweb_execute_request_in_safty_mode(
     pid_t pid = fork();
     if (pid == 0){
         // means that the process is the child
+      
         alarm(time_out);
         private_cweb_execute_request(new_socket, max_body_size, request_handler);
         cweb_print("Request executed\n");
@@ -72,7 +73,12 @@ void private_cweb_execute_request_in_safty_mode(
     
 }
 
+long int private_cweb_get_memory_usage(){
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
 
+    return usage.ru_maxrss;
+}
 
 void private_cweb_run_server_in_multiprocess(
     int port,
@@ -111,11 +117,12 @@ void private_cweb_run_server_in_multiprocess(
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
     }
+    
 
     // Main loop
     printf("Sever is running on port:%d\n", port);
 
-    while (1)
+    while (true)
     {
         actual_request++;
 
@@ -125,9 +132,13 @@ void private_cweb_run_server_in_multiprocess(
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
+      
+        long int memory_usage = private_cweb_get_memory_usage();
+        printf("Memory usage: %ld\n", memory_usage);
 
         pid_t pid = fork();
         if (pid == 0){
+          
             // creates an new socket and parse the request to the new socket
             int new_socket = dup(main_socket);
             struct timeval timer;
@@ -151,15 +162,18 @@ void private_cweb_run_server_in_multiprocess(
             cweb_print("Closed Conection with socket %d\n", new_socket);
             exit(0);
         }
-        
+
+
         else if (pid < 0){
             perror("Faluire to create a new process");
             exit(EXIT_FAILURE);
         }
 
+
         else{
             close(main_socket);
             signal(SIGCHLD, SIG_IGN);
+            continue;
         }
         
   

@@ -10,6 +10,7 @@
         "cwebstudiomain.c": "cpp",
         "typeinfo": "cpp",
         "string": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "resource.h": "c"
     }
 }
