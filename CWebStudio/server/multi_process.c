@@ -75,6 +75,7 @@ void private_cweb_execute_request_in_safty_mode(
 
 long int private_cweb_get_memory_usage(){
     struct rusage usage;
+    //get ram usage of self process and all its child 
     getrusage(RUSAGE_SELF, &usage);
 
     return usage.ru_maxrss;
