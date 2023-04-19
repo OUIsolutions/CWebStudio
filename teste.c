@@ -1,18 +1,20 @@
-#define CWEB_DEBUG
-#include "CWebStudio.c"
+
+#include "CWebStudio/CwebStudioMain.c"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    sleep(5);
-    char *tag = request->get_param(request,"tag");
+    //printf("-------------------\n");
+    //request->represent(request);
+    
+    char *tag = request->get_header(request,"tag");
     if(tag == NULL){
         return cweb_send_text("not passed tag",200);
     }
 
-    char formated_text [100];
-    sprintf(formated_text,"passed tag: %s",tag);
-    return cweb_send_text(formated_text,200);
-
-
+    if(strcmp(tag,"teste") == 0){
+        return cweb_send_text("tag ok",200);
+    }
+    
+    return cweb_send_text("tag not ok",200);
 }
 
 int main(int argc, char *argv[]){
