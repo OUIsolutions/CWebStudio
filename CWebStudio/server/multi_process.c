@@ -136,7 +136,6 @@ void private_cweb_run_server_in_multiprocess(
         pid_t pid = fork();
         if (pid == 0){
             
-           
             // creates an new socket and parse the request to the new socket
             int new_socket = dup(client_socket);
 
@@ -179,6 +178,5 @@ void private_cweb_run_server_in_multiprocess(
         }
         
   
-
     }
 }
