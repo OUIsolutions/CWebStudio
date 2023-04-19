@@ -2,8 +2,9 @@
 #include "CWebStudio/CwebStudioMain.c"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    //printf("-------------------\n");
-    //request->represent(request);
+    printf("-------------------\n");
+    printf("size:%d\n",request->content_length);
+    request->represent(request);
     
     char *tag = request->get_header(request,"tag");
     if(tag == NULL){
