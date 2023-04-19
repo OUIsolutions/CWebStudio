@@ -6865,6 +6865,7 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
 
 void private_cweb_treat_response(int new_socket);
 
+
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
     size_t max_body_size,
@@ -7133,14 +7134,14 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
             raw_entrys[i-1] == '\r' &&
             raw_entrys[i] == '\n'
         ){
-            last_string[line_index] = '\0';
-            lines->add_string(lines, last_string);
+            
+           
             break;
         }
 
         //means its an break line
         if (raw_entrys[i-1] == '\r' && raw_entrys[i] == '\n'){
-            last_string[line_index] = '\0';
+            last_string[line_index - 1] = '\0';
             lines->add_string(lines, last_string);
             line_index=0;
         }
