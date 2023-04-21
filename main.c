@@ -1,23 +1,28 @@
+#define CWEB_ONCE
 #include "CWebStudio/CwebStudioMain.c"
-
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
-    struct CwebDict *query_paramns = request->params;
-    for(int i = 0; i < query_paramns->size; i++){
-        struct CwebKeyVal *key_val = query_paramns->keys_vals[i];
-        char *key = key_val->key;
-        char *value = key_val->value;
-        printf("%s : %s\n", key, value);
-    }
+    request->represent(request);
+
     return cweb_send_text("Hello World", 200);
     
 }
 
 int main(){
+    /*
+    cweb_run_server(
+        8080,
+        main_sever,
+        CWEB_DEFAULT_TIMEOUT,
+        CWEB_DEFAULT_MAX_BODY,
+        CWEB_DANGEROUS_SINGLE_PROCESS
+            );
+     */
+     struct CwebHttpRequest *request = cweb_request_constructor();
+     int result = request->interpret_first_line(request,"GET /teste2");
+     printf("Result:%d",result);
 
-    struct CwebHttpRequest *request = cweb_request_constructor();
-    request->interpret_first_line(request,"GET    /teste  ");
 
-    return 0;
+     return 0;
 }

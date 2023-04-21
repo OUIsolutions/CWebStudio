@@ -55,33 +55,48 @@ void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
 
 }
 
-void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
-    
-    char method[100] = {0};
-    char url[5000] = {0};
+int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+    #define METHOD_MAX_SIZE 300
+    #define URL_MAX_SIZE 50000
+    char method[METHOD_MAX_SIZE] = {0};
+    char url[URL_MAX_SIZE] = {0};
+
 
     int line_len = strlen(first_line);
-    int method_end;
+    int method_end = 0;
     //getting the method
+
     for (int i = 0; i < line_len; i++){
-        
+        if(i >= METHOD_MAX_SIZE){
+            return INVALID_HTTP;
+        }
+
         char current_char = first_line[i];
         if(current_char == ' '){
             method_end = i;
             method[i] = '\0';
             break;
         }
-        method[i] = current_char;   
-         
+        method[i] = current_char;
+
     }
+
+    if(!method_end){
+        return INVALID_HTTP;
+    }
+
     self->set_method(self,method);
+
 
     //getting the url
     int url_start_position;
     bool url_found = false;
 
     for (int i = method_end; i < line_len; i++){
-        
+
+        if((i - url_start_position) >= URL_MAX_SIZE ){
+            return INVALID_HTTP;
+        }
         char current_char = first_line[i];
 
         if(current_char == ' ' && url_found == true){
@@ -93,16 +108,19 @@ void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first
            url_start_position = i;
         }
 
+
         if(url_found){
             url[i - url_start_position] = current_char;
         }
-
          
     }
+    if(!url_found){
+        return INVALID_HTTP;
+    }
     self->set_url(self,url);
-    printf("method:%s\n",method);
-    printf("url:%s\n",url);
-    
+
+    return 0;
+
 }
 
 
@@ -112,7 +130,7 @@ void private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStri
         char *current_line = line_headers->strings[i];
         int line_size = strlen(current_line);
         char key[1000] = {0};
-        char value[3000] = {0};
+        char value[10000] = {0};
         bool key_found = false;
         int value_start_point = 0;
         for(int j = 0; j<line_size;j++){
@@ -195,8 +213,13 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
 
     }
 
-    self->interpret_first_line(self, lines->strings[0]);
-    self->interpret_headders(self, lines);    
+    int line_error = self->interpret_first_line(self, lines->strings[0]);
+
+    if(line_error){
+        return line_error;
+    }
+
+    self->interpret_headders(self, lines);
 
     const char *content_lenght_str = self->get_header(self, "Content-Length");
 
