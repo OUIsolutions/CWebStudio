@@ -14,4 +14,10 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(){
+
+    struct CwebHttpRequest *request = cweb_request_constructor();
+    request->interpret_first_line("GET /teste");
+
+    return 0;
+}
