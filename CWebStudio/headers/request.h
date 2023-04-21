@@ -27,7 +27,7 @@ struct CwebHttpRequest{
     int (*parse_http_request)(struct CwebHttpRequest *self,int socket,size_t max_body_size);
     void (*interpret_query_params)(struct CwebHttpRequest *self,const char *query_params);
     int (*interpret_first_line)(struct CwebHttpRequest *self, char *first_line);
-    void (*interpret_headders)(struct CwebHttpRequest *self, struct DtwStringArray *line_headers);
+    int (*interpret_headders)(struct CwebHttpRequest *self, struct DtwStringArray *line_headers);
     void (*free)(struct CwebHttpRequest *request);
     void (*represent)(struct CwebHttpRequest *request);
 };
@@ -54,7 +54,7 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
 int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
 
 
-void private_cweb_interpret_headders(
+int private_cweb_interpret_headders(
     struct CwebHttpRequest *self,
     struct DtwStringArray *line_headers
 );

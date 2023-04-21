@@ -124,7 +124,7 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
 }
 
 
-void private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
+int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
     
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
@@ -155,7 +155,11 @@ void private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStri
         if(key_found){
             self->add_header(self, key, value);
         }
+        else{
+            return INVALID_HTTP;
+        }
     }
+    return 0;
 
 }
 
@@ -219,17 +223,19 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
         return line_error;
     }
 
-    self->interpret_headders(self, lines);
+    int headers_error = self->interpret_headders(self, lines);
+
+    if(headers_error){
+        return headers_error;
+    }
 
     const char *content_lenght_str = self->get_header(self, "Content-Length");
-
 
 
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
         if(self->content_length > max_body_size){
-  
-            
+
             return MAX_BODY_SIZE;
         }
 
