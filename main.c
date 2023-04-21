@@ -11,7 +11,11 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 int main(){
 
-    struct CwebHttpRequest *request = cweb_request_constructor();
-    request->set_url(request,"/teste  ?a=30&b=c");
-    request->represent(request);
+      cweb_run_server(
+        8080,
+        main_sever,
+        CWEB_DEFAULT_TIMEOUT,
+        CWEB_DEFAULT_MAX_BODY,
+        CWEB_SAFTY_MODE
+    );
 }
