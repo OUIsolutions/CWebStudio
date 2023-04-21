@@ -6661,6 +6661,13 @@ struct DtwTreePart *private_dtw_find_tree_part_by_path(struct DtwTree *self,cons
 }
 
 
+
+char *cweb_parse_string_to_lower(const char *old_string);
+
+char *cweb_parse_string_to_upper(const char *old_string);
+
+char *cweb_normalize_string(const char *old_string,const char *invalid_chars);
+
 const char *cweb_generate_content_type(const char *file_name);
 
 
@@ -6688,6 +6695,7 @@ struct CwebDict {
   struct CwebKeyVal **keys_vals;
   void (*set)(struct CwebDict *dict,const char *key,const char *value);
   char*(*get_value)(struct CwebDict *dict,const char *key);
+  char*(*find_value_by_normalized_key)(struct CwebDict *dict,const char *key,const char *chars_to_remove);
   void (*free)(struct CwebDict *dict);
   void (*represent)(struct CwebDict *dict);
 };
@@ -6697,6 +6705,13 @@ struct CwebDict {
 struct CwebDict *cweb_create_dict();
 void private_cweb_dict_set(struct CwebDict *self,const  char *key,const char *value);
 char *private_cweb_dict_get(struct CwebDict *self,const char *key);
+
+char *private_cweb_find_value_by_normalized_key(
+  struct CwebDict *self,
+  const char *key,
+  const char *chars_to_remove
+);
+
 void private_cweb_dict_represent(struct CwebDict *dict);
 void private_cweb_free_dict(struct CwebDict *self);
 
@@ -6799,7 +6814,16 @@ struct CwebHttpRequest{
 
 
     char *(*get_header)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_header_by_sanitized_key)(
+        struct CwebHttpRequest *self,
+        const char *key,
+        const char *chars_to_remove
+        );
+
     char *(*get_param)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_param_by_sanitized_key)(struct CwebHttpRequest *self,const char *key,
+        const char *chars_to_remove);
+
     void (*add_header)(struct CwebHttpRequest *self,const char *key,const char *value);
     void (*add_param)(struct CwebHttpRequest *self,const char *key,const char *value);
 
@@ -6807,15 +6831,26 @@ struct CwebHttpRequest{
 
     int (*parse_http_request)(struct CwebHttpRequest *self,int socket,size_t max_body_size);
     void (*interpret_query_params)(struct CwebHttpRequest *self,const char *query_params);
-    void (*interpret_first_line)(struct CwebHttpRequest *self, char *first_line);
-    void (*interpret_headders)(struct CwebHttpRequest *self, struct DtwStringArray *line_headers);
+    int (*interpret_first_line)(struct CwebHttpRequest *self, char *first_line);
+    int (*interpret_headders)(struct CwebHttpRequest *self, struct DtwStringArray *line_headers);
     void (*free)(struct CwebHttpRequest *request);
     void (*represent)(struct CwebHttpRequest *request);
 };
 //algorithm functions
 
 char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key);
+char * private_cweb_get_header_by_sanitized_key(
+    struct CwebHttpRequest *self,
+    const char *key,
+    const char *chars_to_remove
+);
 char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key);
+char * private_cweb_get_param_by_sanitized_key(
+    struct CwebHttpRequest *self,
+    const char *key,
+    const char *chars_to_remove
+);
+
 void private_cweb_set_url(struct CwebHttpRequest *self,const char *url);
 void private_cweb_set_route(struct CwebHttpRequest *self,const char *route);
 
@@ -6832,10 +6867,10 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
 
 void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params);
 
-void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
+int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
 
 
-void private_cweb_interpret_headders(
+int private_cweb_interpret_headders(
     struct CwebHttpRequest *self,
     struct DtwStringArray *line_headers
 );
@@ -6907,7 +6942,9 @@ struct CwebHttpRequest *cweb_request_constructor(){
     self->set_content_string = private_cweb_set_content_string;
 
     self->get_header = private_cweb_get_header;
+    self->get_header_by_sanitized_key = private_cweb_get_header_by_sanitized_key;
     self->get_param = private_cweb_get_param;
+    self->get_param_by_sanitized_key = private_cweb_get_param_by_sanitized_key;
 
     self->params = cweb_create_dict();
     self->headers = cweb_create_dict();
@@ -6922,12 +6959,22 @@ struct CwebHttpRequest *cweb_request_constructor(){
     
 }
 
+
 char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
     return self->headers->get_value(self->headers,key);
 }
+
+char * private_cweb_get_param_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
+    return self->params->find_value_by_normalized_key(self->params,key,chars_to_remove);
+}
+
 char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key){
     return self->params->get_value(self->params,key);
 }
+char * private_cweb_get_header_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
+    return self->headers->find_value_by_normalized_key(self->headers,key,chars_to_remove);
+}
+
 
 
 void private_cweb_set_route(struct CwebHttpRequest *self,const char *route){
@@ -7051,28 +7098,82 @@ void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
 
 }
 
-void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
-    
-    char method[1000] = {0};
-    char url[1000] = {0};
+int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+    #define METHOD_MAX_SIZE 300
+    #define URL_MAX_SIZE 50000
+    char method[METHOD_MAX_SIZE] = {0};
+    char url[URL_MAX_SIZE] = {0};
 
-    sscanf(first_line, "%s %s", method, url);
+
+    int line_len = strlen(first_line);
+    int method_end = 0;
+    //getting the method
+
+    for (int i = 0; i < line_len; i++){
+        if(i >= METHOD_MAX_SIZE){
+            return INVALID_HTTP;
+        }
+
+        char current_char = first_line[i];
+        if(current_char == ' '){
+            method_end = i;
+            method[i] = '\0';
+            break;
+        }
+        method[i] = current_char;
+
+    }
+
+    if(!method_end){
+        return INVALID_HTTP;
+    }
 
     self->set_method(self,method);
 
+
+    //getting the url
+    int url_start_position;
+    bool url_found = false;
+
+    for (int i = method_end; i < line_len; i++){
+
+        if((i - url_start_position) >= URL_MAX_SIZE ){
+            return INVALID_HTTP;
+        }
+        char current_char = first_line[i];
+
+        if(current_char == ' ' && url_found == true){
+            break;
+        }
+
+        if(current_char != ' ' && url_found == false){
+           url_found = true;
+           url_start_position = i;
+        }
+
+
+        if(url_found){
+            url[i - url_start_position] = current_char;
+        }
+         
+    }
+    if(!url_found){
+        return INVALID_HTTP;
+    }
     self->set_url(self,url);
 
-    
+    return 0;
+
 }
 
 
-void private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
+int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
     
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
         int line_size = strlen(current_line);
         char key[1000] = {0};
-        char value[3000] = {0};
+        char value[10000] = {0};
         bool key_found = false;
         int value_start_point = 0;
         for(int j = 0; j<line_size;j++){
@@ -7097,7 +7198,11 @@ void private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStri
         if(key_found){
             self->add_header(self, key, value);
         }
+        else{
+            return INVALID_HTTP;
+        }
     }
+    return 0;
 
 }
 
@@ -7155,18 +7260,25 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
 
     }
 
-    self->interpret_first_line(self, lines->strings[0]);
-    self->interpret_headders(self, lines);    
+    int line_error = self->interpret_first_line(self, lines->strings[0]);
 
-    const char *content_lenght_str = self->get_header(self, "Content-Length");
+    if(line_error){
+        return line_error;
+    }
 
+    int headers_error = self->interpret_headders(self, lines);
 
+    if(headers_error){
+        return headers_error;
+    }
+    //const char *content_lenght_str = self->get_header(self, "Content-Length");
+    const char *content_lenght_str = self->get_header_by_sanitized_key(
+        self, "contentlength","- "
+    );
 
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
         if(self->content_length > max_body_size){
-  
-            
             return MAX_BODY_SIZE;
         }
 
@@ -7189,10 +7301,13 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
             }       
 
         }
+
         self->content[self->content_length]= '\0';
 
         //extracting url encoded data
-        char *content_type = self->headers->get_value(self->headers, "Content-Type");
+        char *content_type = self->get_header_by_sanitized_key(
+            self, "contenttype","- "
+        );
         if(content_type != NULL){
             if(strcmp(content_type, "application/x-www-form-urlencoded") == 0){
                 self->interpret_query_params(self, (char*)self->content);
@@ -7207,6 +7322,48 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
 }
 
 
+
+
+char *cweb_parse_string_to_lower(const char *old_string){
+     
+    int string_size = strlen(old_string);
+    char *new_string = (char*)malloc(string_size + 2);
+    for(int i = 0; i < string_size; i++){
+        new_string[i] = tolower(old_string[i]);
+    }
+    new_string[string_size] = '\0';
+    return new_string;
+}
+
+
+char *cweb_parse_string_to_upper(const char *old_string){
+    
+    int string_size = strlen(old_string);
+    char *new_string = (char*)malloc(string_size + 2);
+    for(int i = 0; i < string_size; i++){
+        new_string[i] = toupper(old_string[i]);
+    }
+    new_string[string_size] = '\0';
+    return new_string;
+}
+
+char *cweb_normalize_string(const char *old_string,const char *invalid_chars){
+    
+    int string_size = strlen(old_string);
+    char *lower_string = cweb_parse_string_to_lower(old_string);
+    char *new_string = (char*)malloc(string_size + 2);
+    int new_string_size = 0;
+
+    for(int i = 0; i < string_size; i++){
+        if(strchr(invalid_chars,lower_string[i]) == NULL){
+            new_string[new_string_size] = lower_string[i];
+            new_string_size++;
+        }        
+    }
+    new_string[new_string_size] = '\0';
+    free(lower_string);
+    return new_string;
+}
 
 const char *cweb_generate_content_type(const char *file_name){
         
@@ -7325,11 +7482,29 @@ struct CwebDict *cweb_create_dict(){
     self->size = 0;
     self->set = private_cweb_dict_set;
     self->get_value = private_cweb_dict_get;
+    self->find_value_by_normalized_key = private_cweb_find_value_by_normalized_key;
     self->free = private_cweb_free_dict;
     self->represent = private_cweb_dict_represent;
     return self;
 }
 
+char *private_cweb_find_value_by_normalized_key(struct CwebDict *self,const char *key,const char *chars_to_remove){
+
+    for(int i = 0;i < self->size;i++){
+        char *current_key = self->keys_vals[i]->key;
+        char *normalized_key = cweb_normalize_string(current_key, chars_to_remove);
+
+        if(strcmp(normalized_key, key) == 0){
+            free(normalized_key);
+            return self->keys_vals[i]->value;
+        }
+
+        free(normalized_key);
+
+    }
+    return NULL;
+
+}
 void private_cweb_dict_set(struct CwebDict *self,const char *key,const char *value){
     struct CwebKeyVal *key_val = cweb_key_val_constructor(key, value);
     self->keys_vals = (struct CwebKeyVal**)realloc(self->keys_vals, (self->size+1)*sizeof(struct CwebKeyVal*));
