@@ -55,17 +55,60 @@ void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
 
 }
 
-void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
-    
-    char method[1000] = {0};
-    char url[1000] = {0};
+int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+    #define METHOD_MAX_SIZE 300
+    #define URL_MAX_SIZE 50000
+    char method[METHOD_MAX_SIZE] = {0};
+    char url[URL_MAX_SIZE] = {0};
 
-    sscanf(first_line, "%s %s", method, url);
 
+    int line_len = strlen(first_line);
+    int method_end;
+    //getting the method
+
+    for (int i = 0; i < line_len; i++){
+        if(i == METHOD_MAX_SIZE){
+            return INVALID_HTTP;
+        }
+
+        char current_char = first_line[i];
+        if(current_char == ' '){
+            method_end = i;
+            method[i] = '\0';
+            break;
+        }
+        method[i] = current_char;   
+         
+    }
     self->set_method(self,method);
 
-    self->set_url(self,url);
 
+    //getting the url
+    int url_start_position;
+    bool url_found = false;
+
+    for (int i = method_end; i < line_len; i++){
+        
+        char current_char = first_line[i];
+
+        if(current_char == ' ' && url_found == true){
+            break;
+        }
+
+        if(current_char != ' ' && url_found == false){
+           url_found = true;
+           url_start_position = i;
+        }
+
+
+        if(url_found){
+            url[i - url_start_position] = current_char;
+        }
+         
+    }
+    self->set_url(self,url);
+    printf("method:%s\n",method);
+    printf("url:%s\n",url);
     
 }
 
