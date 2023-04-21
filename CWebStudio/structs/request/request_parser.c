@@ -229,7 +229,13 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
         return headers_error;
     }
 
-    const char *content_lenght_str = self->get_header(self, "Content-Length");
+
+    //const char *content_lenght_str = self->get_header(self, "Content-Length");
+    const char *content_lenght_str = self->get_header_by_sanitized_key(
+        self, "contentlength"
+    );
+    printf("content_lenght_str: %s\n",content_lenght_str);
+
 
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);

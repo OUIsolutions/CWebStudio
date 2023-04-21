@@ -10,12 +10,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 int main(){
-    struct CwebDict *element = cweb_create_dict();
-    element->set(element,"testE#  $ # ","aaaa");
-    char *teste = element->find_value_by_normalized_key(element,"teste");
-    printf("%s\n",teste);
     
-    /*
+    
+    
     cweb_run_server(
         8080,
         main_sever,
@@ -24,7 +21,7 @@ int main(){
         CWEB_DANGEROUS_SINGLE_PROCESS
 
         );
-    */
+    
     /*
     struct CwebHttpRequest *request = cweb_request_constructor();
      request->interpret_first_line(request,"GET /teste2");
