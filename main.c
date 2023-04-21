@@ -1,4 +1,4 @@
-#include "CWebStudio.c"
+#include "CWebStudio/CwebStudioMain.c"
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -17,7 +17,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(){
 
     struct CwebHttpRequest *request = cweb_request_constructor();
-    request->interpret_first_line("GET /teste");
+    request->interpret_first_line(request,"GET    /teste  ");
 
     return 0;
 }
