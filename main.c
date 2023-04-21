@@ -11,8 +11,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 int main(){
     
-    char *teste = cweb_parse_string_to_lower("Teste");
-    printf("%s",teste);
+    char *teste = cweb_normalize_string("TES T $E","$#@!@#$ ");
+    printf("%s\n",teste);
     free(teste);
     
     /*
