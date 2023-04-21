@@ -12,7 +12,10 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(){
  
     
-    
+    char *teste = "Teste $ ";
+    char *normalized = cweb_normalize_string(teste,"$ ");
+    printf("Normalized:%s",normalized);
+    /*
     cweb_run_server(
         8080,
         main_sever,
