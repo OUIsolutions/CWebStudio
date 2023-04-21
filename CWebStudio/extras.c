@@ -1,5 +1,23 @@
 
 
+
+char *cweb_parse_string_to_lower(char *old_string){
+     
+        int string_size = strlen(old_string);
+        char *new_string = (char*)malloc(string_size);
+        for(int i = 0; i < string_size; i++){
+            new_string[i] = tolower(old_string[i]);
+        }
+        return new_string;
+}
+
+char *cweb_normalize_string(char *old_string){
+    
+    char *new_string = (char*)malloc(strlen(old_string) + 2);
+
+
+}
+
 const char *cweb_generate_content_type(const char *file_name){
         
         struct DtwPath *path = dtw_constructor_path(file_name);

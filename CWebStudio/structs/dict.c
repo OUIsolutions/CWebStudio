@@ -9,11 +9,20 @@ struct CwebDict *cweb_create_dict(){
     self->size = 0;
     self->set = private_cweb_dict_set;
     self->get_value = private_cweb_dict_get;
+    self->get_normalized_value = private_cweb_dict_get_normalized_value;
     self->free = private_cweb_free_dict;
     self->represent = private_cweb_dict_represent;
     return self;
 }
 
+char *private_cweb_dict_get_normalized_value(struct CwebDict *self,const char *key){
+
+    for(int i = 0;i < self->size;i++){
+        char *key = self->keys_vals[i]->key;
+        //
+    }
+
+}
 void private_cweb_dict_set(struct CwebDict *self,const char *key,const char *value){
     struct CwebKeyVal *key_val = cweb_key_val_constructor(key, value);
     self->keys_vals = (struct CwebKeyVal**)realloc(self->keys_vals, (self->size+1)*sizeof(struct CwebKeyVal*));

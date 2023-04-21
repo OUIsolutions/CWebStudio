@@ -231,11 +231,9 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
 
     const char *content_lenght_str = self->get_header(self, "Content-Length");
 
-
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
         if(self->content_length > max_body_size){
-
             return MAX_BODY_SIZE;
         }
 
@@ -258,6 +256,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
             }       
 
         }
+
         self->content[self->content_length]= '\0';
 
         //extracting url encoded data

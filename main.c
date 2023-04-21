@@ -10,7 +10,12 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 int main(){
-
+    
+    char *teste = cweb_parse_string_to_lower("Teste");
+    printf("%s",teste);
+    free(teste);
+    
+    /*
     cweb_run_server(
         8080,
         main_sever,
@@ -19,7 +24,7 @@ int main(){
         CWEB_DANGEROUS_SINGLE_PROCESS
 
         );
-
+    */
     /*
     struct CwebHttpRequest *request = cweb_request_constructor();
      request->interpret_first_line(request,"GET /teste2");
