@@ -1,4 +1,6 @@
 
+
+
 char *cweb_parse_string_to_lower(const char *old_string);
 
 char *cweb_parse_string_to_upper(const char *old_string);

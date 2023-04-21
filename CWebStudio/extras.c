@@ -3,25 +3,25 @@
 
 char *cweb_parse_string_to_lower(const char *old_string){
      
-        int string_size = strlen(old_string);
-        char *new_string = (char*)malloc(string_size + 2);
-        for(int i = 0; i < string_size; i++){
-            new_string[i] = tolower(old_string[i]);
-        }
-        new_string[string_size] = '\0';
-        return new_string;
+    int string_size = strlen(old_string);
+    char *new_string = (char*)malloc(string_size + 2);
+    for(int i = 0; i < string_size; i++){
+        new_string[i] = tolower(old_string[i]);
+    }
+    new_string[string_size] = '\0';
+    return new_string;
 }
 
 
 char *cweb_parse_string_to_upper(const char *old_string){
-     
-        int string_size = strlen(old_string);
-        char *new_string = (char*)malloc(string_size + 2);
-        for(int i = 0; i < string_size; i++){
-            new_string[i] = toupper(old_string[i]);
-        }
-        new_string[string_size] = '\0';
-        return new_string;
+    
+    int string_size = strlen(old_string);
+    char *new_string = (char*)malloc(string_size + 2);
+    for(int i = 0; i < string_size; i++){
+        new_string[i] = toupper(old_string[i]);
+    }
+    new_string[string_size] = '\0';
+    return new_string;
 }
 
 char *cweb_normalize_string(const char *old_string,char *invalid_chars){

@@ -9,18 +9,26 @@ struct CwebDict *cweb_create_dict(){
     self->size = 0;
     self->set = private_cweb_dict_set;
     self->get_value = private_cweb_dict_get;
-    self->get_normalized_value = private_cweb_dict_get_normalized_value;
+    self->find_value_by_normalized_key = private_cweb_find_value_by_normalized_key;
     self->free = private_cweb_free_dict;
     self->represent = private_cweb_dict_represent;
     return self;
 }
 
-char *private_cweb_dict_get_normalized_value(struct CwebDict *self,const char *key){
+char *private_cweb_find_value_by_normalized_key(struct CwebDict *self,const char *key){
 
     for(int i = 0;i < self->size;i++){
         char *key = self->keys_vals[i]->key;
-        //
+        char *normalized_key = cweb_normalize_string(key, " $#-&!@");
+        /*
+        if(strcmp(normalized_key, key) == 0){
+            free(normalized_key);
+            return self->keys_vals[i]->value;
+        }
+        free(normalized_key);
+         */
     }
+    return NULL;
 
 }
 void private_cweb_dict_set(struct CwebDict *self,const char *key,const char *value){
