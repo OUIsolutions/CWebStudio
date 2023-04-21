@@ -18,15 +18,16 @@ struct CwebDict *cweb_create_dict(){
 char *private_cweb_find_value_by_normalized_key(struct CwebDict *self,const char *key){
 
     for(int i = 0;i < self->size;i++){
-        char *key = self->keys_vals[i]->key;
-        char *normalized_key = cweb_normalize_string(key, " $#-&!@");
-        /*
+        char *current_key = self->keys_vals[i]->key;
+        char *normalized_key = cweb_normalize_string(current_key, " $#-&!@");
+
         if(strcmp(normalized_key, key) == 0){
             free(normalized_key);
             return self->keys_vals[i]->value;
         }
+
         free(normalized_key);
-         */
+
     }
     return NULL;
 

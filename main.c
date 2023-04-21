@@ -11,7 +11,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 int main(){
     struct CwebDict *element = cweb_create_dict();
-    element->set(element,"testE $ # ","aaaa");
+    element->set(element,"testE#  $ # ","aaaa");
     char *teste = element->find_value_by_normalized_key(element,"teste");
     printf("%s\n",teste);
     
