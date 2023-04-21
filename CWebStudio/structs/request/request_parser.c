@@ -55,22 +55,16 @@ void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
 
 }
 
-int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
-    #define METHOD_MAX_SIZE 300
-    #define URL_MAX_SIZE 50000
-    char method[METHOD_MAX_SIZE] = {0};
-    char url[URL_MAX_SIZE] = {0};
-
+void private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+    
+    char method[100] = {0};
+    char url[5000] = {0};
 
     int line_len = strlen(first_line);
     int method_end;
     //getting the method
-
     for (int i = 0; i < line_len; i++){
-        if(i == METHOD_MAX_SIZE){
-            return INVALID_HTTP;
-        }
-
+        
         char current_char = first_line[i];
         if(current_char == ' '){
             method_end = i;
@@ -81,7 +75,6 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
          
     }
     self->set_method(self,method);
-
 
     //getting the url
     int url_start_position;
@@ -100,10 +93,10 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
            url_start_position = i;
         }
 
-
         if(url_found){
             url[i - url_start_position] = current_char;
         }
+
          
     }
     self->set_url(self,url);
