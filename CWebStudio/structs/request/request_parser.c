@@ -3,14 +3,17 @@
 
 
 void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params){
+    if(!query_params){
+        return;
+    }
     int paramns_size = strlen(query_params);
     char key[1000] = {0};
     char value[1000] = {0};
     bool key_found = false;
 
-    for(int i=1; i<paramns_size; i++){
+    for(int i =0; i<paramns_size; i++){
 
-        if(query_params[i] == '='){
+        if(query_params[i] == '='&& key_found == false){
             key_found = true;
             continue;
         }
@@ -38,26 +41,49 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
 }
 
 void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
-    self->url = (char*) malloc(strlen(url)+2);
+    int size_url = strlen(url);
+    self->url = (char*) malloc(size_url+2);
     strcpy(self->url,url);
 
-    strcpy(self->url, url);
+    char route[5000] = {0};
+    char params[5000] = {0};
 
-    char route[1000] = {0};
-    char params[30000] = {0};
+    bool route_end = false;
+    int route_end_position;
+    int i = 0;
+    for(;i < size_url;i++){
+        char current_char = url[i];
 
-    sscanf(url, "%[^?]%s", route, params);
+        if(current_char == '?'){
+            route_end = true;
+            route_end_position = i+1;
+            route[i] = '\0';
+            continue;
+        }
+
+        if(route_end == false){
+            route[i] = current_char;
+        }
+        if(route_end == true){
+            params[i-route_end_position] = current_char;
+        }
+    }
+
 
     self->route = (char*)malloc(strlen(route)+1);
     strcpy(self->route, route);
 
-    self->interpret_query_params(self, params);
+    if(params){
+        params[i-route_end_position] = '\0';
+        self->interpret_query_params(self, params);
+    }
+
 
 }
 
 int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
     #define METHOD_MAX_SIZE 300
-    #define URL_MAX_SIZE 50000
+    #define URL_MAX_SIZE 5000
     char method[METHOD_MAX_SIZE] = {0};
     char url[URL_MAX_SIZE] = {0};
 

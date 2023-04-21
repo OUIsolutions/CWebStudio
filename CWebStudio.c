@@ -7051,7 +7051,7 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
     char value[1000] = {0};
     bool key_found = false;
 
-    for(int i=1; i<paramns_size; i++){
+    for(int i=0; i<paramns_size; i++){
 
         if(query_params[i] == '='){
             key_found = true;
