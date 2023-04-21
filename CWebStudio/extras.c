@@ -24,7 +24,7 @@ char *cweb_parse_string_to_upper(const char *old_string){
     return new_string;
 }
 
-char *cweb_normalize_string(const char *old_string,char *invalid_chars){
+char *cweb_normalize_string(const char *old_string,const char *invalid_chars){
     
     int string_size = strlen(old_string);
     char *lower_string = cweb_parse_string_to_lower(old_string);

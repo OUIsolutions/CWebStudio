@@ -228,14 +228,10 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     if(headers_error){
         return headers_error;
     }
-
-
     //const char *content_lenght_str = self->get_header(self, "Content-Length");
     const char *content_lenght_str = self->get_header_by_sanitized_key(
-        self, "contentlength"
+        self, "contentlength","- "
     );
-    printf("content_lenght_str: %s\n",content_lenght_str);
-
 
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
@@ -266,7 +262,9 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
         self->content[self->content_length]= '\0';
 
         //extracting url encoded data
-        char *content_type = self->headers->get_value(self->headers, "Content-Type");
+        char *content_type = self->get_header_by_sanitized_key(
+            self, "contenttype","- "
+        );
         if(content_type != NULL){
             if(strcmp(content_type, "application/x-www-form-urlencoded") == 0){
                 self->interpret_query_params(self, (char*)self->content);

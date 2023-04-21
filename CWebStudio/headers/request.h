@@ -18,10 +18,15 @@ struct CwebHttpRequest{
 
 
     char *(*get_header)(struct CwebHttpRequest *self,const char *key);
-    char *(*get_header_by_sanitized_key)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_header_by_sanitized_key)(
+        struct CwebHttpRequest *self,
+        const char *key,
+        const char *chars_to_remove
+        );
 
     char *(*get_param)(struct CwebHttpRequest *self,const char *key);
-    char *(*get_param_by_sanitized_key)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_param_by_sanitized_key)(struct CwebHttpRequest *self,const char *key,
+        const char *chars_to_remove);
 
     void (*add_header)(struct CwebHttpRequest *self,const char *key,const char *value);
     void (*add_param)(struct CwebHttpRequest *self,const char *key,const char *value);
@@ -40,12 +45,14 @@ struct CwebHttpRequest{
 char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key);
 char * private_cweb_get_header_by_sanitized_key(
     struct CwebHttpRequest *self,
-    const char *key
+    const char *key,
+    const char *chars_to_remove
 );
 char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key);
 char * private_cweb_get_param_by_sanitized_key(
     struct CwebHttpRequest *self,
-    const char *key
+    const char *key,
+    const char *chars_to_remove
 );
 
 void private_cweb_set_url(struct CwebHttpRequest *self,const char *url);

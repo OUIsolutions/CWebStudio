@@ -40,14 +40,16 @@ struct CwebHttpRequest *cweb_request_constructor(){
 char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
     return self->headers->get_value(self->headers,key);
 }
-char * private_cweb_get_param_by_sanitized_key(struct CwebHttpRequest *self,const char *key){
-    return self->headers->find_value_by_normalized_key(self->headers,key);
+
+char * private_cweb_get_param_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
+    return self->params->find_value_by_normalized_key(self->params,key,chars_to_remove);
 }
+
 char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key){
     return self->params->get_value(self->params,key);
 }
-char * private_cweb_get_header_by_sanitized_key(struct CwebHttpRequest *self,const char *key){
-    return self->params->find_value_by_normalized_key(self->params,key);
+char * private_cweb_get_header_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
+    return self->headers->find_value_by_normalized_key(self->headers,key,chars_to_remove);
 }
 
 
