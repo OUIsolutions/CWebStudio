@@ -14,9 +14,25 @@ struct CwebHttpResponse* cweb_send_text(const char *content,int status_code){
     return cweb_send_any("text/plain", strlen(content), (unsigned char*)content, status_code);
 }
 
+
+struct CwebHttpResponse* cweb_send_text_cleaning_memory(char *content,int status_code){
+    struct CwebHttpResponse*  response = cweb_send_any("text/plain", strlen(content), (unsigned char*)content, status_code);
+    free(content);
+    return response;
+}
+
+
 struct CwebHttpResponse* cweb_send_var_html(const char *content,int status_code){
     return cweb_send_any("text/html", strlen(content), (unsigned char*)content, status_code);
 }
+
+
+struct CwebHttpResponse* cweb_send_var_html_cleaning_memory(char *content,int status_code){
+    struct CwebHttpResponse*  response = cweb_send_any("text/html", strlen(content), (unsigned char*)content, status_code);
+    free(content);
+    return response;
+}
+
 
 
 struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,int status_code){

@@ -8,7 +8,6 @@
 #define CWEB_INTERNAL_SERVER_ERROR 500
 
 
-
 struct CwebHttpResponse * cweb_send_any(
     const char *content_type,
     size_t content_length,
@@ -16,40 +15,32 @@ struct CwebHttpResponse * cweb_send_any(
     int status_code
 );
 
-#ifdef __cplusplus
 
-struct CwebHttpResponse * cweb_send_text(
-    const char *content,
-    int status_code=CWEB_OK
-);
-
-struct CwebHttpResponse* cweb_send_var_html(
-    const char *content,
-    int status_code=CWEB_OK
-);
-
-#else
 struct CwebHttpResponse * cweb_send_text(
     const char *content,
     int status_code
 );
+
+struct CwebHttpResponse * cweb_send_text_cleaning_memory(
+    char *content,
+    int status_code
+);
+
+
 struct CwebHttpResponse* cweb_send_var_html(
     const char *content,
     int status_code
 );
 
-#endif
-
-#ifdef __cplusplus
-struct CwebHttpResponse * cweb_send_file(
-    const char *file_path,
-    const char *content_type=CWEB_AUTO_SET_CONTENT,
-    int status_code=CWEB_OK
+struct CwebHttpResponse* cweb_send_var_html_cleaning_memory(
+    char *content,
+    int status_code
 );
-#else
+
+
+
 struct CwebHttpResponse * cweb_send_file(
     const char *file_path,
     const char *content_type,
     int status_code
 );
-#endif
