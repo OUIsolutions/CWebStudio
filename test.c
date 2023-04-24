@@ -1,18 +1,18 @@
 #define CWEB_ONCE
 #define OUI_DEBUG
-#define CWEB_DEBUG
+
 #include "CWebStudio/CwebStudioMain.c"
 
 
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    
-    
     char *test = (char*)malloc(100);
-    strcpy(test,"Hello World!");
+    sprintf(test, "Hello world");
     
-    return cweb_send_text_cleaning_memory("aaaaa",CWEB_OK);
+    request->represent(request);
+    
+    return cweb_send_var_html_cleaning_memory(test, CWEB_OK);
     
 }
 
@@ -20,7 +20,7 @@ int main(){
     
     
       cweb_run_server(
-        8080,
+        8081,
         main_sever,
         CWEB_DEFAULT_TIMEOUT,
         CWEB_DEFAULT_MAX_BODY,
