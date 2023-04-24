@@ -49,7 +49,7 @@ void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
     char params[5000] = {0};
 
     bool route_end = false;
-    int route_end_position;
+    int route_end_position =0;
     int i = 0;
     for(;i < size_url;i++){
         char current_char = url[i];
@@ -73,7 +73,7 @@ void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
     self->route = (char*)malloc(strlen(route)+1);
     strcpy(self->route, route);
 
-    if(params){
+    if(route_end_position){
         params[i-route_end_position] = '\0';
         self->interpret_query_params(self, params);
     }
@@ -115,7 +115,7 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
 
     
     //getting the url
-    int url_start_position;
+    int url_start_position = 0;
     bool url_found = false;
     
     for (int i = method_end; i < line_len; i++){

@@ -27,6 +27,7 @@ int main(){
     );
     */
    struct CwebHttpRequest *request = cweb_request_constructor();
-   request->interpret_first_line(request,"GET /aaa HTTP/1.1");
+   request->interpret_first_line(request,"GET /aaa?teste=20 HTTP/1.1");
+   request->represent(request);
    request->free(request);
 }
