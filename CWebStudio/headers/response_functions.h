@@ -22,11 +22,22 @@ struct CwebHttpResponse * cweb_send_text(
     const char *content,
     int status_code=CWEB_OK
 );
+
+struct CwebHttpResponse* cweb_send_var_html(
+    const char *content,
+    int status_code=CWEB_OK
+);
+
 #else
 struct CwebHttpResponse * cweb_send_text(
     const char *content,
     int status_code
 );
+struct CwebHttpResponse* cweb_send_var_html(
+    const char *content,
+    int status_code
+);
+
 #endif
 
 #ifdef __cplusplus

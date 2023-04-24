@@ -41,6 +41,8 @@ SOFTWARE.
 
 #ifdef OUI_DEBUG
 #include "../../doTheWorld/doTheWorld/doTheWorldMain.c"
+#include "../../CTextEngine/CTextEngine/CTextEngineMain.h"
+
 #else 
 #include "dependencies/doTheWorld/doTheWorldMain.c"
 #endif 
