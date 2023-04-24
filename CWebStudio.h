@@ -6760,7 +6760,6 @@ void private_cweb_http_response_free(struct CwebHttpResponse *self);
 #define CWEB_INTERNAL_SERVER_ERROR 500
 
 
-
 struct CwebHttpResponse * cweb_send_any(
     const char *content_type,
     size_t content_length,
@@ -6768,32 +6767,35 @@ struct CwebHttpResponse * cweb_send_any(
     int status_code
 );
 
-#ifdef __cplusplus
 
-struct CwebHttpResponse * cweb_send_text(
-    const char *content,
-    int status_code=CWEB_OK
-);
-#else
 struct CwebHttpResponse * cweb_send_text(
     const char *content,
     int status_code
 );
-#endif
 
-#ifdef __cplusplus
-struct CwebHttpResponse * cweb_send_file(
-    const char *file_path,
-    const char *content_type=CWEB_AUTO_SET_CONTENT,
-    int status_code=CWEB_OK
+struct CwebHttpResponse * cweb_send_text_cleaning_memory(
+    char *content,
+    int status_code
 );
-#else
+
+
+struct CwebHttpResponse* cweb_send_var_html(
+    const char *content,
+    int status_code
+);
+
+struct CwebHttpResponse* cweb_send_var_html_cleaning_memory(
+    char *content,
+    int status_code
+);
+
+
+
 struct CwebHttpResponse * cweb_send_file(
     const char *file_path,
     const char *content_type,
     int status_code
 );
-#endif
 
 #define INVALID_HTTP -1
 #define MAX_BODY_SIZE -2
@@ -7046,14 +7048,17 @@ void private_cweb_free_http_request(struct CwebHttpRequest *self){
 
 
 void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params){
+    if(!query_params){
+        return;
+    }
     int paramns_size = strlen(query_params);
     char key[1000] = {0};
     char value[1000] = {0};
     bool key_found = false;
 
-    for(int i=0; i<paramns_size; i++){
+    for(int i =0; i<paramns_size; i++){
 
-        if(query_params[i] == '='){
+        if(query_params[i] == '='&& key_found == false){
             key_found = true;
             continue;
         }
@@ -7081,26 +7086,49 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
 }
 
 void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
-    self->url = (char*) malloc(strlen(url)+2);
+    int size_url = strlen(url);
+    self->url = (char*) malloc(size_url+2);
     strcpy(self->url,url);
 
-    strcpy(self->url, url);
+    char route[5000] = {0};
+    char params[5000] = {0};
 
-    char route[1000] = {0};
-    char params[30000] = {0};
+    bool route_end = false;
+    int route_end_position =0;
+    int i = 0;
+    for(;i < size_url;i++){
+        char current_char = url[i];
 
-    sscanf(url, "%[^?]%s", route, params);
+        if(current_char == '?'){
+            route_end = true;
+            route_end_position = i+1;
+            route[i] = '\0';
+            continue;
+        }
+
+        if(route_end == false){
+            route[i] = current_char;
+        }
+        if(route_end == true){
+            params[i-route_end_position] = current_char;
+        }
+    }
+
 
     self->route = (char*)malloc(strlen(route)+1);
     strcpy(self->route, route);
 
-    self->interpret_query_params(self, params);
+    if(route_end_position){
+        params[i-route_end_position] = '\0';
+        self->interpret_query_params(self, params);
+    }
+
 
 }
 
 int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
     #define METHOD_MAX_SIZE 300
-    #define URL_MAX_SIZE 50000
+    #define URL_MAX_SIZE 5000
     char method[METHOD_MAX_SIZE] = {0};
     char url[URL_MAX_SIZE] = {0};
 
@@ -7123,25 +7151,27 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
         method[i] = current_char;
 
     }
-
+    
     if(!method_end){
         return INVALID_HTTP;
     }
-
+    
     self->set_method(self,method);
 
-
+    
     //getting the url
-    int url_start_position;
+    int url_start_position = 0;
     bool url_found = false;
-
+    
     for (int i = method_end; i < line_len; i++){
 
+        
         if((i - url_start_position) >= URL_MAX_SIZE ){
             return INVALID_HTTP;
         }
+        
         char current_char = first_line[i];
-
+        
         if(current_char == ' ' && url_found == true){
             break;
         }
@@ -7157,11 +7187,12 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
         }
          
     }
+    
     if(!url_found){
         return INVALID_HTTP;
     }
     self->set_url(self,url);
-
+    
     return 0;
 
 }
@@ -7414,6 +7445,26 @@ struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_l
 struct CwebHttpResponse* cweb_send_text(const char *content,int status_code){
     return cweb_send_any("text/plain", strlen(content), (unsigned char*)content, status_code);
 }
+
+
+struct CwebHttpResponse* cweb_send_text_cleaning_memory(char *content,int status_code){
+    struct CwebHttpResponse*  response = cweb_send_any("text/plain", strlen(content), (unsigned char*)content, status_code);
+    free(content);
+    return response;
+}
+
+
+struct CwebHttpResponse* cweb_send_var_html(const char *content,int status_code){
+    return cweb_send_any("text/html", strlen(content), (unsigned char*)content, status_code);
+}
+
+
+struct CwebHttpResponse* cweb_send_var_html_cleaning_memory(char *content,int status_code){
+    struct CwebHttpResponse*  response = cweb_send_any("text/html", strlen(content), (unsigned char*)content, status_code);
+    free(content);
+    return response;
+}
+
 
 
 struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,int status_code){

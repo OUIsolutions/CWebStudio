@@ -7,7 +7,7 @@ def main():
     template = env.get_template('amalgamete.j2')
 
     complete = template.render(lite=False)
-    with open('CWebStudio.c', 'w') as f:
+    with open('CWebStudio.h', 'w') as f:
         f.write(complete)
 
 main()

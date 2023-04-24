@@ -1,7 +1,5 @@
 
-#define OUI_DEBUG
-
-#include "CWebStudio/CwebStudioMain.c"
+#include "CWebStudio.h"
 
 
 int executions = 0;
