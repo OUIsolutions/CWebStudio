@@ -22,7 +22,7 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 ## Full Folder 
 or you can download the entier **CWebStudio** folder to your project and run with 
-**#include "CWebStudio/CwebStudioMain.c"** header
+**#include "CWebStudio/CwebStudioMain.h"** header
 ~~~c
 
 #include "CWebStudio/CwebStudioMain.h"
