@@ -1,5 +1,5 @@
 #define CWEB_ONCE
-#define OUI_DEBUG
+
 #include "CWebStudio/CwebStudioMain.c"
 
 
@@ -16,7 +16,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 int main(){
-
+    
+    /*
       cweb_run_server(
         8080,
         main_sever,
@@ -24,4 +25,8 @@ int main(){
         CWEB_DEFAULT_MAX_BODY,
         CWEB_DANGEROUS_SINGLE_PROCESS
     );
+    */
+   struct CwebHttpRequest *request = cweb_request_constructor();
+   request->interpret_first_line(request,"GET /aaa HTTP/1.1");
+   request->free(request);
 }

@@ -106,25 +106,27 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
         method[i] = current_char;
 
     }
-
+    
     if(!method_end){
         return INVALID_HTTP;
     }
-
+    
     self->set_method(self,method);
 
-
+    
     //getting the url
     int url_start_position;
     bool url_found = false;
-
+    
     for (int i = method_end; i < line_len; i++){
 
+        
         if((i - url_start_position) >= URL_MAX_SIZE ){
             return INVALID_HTTP;
         }
+        
         char current_char = first_line[i];
-
+        
         if(current_char == ' ' && url_found == true){
             break;
         }
@@ -140,11 +142,12 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
         }
          
     }
+    
     if(!url_found){
         return INVALID_HTTP;
     }
     self->set_url(self,url);
-
+    
     return 0;
 
 }
