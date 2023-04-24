@@ -7,11 +7,11 @@ query paramns, returning files and text.
 
 ## Single File
 CWebSudio is made to be as dumb as possible, and adopt the idea of single file lib,
-for instalation you can just copy the **CWebStudio.c** into your project, and execute an normal copilation with gcc/g++ or clang 
+for instalation you can just copy the **CWebStudio.h** into your project, and execute an normal copilation with gcc/g++ or clang 
 
 ~~~c
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
@@ -25,7 +25,7 @@ or you can download the entier **CWebStudio** folder to your project and run wit
 **#include "CWebStudio/CwebStudioMain.c"** header
 ~~~c
 
-#include "CWebStudio/CwebStudioMain.c"
+#include "CWebStudio/CwebStudioMain.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
@@ -39,7 +39,7 @@ if you need to make, main configurations before run the sever, you can run the f
 
 ~~~c
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
@@ -67,7 +67,7 @@ for getting the "url" paramns , its very easy, follow the program above
 
 ~~~c
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
@@ -93,7 +93,7 @@ even urlencoded is consider as paramn, so you dont need to care about it
 
 
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -119,7 +119,7 @@ The same way as iterating over paramns, iterate over headers still simple
 
 
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     struct CwebDict *headers = request->headers;
@@ -140,7 +140,7 @@ CWEB_START_MACRO(5001, main_sever);
 you can acess the body content in these way 
 
 ~~~c
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     unsigned char *body = request->content;
@@ -156,7 +156,7 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 ## Parsing Body Json 
 ~~~c
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     unsigned char *body = request->content;
@@ -184,7 +184,7 @@ CWEB_START_MACRO(5001, main_sever);
 
 ~~~c
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     unsigned char *body = request->content;
@@ -206,7 +206,7 @@ For returning plain text , you can return with the function
 
 ~~~c
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 
@@ -221,7 +221,7 @@ CWEB_START_MACRO(5001, main_sever);
 You can return other formats like these 
 ~~~c
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     char *json = "{\"name\":\"CWebStudio\",\"version\":\"1.0.0\"}";
@@ -241,7 +241,7 @@ if you know the path of your file , you can directly send files
 
 ~~~c
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     return cweb_send_file(
@@ -259,7 +259,7 @@ CWEB_START_MACRO(5001, main_sever);
 if you want to make an custon http response , you can construct the struct buy yourself 
 ~~~c
 
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
@@ -282,7 +282,7 @@ with cweb debug Flag, it will print stages of aplications , like requests, and e
 ~~~c 
 
 #define CWEB_DEBUG
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     return cweb_send_text("Hello World", 200);
@@ -302,7 +302,7 @@ error, your aplicantion will crash, so, if you will use these flag, ensure that 
 
 ~~~c
 #define CWEB_DEBUG
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     if(strcmp(request->route, "/test") == 0){
@@ -330,7 +330,7 @@ If you dont need , is higly recomended you use the safify mode
 
 ~~~c 
 #define CWEB_DEBUG
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     if(strcmp(request->route, "/test") == 0){
@@ -357,7 +357,7 @@ you can set the max timeout your aplication will deal, if is the function takes 
 than that time , the sever will return 500, the default time its 30 seconds
 ~~~c 
 #define CWEB_DEBUG
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     return cweb_send_text("Hello World", 200);
@@ -384,7 +384,7 @@ to 10mb if an request were more than that value, the aplication will return 400 
 
 
 #define CWEB_DEBUG
-#include "CWebStudio.c"
+#include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 return cweb_send_text("Hello World", 200);
