@@ -5,8 +5,7 @@
 int executions = 0;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    
-  
+    request->represent(request);
     return  cweb_send_file("a.out",CWEB_AUTO_SET_CONTENT,200);
     
 }
