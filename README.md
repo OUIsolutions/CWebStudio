@@ -247,7 +247,7 @@ see more at : https://github.com/OUIsolutions/CTextEngine
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
-        const char *lang = "en";
+    const char *lang = "en";
     const char *text = "text exemple";
     struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
