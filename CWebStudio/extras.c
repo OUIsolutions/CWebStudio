@@ -106,18 +106,22 @@ char *cweb_normalize_string(const char *old_string,const char *invalid_chars){
 
 const char *cweb_generate_content_type(const char *file_name){
         int file_name_size = strlen(file_name);
-        char extension[100];
-        int extension_size = 0;
+
         //iterate in negative
-        for(int i = file_name_size-1; i >=0; i--){
-            char current_char = file_name[i];
-            if(current_char =='.'){
+        char *extension;
+        for(int i = 0; i < file_name_size-1; i++){
+
+           //makes extension to point to i
+            extension = (char*)&file_name[i+1];
+            //if found a dot, break
+            if(file_name[i] =='.'){
                 break;
-            }
-            extension[extension_size] = current_char;
-            extension_size+=1;
+            }        
         }
-        printf("extension: %s",extension);
+
+        printf("extension: %s\n",extension);
+
+
         
         char *content_type_created = (char*)malloc(100);
        
