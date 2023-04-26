@@ -119,8 +119,6 @@ const char *cweb_generate_content_type(const char *file_name){
             }        
         }
 
-        printf("extension: %s\n",extension);
-
 
         
         char *content_type_created = (char*)malloc(100);
