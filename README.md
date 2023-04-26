@@ -155,6 +155,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 ## Parsing Body Json 
+CwebStudio has cJSON integrated into the lib , for more informations read in 
+https://github.com/DaveGamble/cJSON
+
 ~~~c
 #include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -215,6 +218,94 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 CWEB_START_MACRO(5001, main_sever);
+~~~
+Or if you have memory alocated in string, dont worry, just call 
+**cweb_send_text_cleaning_memory**
+~~~c
+#include "CWebStudio.h"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    char *teste = malloc(100);
+    strcpy(teste, "Hello World");
+    return cweb_send_text_cleaning_memory(teste,200);
+}
+
+CWEB_START_MACRO(5000, main_sever)
+
+
+~~~
+
+## Rendered Html 
+If you want to return a rendered html, you can use the function 
+**cweb_send_rendered_CTextStack_cleaning_memory**, dont worry about cleaning memory, the function
+will do it for you .
+see more at : https://github.com/OUIsolutions/CTextEngine
+~~~c
+
+#include "CWebStudio/CwebStudioMain.h"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    const char *lang = "en";
+    const char *text = "text exemple";
+    struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+
+
+    s->$open(s,HTML,"lang=\"%s\"",lang);
+        s->open(s,HEAD);
+     
+        s->close(s,HEAD);
+        s->open(s,BODY);
+            s->open(s,H1);
+                s->segment_text(s,"This is a text");
+            s->close(s,H1);
+            s->open(s,P);
+                s->segment_format(s,"This is a formated  text  %s",text);
+            s->close(s,P);
+
+        s->close(s,BODY);
+    s->close(s,HTML);
+    return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
+}
+
+CWEB_START_MACRO(5000, main_sever)
+
+
+~~~
+
+## HTML
+if you want to generate html from file from scratch , you can call
+**cweb_send_var_html** function
+~~~c
+
+#include "CWebStudio.h"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    char *html = "<html><body><h1>Hello World</h1></body></html>";
+    return cweb_send_var_html(html,200);
+}
+
+CWEB_START_MACRO(5000, main_sever)
+
+~~~
+as the  same as plain text , you can call cleaning memory too 
+
+~~~c
+
+#include "CWebStudio.h"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    char *html = malloc(1000);
+    strcat(html, "<html><body><h1>Hello World</h1></body></html>");
+    return cweb_send_var_html_cleaning_memory(html,200);
+}
+
+CWEB_START_MACRO(5000, main_sever)
+
+
 ~~~
 
 ## Other Formats 
@@ -402,3 +493,53 @@ int main(){
     );
 }
 ~~~
+
+
+# Used Dependencies And Atributions
+DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
+
+## CJson<br><br>
+**CJson**: from https://github.com/DaveGamble/cJSON <br>
+Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+## sha-256 <br>
+**sha-256**: from https://github.com/amosnier/sha-2 <br>
+
+Zero Clause BSD License
+© 2021 Alain Mosnier
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+## CTextEngine 
+**CtextEngine**: from https://github.com/OUIsolutions/CTextEngine <br>
+
+MIT License
+
+Copyright (c) 2023 OUI
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
