@@ -1,7 +1,5 @@
 
 #include "CWebStudio.h"
-
-
 int executions = 0;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){

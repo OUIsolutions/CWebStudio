@@ -28,7 +28,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
-
+#ifndef __CWEBSTUDIO_H
+#define __CWEBSTUDIO_H
 #include <sys/wait.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -40,9 +41,12 @@ SOFTWARE.
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#ifndef cJSON__h
 
 #include "dependencies/cJson/cJSON.h"
 #include "dependencies/cJson/cJSON.c"
+
+#endif    
 #include "headers/string_array.h"
 
 #include "headers/extras.h"
@@ -65,3 +69,5 @@ SOFTWARE.
 #include "structs/dict.c"
 #include "structs/response.c"
 #include "server.c"
+
+#endif
