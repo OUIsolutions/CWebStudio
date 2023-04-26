@@ -1,5 +1,6 @@
-#define CWEB_ONCE
+
 #include "CWebStudio/CwebStudioMain.h"
+
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     struct CTextStack *s  = newCTextStack(CTEXT_LINE_BREAKER,CTEXT_SEPARATOR);
