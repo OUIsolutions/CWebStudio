@@ -38,8 +38,8 @@ def get_amalgamated_code(starter:str)->str:
 
 
 def main():
-    OUTPUT = 'YourOutput.h'
-    STARTER  =f'YourProject/YourMainFile.h'
+    OUTPUT = 'CWebStudio.h'
+    STARTER  =f'CWebStudio/CwebStudioMain.h'
     amalgamated_code = get_amalgamated_code(STARTER)
     with open(OUTPUT,'w') as f:
         f.write(amalgamated_code)
