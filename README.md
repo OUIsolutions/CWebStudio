@@ -155,6 +155,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 ## Parsing Body Json 
+CwebStudio has cJSON integrated into the lib , for more informations read in 
+https://github.com/DaveGamble/cJSON
+
 ~~~c
 #include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
