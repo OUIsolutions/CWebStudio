@@ -43,6 +43,7 @@ SOFTWARE.
 
 #include "dependencies/cJson/cJSON.h"
 #include "dependencies/cJson/cJSON.c"
+#include "headers/string_array.h"
 
 #include "headers/extras.h"
 #include "headers/debug.h"
@@ -59,6 +60,7 @@ SOFTWARE.
 #include "structs/request/request.c"
 #include "structs/request/request_parser.c"
 #include "response_functions.c"
+#include "structs/string_array.c"
 #include "structs/key_val.c"
 #include "structs/dict.c"
 #include "structs/response.c"
