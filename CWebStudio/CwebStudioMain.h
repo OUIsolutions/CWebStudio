@@ -31,6 +31,7 @@ SOFTWARE.
 
 #include <sys/wait.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -39,13 +40,9 @@ SOFTWARE.
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#ifdef OUI_DEBUG
-#include "../../doTheWorld/doTheWorld/doTheWorldMain.c"
-#include "../../CTextEngine/CTextEngine/CTextEngineMain.h"
 
-#else 
-#include "dependencies/doTheWorld/doTheWorldMain.c"
-#endif 
+#include "dependencies/cJson/cJSON.h"
+#include "dependencies/cJson/cJSON.c"
 
 #include "headers/extras.h"
 #include "headers/debug.h"

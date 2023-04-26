@@ -105,10 +105,20 @@ char *cweb_normalize_string(const char *old_string,const char *invalid_chars){
 }
 
 const char *cweb_generate_content_type(const char *file_name){
+        int file_name_size = strlen(file_name);
+        char extension[100];
+        int extension_size = 0;
+        //iterate in negative
+        for(int i = file_name_size-1; i >=0; i--){
+            char current_char = file_name[i];
+            if(current_char =='.'){
+                break;
+            }
+            extension[extension_size] = current_char;
+            extension_size+=1;
+        }
+        printf("extension: %s",extension);
         
-        struct DtwPath *path = dtw_constructor_path(file_name);
-        char *extension = path->get_extension(path);
-
         char *content_type_created = (char*)malloc(100);
        
         if(strcmp(extension, "html") == 0){
@@ -134,7 +144,8 @@ const char *cweb_generate_content_type(const char *file_name){
         else{
             strcpy(content_type_created, "text/plain");
         }
-        free(extension);
-        path->free_path(path);
+     
+
+
         return content_type_created;
 }
