@@ -9,6 +9,14 @@ struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_l
     return response;
 }
 
+struct CwebHttpResponse* cweb_send_rendered_CTextStack(struct CTextStack *stack,int status_code){
+
+    struct CwebHttpResponse *response = cweb_send_var_html(stack->rendered_text,status_code);
+    stack->free(stack);
+    return response;
+}
+
+
 
 struct CwebHttpResponse* cweb_send_text(const char *content,int status_code){
     return cweb_send_any("text/plain", strlen(content), (unsigned char*)content, status_code);
@@ -38,7 +46,7 @@ struct CwebHttpResponse* cweb_send_var_html_cleaning_memory(char *content,int st
 struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,int status_code){
     
     int size = 0;
-    unsigned char *content = dtw_load_binary_content(file_path, &size);
+    unsigned char *content = cweb_load_binary_content(file_path, &size);
     
     cweb_print("Writen size: %i\n",size);
     if(content == NULL){

@@ -153,7 +153,7 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
 }
 
 
-int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct DtwStringArray *line_headers){
+int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStringArray *line_headers){
     
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
@@ -197,7 +197,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
 
     unsigned char raw_entrys[200000];
 
-    struct DtwStringArray *lines = dtw_constructor_string_array();
+    struct CwebStringArray *lines = cweb_constructor_string_array();
     char last_string[10000]= {0};
     int line_index = 0;
     int i = 0;

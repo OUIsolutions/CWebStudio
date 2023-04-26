@@ -28,9 +28,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
-
+#ifndef __CWEBSTUDIO_H
+#define __CWEBSTUDIO_H
 #include <sys/wait.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -38,14 +40,15 @@ SOFTWARE.
 
 #include <arpa/inet.h>
 #include <unistd.h>
+#include "dependencies/CTextEngine.h"
 
-#ifdef OUI_DEBUG
-#include "../../doTheWorld/doTheWorld/doTheWorldMain.c"
-#include "../../CTextEngine/CTextEngine/CTextEngineMain.h"
+#ifndef cJSON__h
 
-#else 
-#include "dependencies/doTheWorld/doTheWorldMain.c"
-#endif 
+#include "dependencies/cJson/cJSON.h"
+#include "dependencies/cJson/cJSON.c"
+
+#endif    
+#include "headers/string_array.h"
 
 #include "headers/extras.h"
 #include "headers/debug.h"
@@ -62,7 +65,10 @@ SOFTWARE.
 #include "structs/request/request.c"
 #include "structs/request/request_parser.c"
 #include "response_functions.c"
+#include "structs/string_array.c"
 #include "structs/key_val.c"
 #include "structs/dict.c"
 #include "structs/response.c"
 #include "server.c"
+
+#endif

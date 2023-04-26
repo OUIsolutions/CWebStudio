@@ -1,5 +1,11 @@
 
 
+unsigned char *cweb_load_any_content(const char * path,int *size,bool *is_binary);
+
+char *cweb_load_string_file_content(const char * path);
+
+unsigned char *cweb_load_binary_content(const char * path,int *size);
+
 
 char *cweb_parse_string_to_lower(const char *old_string);
 

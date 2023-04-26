@@ -57,7 +57,6 @@
 #endif
 
 
-
 /* define our own boolean type */
 #ifdef true
 #undef true
