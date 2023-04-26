@@ -1,36 +1,22 @@
-#define OUI_DEBUG
 #include "CWebStudio.h"
-
-
-
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-       struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
-    s->text(s,"<!DOCTYPE html>");
-    s->$open(s,HTML,"lang=\"en\"");
-        s->open(s,HEAD);
-     
-        s->close(s,HEAD);
-        s->open(s,BODY);
-            s->open(s,H1);
-                s->segment_text(s,"Hello World!");
-            s->close(s,H1);
-        s->close(s,BODY);
-    s->close(s,HTML);
+    unsigned char *body = request->content;
+    int size = request->content_length;
 
-    struct CwebHttpResponse *response = cweb_send_var_html(s->rendered_text,CWEB_OK);
-    s->free(s);
-    return response;
+    //parse with cJson the body 
+
+    cJSON *json = cJSON_Parse(body);
+    cJSON *name = cJSON_GetObjectItemCaseSensitive(json, "name");
+    cJSON *age = cJSON_GetObjectItemCaseSensitive(json, "age");
+
+
+    printf("Name: %s\n", name->valuestring);
+    printf("Age: %d\n", age->valueint);
+
+
+    return cweb_send_text("Hello World", 200);
     
 }
 
-int main(){
-
-      cweb_run_server(
-        8080,
-        main_sever,
-        CWEB_DEFAULT_TIMEOUT,
-        CWEB_DEFAULT_MAX_BODY,
-        CWEB_SAFTY_MODE
-    );
-}
+CWEB_START_MACRO(5001, main_sever);
