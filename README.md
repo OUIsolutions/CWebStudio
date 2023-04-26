@@ -238,7 +238,7 @@ CWEB_START_MACRO(5000, main_sever)
 
 ## Rendered Html 
 If you want to return a rendered html, you can use the function 
-**cweb_send_rendered_CTextStack**, dont worry about cleaning memory, the function
+**cweb_send_rendered_CTextStack_cleaning_memory**, dont worry about cleaning memory, the function
 will do it for you .
 see more at : https://github.com/OUIsolutions/CTextEngine
 ~~~c
@@ -266,7 +266,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
         s->close(s,BODY);
     s->close(s,HTML);
-    return cweb_send_rendered_CTextStack(s,200);
+    return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
 }
 
 CWEB_START_MACRO(5000, main_sever)
