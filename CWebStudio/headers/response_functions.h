@@ -25,12 +25,9 @@ struct CwebHttpResponse * cweb_send_text_cleaning_memory(
     char *content,
     int status_code
 );
+struct CwebHttpResponse* cweb_send_rendered_CTextStack(struct CTextStack *stack,int status_code);
 
-
-struct CwebHttpResponse* cweb_send_var_html(
-    const char *content,
-    int status_code
-);
+struct CwebHttpResponse* cweb_send_var_html(const char *content,int status_code);
 
 struct CwebHttpResponse* cweb_send_var_html_cleaning_memory(
     char *content,

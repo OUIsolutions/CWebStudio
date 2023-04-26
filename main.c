@@ -1,4 +1,5 @@
-#include "CWebStudio.h"
+#define CWEB_ONCE
+#include "CWebStudio/CwebStudioMain.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     struct CTextStack *s  = newCTextStack(CTEXT_LINE_BREAKER,CTEXT_SEPARATOR);
@@ -17,14 +18,16 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
         s->close(s,BODY);
     s->close(s,HTML);
-
-    struct CwebHttpResponse * response = cweb_send_var_html(
-        s->rendered_text,
-        200
-    );
-    s->free(s);
-    return response;
     
+    return cweb_send_rendered_CTextStack(s,200);
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char const *argv[]){
+ cweb_run_server(
+    8080,
+    main_sever,
+    CWEB_DEFAULT_TIMEOUT,
+    CWEB_DEFAULT_MAX_BODY,
+    CWEB_DANGEROUS_SINGLE_PROCESS
+    );
+}
