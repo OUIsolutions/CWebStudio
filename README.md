@@ -236,6 +236,43 @@ CWEB_START_MACRO(5000, main_sever)
 
 ~~~
 
+## Rendered Html 
+If you want to return a rendered html, you can use the function 
+**cweb_send_rendered_CTextStack**, dont worry about cleaning memory, the function
+will do it for you .
+see more at : https://github.com/OUIsolutions/CTextEngine
+~~~c
+
+#include "CWebStudio/CwebStudioMain.h"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+        const char *lang = "en";
+    const char *text = "text exemple";
+    struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+
+
+    s->$open(s,HTML,"lang=\"%s\"",lang);
+        s->open(s,HEAD);
+     
+        s->close(s,HEAD);
+        s->open(s,BODY);
+            s->open(s,H1);
+                s->segment_text(s,"This is a text");
+            s->close(s,H1);
+            s->open(s,P);
+                s->segment_format(s,"This is a formated  text  %s",text);
+            s->close(s,P);
+
+        s->close(s,BODY);
+    s->close(s,HTML);
+    return cweb_send_rendered_CTextStack(s,200);
+}
+
+CWEB_START_MACRO(5000, main_sever)
+
+
+~~~
 
 ## HTML
 if you want to generate html from file from scratch , you can call
