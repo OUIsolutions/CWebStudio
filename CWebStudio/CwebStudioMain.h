@@ -40,6 +40,7 @@ SOFTWARE.
 
 #include <arpa/inet.h>
 #include <unistd.h>
+#include "dependencies/CTextEngine.h"
 
 #ifndef cJSON__h
 
