@@ -1,21 +1,29 @@
 #include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
-    unsigned char *body = request->content;
-    int size = request->content_length;
+    struct CTextStack *s  = newCTextStack(CTEXT_LINE_BREAKER,CTEXT_SEPARATOR);
+  
+    s->$open(s,HTML,"lang=\"%s\"","en");
+        s->open(s,HEAD);
+        
+        s->close(s,HEAD);
+        s->open(s,BODY);
+            s->open(s,H1);
+                s->segment_text(s,"This is a text");
+            s->close(s,H1);
+            s->open(s,P);
+                s->segment_format(s,"This is a formated  text  %s","aaaa");
+            s->close(s,P);
 
-    //parse with cJson the body 
+        s->close(s,BODY);
+    s->close(s,HTML);
 
-    cJSON *json = cJSON_Parse(body);
-    cJSON *name = cJSON_GetObjectItemCaseSensitive(json, "name");
-    cJSON *age = cJSON_GetObjectItemCaseSensitive(json, "age");
-
-
-    printf("Name: %s\n", name->valuestring);
-    printf("Age: %d\n", age->valueint);
-
-
-    return cweb_send_text("Hello World", 200);
+    struct CwebHttpResponse * response = cweb_send_var_html(
+        s->rendered_text,
+        200
+    );
+    s->free(s);
+    return response;
     
 }
 
