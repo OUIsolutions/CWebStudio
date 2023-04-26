@@ -1,6 +1,68 @@
 
 
 
+unsigned char *cweb_load_any_content(const char * path,int *size,bool *is_binary){
+    FILE *file = fopen(path,"rb");
+    if(file == NULL){
+        free(file);
+        return NULL;
+    }
+    fseek(file,0,SEEK_END);
+    *size = ftell(file);
+    fseek(file,0,SEEK_SET);
+    unsigned char *content = (unsigned char*)malloc(*size +1);
+    fread(content,1,*size,file);
+
+    *is_binary = false;
+    for(int i = 0;i < *size;i++){
+        if(content[i] == 0){
+            *is_binary = true;
+            break;
+        }
+    }
+    if(!*is_binary){
+        content[*size] = '\0';
+    }
+
+    fclose(file);
+    return content;
+}
+
+
+char *cweb_load_string_file_content(const char * path){
+    FILE *file = fopen(path,"r");
+    if(file == NULL){
+        return NULL;
+    }
+    fseek(file,0,SEEK_END);
+    int size = ftell(file);
+    fseek(file,0,SEEK_SET);
+    char *content = (char*)malloc(size +1);
+    fread(content,1,size,file);
+    content[size] = '\0';
+    fclose(file);
+    return content;
+}
+
+
+unsigned char *cweb_load_binary_content(const char * path,int *size){
+    FILE *file = fopen(path,"rb");
+    if(file == NULL){
+        return NULL;
+    }
+    fseek(file,0,SEEK_END);
+    *size = ftell(file);
+    fseek(file,0,SEEK_SET);
+    unsigned char *content = (unsigned char*)malloc(*size);
+    fread(content,1,*size,file);
+    fclose(file);
+    return content;
+}
+
+
+
+
+
 char *cweb_parse_string_to_lower(const char *old_string){
      
     int string_size = strlen(old_string);
