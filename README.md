@@ -219,7 +219,7 @@ CWEB_START_MACRO(5001, main_sever);
 Or if you have memory alocated in string, dont worry, just call 
 **cweb_send_text_cleaning_memory**
 ~~~c
-#include "CWebStudio/CwebStudioMain.h"
+#include "CWebStudio.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
@@ -232,6 +232,42 @@ CWEB_START_MACRO(5000, main_sever)
 
 
 ~~~
+
+
+## HTML
+if you want to generate html from file from scratch , you can call
+**cweb_send_var_html** function
+~~~c
+
+#include "CWebStudio.h"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    char *html = "<html><body><h1>Hello World</h1></body></html>";
+    return cweb_send_var_html(html,200);
+}
+
+CWEB_START_MACRO(5000, main_sever)
+
+~~~
+as the  same as plain text , you can call cleaning memory too 
+
+~~~c
+
+#include "CWebStudio.h"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    char *html = malloc(1000);
+    strcat(html, "<html><body><h1>Hello World</h1></body></html>");
+    return cweb_send_var_html_cleaning_memory(html,200);
+}
+
+CWEB_START_MACRO(5000, main_sever)
+
+
+~~~
+
 ## Other Formats 
 You can return other formats like these 
 ~~~c
