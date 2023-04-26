@@ -5,7 +5,8 @@
 int executions = 0;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-        const char *lang = "en";
+    request->represent(request);
+    const char *lang = "en";
     const char *text = "text exemple";
     struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
