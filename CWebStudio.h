@@ -4019,13 +4019,9 @@ struct CwebHttpResponse * cweb_send_text_cleaning_memory(
     char *content,
     int status_code
 );
+struct CwebHttpResponse* cweb_send_rendered_CTextStack_cleaning_memory(struct CTextStack *stack,int status_code);
 
-struct CwebHttpResponse* cweb_send_rendered_CText(struct CTextStack *stack,int status_code);
-
-struct CwebHttpResponse* cweb_send_var_html(
-    const char *content,
-    int status_code
-);
+struct CwebHttpResponse* cweb_send_var_html(const char *content,int status_code);
 
 struct CwebHttpResponse* cweb_send_var_html_cleaning_memory(
     char *content,
@@ -4759,9 +4755,9 @@ struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_l
     return response;
 }
 
-struct CwebHttpResponse* cweb_send_rendered_CText(struct CTextStack *stack,int status_code){
+struct CwebHttpResponse* cweb_send_rendered_CTextStack_cleaning_memory(struct CTextStack *stack,int status_code){
 
-    struct CwebHttpResponse *response = cweb_send_var_html(stack->rendered_text, status_code);
+    struct CwebHttpResponse *response = cweb_send_var_html(stack->rendered_text,status_code);
     stack->free(stack);
     return response;
 }
