@@ -151,3 +151,29 @@ const char *cweb_generate_content_type(const char *file_name){
 
         return content_type_created;
 }
+
+
+char *private_cweb_convert_url_encoded_text(char *text){
+
+    int text_size = strlen(text);
+    char *new_text = (char*)malloc(text_size + 1);
+    int new_text_size = 0;
+    
+    for(int i = 0; i < text_size; i++){
+        if(text[i] == '%'){
+            char hex[3];
+            hex[0] = text[i+1];
+            hex[1] = text[i+2];
+            hex[2] = '\0';
+            new_text[new_text_size] = (char)strtol(hex, NULL, 16);
+            new_text_size++;
+            i += 2;
+        }
+        else{
+            new_text[new_text_size] = text[i];
+            new_text_size++;
+        }
+    }
+    new_text[new_text_size] = '\0';
+    return new_text;
+}
