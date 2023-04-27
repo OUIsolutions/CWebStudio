@@ -23,7 +23,7 @@ void create_num_line(struct CTextStack *stack,int n1,int n2,int n3){
 }
 
 
- struct CTextStack * create_interface(int visor, int acumulated,char operator[]){
+ struct CTextStack * create_interface(const char *visor,const  char *acumulated,const char *operator){
     struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
     s->$open(s,HTML,"lang=\"en\"");
         s->open(s,HEAD);
@@ -42,14 +42,14 @@ void create_num_line(struct CTextStack *stack,int n1,int n2,int n3){
         s->open(s,BODY);
             s->$open(s,FORM,"action=\"/button_pressed\" method=\"POST\" ");
                 s->auto$close(s,INPUT,"type=\"hidden\" name=\"operator\" value=\"%s\"",operator);
-                s->auto$close(s,INPUT,"type=\"hidden\" name=\"acumulated\" value=\"%i\"",acumulated);
-                s->auto$close(s,INPUT,"type=\"text\" name=\"visor\" value=\"%i\"",visor);
+                s->auto$close(s,INPUT,"type=\"hidden\" name=\"acumulated\" value=\"%s\"",acumulated);
+                s->auto$close(s,INPUT,"type=\"text\" name=\"visor\" value=\"%s\"",visor);
                 create_num_line(s,7,8,9);
                 create_num_line(s,4,5,6);
                 create_num_line(s,1,2,3);
                 s->only$open(s,BR,"");
                 create_num(s,0);
-                
+
                 create_operator(s,"+");
                 create_operator(s,"-");
                 s->auto$close(s,BR,"");  
@@ -78,14 +78,15 @@ void create_num_line(struct CTextStack *stack,int n1,int n2,int n3){
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
-    int visor = 0;
-    int acumulated = 0;
-    char operator[10];
-    strcpy(operator,"NULL\0");
+    char *visor = "0";
+    char *acumulated = "0";
+    char *operator = "NULL";
     
     
     
     //logic of the code 
+    
+    /*
     if(strcmp(request->route,"/button_pressed") == 0){
 
         char *entry_visor = request->get_param(request,"visor");
@@ -155,7 +156,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
             strcpy(entry_acumulated,"0");
         }
     }
-        
+    */  
+
+
     return cweb_send_rendered_CTextStack_cleaning_memory(
         create_interface(visor,acumulated,operator),
         200
