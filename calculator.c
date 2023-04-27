@@ -73,16 +73,10 @@ void create_num_line(struct CTextStack *stack,int n1,int n2,int n3){
     s->close(s,HTML);
     return s;
  }
-int total_request = 0;
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
-    if(total_request == 10){
-        request->free(request);
-        exit(0);
-    }
-
     char *visor = malloc(10);
     char *acumulated = malloc(10);
     char *operator = malloc(10);
@@ -127,15 +121,15 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         //means that a operator button were clicked
         char *operator_button = request->get_param(request,"set_operator");
         if(operator_button != NULL){
-            acumulated = visor;
-            operator = operator_button;
+            strcpy(acumulated,visor);
+            strcpy(operator,operator_button);
             strcpy(visor,"");
         }
 
         char * equal_button = request->get_param(request,"equal");
 
         if(equal_button != NULL){
-            visor = (char*)realloc(visor,10);
+       
         
             if(strcmp(operator,"+") == 0){
                 int result = atoi(acumulated) + atoi(visor);
@@ -169,15 +163,4 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     );
 }
 
-int main(){
-    
-    cweb_run_server(
-        8081,
-        main_sever,
-        CWEB_DEFAULT_TIMEOUT,
-        CWEB_DEFAULT_MAX_BODY,
-        CWEB_DANGEROUS_SINGLE_PROCESS
-    );
-
-}
-
+CWEB_START_MACRO(8000,main_sever)
