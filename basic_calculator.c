@@ -6,6 +6,13 @@ void create_num(struct CTextStack *stack, int  number){
                     stack->segment_format(stack,"%i",number);
     stack->close(stack,BUTTON);
 }
+
+void create_operator(struct CTextStack *stack,  char operator){
+    stack->$open(stack,BUTTON,"type=\"submit\" name=\"set_operator\" value=\"%c\"",operator);
+                    stack->segment_format(stack,"%c",operator);
+    stack->close(stack,BUTTON);
+}
+
 void create_num_line(struct CTextStack *stack,int n1,int n2,int n3){
     stack->only$open(stack,BR,"");
     create_num(stack,n1);
@@ -58,7 +65,13 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
                 s->only$open(s,BR,"");
                 create_num(s,0);
                 s->auto$close(s,BR,"");  
-                
+                create_operator(s,'+');
+                create_operator(s,'-');
+                create_operator(s,'*');
+                create_operator(s,'/');
+                s->only$open(s,BR,"");
+                create_operator(s,'=');
+                create_operator(s,'C');
 
             s->close(s,FORM);
         s->close(s,BODY);
