@@ -39,7 +39,7 @@ void create_num_line(struct CTextStack *stack,int n1,int n2,int n3){
         s->close(s,HEAD);
         s->open(s,BODY);
             s->$open(s,FORM,"action=\"/button_pressed\" method=\"POST\" enctype=\"application/x-www-form-urlencoded\"");
-                s->auto$close(s,INPUT,"type=\"hidden\" name=\"operator\" value=\"%s\"",operator);
+                s->auto$close(s,INPUT,"type=\"hidden\" name=\"operator\" value=\"%c\"",operator);
                 s->auto$close(s,INPUT,"type=\"hidden\" name=\"acumulated\" value=\"%i\"",acumulated);
                 s->auto$close(s,INPUT,"type=\"text\" name=\"visor\" value=\"%i\"",visor);
                 create_num_line(s,7,8,9);
@@ -47,11 +47,13 @@ void create_num_line(struct CTextStack *stack,int n1,int n2,int n3){
                 create_num_line(s,1,2,3);
                 s->only$open(s,BR,"");
                 create_num(s,0);
+                
                 create_operator(s,'+');
                 create_operator(s,'-');
                 s->auto$close(s,BR,"");  
                 create_operator(s,'*');
                 create_operator(s,'/');
+                
                 s->only$open(s,BR,"");
               
                 s->$open(s,BUTTON,"type=\"submit\" class=\"delete\"  name=\"delete\" value=\"%s\"","Delete");
@@ -76,9 +78,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
     int visor = 0;
     int acumulated = 0;
-    char operator = '\0';
+    char operator = 'N';
     
-
+    
     //logic of the code 
     if(strcmp(request->route,"/button_pressed") == 0){
 
@@ -111,20 +113,21 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         else if(delete_button != NULL){
              strcpy(entry_visor,"0");
              strcpy(entry_acumulated,"0");
-             operator = '\0';
+             operator = 'N';
         }
 
-
         else if(operator_button != NULL){
-
             operator = operator_button[0];
             strcpy(entry_acumulated,entry_visor);
             strcpy(entry_visor,"0");
         }   
-        
-        if(entry_operator != NULL){
+
+
+        if(strcmp(entry_operator,"N") != 0){
             operator = entry_operator[0];
-         }
+        }
+    
+        
         acumulated = atoi(entry_acumulated);
         visor = atoi(entry_visor);
             
@@ -135,6 +138,13 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         200
     );
 }
-
-CWEB_START_MACRO(8080, main_sever)
+int main(){
+    cweb_run_server(
+        8081,
+        main_sever,
+        CWEB_DEFAULT_TIMEOUT,
+        CWEB_DEFAULT_MAX_BODY,
+        CWEB_DANGEROUS_SINGLE_PROCESS
+    );
+}
 
