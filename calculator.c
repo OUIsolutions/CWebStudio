@@ -40,6 +40,7 @@ void create_num_line(struct CTextStack *stack,int n1,int n2,int n3){
             s->close(s,STYLE);
         s->close(s,HEAD);
         s->open(s,BODY);
+            s->segment_text(s,"Eai mai suave");
             s->$open(s,FORM,"action=\"/button_pressed\" method=\"POST\" ");
                 s->auto$close(s,INPUT,"type=\"hidden\" name=\"operator\" value=\"%s\"",operator);
                 s->auto$close(s,INPUT,"type=\"hidden\" name=\"acumulated\" value=\"%s\"",acumulated);
@@ -78,85 +79,79 @@ void create_num_line(struct CTextStack *stack,int n1,int n2,int n3){
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
-    char *visor = "0";
-    char *acumulated = "0";
-    char *operator = "NULL";
+    char *visor = "";
+    char *acumulated = "";
+    char *operator = "";
     
-    
-    
+        
     //logic of the code 
     
-    /*
+    
     if(strcmp(request->route,"/button_pressed") == 0){
 
-        char *entry_visor = request->get_param(request,"visor");
-        char *entry_acumulated = request->get_param(request,"acumulated");
-        char *entry_operator = request->get_param(request,"operator");
+        visor = request->get_param(request,"visor");
+        acumulated = request->get_param(request,"acumulated");
+        operator = request->get_param(request,"operator");
  
-
-        int visor_size = strlen(entry_visor);
-
-
-        //means that the user pressed the delete button
-        char *delete_button = request->get_param(request,"delete");
-
-
         //means that the user pressed a number
-        char *number_button = request->get_param(request,"set_num");
 
-        char *operator_button = request->get_param(request,"set_operator");
 
-        char * equal_button = request->get_param(request,"equal");
 
         //means that a  number button were clicked
+        char *number_button = request->get_param(request,"set_num");
         if( number_button != NULL){
                //realocates it
+
+                int visor_size = strlen(visor);
                 if(visor_size < 9){
-                    entry_visor = (char*)realloc(entry_visor,visor_size+strlen(number_button)+2);      
-                    strcat(entry_visor,number_button);                    
-                }
-              
+                    visor = (char*)realloc(visor,visor_size+strlen(number_button)+2);      
+                    strcat(visor,number_button);                    
+                }      
         }
+
         // means that the delete button were clicked
-        else if(delete_button != NULL){
-             strcpy(entry_visor,"0");
-             strcpy(entry_acumulated,"0");
-             strcpy(operator,"NULL\0");
+        char *delete_button = request->get_param(request,"delete");
+        if(delete_button != NULL){
+             visor = "";
+             acumulated = "";
+             operator = "";
         }
 
         //means that a operator button were clicked
-        else if(operator_button != NULL){
-            strcpy(entry_acumulated,entry_visor);
-            strcpy(entry_visor,"0");
-            request->represent(request);
-            entry_operator = realloc(entry_operator,strlen(operator_button)+1);
-            strcpy(entry_operator,operator_button);
+        char *operator_button = request->get_param(request,"set_operator");
+        if(operator_button != NULL){
+            acumulated = visor;
+            operator = operator_button;
+            visor = "";
         }
 
+        char * equal_button = request->get_param(request,"equal");
 
-
-
-        acumulated = atoi(entry_acumulated);
-        visor = atoi(entry_visor);
-        strcpy(operator,entry_operator);
         if(equal_button != NULL){
+            visor = (char*)realloc(visor,10);
+        
             if(strcmp(operator,"+") == 0){
-                visor = acumulated + visor;
+                int result = atoi(acumulated) + atoi(visor);
+                sprintf(visor,"%i",result);
             }
-            else if(strcmp(operator,"-") == 0){
-                visor = acumulated - visor;
+            if(strcmp(operator,"-") == 0){
+                int result = atoi(acumulated) - atoi(visor);
+                sprintf(visor,"%i",result);
             }
-            else if(strcmp(operator,"*") == 0){
-                visor = acumulated * visor;
+            if(strcmp(operator,"*") == 0){
+                int result = atoi(acumulated) * atoi(visor);
+                sprintf(visor,"%i",result);
             }
-            else if(strcmp(operator,"/") == 0){
-                visor = acumulated / visor;
+            if(strcmp(operator,"/") == 0){
+                int result = atoi(acumulated) / atoi(visor);
+                sprintf(visor,"%i",result);
             }
-            strcpy(operator,"NULL\0");
-            strcpy(entry_acumulated,"0");
+            acumulated = "";
+            operator = "";
         }
+        
     }
-    */  
+    
 
 
     return cweb_send_rendered_CTextStack_cleaning_memory(
@@ -168,7 +163,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(){
     
     cweb_run_server(
-        8080,
+        8081,
         main_sever,
         CWEB_DEFAULT_TIMEOUT,
         CWEB_DEFAULT_MAX_BODY,
