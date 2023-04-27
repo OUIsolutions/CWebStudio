@@ -100,6 +100,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
         char *operator_button = request->get_param(request,"set_operator");
 
+        char * equal_button = request->get_param(request,"equal");
+
         //dealing with actions 
         if( number_button != NULL){
                //realocates it
@@ -122,7 +124,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
             strcpy(entry_visor,"0");
         }   
 
-
+    
         if(strcmp(entry_operator,"N") != 0){
             operator = entry_operator[0];
         }
@@ -130,7 +132,25 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         
         acumulated = atoi(entry_acumulated);
         visor = atoi(entry_visor);
-            
+
+        if(equal_button != NULL){
+            switch(operator){
+                case '+':
+                    visor = acumulated + visor;
+                    break;
+                case '-':
+                    visor = acumulated - visor;
+                    break;
+                case '*':
+                    visor = acumulated * visor;
+                    break;
+                case '/':
+                    visor = acumulated / visor;
+                    break;
+            }
+            acumulated = 0;
+            operator = 'N';
+        }        
     }
     
     return cweb_send_rendered_CTextStack_cleaning_memory(
