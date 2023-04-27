@@ -91,9 +91,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         char *entry_visor = request->get_param(request,"visor");
         char *entry_acumulated = request->get_param(request,"acumulated");
         char *entry_operator = request->get_param(request,"operator");
-        if(entry_operator == NULL){
-            entry_operator = (char*)operator;
-        }
+ 
 
         int visor_size = strlen(entry_visor);
 
@@ -130,14 +128,16 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
             strcpy(entry_acumulated,entry_visor);
             strcpy(entry_visor,"0");
             request->represent(request);
-            strcpy(operator,operator_button);
-        }else{
-            strcpy(operator,entry_operator);
+            entry_operator = realloc(entry_operator,strlen(operator_button)+1);
+            strcpy(entry_operator,operator_button);
         }
+
+
+
 
         acumulated = atoi(entry_acumulated);
         visor = atoi(entry_visor);
-
+        strcpy(operator,entry_operator);
         if(equal_button != NULL){
             if(strcmp(operator,"+") == 0){
                 visor = acumulated + visor;
