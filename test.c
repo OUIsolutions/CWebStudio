@@ -1,6 +1,6 @@
 
 
-#include "CWebStudio/CwebStudioMain.h"
+#include "CWebStudio.h"
 
 int executions = 0;
 
