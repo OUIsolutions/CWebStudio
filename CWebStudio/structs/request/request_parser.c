@@ -296,7 +296,9 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
         );
         if(content_type != NULL){
             if(strcmp(content_type, "application/x-www-form-urlencoded") == 0){
-                self->interpret_query_params(self, (char*)self->content);
+                char *decoded = private_cweb_convert_url_encoded_text(self->content);
+                self->interpret_query_params(self, decoded);
+                free(decoded);
             }
         }
 

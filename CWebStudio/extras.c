@@ -153,7 +153,7 @@ const char *cweb_generate_content_type(const char *file_name){
 }
 
 
-char *private_cweb_convert_url_encoded_text(char *text){
+char *private_cweb_convert_url_encoded_text(const char *text){
 
     int text_size = strlen(text);
     char *new_text = (char*)malloc(text_size + 1);
