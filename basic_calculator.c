@@ -17,13 +17,28 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
     struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
-
     int visor = 0;
     int acumulated = 0;
 
     //logic of the code 
     if(strcmp(request->route,"/button_pressed") == 0){
-          
+
+          char *str_visor = request->get_param(request,"visor");
+          int visor_size = strlen(str_visor);
+
+          char *button_pressed = request->get_param(request,"set_num");
+
+        
+          if( button_pressed != NULL){
+               //realocates it
+                if(visor_size < 9){
+                    str_visor = realloc(str_visor,visor_size+strlen(button_pressed)+2);      
+                    strcat(str_visor,button_pressed);                    
+                }
+
+          }
+
+          visor = atoi(str_visor);
 
     }
     
@@ -43,6 +58,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
                 s->only$open(s,BR,"");
                 create_num(s,0);
                 s->auto$close(s,BR,"");  
+                
 
             s->close(s,FORM);
         s->close(s,BODY);
@@ -52,5 +68,5 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
 }
 
-CWEB_START_MACRO(5000, main_sever)
+CWEB_START_MACRO(8080, main_sever)
 

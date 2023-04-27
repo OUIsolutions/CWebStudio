@@ -1,6 +1,12 @@
-
-
 #include "CWebStudio.h"
+
+#define SO(s,t) s->open(s, t)
+#define SOA(s,t,...) s->$open(s, t, __VA_ARGS__)
+#define SC(s,t) s->close(s, t)
+#define OPEN(s,t) s->open(s, t); for(int i = 0; i < 1; s->close(s, t), ++i)
+#define $OPEN(s,t, ...) s->$open(s, t, __VA_ARGS__); for(int i = 0; i < 1; s->close(s, t), ++i)
+#define TEXT(s,t) s->segment_text(s,t)
+#define SF(s,t, ...) s->segment_format(s, t, __VA__ARGS__)
 
 int executions = 0;
 
@@ -11,36 +17,22 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
 
-    s->$open(s,HTML,"lang=\"%s\"",lang);
-        s->open(s,HEAD);
-     
-        s->close(s,HEAD);
-        s->open(s,BODY);
-            s->open(s,H1);
-                s->segment_text(s,"This is a text");
-            s->close(s,H1);
-            s->open(s,P);
-                s->segment_format(s,"This is a formated  text  %s",text);
-            s->close(s,P);
-
-        s->close(s,BODY);
-    s->close(s,HTML);
+    $OPEN(s,HTML,"lang=\"%s\"",lang) {
+        OPEN(s,HEAD);
+        OPEN(s,BODY) {
+            OPEN(s,H1) {
+                TEXT(s,"This is a text");
+            }
+            if( 1 == 1){
+                OPEN(s, P) {
+                        TEXT(s,"This is a text");
+                }
+            }
+ 
+         }
+    }
     return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
     
 }
 
-int main(){
-    
-    
-      cweb_run_server(
-        8080,
-        main_sever,
-        CWEB_DEFAULT_TIMEOUT,
-        CWEB_DEFAULT_MAX_BODY,
-        CWEB_DANGEROUS_SINGLE_PROCESS
-    );
-    
-
-    
-
-}
+CWEB_START_MACRO(5000, main_sever)
