@@ -1,12 +1,7 @@
 #include "CWebStudio.h"
 
-#define SO(s,t) s->open(s, t)
-#define SOA(s,t,...) s->$open(s, t, __VA_ARGS__)
-#define SC(s,t) s->close(s, t)
-#define OPEN(s,t) s->open(s, t); for(int i = 0; i < 1; s->close(s, t), ++i)
-#define $OPEN(s,t, ...) s->$open(s, t, __VA_ARGS__); for(int i = 0; i < 1; s->close(s, t), ++i)
-#define TEXT(s,t) s->segment_text(s,t)
-#define SF(s,t, ...) s->segment_format(s, t, __VA__ARGS__)
+
+#include "CWebStudio.h"
 
 int executions = 0;
 
