@@ -7,9 +7,9 @@ void create_num(struct CTextStack *stack, int  number){
     stack->close(stack,BUTTON);
 }
 
-void create_operator(struct CTextStack *stack,  char operator){
-    stack->$open(stack,BUTTON,"type=\"submit\" name=\"set_operator\" value=\"%c\"",operator);
-                    stack->segment_format(stack,"%c",operator);
+void create_operator(struct CTextStack *stack,  char* operator){
+    stack->$open(stack,BUTTON,"type=\"submit\" name=\"set_operator\" value=\"%s\"",operator);
+                    stack->segment_format(stack,"%s",operator);
     stack->close(stack,BUTTON);
 }
 
@@ -54,6 +54,10 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
             s->open(s,TITLE);
                 s->text(s,"Basic Calculator");
             s->close(s,TITLE);
+            s->open(s,STYLE);
+                s->text(s,"button{width:60px;height:30px;}");
+                s->text(s,"input{width:200px;height:50px;}");
+            s->close(s,STYLE);
         s->close(s,HEAD);
         s->open(s,BODY);
             s->$open(s,FORM,"action=\"/button_pressed\" method=\"POST\" enctype=\"application/x-www-form-urlencoded\"");
@@ -64,14 +68,14 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
                 create_num_line(s,1,2,3);
                 s->only$open(s,BR,"");
                 create_num(s,0);
+                create_operator(s,"+");
+                create_operator(s,"-");
                 s->auto$close(s,BR,"");  
-                create_operator(s,'+');
-                create_operator(s,'-');
-                create_operator(s,'*');
-                create_operator(s,'/');
+                create_operator(s,"*");
+                create_operator(s,"/");
                 s->only$open(s,BR,"");
-                create_operator(s,'=');
-                create_operator(s,'C');
+                create_operator(s,"=");
+                create_operator(s,"Delete");
 
             s->close(s,FORM);
         s->close(s,BODY);
