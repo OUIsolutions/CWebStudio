@@ -55,10 +55,12 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
                 s->text(s,"Basic Calculator");
             s->close(s,TITLE);
             s->open(s,STYLE);
+                s->text(s,"input{width:190px;height:30px;}");
                 s->text(s,"button{width:60px;height:30px;}");
-                s->text(s,"input{width:100px;height:50px;}");
-                s->text(s,".equal{width:100px;height:30px; background-color: #4CAF50;}");  
-                s->text(s,".delete{width:100px;height:30px; background-color: #f44336;}");
+                s->text(s,".equal{width:90px;height:30px; background-color: #4CAF50;}");  
+                s->text(s,".delete{width:90px;height:30px; background-color: #f44336;}");
+                //add border radios 
+                s->text(s,"*{border-radius: 4px;}");
             s->close(s,STYLE);
         s->close(s,HEAD);
         s->open(s,BODY);
@@ -76,15 +78,16 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
                 create_operator(s,"*");
                 create_operator(s,"/");
                 s->only$open(s,BR,"");
-                
-                s->$open(s,BUTTON,"type=\"submit\" class=\"equal\" name=\"set_action\" value=\"%s\"","=");
-                    s->segment_format(s,"%s","=");
-                s->close(s,BUTTON);
-                
               
                 s->$open(s,BUTTON,"type=\"submit\" class=\"delete\"  name=\"set_action\" value=\"%s\"","Delete");
                     s->segment_format(s,"%s","Delete");
                 s->close(s,BUTTON);
+
+
+                s->$open(s,BUTTON,"type=\"submit\" class=\"equal\" name=\"set_action\" value=\"%s\"","=");
+                    s->segment_format(s,"%s","=");
+                s->close(s,BUTTON);
+                
 
             s->close(s,FORM);
         s->close(s,BODY);
