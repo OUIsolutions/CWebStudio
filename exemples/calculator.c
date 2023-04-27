@@ -97,6 +97,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         strcpy(operator,request->get_param(request,"operator"));
         //means that the user pressed a number
 
+
         //means that a  number button were clicked
         char *number_button = request->get_param(request,"set_num");
         if( number_button != NULL){
@@ -109,6 +110,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
                 }      
         }
 
+
         // means that the delete button were clicked
         char *delete_button = request->get_param(request,"delete");
         if(delete_button != NULL){
@@ -117,6 +119,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
             strcpy(operator,"");
     
         }
+
 
         //means that a operator button were clicked
         char *operator_button = request->get_param(request,"set_operator");
@@ -127,10 +130,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
         }
 
         char * equal_button = request->get_param(request,"equal");
-
         if(equal_button != NULL){
        
-        
             if(strcmp(operator,"+") == 0){
                 int result = atoi(acumulated) + atoi(visor);
                 sprintf(visor,"%i",result);
