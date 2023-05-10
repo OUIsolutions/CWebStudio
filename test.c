@@ -1,5 +1,5 @@
 
-#include "CWebStudio.h"
+#include "CWebStudio/CwebStudioMain.h"
 
 
 
@@ -207,4 +207,4 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 }
 
-CWEB_START_MACRO(5000,main_sever)
+CWEB_START_MACRO(5001,main_sever)
