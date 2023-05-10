@@ -45,7 +45,7 @@ SOFTWARE.
 
 #endif    
 #include "headers/string_array.h"
-
+#include "headers/strings.h"
 #include "headers/extras.h"
 #include "headers/debug.h"
 #include "headers/key_val.h"
@@ -58,7 +58,7 @@ SOFTWARE.
 #include "headers/server.h"
 #include "headers/main_macro.h"
 
-
+#include "strings.c"
 #include "extras.c"
 #include "structs/request/request.c"
 #include "structs/request/request_parser.c"

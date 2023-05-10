@@ -63,46 +63,6 @@ unsigned char *cweb_load_binary_content(const char * path,int *size){
 
 
 
-char *cweb_parse_string_to_lower(const char *old_string){
-     
-    int string_size = strlen(old_string);
-    char *new_string = (char*)malloc(string_size + 2);
-    for(int i = 0; i < string_size; i++){
-        new_string[i] = tolower(old_string[i]);
-    }
-    new_string[string_size] = '\0';
-    return new_string;
-}
-
-
-char *cweb_parse_string_to_upper(const char *old_string){
-    
-    int string_size = strlen(old_string);
-    char *new_string = (char*)malloc(string_size + 2);
-    for(int i = 0; i < string_size; i++){
-        new_string[i] = toupper(old_string[i]);
-    }
-    new_string[string_size] = '\0';
-    return new_string;
-}
-
-char *cweb_normalize_string(const char *old_string,const char *invalid_chars){
-    
-    int string_size = strlen(old_string);
-    char *lower_string = cweb_parse_string_to_lower(old_string);
-    char *new_string = (char*)malloc(string_size + 2);
-    int new_string_size = 0;
-
-    for(int i = 0; i < string_size; i++){
-        if(strchr(invalid_chars,lower_string[i]) == NULL){
-            new_string[new_string_size] = lower_string[i];
-            new_string_size++;
-        }        
-    }
-    new_string[new_string_size] = '\0';
-    free(lower_string);
-    return new_string;
-}
 
 const char *cweb_generate_content_type(const char *file_name){
         int file_name_size = strlen(file_name);

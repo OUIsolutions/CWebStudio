@@ -9,11 +9,13 @@ void private_cweb_execute_request(
     struct CwebHttpRequest *request = cweb_request_constructor();
 
 
+
     int result = request->parse_http_request(
             request,
             socket,
             max_body_size
     );
+
 
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");
@@ -31,8 +33,15 @@ void private_cweb_execute_request(
     cweb_print("Request method: %s\n", request->method);
     cweb_print("Request url: %s\n", request->url);
 
+
+
     struct CwebHttpResponse *response;
-    response = request_handler(request);
+
+    response = private_cweb_generate_static_response(request);
+    if(response == NULL){
+        response = request_handler(request);
+    }
+
     cweb_print("executed client lambda\n");
 
 
