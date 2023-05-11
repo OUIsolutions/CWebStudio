@@ -13,18 +13,24 @@ void private_cweb_execute_request(
             socket,
             max_body_size
     );
-
-
+    
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");
         private_cweb_send_error_mensage("Invalid HTTP",400,socket);
         request->free(request);
         return;
     }
+    
 
     if(result == MAX_BODY_SIZE){
         cweb_print("Max body size \n");
         private_cweb_send_error_mensage("Max Request size Exceded",400,socket);
+        request->free(request);
+        return;
+    }
+
+    if(result == READ_ERROR){
+        cweb_print("Read Error \n");
         request->free(request);
         return;
     }
@@ -132,13 +138,15 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
     send(socket, response_str, strlen(response_str), 0);
     send(socket, response->content, response->content_length, 0);
 
+
+    response->free(response);
     free(response_str);
 
 }
 
 
 void private_cweb_treat_response(int new_socket){
-    cweb_print("New request %ld\n", actual_request);
+    cweb_print("New request %lld\n", actual_request);
     cweb_print("Waiting for child process\n");
     int status = 0;
     while (wait(&status) > 0);
@@ -240,8 +248,7 @@ void cweb_run_server(
     // Vinculando o socket à porta especificada
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
-        perror("Faluire to bind socket");
-        exit(EXIT_FAILURE);
+        return;
     }
 
     // Waiting for connections
@@ -260,6 +267,10 @@ void cweb_run_server(
         #endif
     #endif
     // Main loop
+    struct timeval timer;
+    timer.tv_sec = timeout;  // tempo em segundos
+    timer.tv_usec = 0;  //
+    
     printf("Sever is running on port:%d\n", port);
 
     while (1)
@@ -267,27 +278,21 @@ void cweb_run_server(
         actual_request++;
 
         // Accepting a new connection in every socket
-        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
-        {
+        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-
-        struct timeval timer;
-        timer.tv_sec = timeout-0.1;  // tempo em segundos
-        timer.tv_usec = 0;  //
-
+        
         setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
 
         cweb_print("----------------------------------------\n");
-        cweb_print("Executing request:%ld\n", actual_request);
+        cweb_print("Executing request:%lld\n", actual_request);
         cweb_print("Socket: %d\n", new_socket);
 
 
-        if (single_process)
-        {
-
+        if (single_process){
+            printf("single process\n");
             private_cweb_execute_request(new_socket, max_body_size, request_handler);
             close(new_socket);
             cweb_print("Closed Conection with socket %d\n", new_socket);
@@ -296,13 +301,14 @@ void cweb_run_server(
             #endif
         }
 
-        else
-        {
+        else{
             private_cweb_execute_request_in_safty_mode(
                 new_socket,
                 max_body_size,
                 timeout,
                 request_handler);
         }
+
     }
+   
 }

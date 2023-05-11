@@ -162,6 +162,8 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
         char value[10000] = {0};
         bool key_found = false;
         int value_start_point = 0;
+
+
         for(int j = 0; j<line_size;j++){
             
             if(current_line[j] == ':' && key_found == false){
@@ -203,66 +205,54 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     int line_index = 0;
     int i = 0;
 
-    //parsing the header
-    cweb_print("\nstart-request-------------------------------------------------------------\n");
     while (true){
-
+  
         ssize_t res = read(socket,raw_entrys+i,1);
 
-        #ifdef CWEB_DEBUG
-            char current_char = raw_entrys[i];
-            if(current_char == '\n'){
-                cweb_print("Endl\n");
-            }
-            else if(current_char =='\r'){
-                cweb_print("\nRCHAR\n");
-            }
-            else{
-                cweb_print("%c",current_char);
-            }
-        #endif
-
-
         if(res < 0){
+            ///cweb_print("\n ended with res <  on iterator: %i\n",i);
 
-            cweb_print("\n ended with res <  on iterator: %i\n",i);
-            return INVALID_HTTP;
-        }
-
-        if(i >= 10000){
-
-            cweb_print("\n ended with res > \n");
-            return INVALID_HTTP;
-        }
-
-        if(
-
-            raw_entrys[i-3]  == '\r' &&
-            raw_entrys[i-2] == '\n' &&
-            raw_entrys[i-1] == '\r' &&
-            raw_entrys[i] == '\n'
-        ){
-            
-           
-            break;
-        }
-
-        //means its an break line
-        if (raw_entrys[i-1] == '\r' && raw_entrys[i] == '\n'){
-            last_string[line_index - 1] = '\0';
-            lines->add_string(lines, last_string);
-            line_index=0;
+            lines->free_string_array(lines);
+            return READ_ERROR;
         }
 
         else{
+        
+                if(i >= 200000){
 
-            last_string[line_index] = raw_entrys[i];
-            line_index++;
+                    //cweb_print("\n ended with res > \n");
+                    return MAX_BODY_SIZE;
+                }
+
+
+                if(
+
+                    raw_entrys[i-3]  == '\r' &&
+                    raw_entrys[i-2] == '\n' &&
+                    raw_entrys[i-1] == '\r' &&
+                    raw_entrys[i] == '\n'
+                ){
+                    break;
+                }
+
+                //means its an break line
+                if (raw_entrys[i-1] == '\r' && raw_entrys[i] == '\n'){
+                    last_string[line_index - 1] = '\0';
+                    lines->add_string(lines, last_string);
+                    line_index=0;
+                }
+
+                else{
+
+                    last_string[line_index] = raw_entrys[i];
+                    line_index++;
+                }
+                i++;
+
+
         }
-        i++;
 
     }
-    cweb_print("\nend-request-------------------------------------------------------------\n");
     // Configura o socket para modo bloqueante novamente
 
     int line_error = self->interpret_first_line(self, lines->strings[0]);
@@ -297,7 +287,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
             ssize_t res = read(socket,self->content+j,1);
             if(res < 0){
               
-                return INVALID_HTTP;
+                return READ_ERROR;
             }
 
             if(j > max_body_size){
@@ -306,7 +296,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
             }       
 
         }
-
+   
         self->content[self->content_length]= '\0';
 
         //extracting url encoded data

@@ -1,6 +1,7 @@
 
 #define INVALID_HTTP -1
 #define MAX_BODY_SIZE -2
+#define READ_ERROR -3
 
 struct CwebHttpRequest{
 
