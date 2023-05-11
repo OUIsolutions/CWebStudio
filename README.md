@@ -351,6 +351,26 @@ if you want to return an static file (javascript/css/html) you can put everythin
 on the static file , and will automaticly sended 
 
 
+~~~html
+
+    <img src="/static/captura2.png">
+~~~
+#### static error codes
+if you put an file called 500.html into the static folder it will return these 
+file,when happen an 500 error
+
+
+#### path 
+if you put an query param called path , into the /static route, it will understand these
+as the path of the folder
+~~~html
+    <img src="/static?path=static/captura2.png">
+~~~
+
+
+
+
+
 ## An Low level aproach 
 if you want to make an custon http response , you can construct the struct buy yourself 
 ~~~c
@@ -372,6 +392,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 CWEB_START_MACRO(5001, main_sever);
 ~~~
+## CWEB_NO_STATIC
+when you pass the cweb no static, everything related to the static flag
+wont work
 
 ## CWEB_DEBUG FLAG
 with cweb debug Flag, it will print stages of aplications , like requests, and each stages 
