@@ -28,6 +28,7 @@ SOFTWARE.
 #define __CWEBSTUDIO_H
 #include <sys/wait.h>
 #include <stdio.h>
+#include <sys/stat.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>

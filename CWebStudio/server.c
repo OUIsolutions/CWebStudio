@@ -48,10 +48,34 @@ void private_cweb_execute_request(
     cweb_print("executed client lambda\n");
 
 
+    //means that the main function respond nothing
     if (response == NULL){
-        response = cweb_send_text(
-            "Error 404",
-            404);
+
+        #ifndef CWEB_NO_STATIC
+
+            char *formated_html = cweb_load_string_file_content("static/404.html");
+            if(formated_html != NULL){
+                response = cweb_send_var_html_cleaning_memory(
+                        formated_html,
+                        404);
+            }
+            else{
+                response = cweb_send_text(
+                        "Error 404",
+                        404
+                );
+            }
+
+        #else
+
+            response = cweb_send_text(
+                    "Error 404",
+                    404
+            );
+
+        #endif
+
+
     };
 
     char *response_str = response->generate_response(response);
@@ -89,7 +113,21 @@ void private_cweb_execute_request(
 
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket)
 {
-    struct CwebHttpResponse *response = cweb_send_text(mensage,status_code);
+    struct CwebHttpResponse *response;
+    #ifndef CWEB_NO_STATIC
+        char code_file[30];
+        sprintf(code_file,"static/%d.html",status_code);
+        char *error_html = cweb_load_string_file_content(code_file);
+        if(error_html != NULL){
+                response = cweb_send_var_html_cleaning_memory(error_html,status_code);
+        }
+        else{
+            response = cweb_send_text(mensage,status_code);
+        }
+    #else
+        response = cweb_send_text(mensage,status_code);
+    #endif
+
     char *response_str = response->generate_response(response);
     send(socket, response_str, strlen(response_str), 0);
     send(socket, response->content, response->content_length, 0);
@@ -115,7 +153,9 @@ void private_cweb_treat_response(int new_socket){
     if (pid_error == 0){
         cweb_print("Sending error mensage\n");
         alarm(2);
+
         private_cweb_send_error_mensage("Internal Sever Error",500,new_socket);
+
         alarm(0);
         exit(0);
     }
@@ -213,6 +253,14 @@ void cweb_run_server(
         exit(EXIT_FAILURE);
     }
 
+    //creating the static file
+    #ifndef CWEB_NO_STATIC
+        #ifdef __linux__
+             mkdir("static",0777);
+        #elif _WIN32
+            _mkdir("static");
+        #endif
+    #endif
     // Main loop
     printf("Sever is running on port:%d\n", port);
 

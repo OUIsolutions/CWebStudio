@@ -1,10 +1,22 @@
-
+#define CWEB_NO_STATIC
+#define CWEB_DEBUG
 #include "CWebStudio/CwebStudioMain.h"
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
-    return cweb_send_text("Hello World", 200);
+    if(strcmp(request->route,"/a") ==0){
+        return cweb_send_text("aaa",200);
+    }
+    return NULL;
 }
 
-CWEB_START_MACRO(5000, main_sever);
+int main(){
+    cweb_run_server(
+            5001,
+            main_sever,
+            CWEB_DEFAULT_TIMEOUT,
+            CWEB_DEFAULT_MAX_BODY,
+            CWEB_DANGEROUS_SINGLE_PROCESS
+    );
+}

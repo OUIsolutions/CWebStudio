@@ -48,11 +48,18 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     int size = 0;
     unsigned char *content;
     content = cweb_load_binary_content(file_path, &size);
+
     #ifndef CWEB_NO_STATIC
         if(content == NULL){
-            content = cweb_load_binary_content("static/404.html",&size);
+            char *not_found_html_page = cweb_load_string_file_content("static/404.html");
+            if(not_found_html_page != NULL){
+                return cweb_send_var_html_cleaning_memory(not_found_html_page,404);
+
+            }
+
         }
     #endif
+
     cweb_print("Writen size: %i\n",size);
     if(content == NULL){
         char *mensage = (char*)malloc(100);

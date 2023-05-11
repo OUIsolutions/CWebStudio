@@ -346,6 +346,11 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 
+### Static File
+if you want to return an static file (javascript/css/html) you can put everything
+on the static file , and will automaticly sended 
+
+
 ## An Low level aproach 
 if you want to make an custon http response , you can construct the struct buy yourself 
 ~~~c
