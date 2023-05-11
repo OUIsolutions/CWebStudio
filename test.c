@@ -15,7 +15,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(){
 
     cweb_run_server(
-            5002,
+            5001,
             main_sever,
             CWEB_DEFAULT_TIMEOUT,
             CWEB_DEFAULT_MAX_BODY,

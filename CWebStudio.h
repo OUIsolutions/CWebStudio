@@ -4750,7 +4750,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
 
         if(res < 0){
 
-            cweb_print("\n ended with res < \n");
+            cweb_print("\n ended with res <  on iterator: %i\n",i);
             return INVALID_HTTP;
         }
 
@@ -5103,7 +5103,7 @@ struct CwebHttpResponse *create_http_response(){
     self->set_content = private_cweb_http_set_content;
     self->generate_response = private_cweb_generate_response;
     self->add_header = private_cweb_http_add_header;
-    self->add_header(self,"Connection", "close");
+
     return self;
 }
 

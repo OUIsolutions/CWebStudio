@@ -225,7 +225,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
 
         if(res < 0){
 
-            cweb_print("\n ended with res < \n");
+            cweb_print("\n ended with res <  on iterator: %i\n",i);
             return INVALID_HTTP;
         }
 
