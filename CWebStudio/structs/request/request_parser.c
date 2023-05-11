@@ -195,7 +195,8 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
 int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,size_t max_body_size){
         //splite lines by "\r\n"
 
-    unsigned char raw_entrys[200000];
+
+    unsigned char raw_entrys[200000] ={0};
 
     struct CwebStringArray *lines = cweb_constructor_string_array();
     char last_string[10000]= {0};
@@ -203,18 +204,34 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     int i = 0;
 
     //parsing the header
-
+    cweb_print("\nstart-request-------------------------------------------------------------\n");
     while (true){
 
         ssize_t res = read(socket,raw_entrys+i,1);
 
+        #ifdef CWEB_DEBUG
+            char current_char = raw_entrys[i];
+            if(current_char == '\n'){
+                cweb_print("Endl\n");
+            }
+            else if(current_char =='\r'){
+                cweb_print("\nRCHAR\n");
+            }
+            else{
+                cweb_print("%c",current_char);
+            }
+        #endif
+
+
         if(res < 0){
-            self->free(self);
+
+            cweb_print("\n ended with res < \n");
             return INVALID_HTTP;
         }
 
         if(i >= 10000){
-            self->free(self);
+
+            cweb_print("\n ended with res > \n");
             return INVALID_HTTP;
         }
 
@@ -245,6 +262,8 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
         i++;
 
     }
+    cweb_print("\nend-request-------------------------------------------------------------\n");
+    // Configura o socket para modo bloqueante novamente
 
     int line_error = self->interpret_first_line(self, lines->strings[0]);
 

@@ -8,8 +8,6 @@ void private_cweb_execute_request(
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = cweb_request_constructor();
 
-
-
     int result = request->parse_http_request(
             request,
             socket,
@@ -19,13 +17,15 @@ void private_cweb_execute_request(
 
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");
-        private_cweb_send_error_mensage("Invalid HTTP Request",400,socket);
+        private_cweb_send_error_mensage("Invalid HTTP",400,socket);
+        request->free(request);
         return;
     }
 
     if(result == MAX_BODY_SIZE){
         cweb_print("Max body size \n");
         private_cweb_send_error_mensage("Max Request size Exceded",400,socket);
+        request->free(request);
         return;
     }
 
@@ -76,7 +76,7 @@ void private_cweb_execute_request(
         #endif
 
 
-    };
+    }
 
     char *response_str = response->generate_response(response);
     cweb_print("Response created\n");
@@ -108,8 +108,8 @@ void private_cweb_execute_request(
     response->free(response);
     request->free(request);
     cweb_print("Cleared memory\n");
-    return;
 }
+
 
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket)
 {
@@ -140,9 +140,8 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
 void private_cweb_treat_response(int new_socket){
     cweb_print("New request %ld\n", actual_request);
     cweb_print("Waiting for child process\n");
-    pid_t wpid;
     int status = 0;
-    while (wpid = wait(&status) > 0);
+    while (wait(&status) > 0);
 
     if (WIFEXITED(status)){
         cweb_print("Sucess\n");
@@ -165,10 +164,9 @@ void private_cweb_treat_response(int new_socket){
                 exit(EXIT_FAILURE);
     }
     else{
-        pid_t wpid2;
         int status2 = 0;
         /// Wait for the child process to finish
-        while (wpid2 = wait(&status2) > 0);
+        while (wait(&status2) > 0);
         if (WIFEXITED(status2)){
             cweb_print("Mensage sent\n");
         }
@@ -276,7 +274,7 @@ void cweb_run_server(
         }
 
         struct timeval timer;
-        timer.tv_sec = timeout;  // tempo em segundos
+        timer.tv_sec = timeout-0.1;  // tempo em segundos
         timer.tv_usec = 0;  //
 
         setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));

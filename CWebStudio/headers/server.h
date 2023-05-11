@@ -1,5 +1,5 @@
 
-static size_t actual_request = 0;
+static long long  actual_request = 0;
 
 #define CWEB_DEFAULT_TIMEOUT 3
 #define CWEB_DEFAULT_MAX_BODY 10485760

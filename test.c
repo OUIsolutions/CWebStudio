@@ -1,7 +1,7 @@
 
 
 #define CWEB_DEBUG
-#include "CWebStudio.h"
+#include "CWebStudio/CwebStudioMain.h"
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -13,11 +13,13 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 int main(){
+
     cweb_run_server(
-            5000,
+            5002,
             main_sever,
             CWEB_DEFAULT_TIMEOUT,
             CWEB_DEFAULT_MAX_BODY,
             CWEB_DANGEROUS_SINGLE_PROCESS
     );
+
 }
