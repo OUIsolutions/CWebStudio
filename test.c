@@ -2,14 +2,13 @@
 
 #define CWEB_DEBUG
 #include "CWebStudio/CwebStudioMain.h"
-int total_request = 0;
+
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    total_request++;
-    if(total_request > 30){
+    if(actual_request >30){
         request->free(request);
         exit(0);
-    }
+    }    
     if(strcmp(request->route,"/a") ==0){
         return cweb_send_text("aaa",200);
     }
