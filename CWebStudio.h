@@ -26,6 +26,7 @@ SOFTWARE.
 */
 #ifndef __CWEBSTUDIO_H
 #define __CWEBSTUDIO_H
+
 #include <sys/wait.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -4136,7 +4137,7 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
 
 struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request);
 
-static size_t actual_request = 0;
+static long long  actual_request = 0;
 
 #define CWEB_DEFAULT_TIMEOUT 3
 #define CWEB_DEFAULT_MAX_BODY 10485760
@@ -4719,7 +4720,8 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
 int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,size_t max_body_size){
         //splite lines by "\r\n"
 
-    unsigned char raw_entrys[200000];
+
+    unsigned char raw_entrys[200000] ={0};
 
     struct CwebStringArray *lines = cweb_constructor_string_array();
     char last_string[10000]= {0};
@@ -4727,18 +4729,34 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     int i = 0;
 
     //parsing the header
-
+    cweb_print("\nstart-request-------------------------------------------------------------\n");
     while (true){
 
         ssize_t res = read(socket,raw_entrys+i,1);
 
+        #ifdef CWEB_DEBUG
+            char current_char = raw_entrys[i];
+            if(current_char == '\n'){
+                cweb_print("Endl\n");
+            }
+            else if(current_char =='\r'){
+                cweb_print("\nRCHAR\n");
+            }
+            else{
+                cweb_print("%c",current_char);
+            }
+        #endif
+
+
         if(res < 0){
-            self->free(self);
+
+            cweb_print("\n ended with res < \n");
             return INVALID_HTTP;
         }
 
         if(i >= 10000){
-            self->free(self);
+
+            cweb_print("\n ended with res > \n");
             return INVALID_HTTP;
         }
 
@@ -4769,6 +4787,8 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
         i++;
 
     }
+    cweb_print("\nend-request-------------------------------------------------------------\n");
+    // Configura o socket para modo bloqueante novamente
 
     int line_error = self->interpret_first_line(self, lines->strings[0]);
 
@@ -5083,6 +5103,7 @@ struct CwebHttpResponse *create_http_response(){
     self->set_content = private_cweb_http_set_content;
     self->generate_response = private_cweb_generate_response;
     self->add_header = private_cweb_http_add_header;
+    self->add_header(self,"Connection", "close");
     return self;
 }
 
@@ -5192,8 +5213,6 @@ void private_cweb_execute_request(
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = cweb_request_constructor();
 
-
-
     int result = request->parse_http_request(
             request,
             socket,
@@ -5203,13 +5222,15 @@ void private_cweb_execute_request(
 
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");
-        private_cweb_send_error_mensage("Invalid HTTP Request",400,socket);
+        private_cweb_send_error_mensage("Invalid HTTP",400,socket);
+        request->free(request);
         return;
     }
 
     if(result == MAX_BODY_SIZE){
         cweb_print("Max body size \n");
         private_cweb_send_error_mensage("Max Request size Exceded",400,socket);
+        request->free(request);
         return;
     }
 
@@ -5260,7 +5281,7 @@ void private_cweb_execute_request(
         #endif
 
 
-    };
+    }
 
     char *response_str = response->generate_response(response);
     cweb_print("Response created\n");
@@ -5292,8 +5313,8 @@ void private_cweb_execute_request(
     response->free(response);
     request->free(request);
     cweb_print("Cleared memory\n");
-    return;
 }
+
 
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket)
 {
@@ -5324,9 +5345,8 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
 void private_cweb_treat_response(int new_socket){
     cweb_print("New request %ld\n", actual_request);
     cweb_print("Waiting for child process\n");
-    pid_t wpid;
     int status = 0;
-    while (wpid = wait(&status) > 0);
+    while (wait(&status) > 0);
 
     if (WIFEXITED(status)){
         cweb_print("Sucess\n");
@@ -5349,10 +5369,9 @@ void private_cweb_treat_response(int new_socket){
                 exit(EXIT_FAILURE);
     }
     else{
-        pid_t wpid2;
         int status2 = 0;
         /// Wait for the child process to finish
-        while (wpid2 = wait(&status2) > 0);
+        while (wait(&status2) > 0);
         if (WIFEXITED(status2)){
             cweb_print("Mensage sent\n");
         }
@@ -5460,7 +5479,7 @@ void cweb_run_server(
         }
 
         struct timeval timer;
-        timer.tv_sec = timeout;  // tempo em segundos
+        timer.tv_sec = timeout-0.1;  // tempo em segundos
         timer.tv_usec = 0;  //
 
         setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
