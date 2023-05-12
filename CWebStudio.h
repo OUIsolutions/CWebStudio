@@ -4797,43 +4797,57 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
 
     unsigned char raw_entries[20000] ={0};
 
+    int i = 0;
+
+    while (true) {
+
+        if (i >= 20000) {
+            printf("Tamanho de i: %i\n", i);
+            return MAX_HEADER_SIZE;
+        }
+
+        ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
+ 
+     
+        if (res <= 0) {
+            break;
+        }
+        //line break is \r\n\r\n
+        if (i >= 3 &&
+            raw_entries[i - 3] == '\r' &&
+            raw_entries[i - 2] == '\n' &&
+            raw_entries[i - 1] == '\r' &&
+                raw_entries[i] == '\n') {
+     
+            break;
+        }
+        i++;
+    
+    }
+    if(i == 0){
+        return READ_ERROR;
+    }
 
     struct CwebStringArray *lines = cweb_constructor_string_array();
     char last_string[10000]= {0};
     int line_index = 0;
-    int i = 0;
 
-    while (true) {
-        if (i >= 20000) {
-            printf("Tamanho de i: %i\n", i);
-            lines->free_string_array(lines);
-            return MAX_HEADER_SIZE;
-        }
 
-        ssize_t res = recv(self->socket, &raw_entries[i], 1, 0);
 
-        if (res < 0) {
-            lines->free_string_array(lines);
-            return READ_ERROR;
-        }
 
-        if (i >= 3 && raw_entries[i - 3] == '\r' &&
-            raw_entries[i - 2] == '\n' &&
-            raw_entries[i - 1] == '\r' &&
-            raw_entries[i] == '\n') {
-            break;
-        }
-
-        if (i >= 1 && raw_entries[i - 1] == '\r' && raw_entries[i] == '\n') {
-            last_string[line_index - 1] = '\0';
+    for(int l =0 ; l < i-1;l++){
+        if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){
             lines->add_string(lines, last_string);
+            memset(last_string, 0, 10000);
             line_index = 0;
-        } else {
-            last_string[line_index] = raw_entries[i];
-            line_index++;
+            l++;
+            continue;
         }
-        i++;
+        last_string[line_index] = raw_entries[l];
+        line_index++;
     }
+
+
 
     int line_error = self->interpret_first_line(self, lines->strings[0]);
 
@@ -5122,7 +5136,7 @@ struct CwebHttpResponse *create_http_response(){
     self->set_content = private_cweb_http_set_content;
     self->generate_response = private_cweb_generate_response;
     self->add_header = private_cweb_http_add_header;
-
+    self->add_header(self, "Connection", "close");
     
     return self;
 }
@@ -5445,8 +5459,15 @@ void cweb_run_server(
     bool single_process){
 
 
+    //limpando lixo de memoria
+    actual_request = 0;
+
+    fflush(stdout);
+    fflush(stderr);
+
+
     int server_fd, new_socket;
-    struct sockaddr_in address;
+    struct sockaddr_in address = {0};
     int addrlen = sizeof(address);
 
     // Creating socket file descriptor
@@ -5519,7 +5540,9 @@ void cweb_run_server(
           
             private_cweb_execute_request(new_socket, request_handler);
             close(new_socket);
-        
+            fflush(stdout);
+            fflush(stderr);
+
             cweb_print("Closed Conection with socket %d\n", new_socket);
             #ifdef CWEB_ONCE
                         return;
