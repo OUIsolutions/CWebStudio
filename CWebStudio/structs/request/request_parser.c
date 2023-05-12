@@ -206,7 +206,14 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     int i = 0;
 
     while (true){
-  
+        if(i >= 200000){
+            printf("tamanho do i: %i\n",i);
+            //cweb_print("\n ended with res > \n");
+
+            lines->free_string_array(lines);
+            return MAX_BODY_SIZE;
+        }
+
         ssize_t res = read(socket,raw_entrys+i,1);
 
         if(res < 0){
@@ -216,41 +223,33 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
             return READ_ERROR;
         }
 
-        else{
-        
-                if(i >= 200000){
 
-                    //cweb_print("\n ended with res > \n");
-                    return MAX_BODY_SIZE;
-                }
+        if(
 
-
-                if(
-
-                    raw_entrys[i-3]  == '\r' &&
-                    raw_entrys[i-2] == '\n' &&
-                    raw_entrys[i-1] == '\r' &&
-                    raw_entrys[i] == '\n'
-                ){
-                    break;
-                }
-
-                //means its an break line
-                if (raw_entrys[i-1] == '\r' && raw_entrys[i] == '\n'){
-                    last_string[line_index - 1] = '\0';
-                    lines->add_string(lines, last_string);
-                    line_index=0;
-                }
-
-                else{
-
-                    last_string[line_index] = raw_entrys[i];
-                    line_index++;
-                }
-                i++;
-
-
+            raw_entrys[i-3]  == '\r' &&
+            raw_entrys[i-2] == '\n' &&
+            raw_entrys[i-1] == '\r' &&
+            raw_entrys[i] == '\n'
+        ){
+            break;
         }
+
+        //means its an break line
+        if (raw_entrys[i-1] == '\r' && raw_entrys[i] == '\n'){
+            last_string[line_index - 1] = '\0';
+            lines->add_string(lines, last_string);
+            line_index=0;
+        }
+
+        else{
+
+            last_string[line_index] = raw_entrys[i];
+            line_index++;
+        }
+        i++;
+
+
+        
 
     }
     // Configura o socket para modo bloqueante novamente
@@ -258,12 +257,16 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     int line_error = self->interpret_first_line(self, lines->strings[0]);
 
     if(line_error){
+
+        lines->free_string_array(lines);
         return line_error;
     }
 
     int headers_error = self->interpret_headders(self, lines);
 
     if(headers_error){
+
+        lines->free_string_array(lines);
         return headers_error;
     }
     //const char *content_lenght_str = self->get_header(self, "Content-Length");

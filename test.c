@@ -5,10 +5,7 @@
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    if(actual_request >30){
-        request->free(request);
-        exit(0);
-    }    
+
     if(strcmp(request->route,"/a") ==0){
         return cweb_send_text("aaa",200);
     }
@@ -20,7 +17,7 @@ int main(){
             cweb_run_server(
                     i,
                     main_sever,
-                    CWEB_DEFAULT_TIMEOUT,
+                    30,
                     CWEB_DEFAULT_MAX_BODY,
                     CWEB_DANGEROUS_SINGLE_PROCESS
             );

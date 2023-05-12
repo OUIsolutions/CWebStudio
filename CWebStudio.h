@@ -4747,6 +4747,8 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
                 if(i >= 200000){
 
                     //cweb_print("\n ended with res > \n");
+
+                    lines->free_string_array(lines);
                     return MAX_BODY_SIZE;
                 }
 
@@ -4784,12 +4786,16 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     int line_error = self->interpret_first_line(self, lines->strings[0]);
 
     if(line_error){
+
+        lines->free_string_array(lines);
         return line_error;
     }
 
     int headers_error = self->interpret_headders(self, lines);
 
     if(headers_error){
+
+        lines->free_string_array(lines);
         return headers_error;
     }
     //const char *content_lenght_str = self->get_header(self, "Content-Length");
