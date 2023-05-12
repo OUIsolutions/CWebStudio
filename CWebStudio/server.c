@@ -219,8 +219,15 @@ void cweb_run_server(
     bool single_process){
 
 
+    //limpando lixo de memoria
+    actual_request = 0;
+
+    fflush(stdout);
+    fflush(stderr);
+
+
     int server_fd, new_socket;
-    struct sockaddr_in address;
+    struct sockaddr_in address = {0};
     int addrlen = sizeof(address);
 
     // Creating socket file descriptor
@@ -293,7 +300,9 @@ void cweb_run_server(
           
             private_cweb_execute_request(new_socket, request_handler);
             close(new_socket);
-        
+            fflush(stdout);
+            fflush(stderr);
+
             cweb_print("Closed Conection with socket %d\n", new_socket);
             #ifdef CWEB_ONCE
                         return;
