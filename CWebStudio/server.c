@@ -84,11 +84,7 @@ void private_cweb_execute_request(
 
 
     //envia todo o content de uma vez 
-    if (response->exist_content)
-    {
-        send(socket, response->content, response->content_length, MSG_NOSIGNAL);
-    }
-    /*
+
     // Enviando conteúdo byte a byte
     if (response->exist_content)
     {
@@ -105,7 +101,7 @@ void private_cweb_execute_request(
             sent += res;
         }
     }
-    */
+    
     free(response_str);
     response->free(response);
     request->free(request);
