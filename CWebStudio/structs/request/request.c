@@ -2,15 +2,18 @@
 
 
 
-struct CwebHttpRequest *cweb_request_constructor(){
+struct CwebHttpRequest *cweb_request_constructor(int socket){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
     
+    self->socket = socket;
     self->url = NULL;
     self->method = NULL;
     self->route = NULL;
     self->content = NULL;
     self->content_length = 0;
 
+
+    self->read_content = private_cweb_read_content;
     self->set_url = private_cweb_set_url;
     self->set_method = private_cweb_set_method;
     self->add_header = private_cweb_add_header;
@@ -35,7 +38,59 @@ struct CwebHttpRequest *cweb_request_constructor(){
     return self;
     
 }
+int private_cweb_read_content(struct CwebHttpRequest *self,long max_content_size){
+            //means is the end of \r\n\r\n
 
+    if(self->content_length == 0){
+        return UNDEFINED_CONTENT;
+    }
+
+    if(self->content_length > max_content_size){
+        return MAX_CONTENT_SIZE;
+    }   
+
+
+    if(self->content != NULL){
+        return 0;
+    }
+
+    struct timeval timer;
+    timer.tv_sec = 5;  // tempo em segundos
+    timer.tv_usec = 0;  //
+    setsockopt(self->socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
+    
+    self->content =(unsigned char*) malloc(self->content_length+2);
+    
+    
+
+    for(int j = 0; j<self->content_length;j++){
+
+        ssize_t res = read(self->socket,self->content+j,1);
+        if(res < 0){
+            
+            return READ_ERROR;
+        }
+
+
+
+    }
+
+    self->content[self->content_length]= '\0';
+
+    //extracting url encoded data
+    char *content_type = self->get_header_by_sanitized_key(
+        self, "contenttype","- "
+    );
+    if(content_type != NULL){
+        if(strcmp(content_type, "application/x-www-form-urlencoded") == 0){
+            char *decoded = private_cweb_convert_url_encoded_text((char*)self->content);
+            self->interpret_query_params(self, decoded);
+            free(decoded);
+        }
+    }
+    return  0;
+
+}
 
 char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
     return self->headers->get_value(self->headers,key);

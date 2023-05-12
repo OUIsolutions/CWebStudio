@@ -13,12 +13,13 @@ struct CwebHttpResponse *create_http_response(){
     self->set_content = private_cweb_http_set_content;
     self->generate_response = private_cweb_generate_response;
     self->add_header = private_cweb_http_add_header;
-    self->add_header(self,"Connection","close");
+
     
     return self;
 }
 
 char *private_cweb_generate_response(struct CwebHttpResponse*self){
+    self->add_header(self,"Connection","close");
     char *response_string = (char*)malloc(20000);
     sprintf(response_string, "HTTP/1.1 %d OK\r\n", self->status_code);
     struct CwebDict *headers = self->headers;

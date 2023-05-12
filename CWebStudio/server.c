@@ -2,17 +2,12 @@
 
 void private_cweb_execute_request(
     int socket,
-    size_t max_body_size,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request))
-            {
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
+    ){
     cweb_print("Parsing Request\n");
-    struct CwebHttpRequest *request = cweb_request_constructor();
+    struct CwebHttpRequest *request = cweb_request_constructor(socket);
 
-    int result = request->parse_http_request(
-            request,
-            socket,
-            max_body_size
-    );
+    int result = request->parse_http_request(request);
     
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");
@@ -20,17 +15,15 @@ void private_cweb_execute_request(
         request->free(request);
         return;
     }
-    
-
-    if(result == MAX_BODY_SIZE){
-        cweb_print("Max body size \n");
-        private_cweb_send_error_mensage("Max Request size Exceded",400,socket);
-        request->free(request);
-        return;
-    }
 
     if(result == READ_ERROR){
         cweb_print("Read Error \n");
+        request->free(request);
+        return;
+    }
+    if(result == MAX_HEADER_SIZE){
+        cweb_print("Max Header Size\n");
+        private_cweb_send_error_mensage("Max Header Size",400,socket);
         request->free(request);
         return;
     }
@@ -97,10 +90,7 @@ void private_cweb_execute_request(
         while (sent < response->content_length)
         {
             size_t chunk_size = response->content_length - sent;
-            if (chunk_size > max_body_size)
-            {
-                chunk_size = max_body_size;
-            }
+          
             ssize_t res = send(socket, response->content + sent, chunk_size, MSG_NOSIGNAL);
             if (res < 0)
             {
@@ -189,7 +179,6 @@ void private_cweb_treat_response(int new_socket){
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
-    size_t max_body_size,
     int time_out,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
 )
@@ -199,7 +188,7 @@ void private_cweb_execute_request_in_safty_mode(
     if (pid == 0){
         // means that the process is the child
         alarm(time_out);
-        private_cweb_execute_request(new_socket, max_body_size, request_handler);
+        private_cweb_execute_request(new_socket,request_handler);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -225,9 +214,8 @@ void cweb_run_server(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
-    size_t max_body_size,
-    bool single_process)
-{
+    bool single_process){
+
 
     int server_fd, new_socket;
     struct sockaddr_in address;
@@ -269,8 +257,10 @@ void cweb_run_server(
             _mkdir("static");
         #endif
     #endif
+
+    
     struct timeval timer;
-    timer.tv_sec = 1;  // tempo em segundos
+    timer.tv_sec = 0;  // tempo em segundos
     timer.tv_usec = 100;  //
 
 
@@ -302,7 +292,7 @@ void cweb_run_server(
 
         if (single_process){
             printf("single process\n");
-            private_cweb_execute_request(new_socket, max_body_size, request_handler);
+            private_cweb_execute_request(new_socket, request_handler);
             close(new_socket);
         
             cweb_print("Closed Conection with socket %d\n", new_socket);
@@ -314,9 +304,9 @@ void cweb_run_server(
         else{
             private_cweb_execute_request_in_safty_mode(
                 new_socket,
-                max_body_size,
                 timeout,
-                request_handler);
+                request_handler
+                );
         }
 
     }
