@@ -22,7 +22,6 @@ void private_cweb_execute_request(
     }
     if(result == MAX_HEADER_SIZE){
         cweb_print("Max Header Size\n");
-
         request->free(request);
         return;
     }
@@ -299,7 +298,8 @@ void cweb_run_server(
           
             private_cweb_execute_request(new_socket, request_handler);
             close(new_socket);
-            
+      
+
          
             cweb_print("Closed Conection with socket %d\n", new_socket);
             #ifdef CWEB_ONCE

@@ -227,16 +227,13 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
         i++;
     
     }
-    if(i == 0){
+
+    if(i == 0){    
         return READ_ERROR;
     }
-
-    struct CwebStringArray *lines = cweb_constructor_string_array();
     char last_string[10000]= {0};
+    struct CwebStringArray *lines = cweb_constructor_string_array();
     int line_index = 0;
-
-
-
 
     for(int l =0 ; l < i-1;l++){
         if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){
@@ -261,10 +258,10 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
     }
 
     int headers_error = self->interpret_headders(self, lines);
-
+    lines->free_string_array(lines);
+    
+    
     if(headers_error){
-
-        lines->free_string_array(lines);
         return headers_error;
     }
     //const char *content_lenght_str = self->get_header(self, "Content-Length");
@@ -276,7 +273,6 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
 
             for(int i = 0; i<strlen(content_lenght_str);i++){
             if(content_lenght_str[i] < '0' || content_lenght_str[i] > '9'){
-                lines->free_string_array(lines);
                 return INVALID_HTTP;
             }
         }
@@ -285,7 +281,6 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
 
     }
 
-    lines->free_string_array(lines);
     return 0;
 }
 
