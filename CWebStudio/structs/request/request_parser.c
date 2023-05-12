@@ -213,7 +213,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
  
      
         if (res <= 0) {
-            return READ_ERROR;
+            break;
         }
         //line break is \r\n\r\n
         if (i >= 3 &&
@@ -225,14 +225,18 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
             break;
         }
         i++;
+    
     }
-
+    if(i == 0){
+        return READ_ERROR;
+    }
 
     struct CwebStringArray *lines = cweb_constructor_string_array();
     char last_string[10000]= {0};
     int line_index = 0;
 
-    
+
+
 
     for(int l =0 ; l < i-1;l++){
         if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){

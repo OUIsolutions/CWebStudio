@@ -7,7 +7,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 int main(){
-    for(int i =5000; i< 6000;i++){
+    for(int i =3000; i< 4000;i++){
          cweb_run_server(i,main_sever,3,true);
     }
 
