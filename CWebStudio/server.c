@@ -11,7 +11,6 @@ void private_cweb_execute_request(
     
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");
-        private_cweb_send_error_mensage("Invalid HTTP",400,socket);
         request->free(request);
         return;
     }
@@ -23,7 +22,7 @@ void private_cweb_execute_request(
     }
     if(result == MAX_HEADER_SIZE){
         cweb_print("Max Header Size\n");
-        private_cweb_send_error_mensage("Max Header Size",400,socket);
+
         request->free(request);
         return;
     }
@@ -206,7 +205,7 @@ void private_cweb_execute_request_in_safty_mode(
     }
     
     close(new_socket);
-    
+
     cweb_print("Closed Conection with socket %d\n", new_socket);
 }
 
@@ -280,7 +279,7 @@ void cweb_run_server(
     {
         actual_request++;
 
-    
+      
         // Accepting a new connection in every socket
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0){
             perror("Faluire to accept connection");
@@ -300,9 +299,8 @@ void cweb_run_server(
           
             private_cweb_execute_request(new_socket, request_handler);
             close(new_socket);
-            fflush(stdout);
-            fflush(stderr);
-
+            
+         
             cweb_print("Closed Conection with socket %d\n", new_socket);
             #ifdef CWEB_ONCE
                         return;
