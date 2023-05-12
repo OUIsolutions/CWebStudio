@@ -16,7 +16,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     }
 
     else if(strcmp(route, "/set") == 0){
-        int error = request->read_content(request,10000000);
+        int error = request->read_content(request,20000);
         if(error != 0){
             return cweb_send_text("error reading content",400);
         }
