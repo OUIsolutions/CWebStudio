@@ -16,7 +16,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     }
 
     else if(strcmp(route, "/set") == 0){
-        int error = request->read_content(request,100);
+        int error = request->read_content(request,10000000);
         if(error != 0){
             return cweb_send_text("error reading content",400);
         }
@@ -33,7 +33,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(int argc, char *argv[]){
 
     cweb_run_server(
-        5005,
+        5000,
         main_sever,
         CWEB_DEFAULT_TIMEOUT,
         CWEB_DANGEROUS_SINGLE_PROCESS

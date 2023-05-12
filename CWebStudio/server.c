@@ -277,12 +277,7 @@ void cweb_run_server(
             exit(EXIT_FAILURE);
         }
         
-        /*
-        // Configure socket as non-blocking
-        int flags = fcntl(new_socket, F_GETFL, 0);
-        fcntl(new_socket, F_SETFL, flags | O_NONBLOCK);
-        */
-    // Main loop
+
         setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
         

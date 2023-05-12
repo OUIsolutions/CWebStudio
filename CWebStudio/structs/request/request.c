@@ -38,58 +38,63 @@ struct CwebHttpRequest *cweb_request_constructor(int socket){
     return self;
     
 }
-int private_cweb_read_content(struct CwebHttpRequest *self,long max_content_size){
-            //means is the end of \r\n\r\n
-    
-    if(self->content_length == 0){
+
+
+int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_size) {
+
+
+   
+    if (self->content_length == 0) {
+        cweb_print("content size is too big\n");
         return UNDEFINED_CONTENT;
     }
 
-    if(self->content_length > max_content_size){
+    if (self->content_length > max_content_size) {
+        cweb_print("content size is too big\n");
         return MAX_CONTENT_SIZE;
-    }   
+    }
 
-
-    if(self->content != NULL){
+    if (self->content != NULL) {
+        
         return 0;
     }
 
     struct timeval timer;
     timer.tv_sec = 5;  // tempo em segundos
     timer.tv_usec = 0;  //
+
     setsockopt(self->socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
-    
-    self->content =(unsigned char*) malloc(self->content_length+2);
-    
-    
 
-    for(int j = 0; j<self->content_length;j++){
+    self->content = (unsigned char*) malloc(self->content_length + 2);
+    
+    int total_bytes_received = 0;
+    int bytes_remaining = self->content_length;
 
-        ssize_t res = read(self->socket,self->content+j,1);
-        if(res < 0){
-            
+    while (bytes_remaining > 0) {
+        int bytes_received = recv(self->socket, self->content + total_bytes_received, bytes_remaining, 0);
+        printf("bytes_received: %d\n", bytes_received);
+        if (bytes_received <= 0) {
             return READ_ERROR;
         }
 
-
-
+        total_bytes_received += bytes_received;
+        bytes_remaining -= bytes_received;
     }
 
-    self->content[self->content_length]= '\0';
+    self->content[total_bytes_received] = '\0';
 
     //extracting url encoded data
-    char *content_type = self->get_header_by_sanitized_key(
-        self, "contenttype","- "
-    );
-    if(content_type != NULL){
-        if(strcmp(content_type, "application/x-www-form-urlencoded") == 0){
-            char *decoded = private_cweb_convert_url_encoded_text((char*)self->content);
+    char *content_type = self->get_header_by_sanitized_key(self, "contenttype", "- ");
+
+    if (content_type != NULL) {
+        if (strcmp(content_type, "application/x-www-form-urlencoded") == 0) {
+            char *decoded = private_cweb_convert_url_encoded_text((char*) self->content);
             self->interpret_query_params(self, decoded);
             free(decoded);
         }
     }
-    return  0;
 
+    return 0;
 }
 
 char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){

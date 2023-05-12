@@ -213,7 +213,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
             return MAX_HEADER_SIZE;
         }
 
-        ssize_t res = read(self->socket, raw_entries + i, 1);
+        ssize_t res = recv(self->socket, &raw_entries[i], 1, 0);
 
         if (res < 0) {
             lines->free_string_array(lines);
