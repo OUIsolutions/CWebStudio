@@ -1,5 +1,5 @@
 #define CWEB_DEBUG
-#include "CWebStudio.h"
+#include "CWebStudio/CwebStudioMain.h"
 #include "doTheWorld.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 

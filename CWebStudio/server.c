@@ -270,7 +270,7 @@ void cweb_run_server(
         #endif
     #endif
     struct timeval timer;
-    timer.tv_sec = 0;  // tempo em segundos
+    timer.tv_sec = 1;  // tempo em segundos
     timer.tv_usec = 100;  //
 
 
