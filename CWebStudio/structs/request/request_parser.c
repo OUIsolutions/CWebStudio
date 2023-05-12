@@ -230,6 +230,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
 
     if(i == 0){    
         return READ_ERROR;
+        
     }
     char last_string[10000]= {0};
     struct CwebStringArray *lines = cweb_constructor_string_array();

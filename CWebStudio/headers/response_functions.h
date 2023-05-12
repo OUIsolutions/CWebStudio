@@ -14,7 +14,7 @@ struct CwebHttpResponse * cweb_send_any(
     unsigned char *content,
     int status_code
 );
-
+struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_length,unsigned char *content,int status_code);
 
 struct CwebHttpResponse * cweb_send_text(
     const char *content,

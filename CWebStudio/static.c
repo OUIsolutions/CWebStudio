@@ -9,18 +9,18 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
 
         content = cweb_load_binary_content("static/favicon.ico", &size);
         if(content != NULL){
-            return cweb_send_file("static/favicon.ico","image/x-icon", 200);
+            return cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
         }
 
         content = cweb_load_binary_content("static/favicon.png", &size);
         if(content != NULL){
-            return cweb_send_file("static/favicon.png","image/x-icon", 200);
+            return cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
         }
 
 
         content = cweb_load_binary_content("static/favicon.jpg", &size);
         if(content != NULL){
-            return cweb_send_file("static/favicon.jpg","image/x-icon", 200);
+             return cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
         }
 
         return cweb_send_text("",404);
