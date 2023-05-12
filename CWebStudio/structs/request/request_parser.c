@@ -194,27 +194,28 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
 
 }
 
-int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,size_t max_body_size){
+int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
 
 
-    unsigned char raw_entrys[200000] ={0};
+    unsigned char raw_entrys[20000] ={0};
 
+    
     struct CwebStringArray *lines = cweb_constructor_string_array();
     char last_string[10000]= {0};
     int line_index = 0;
     int i = 0;
 
     while (true){
-        if(i >= 200000){
+        if(i >= 20000){
             printf("tamanho do i: %i\n",i);
             //cweb_print("\n ended with res > \n");
 
             lines->free_string_array(lines);
-            return MAX_BODY_SIZE;
+            return MAX_HEADER_SIZE;
         }
 
-        ssize_t res = read(socket,raw_entrys+i,1);
+        ssize_t res = read(self->socket,raw_entrys+i,1);
 
         if(res < 0){
             ///cweb_print("\n ended with res <  on iterator: %i\n",i);
@@ -247,12 +248,9 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
             line_index++;
         }
         i++;
-
-
         
 
     }
-    // Configura o socket para modo bloqueante novamente
 
     int line_error = self->interpret_first_line(self, lines->strings[0]);
 
@@ -276,46 +274,8 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
 
     if(content_lenght_str != NULL){
         self->content_length = atoi(content_lenght_str);
-        if(self->content_length > max_body_size){
-            return MAX_BODY_SIZE;
-        }
-
-        //means is the end of \r\n\r\n
-   
-        self->content =(unsigned char*) malloc(self->content_length+2);
-  
-        
-        for(int j = 0; j<self->content_length;j++){
-
-            ssize_t res = read(socket,self->content+j,1);
-            if(res < 0){
-              
-                return READ_ERROR;
-            }
-
-            if(j > max_body_size){
-
-                return MAX_BODY_SIZE;
-            }       
-
-        }
-   
-        self->content[self->content_length]= '\0';
-
-        //extracting url encoded data
-        char *content_type = self->get_header_by_sanitized_key(
-            self, "contenttype","- "
-        );
-        if(content_type != NULL){
-            if(strcmp(content_type, "application/x-www-form-urlencoded") == 0){
-                char *decoded = private_cweb_convert_url_encoded_text((char*)self->content);
-                self->interpret_query_params(self, decoded);
-                free(decoded);
-            }
-        }
 
     }
-
 
     lines->free_string_array(lines);
     return 0;
