@@ -4490,7 +4490,6 @@ int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_siz
 
     while (bytes_remaining > 0) {
         int bytes_received = recv(self->socket, self->content + total_bytes_received, bytes_remaining, 0);
-        printf("bytes_received: %d\n", bytes_received);
         if (bytes_received <= 0) {
             return READ_ERROR;
         }
