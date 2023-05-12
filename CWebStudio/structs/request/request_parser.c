@@ -198,58 +198,44 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
 
 
-    unsigned char raw_entrys[20000] ={0};
+    unsigned char raw_entries[20000] ={0};
 
-    
+
     struct CwebStringArray *lines = cweb_constructor_string_array();
     char last_string[10000]= {0};
     int line_index = 0;
     int i = 0;
 
-    while (true){
-        if(i >= 20000){
-            printf("tamanho do i: %i\n",i);
-            //cweb_print("\n ended with res > \n");
-
+    while (true) {
+        if (i >= 20000) {
+            printf("Tamanho de i: %i\n", i);
             lines->free_string_array(lines);
             return MAX_HEADER_SIZE;
         }
 
-        ssize_t res = read(self->socket,raw_entrys+i,1);
+        ssize_t res = read(self->socket, raw_entries + i, 1);
 
-        if(res < 0){
-            ///cweb_print("\n ended with res <  on iterator: %i\n",i);
-
+        if (res < 0) {
             lines->free_string_array(lines);
             return READ_ERROR;
         }
 
-
-        if(
-
-            raw_entrys[i-3]  == '\r' &&
-            raw_entrys[i-2] == '\n' &&
-            raw_entrys[i-1] == '\r' &&
-            raw_entrys[i] == '\n'
-        ){
+        if (i >= 3 && raw_entries[i - 3] == '\r' &&
+            raw_entries[i - 2] == '\n' &&
+            raw_entries[i - 1] == '\r' &&
+            raw_entries[i] == '\n') {
             break;
         }
 
-        //means its an break line
-        if (raw_entrys[i-1] == '\r' && raw_entrys[i] == '\n'){
+        if (i >= 1 && raw_entries[i - 1] == '\r' && raw_entries[i] == '\n') {
             last_string[line_index - 1] = '\0';
             lines->add_string(lines, last_string);
-            line_index=0;
-        }
-
-        else{
-
-            last_string[line_index] = raw_entrys[i];
+            line_index = 0;
+        } else {
+            last_string[line_index] = raw_entries[i];
             line_index++;
         }
         i++;
-        
-
     }
 
     int line_error = self->interpret_first_line(self, lines->strings[0]);
@@ -273,6 +259,14 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
     );
 
     if(content_lenght_str != NULL){
+
+            for(int i = 0; i<strlen(content_lenght_str);i++){
+            if(content_lenght_str[i] < '0' || content_lenght_str[i] > '9'){
+                lines->free_string_array(lines);
+                return INVALID_HTTP;
+            }
+        }
+
         self->content_length = atoi(content_lenght_str);
 
     }

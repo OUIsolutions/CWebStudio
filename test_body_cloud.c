@@ -33,7 +33,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(int argc, char *argv[]){
 
     cweb_run_server(
-        5002,
+        5005,
         main_sever,
         CWEB_DEFAULT_TIMEOUT,
         CWEB_DANGEROUS_SINGLE_PROCESS
