@@ -1,9 +1,14 @@
 #define CWEB_DEBUG
-#include "CWebStudio.h"
+#include "CWebStudio/CwebStudioMain.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     return cweb_send_text("Hello World", 200);
 }
 
-CWEB_START_MACRO(5002, main_sever);
+int main(){
+    for(int i =5000; i< 6000;i++){
+         cweb_run_server(i,main_sever,3,true);
+    }
+
+}
