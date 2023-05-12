@@ -35,6 +35,7 @@ SOFTWARE.
 #include <string.h>
 #include <sys/socket.h>
 #include <signal.h>
+#include <sys/resource.h>
 
 
 #include <arpa/inet.h>
@@ -70,7 +71,7 @@ SOFTWARE.
 #include "structs/key_val.c"
 #include "structs/dict.c"
 #include "structs/response.c"
-#include "static.c"
-#include "server.c"
-
-#endif
+#include "server/request_execution.c"
+#include "server/single_process.c"
+#include "server/multi_process.c"
+#include "server/server.c"

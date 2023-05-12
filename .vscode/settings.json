@@ -11,9 +11,15 @@
         "typeinfo": "cpp",
         "string": "cpp",
 <<<<<<< HEAD
+<<<<<<< HEAD
         "cwebstudio.c": "cpp"
 =======
         "iostream": "cpp"
 >>>>>>> dev-branch
+=======
+        "iostream": "cpp",
+        "resource.h": "c",
+        "cstdlib": "c"
+>>>>>>> MultiProcess
     }
 }
