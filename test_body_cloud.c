@@ -1,15 +1,23 @@
-#define CWEB_DEBUG
-#include "CWebStudio/CwebStudioMain.h"
+#include "CWebStudio.h"
+void write_binary_file(char *path, unsigned char *content, int size)
+{
+    FILE *file = fopen(path, "wb");
+    fwrite(content, sizeof(unsigned char), size, file);
+    fclose(file);
+}
+
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+    int two_mega_bytes = 2097152;
+    request->read_content(request, two_mega_bytes);
+    unsigned char *body = request->content;
+    char *name = request->get_param(request, "name");
+    int size = request->content_length;
 
-    return cweb_send_text("Hello World", 200);
+    write_binary_file(name, body, size);
+
+    return cweb_send_text("File Written", 200);
+    
 }
 
-int main(){
-    for(int i =3000;i< 4000;i++){
-     cweb_run_server(i,main_sever,3,true);
-
-    }
-
-}
+CWEB_START_MACRO(5001, main_sever);

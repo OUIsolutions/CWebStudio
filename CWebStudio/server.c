@@ -43,7 +43,7 @@ void private_cweb_execute_request(
     #endif
 
     cweb_print("executed client lambda\n");
-
+    //clear buffer of the socket
 
     //means that the main function respond nothing
     if (response == NULL){
