@@ -4160,6 +4160,7 @@ static long long  actual_request = 0;
 #define CWEB_SAFTY_MODE false
 
 
+
 void  private_cweb_execute_request(
     int socket,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request)
@@ -5307,8 +5308,10 @@ void private_cweb_execute_request(
 
     send(socket, response_str, strlen(response_str), MSG_NOSIGNAL);
 
-    // Enviando conteúdo byte a byte
 
+    //envia todo o content de uma vez 
+
+    // Enviando conteúdo byte a byte
     if (response->exist_content)
     {
         size_t sent = 0;
@@ -5324,7 +5327,7 @@ void private_cweb_execute_request(
             sent += res;
         }
     }
-
+    
     free(response_str);
     response->free(response);
     request->free(request);
