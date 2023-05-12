@@ -5466,6 +5466,7 @@ void cweb_run_server(
     // Vinculando o socket à porta especificada
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
+        printf("Faluire to bind socket to port %d\n", port);
         return;
     }
 
