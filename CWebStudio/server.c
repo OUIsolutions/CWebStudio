@@ -270,6 +270,7 @@ void cweb_run_server(
     {
         actual_request++;
 
+    
         // Accepting a new connection in every socket
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0){
             perror("Faluire to accept connection");
@@ -291,7 +292,7 @@ void cweb_run_server(
 
 
         if (single_process){
-            printf("single process\n");
+          
             private_cweb_execute_request(new_socket, request_handler);
             close(new_socket);
         

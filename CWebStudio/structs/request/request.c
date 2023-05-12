@@ -40,7 +40,7 @@ struct CwebHttpRequest *cweb_request_constructor(int socket){
 }
 int private_cweb_read_content(struct CwebHttpRequest *self,long max_content_size){
             //means is the end of \r\n\r\n
-
+    
     if(self->content_length == 0){
         return UNDEFINED_CONTENT;
     }
