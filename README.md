@@ -52,7 +52,6 @@ int main(int argc, char *argv[]){
         8080,
         main_sever,
         CWEB_DEFAULT_TIMEOUT,
-        CWEB_DEFAULT_MAX_BODY,
         CWEB_SAFTY_MODE
     );
 }
@@ -439,7 +438,6 @@ int main(){
             5000,
             main_sever,
             CWEB_DEFAULT_TIMEOUT,
-            CWEB_DEFAULT_MAX_BODY,
             CWEB_DANGEROUS_SINGLE_PROCESS
             );
 }
@@ -466,7 +464,6 @@ int main(){
             5000,
             main_sever,
             CWEB_DEFAULT_TIMEOUT,
-            CWEB_DEFAULT_MAX_BODY,
             CWEB_SAFTY_MODE
     );
 }
@@ -489,35 +486,7 @@ int main(){
             5000,
             main_sever,
             timeout,
-            CWEB_DEFAULT_MAX_BODY,
             CWEB_SAFTY_MODE
-    );
-}
-~~~
-
-### max body size
-You can set the max body size, the defaults is 10485760 bytes ,witch is equivalent 
-to 10mb if an request were more than that value, the aplication will return 400 error
-
-~~~c
-
-
-#define CWEB_DEBUG
-#include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-
-return cweb_send_text("Hello World", 200);
-
-}
-
-int main(){
-    size_t max_size = 2000;
-    cweb_run_server(
-        5000,
-        main_sever,
-        CWEB_DEFAULT_TIMEOUT,
-        max_size,
-        CWEB_SAFTY_MODE
     );
 }
 ~~~
