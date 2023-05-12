@@ -44,7 +44,6 @@ void private_cweb_treat_response(int new_socket){
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
-    size_t max_body_size,
     int time_out,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
 )
@@ -55,7 +54,7 @@ void private_cweb_execute_request_in_safty_mode(
         // means that the process is the child
       
         alarm(time_out);
-        private_cweb_execute_request(new_socket, max_body_size, request_handler);
+        private_cweb_execute_request(new_socket,request_handler);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
