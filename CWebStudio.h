@@ -4048,18 +4048,24 @@ struct CwebHttpResponse * cweb_send_file(
 );
 
 #define INVALID_HTTP -1
-#define MAX_BODY_SIZE -2
+#define MAX_HEADER_SIZE -2
 #define READ_ERROR -3
+#define MAX_CONTENT_SIZE -4
+#define UNDEFINED_CONTENT -5
 
 struct CwebHttpRequest{
 
     char *url;
+    int socket;
     char *route;
     char *method;
     struct CwebDict *params;
     struct CwebDict *headers;
     int content_length;
     unsigned char *content;
+
+
+    int (*read_content)(struct CwebHttpRequest *self,long max_content_size);
 
     void (*set_url)(struct CwebHttpRequest *self,const char *url);
     void (*set_route)(struct CwebHttpRequest *self,const char *route);
@@ -4082,7 +4088,7 @@ struct CwebHttpRequest{
 
     void (*set_content_string)(struct CwebHttpRequest *self,const char *content);
 
-    int (*parse_http_request)(struct CwebHttpRequest *self,int socket,size_t max_body_size);
+    int (*parse_http_request)(struct CwebHttpRequest *self);
     void (*interpret_query_params)(struct CwebHttpRequest *self,const char *query_params);
     int (*interpret_first_line)(struct CwebHttpRequest *self, char *first_line);
     int (*interpret_headders)(struct CwebHttpRequest *self, struct CwebStringArray *line_headers);
@@ -4090,6 +4096,9 @@ struct CwebHttpRequest{
     void (*represent)(struct CwebHttpRequest *request);
 };
 //algorithm functions
+
+int private_cweb_read_content(struct CwebHttpRequest *self,long max_content_size);
+
 
 char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key);
 char * private_cweb_get_header_by_sanitized_key(
@@ -4105,18 +4114,22 @@ char * private_cweb_get_param_by_sanitized_key(
 );
 
 void private_cweb_set_url(struct CwebHttpRequest *self,const char *url);
+
 void private_cweb_set_route(struct CwebHttpRequest *self,const char *route);
 
 void private_cweb_add_header(struct CwebHttpRequest *self,const char *key,const char *value);
+
 void private_cweb_add_param(struct CwebHttpRequest *self,const char *key,const char *value);
 
 void private_cweb_set_method(struct CwebHttpRequest *self,const char *method);
+
 void private_cweb_set_content_string(struct CwebHttpRequest *self,const char *content);
 
-struct CwebHttpRequest *cweb_request_constructor();
+struct CwebHttpRequest *cweb_request_constructor(int socket);
 
 
-int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,size_t max_body_size);
+int  private_cweb_parse_http_request(struct CwebHttpRequest *self);
+
 
 void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params);
 
@@ -4141,36 +4154,33 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
 static long long  actual_request = 0;
 
-#define CWEB_DEFAULT_TIMEOUT 3
-#define CWEB_DEFAULT_MAX_BODY 10485760
+#define CWEB_DEFAULT_TIMEOUT 30
+
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_SAFTY_MODE false
 
+
 void  private_cweb_execute_request(
     int socket,
-    size_t max_body_size,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request)
 );
 
-
-
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket);
+
 
 void private_cweb_treat_response(int new_socket);
 
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
-    size_t max_body_size,
     int time_out,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
-
 );
+
 void cweb_run_server(
     int port,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
             int timeout,
-            size_t max_body_size,
             bool single_process
 );
 #define CWEB_START_MACRO(port, caller)\
@@ -4410,15 +4420,18 @@ char *private_cweb_convert_url_encoded_text(const char *text){
 
 
 
-struct CwebHttpRequest *cweb_request_constructor(){
+struct CwebHttpRequest *cweb_request_constructor(int socket){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
     
+    self->socket = socket;
     self->url = NULL;
     self->method = NULL;
     self->route = NULL;
     self->content = NULL;
     self->content_length = 0;
 
+
+    self->read_content = private_cweb_read_content;
     self->set_url = private_cweb_set_url;
     self->set_method = private_cweb_set_method;
     self->add_header = private_cweb_add_header;
@@ -4444,6 +4457,63 @@ struct CwebHttpRequest *cweb_request_constructor(){
     
 }
 
+
+int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_size) {
+
+
+   
+    if (self->content_length == 0) {
+        cweb_print("content size is too big\n");
+        return UNDEFINED_CONTENT;
+    }
+
+    if (self->content_length > max_content_size) {
+        cweb_print("content size is too big\n");
+        return MAX_CONTENT_SIZE;
+    }
+
+    if (self->content != NULL) {
+        
+        return 0;
+    }
+
+    struct timeval timer;
+    timer.tv_sec = 5;  // tempo em segundos
+    timer.tv_usec = 0;  //
+
+    setsockopt(self->socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
+
+    self->content = (unsigned char*) malloc(self->content_length + 2);
+    
+    int total_bytes_received = 0;
+    int bytes_remaining = self->content_length;
+
+    while (bytes_remaining > 0) {
+        int bytes_received = recv(self->socket, self->content + total_bytes_received, bytes_remaining, 0);
+        printf("bytes_received: %d\n", bytes_received);
+        if (bytes_received <= 0) {
+            return READ_ERROR;
+        }
+
+        total_bytes_received += bytes_received;
+        bytes_remaining -= bytes_received;
+    }
+
+    self->content[total_bytes_received] = '\0';
+
+    //extracting url encoded data
+    char *content_type = self->get_header_by_sanitized_key(self, "contenttype", "- ");
+
+    if (content_type != NULL) {
+        if (strcmp(content_type, "application/x-www-form-urlencoded") == 0) {
+            char *decoded = private_cweb_convert_url_encoded_text((char*) self->content);
+            self->interpret_query_params(self, decoded);
+            free(decoded);
+        }
+    }
+
+    return 0;
+}
 
 char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
     return self->headers->get_value(self->headers,key);
@@ -4721,65 +4791,49 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
 
 }
 
-int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,size_t max_body_size){
+int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
 
 
-    unsigned char raw_entrys[200000] ={0};
+    unsigned char raw_entries[20000] ={0};
+
 
     struct CwebStringArray *lines = cweb_constructor_string_array();
     char last_string[10000]= {0};
     int line_index = 0;
     int i = 0;
 
-    while (true){
-        if(i >= 200000){
-            printf("tamanho do i: %i\n",i);
-            //cweb_print("\n ended with res > \n");
-
+    while (true) {
+        if (i >= 20000) {
+            printf("Tamanho de i: %i\n", i);
             lines->free_string_array(lines);
-            return MAX_BODY_SIZE;
+            return MAX_HEADER_SIZE;
         }
 
-        ssize_t res = read(socket,raw_entrys+i,1);
+        ssize_t res = recv(self->socket, &raw_entries[i], 1, 0);
 
-        if(res < 0){
-            ///cweb_print("\n ended with res <  on iterator: %i\n",i);
-
+        if (res < 0) {
             lines->free_string_array(lines);
             return READ_ERROR;
         }
 
-
-        if(
-
-            raw_entrys[i-3]  == '\r' &&
-            raw_entrys[i-2] == '\n' &&
-            raw_entrys[i-1] == '\r' &&
-            raw_entrys[i] == '\n'
-        ){
+        if (i >= 3 && raw_entries[i - 3] == '\r' &&
+            raw_entries[i - 2] == '\n' &&
+            raw_entries[i - 1] == '\r' &&
+            raw_entries[i] == '\n') {
             break;
         }
 
-        //means its an break line
-        if (raw_entrys[i-1] == '\r' && raw_entrys[i] == '\n'){
+        if (i >= 1 && raw_entries[i - 1] == '\r' && raw_entries[i] == '\n') {
             last_string[line_index - 1] = '\0';
             lines->add_string(lines, last_string);
-            line_index=0;
-        }
-
-        else{
-
-            last_string[line_index] = raw_entrys[i];
+            line_index = 0;
+        } else {
+            last_string[line_index] = raw_entries[i];
             line_index++;
         }
         i++;
-
-
-        
-
     }
-    // Configura o socket para modo bloqueante novamente
 
     int line_error = self->interpret_first_line(self, lines->strings[0]);
 
@@ -4802,47 +4856,17 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self,int socket,siz
     );
 
     if(content_lenght_str != NULL){
+
+            for(int i = 0; i<strlen(content_lenght_str);i++){
+            if(content_lenght_str[i] < '0' || content_lenght_str[i] > '9'){
+                lines->free_string_array(lines);
+                return INVALID_HTTP;
+            }
+        }
+
         self->content_length = atoi(content_lenght_str);
-        if(self->content_length > max_body_size){
-            return MAX_BODY_SIZE;
-        }
-
-        //means is the end of \r\n\r\n
-   
-        self->content =(unsigned char*) malloc(self->content_length+2);
-  
-        
-        for(int j = 0; j<self->content_length;j++){
-
-            ssize_t res = read(socket,self->content+j,1);
-            if(res < 0){
-              
-                return READ_ERROR;
-            }
-
-            if(j > max_body_size){
-
-                return MAX_BODY_SIZE;
-            }       
-
-        }
-   
-        self->content[self->content_length]= '\0';
-
-        //extracting url encoded data
-        char *content_type = self->get_header_by_sanitized_key(
-            self, "contenttype","- "
-        );
-        if(content_type != NULL){
-            if(strcmp(content_type, "application/x-www-form-urlencoded") == 0){
-                char *decoded = private_cweb_convert_url_encoded_text((char*)self->content);
-                self->interpret_query_params(self, decoded);
-                free(decoded);
-            }
-        }
 
     }
-
 
     lines->free_string_array(lines);
     return 0;
@@ -5098,12 +5122,13 @@ struct CwebHttpResponse *create_http_response(){
     self->set_content = private_cweb_http_set_content;
     self->generate_response = private_cweb_generate_response;
     self->add_header = private_cweb_http_add_header;
-    self->add_header(self,"Connection","close");
+
     
     return self;
 }
 
 char *private_cweb_generate_response(struct CwebHttpResponse*self){
+   
     char *response_string = (char*)malloc(20000);
     sprintf(response_string, "HTTP/1.1 %d OK\r\n", self->status_code);
     struct CwebDict *headers = self->headers;
@@ -5203,17 +5228,12 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
 void private_cweb_execute_request(
     int socket,
-    size_t max_body_size,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request))
-            {
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
+    ){
     cweb_print("Parsing Request\n");
-    struct CwebHttpRequest *request = cweb_request_constructor();
+    struct CwebHttpRequest *request = cweb_request_constructor(socket);
 
-    int result = request->parse_http_request(
-            request,
-            socket,
-            max_body_size
-    );
+    int result = request->parse_http_request(request);
     
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");
@@ -5221,17 +5241,15 @@ void private_cweb_execute_request(
         request->free(request);
         return;
     }
-    
-
-    if(result == MAX_BODY_SIZE){
-        cweb_print("Max body size \n");
-        private_cweb_send_error_mensage("Max Request size Exceded",400,socket);
-        request->free(request);
-        return;
-    }
 
     if(result == READ_ERROR){
         cweb_print("Read Error \n");
+        request->free(request);
+        return;
+    }
+    if(result == MAX_HEADER_SIZE){
+        cweb_print("Max Header Size\n");
+        private_cweb_send_error_mensage("Max Header Size",400,socket);
         request->free(request);
         return;
     }
@@ -5298,10 +5316,7 @@ void private_cweb_execute_request(
         while (sent < response->content_length)
         {
             size_t chunk_size = response->content_length - sent;
-            if (chunk_size > max_body_size)
-            {
-                chunk_size = max_body_size;
-            }
+          
             ssize_t res = send(socket, response->content + sent, chunk_size, MSG_NOSIGNAL);
             if (res < 0)
             {
@@ -5390,7 +5405,6 @@ void private_cweb_treat_response(int new_socket){
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
-    size_t max_body_size,
     int time_out,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
 )
@@ -5400,7 +5414,7 @@ void private_cweb_execute_request_in_safty_mode(
     if (pid == 0){
         // means that the process is the child
         alarm(time_out);
-        private_cweb_execute_request(new_socket, max_body_size, request_handler);
+        private_cweb_execute_request(new_socket,request_handler);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -5426,9 +5440,8 @@ void cweb_run_server(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
-    size_t max_body_size,
-    bool single_process)
-{
+    bool single_process){
+
 
     int server_fd, new_socket;
     struct sockaddr_in address;
@@ -5470,6 +5483,8 @@ void cweb_run_server(
             _mkdir("static");
         #endif
     #endif
+
+    
     struct timeval timer;
     timer.tv_sec = 0;  // tempo em segundos
     timer.tv_usec = 100;  //
@@ -5481,18 +5496,14 @@ void cweb_run_server(
     {
         actual_request++;
 
+    
         // Accepting a new connection in every socket
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
         
-        /*
-        // Configure socket as non-blocking
-        int flags = fcntl(new_socket, F_GETFL, 0);
-        fcntl(new_socket, F_SETFL, flags | O_NONBLOCK);
-        */
-    // Main loop
+
         setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
         
@@ -5502,8 +5513,8 @@ void cweb_run_server(
 
 
         if (single_process){
-            printf("single process\n");
-            private_cweb_execute_request(new_socket, max_body_size, request_handler);
+          
+            private_cweb_execute_request(new_socket, request_handler);
             close(new_socket);
         
             cweb_print("Closed Conection with socket %d\n", new_socket);
@@ -5515,9 +5526,9 @@ void cweb_run_server(
         else{
             private_cweb_execute_request_in_safty_mode(
                 new_socket,
-                max_body_size,
                 timeout,
-                request_handler);
+                request_handler
+                );
         }
 
     }
