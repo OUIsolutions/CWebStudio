@@ -2,10 +2,7 @@
 #include "CWebStudio/CwebStudioMain.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    if(actual_request > 20){
-        request->free(request);
-        exit(0);
-    }
+
     return cweb_send_text("Hello World", 200);
 }
 
