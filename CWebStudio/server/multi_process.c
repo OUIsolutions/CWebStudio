@@ -1,7 +1,7 @@
 
 
 void private_cweb_treat_response(int new_socket){
-    cweb_print("New request %ld\n", actual_request);
+    cweb_print("New request %lld\n", actual_request);
     cweb_print("Waiting for child process\n");
     pid_t wpid;
     int status = 0;
@@ -144,7 +144,7 @@ void private_cweb_run_server_in_multiprocess(
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
             
             cweb_print("----------------------------------------\n");
-            cweb_print("Executing request:%ld\n", actual_request);
+            cweb_print("Executing request:%lld\n", actual_request);
             cweb_print("Socket: %d\n", new_socket);
 
 
