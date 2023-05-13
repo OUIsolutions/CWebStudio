@@ -28,8 +28,9 @@ void private_cweb_run_server_in_single_process(
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
-        perror("Faluire to bind socket");
+        printf("Faluire to bind socket to port %d\n", port);
         return;
+      
     }
 
     // Waiting for connections
