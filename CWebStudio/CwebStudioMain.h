@@ -76,3 +76,5 @@ SOFTWARE.
 #include "server/single_process.c"
 #include "server/multi_process.c"
 #include "server/server.c"
+
+#endif
