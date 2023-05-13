@@ -71,7 +71,7 @@ void private_cweb_run_server_in_single_process(
 
 
     
-        private_cweb_execute_request(client_socket, max_body_size, request_handler);
+        private_cweb_execute_request(client_socket,request_handler);
         close(client_socket);
         cweb_print("Closed Conection with socket %d\n", client_socket);
         #ifdef CWEB_ONCE
