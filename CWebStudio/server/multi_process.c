@@ -76,7 +76,6 @@ void private_cweb_run_server_in_multiprocess(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
-    size_t max_body_size,
     int max_process,
     int max_queue
 ){
@@ -151,7 +150,6 @@ void private_cweb_run_server_in_multiprocess(
 
             private_cweb_execute_request_in_safty_mode(
                 new_socket,
-                max_body_size,
                 timeout,
                 request_handler
             );
