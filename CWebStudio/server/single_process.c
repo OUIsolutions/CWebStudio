@@ -29,7 +29,7 @@ void private_cweb_run_server_in_single_process(
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
         perror("Faluire to bind socket");
-        exit(EXIT_FAILURE);
+        return;
     }
 
     // Waiting for connections

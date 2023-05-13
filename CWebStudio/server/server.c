@@ -14,7 +14,7 @@ void cweb_run_server(
             port,
             request_handler,
             timeout,
-            1
+            10
         );
     }
 
