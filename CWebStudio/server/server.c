@@ -4,6 +4,7 @@ void cweb_run_server(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
+    int max_queue,
     bool single_process
     ){
 
@@ -14,7 +15,7 @@ void cweb_run_server(
             port,
             request_handler,
             timeout,
-            10
+            max_queue
         );
     }
 
@@ -24,7 +25,7 @@ void cweb_run_server(
             request_handler,
             timeout,
             1,
-            1
+            max_queue
         );
     }
 }

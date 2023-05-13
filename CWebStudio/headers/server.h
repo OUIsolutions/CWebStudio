@@ -3,7 +3,7 @@ static long long  actual_request = 0;
 
 #define CWEB_DEFAULT_TIMEOUT 30
 #define CWEB_DEFAULT_MAX_BODY 10485760
-#define CWEB_MAX_QUEUE 100
+#define CWEB_DEFAULT_MAX_QUEUE 100
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_SAFTY_MODE false
 
@@ -44,9 +44,11 @@ void private_cweb_run_server_in_single_process(
 );
 
 
+
 void cweb_run_server(
     int port,
-    struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
-            int timeout,
-            bool single_process
-);
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+    int timeout,
+    int max_queue,
+    bool single_process
+    );
