@@ -60,7 +60,7 @@ void private_cweb_run_server_in_single_process(
         }
 
         struct timeval timer;
-        timer.tv_sec = timeout;  // tempo em segundos
+        timer.tv_sec = 0.1;  // tempo em segundos
         timer.tv_usec = 0;  //
 
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
