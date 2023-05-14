@@ -216,7 +216,7 @@ void cweb_run_server(
     int timeout,
     bool single_process){
 
-
+    
     //limpando lixo de memoria
     actual_request = 0;
 
@@ -264,9 +264,6 @@ void cweb_run_server(
     #endif
 
     
-    struct timeval timer;
-    timer.tv_sec = timeout;  // tempo em segundos
-    timer.tv_usec = 100;  //
 
 
     printf("Sever is running on port:%d\n", port);
@@ -275,13 +272,16 @@ void cweb_run_server(
     {
         actual_request++;
 
-      
+ 
         // Accepting a new connection in every socket
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-        
+        struct timeval timer;
+        timer.tv_sec = timeout;  // tempo em segundos
+        timer.tv_usec = 100;  //
+
 
         setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 

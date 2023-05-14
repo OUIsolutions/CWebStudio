@@ -4154,7 +4154,7 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
 static long long  actual_request = 0;
 
-#define CWEB_DEFAULT_TIMEOUT 30
+#define CWEB_DEFAULT_TIMEOUT 2
 
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_SAFTY_MODE false
@@ -5191,25 +5191,34 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
 
         int size = 0;
         unsigned char *content;
-
-
+        bool content_found = false;
+        struct CwebHttpResponse * response;
         content = cweb_load_binary_content("static/favicon.ico", &size);
         if(content != NULL){
-            return cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
+            response = cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
+            content_found = true;
         }
 
         content = cweb_load_binary_content("static/favicon.png", &size);
         if(content != NULL){
-            return cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
+            response = cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
+            content_found = true;
         }
 
 
         content = cweb_load_binary_content("static/favicon.jpg", &size);
         if(content != NULL){
-             return cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
+             response =  cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
+            content_found = true;
         }
 
-        return cweb_send_text("",404);
+        if(!content_found){
+              return cweb_send_text("",404);
+        }
+
+        response->add_header(response,"Cache-Control:", "public, max-age=31536000");
+        return response;
+      
 
     }
     return NULL;
@@ -5232,8 +5241,13 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
         if(path != NULL){
             full_path = path;
         }
+
         char *securyt_path = cweb_replace_string(full_path,"../","");
+
+
+            
         struct CwebHttpResponse * response = cweb_send_file(securyt_path,CWEB_AUTO_SET_CONTENT,200);
+        response->add_header(response,"Cache-Control:", "public, max-age=31536000");
         free(securyt_path);
         return response;
     }
@@ -5459,7 +5473,7 @@ void cweb_run_server(
     int timeout,
     bool single_process){
 
-
+    
     //limpando lixo de memoria
     actual_request = 0;
 
@@ -5507,9 +5521,6 @@ void cweb_run_server(
     #endif
 
     
-    struct timeval timer;
-    timer.tv_sec = timeout;  // tempo em segundos
-    timer.tv_usec = 100;  //
 
 
     printf("Sever is running on port:%d\n", port);
@@ -5518,13 +5529,16 @@ void cweb_run_server(
     {
         actual_request++;
 
-      
+ 
         // Accepting a new connection in every socket
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-        
+        struct timeval timer;
+        timer.tv_sec = timeout;  // tempo em segundos
+        timer.tv_usec = 100;  //
+
 
         setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
