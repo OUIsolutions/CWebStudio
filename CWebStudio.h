@@ -5494,7 +5494,7 @@ void cweb_run_server(
 
     
     // Waiting for connections
-    if (listen(server_fd, 3) < 0)
+    if (listen(server_fd, 1000) < 0)
     {
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
