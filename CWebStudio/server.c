@@ -279,7 +279,7 @@ void cweb_run_server(
             exit(EXIT_FAILURE);
         }
         struct timeval timer;
-        timer.tv_sec = timeout-0.1;  // tempo em segundos
+        timer.tv_sec = timeout-0.2;  // tempo em segundos
         timer.tv_usec =0;  //
 
 
