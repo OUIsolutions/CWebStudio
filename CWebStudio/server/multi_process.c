@@ -166,7 +166,6 @@ void private_cweb_run_server_in_multiprocess(
             exit(EXIT_FAILURE);
         }
 
-
         else{
             close(client_socket);
             cweb_print("Closed Conection with socket %d\n", client_socket);
