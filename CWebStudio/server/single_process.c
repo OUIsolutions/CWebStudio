@@ -44,7 +44,7 @@ void private_cweb_run_server_in_single_process(
     printf("Sever is running on port:%d\n", port);
 
     struct timeval timer;
-    timer.tv_sec = 1;  // tempo em segundos
+    timer.tv_sec = timeout;  // tempo em segundos
     timer.tv_usec = 0;  //
 
 
