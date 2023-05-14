@@ -5509,7 +5509,7 @@ void cweb_run_server(
     
     struct timeval timer;
     timer.tv_sec = timeout;  // tempo em segundos
-    timer.tv_usec = 0;  //
+    timer.tv_usec = 100;  //
 
 
     printf("Sever is running on port:%d\n", port);
