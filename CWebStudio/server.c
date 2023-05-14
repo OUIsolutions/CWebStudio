@@ -279,8 +279,8 @@ void cweb_run_server(
             exit(EXIT_FAILURE);
         }
         struct timeval timer;
-        timer.tv_sec = timeout;  // tempo em segundos
-        timer.tv_usec = 100;  //
+        timer.tv_sec = timeout-0.1;  // tempo em segundos
+        timer.tv_usec =0;  //
 
 
         setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
@@ -297,7 +297,6 @@ void cweb_run_server(
             close(new_socket);
       
 
-         
             cweb_print("Closed Conection with socket %d\n", new_socket);
             #ifdef CWEB_ONCE
                         return;
