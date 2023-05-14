@@ -201,7 +201,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
     unsigned char raw_entries[20000] ={0};
 
     int i = 0;
-
+    printf("\nstart : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
     while (true) {
 
         if (i >= 20000) {
@@ -210,24 +210,25 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
         }
 
         ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
- 
-     
+        
         if (res <= 0) {
             break;
         }
+        printf("%c", raw_entries[i]);
         //line break is \r\n\r\n
         if (i >= 3 &&
             raw_entries[i - 3] == '\r' &&
             raw_entries[i - 2] == '\n' &&
             raw_entries[i - 1] == '\r' &&
-                raw_entries[i] == '\n') {
-     
+                raw_entries[i] == '\n'
+           ){
+            
             break;
         }
         i++;
     
     }
-
+    printf("\nend : <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
     if(i == 0){    
         return READ_ERROR;
         
