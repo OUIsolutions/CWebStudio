@@ -101,6 +101,7 @@ void private_cweb_run_server_in_multiprocess(
         perror("Faluire to bind socket");
         exit(EXIT_FAILURE);
     }
+    
     cweb_print("Port Socket %d\n", port_socket);
 
     // Waiting for connections
@@ -169,6 +170,7 @@ void private_cweb_run_server_in_multiprocess(
         else{
             close(client_socket);
             cweb_print("Closed Conection with socket %d\n", client_socket);
+            //make the parent process ignore the SIGCHLD signal
             signal(SIGCHLD, SIG_IGN);
             continue;
         }
