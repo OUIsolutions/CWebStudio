@@ -99,7 +99,7 @@ void private_cweb_run_server_in_multiprocess(
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0){
         perror("Faluire to bind socket");
-        exit(EXIT_FAILURE);
+        return;
     }
     
     cweb_print("Port Socket %d\n", port_socket);
