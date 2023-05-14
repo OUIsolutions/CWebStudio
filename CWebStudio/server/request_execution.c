@@ -78,6 +78,8 @@ void private_cweb_execute_request(
     char *response_str = response->generate_response(response);
     cweb_print("Response created\n");
 
+
+
     send(socket, response_str, strlen(response_str), MSG_NOSIGNAL);
 
 
@@ -99,6 +101,7 @@ void private_cweb_execute_request(
             sent += res;
         }
     }
+    
     
     free(response_str);
     response->free(response);
