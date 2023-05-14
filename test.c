@@ -1,8 +1,9 @@
 #define CWEB_DEBUG
+
 #include "CWebStudio/CwebStudioMain.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    request->read_content(request,2000);
+    //request->read_content(request,2000);
    return cweb_send_text("Hello World",200);
     
 }

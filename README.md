@@ -427,8 +427,12 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 ## CWEB_NO_STATIC
-when you pass the cweb no static, everything related to the static flag
+when you pass the **CWEB_NO_STATIC** flag, everything related to the static flag
 wont work
+
+## CWEB_NO_CACHE
+When you pass the **CWEB_NO_CACHE**  flag the browser wont cache the 
+static Data
 
 ## CWEB_DEBUG FLAG
 with cweb debug Flag, it will print stages of aplications , like requests, and each stages 

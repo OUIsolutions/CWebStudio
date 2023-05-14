@@ -45,7 +45,7 @@ int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_siz
 
    
     if (self->content_length == 0) {
-        cweb_print("content size is too big\n");
+        cweb_print("no content lenght provided\n");
         return UNDEFINED_CONTENT;
     }
 

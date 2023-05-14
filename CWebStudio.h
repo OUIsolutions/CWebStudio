@@ -4464,7 +4464,7 @@ int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_siz
 
    
     if (self->content_length == 0) {
-        cweb_print("content size is too big\n");
+        cweb_print("no content lenght provided\n");
         return UNDEFINED_CONTENT;
     }
 
@@ -5215,8 +5215,9 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
         if(!content_found){
               return cweb_send_text("",404);
         }
-
-        response->add_header(response,"Cache-Control:", "public, max-age=31536000");
+        #ifndef CWEB_NO_CACHE
+                response->add_header(response,"Cache-Control:", "public, max-age=31536000");
+        #endif
         return response;
       
 
@@ -5247,8 +5248,10 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
             
         struct CwebHttpResponse * response = cweb_send_file(securyt_path,CWEB_AUTO_SET_CONTENT,200);
-        response->add_header(response,"Cache-Control:", "public, max-age=31536000");
-        free(securyt_path);
+        #ifndef CWEB_NO_CACHE
+            response->add_header(response,"Cache-Control:", "public, max-age=31536000");
+        #endif
+            free(securyt_path);
         return response;
     }
     return NULL;
