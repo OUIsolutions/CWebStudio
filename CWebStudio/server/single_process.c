@@ -43,6 +43,11 @@ void private_cweb_run_server_in_single_process(
     // Main loop
     printf("Sever is running on port:%d\n", port);
 
+    struct timeval timer;
+    timer.tv_sec = timeout;  // tempo em segundos
+    timer.tv_usec = 0;  //
+
+
     while (1)
     {
         actual_request++;
@@ -59,10 +64,7 @@ void private_cweb_run_server_in_single_process(
             exit(EXIT_FAILURE);
         }
 
-        struct timeval timer;
-        timer.tv_sec = timeout;  // tempo em segundos
-        timer.tv_usec = 0;  //
-
+      
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
 
