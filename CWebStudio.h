@@ -4154,7 +4154,7 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
 static long long  actual_request = 0;
 
-#define CWEB_DEFAULT_TIMEOUT 2
+#define CWEB_DEFAULT_TIMEOUT 30
 
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_SAFTY_MODE false
