@@ -90,7 +90,6 @@ for iterating over paramns, you can use the object **CwebDict**
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-<<<<<<< HEAD
 
     struct CwebDict *query_paramns = request->params;
     for(int i = 0; i < query_paramns->size; i++){
@@ -107,24 +106,6 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 
 
-=======
-
-    struct CwebDict *query_paramns = request->params;
-    for(int i = 0; i < query_paramns->size; i++){
-        struct CwebKeyVal *key_val = query_paramns->keys_vals[i];
-        char *key = key_val->key;
-        char *value = key_val->value;
-        printf("%s : %s\n", key, value);
-    }
-    return cweb_send_text("Hello World", 200);
-    
-}
-
-CWEB_START_MACRO(5000, main_sever);
-~~~
-
-
->>>>>>> origin/mult_process_new
 ## UrlEncode Paramns
 Cweb Studio also suport url encode paramns, but you need to call the method 
 ** request->read_content** for parsing the body 
@@ -235,13 +216,8 @@ void write_binary_file(char *path, unsigned char *content, int size)
     fwrite(content, sizeof(unsigned char), size, file);
     fclose(file);
 }
-<<<<<<< HEAD
 
 
-=======
-
-
->>>>>>> origin/mult_process_new
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     int two_mega_bytes = 2097152;
     request->read_content(request, two_mega_bytes);
@@ -449,13 +425,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 
 ~~~
-<<<<<<< HEAD
-## CWEB_NO_STATIC
-when you pass the **CWEB_NO_STATIC** flag, everything related to the static flag
-wont work
-=======
-
->>>>>>> origin/mult_process_new
 
 ## CWEB_NO_CACHE
 When you pass the **CWEB_NO_CACHE**  flag the browser wont cache the 

@@ -4154,17 +4154,6 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
 
 struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request);
 
-<<<<<<< HEAD
-static long long  actual_request = 0;
-
-#define CWEB_DEFAULT_TIMEOUT 2
-
-#define CWEB_DANGEROUS_SINGLE_PROCESS true
-#define CWEB_SAFTY_MODE false
-
-
-=======
->>>>>>> origin/mult_process_new
 
 void  private_cweb_execute_request(
     int socket,
@@ -5370,7 +5359,7 @@ void private_cweb_execute_request(
     }
 
     cweb_print("executed client lambda\n");
-    //clear buffer of the socket
+
 
     //means that the main function respond nothing
     if (response == NULL){
@@ -5634,19 +5623,6 @@ void private_cweb_handle_child_termination(int signal) {
 void private_cweb_run_server_in_multiprocess(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-<<<<<<< HEAD
-    int timeout,
-    bool single_process){
-
-    
-    //limpando lixo de memoria
-    actual_request = 0;
-
-
-    int server_fd, new_socket;
-    struct sockaddr_in address = {0};
-    int addrlen = sizeof(address);
-=======
     int function_timeout,
     double client_timeout,
     int max_queue,
@@ -5655,7 +5631,6 @@ void private_cweb_run_server_in_multiprocess(
 ){
 
     int port_socket;
->>>>>>> origin/mult_process_new
 
     // Creating socket file descriptor
     if ((port_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0){
@@ -5680,20 +5655,12 @@ void private_cweb_run_server_in_multiprocess(
 
 
     // Waiting for connections
-<<<<<<< HEAD
-    if (listen(server_fd, 1000) < 0)
-=======
     if (listen(port_socket, max_queue) < 0)
->>>>>>> origin/mult_process_new
     {
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
     }
     
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/mult_process_new
 
     // Main loop
     printf("Sever is running on port:%d\n", port);
@@ -5720,10 +5687,6 @@ void private_cweb_run_server_in_multiprocess(
         actual_request++;
         total_requests++;
 
-<<<<<<< HEAD
- 
-=======
->>>>>>> origin/mult_process_new
         // Accepting a new connection in every socket
         int client_socket = accept(
             port_socket,
@@ -5735,12 +5698,6 @@ void private_cweb_run_server_in_multiprocess(
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-<<<<<<< HEAD
-        struct timeval timer;
-        timer.tv_sec = timeout-0.2;  // tempo em segundos
-        timer.tv_usec =0;  //
-
-=======
         cweb_print("client_socket: %d\n", client_socket);
     
         pid_t pid = fork();
@@ -5748,7 +5705,6 @@ void private_cweb_run_server_in_multiprocess(
             
             // creates an new socket and parse the request to the new socket
             int new_socket = dup(client_socket);
->>>>>>> origin/mult_process_new
 
 
 
@@ -5758,14 +5714,6 @@ void private_cweb_run_server_in_multiprocess(
             timer.tv_usec =(long)((client_timeout - seconds) * 1000000);
 
 
-<<<<<<< HEAD
-            cweb_print("Closed Conection with socket %d\n", new_socket);
-            #ifdef CWEB_ONCE
-                        return;
-            #endif
-        }
-=======
->>>>>>> origin/mult_process_new
 
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
