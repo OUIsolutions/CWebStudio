@@ -47,11 +47,11 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 int main(int argc, char *argv[]){
-     
-     struct CwebSever *sever = newCwebSever(300, main_sever);
+
+   
+     struct CwebSever *sever = newCwebSever(5000, main_sever);
      sever->start(sever);
      sever->free(sever);
-
 }
 ~~~
 
@@ -79,16 +79,12 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-CWEB_START_MACRO(5001, main_sever);
+CWEB_START_MACRO(50010, main_sever);
 ~~~
 ## Iterating over query Paramns 
 
-for iterating over paramns, you can use the object **CwebDict** , note that
-even urlencoded is consider as paramn, so you dont need to care about it 
-
+for iterating over paramns, you can use the object **CwebDict** 
 ~~~c
-
-
 
 #include "CWebStudio.h"
 
@@ -106,8 +102,34 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
+CWEB_START_MACRO(5000, main_sever);
+~~~
+
+
+## UrlEncode Paramns
+Cweb Studio also suport url encode paramns, but you need to call the method 
+** request->read_content** for parsing the body 
+~~~c
+
+#include "CWebStudio.h"
+
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+    request->read_content(request, 20000);
+    struct CwebDict *query_paramns = request->params;
+    for(int i = 0; i < query_paramns->size; i++){
+        struct CwebKeyVal *key_val = query_paramns->keys_vals[i];
+        char *key = key_val->key;
+        char *value = key_val->value;
+        printf("%s : %s\n", key, value);
+    }
+    return cweb_send_text("Hello World", 200);
+    
+}
+
 CWEB_START_MACRO(5001, main_sever);
 ~~~
+
 
 ## Iterating over Headders
 
@@ -134,12 +156,14 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 
 ## Reading body Content 
-you can acess the body content in these way 
+you can acess the body content by calling the function **request->read_content**
+after it , it would be acessible by the **request->content** and **request->content_length**
 
 ~~~c
 #include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-
+    int one_mega_byte = 1048576;
+    request->read_content(request, one_mega_byte);
     unsigned char *body = request->content;
     int size = request->content_length;
 
@@ -158,7 +182,8 @@ https://github.com/DaveGamble/cJSON
 ~~~c
 #include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-
+    int one_mega_byte = 1048576;
+    request->read_content(request, one_mega_byte);
     unsigned char *body = request->content;
     int size = request->content_length;
 
@@ -185,14 +210,24 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~c
 
 #include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+void write_binary_file(char *path, unsigned char *content, int size)
+{
+    FILE *file = fopen(path, "wb");
+    fwrite(content, sizeof(unsigned char), size, file);
+    fclose(file);
+}
 
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+    int two_mega_bytes = 2097152;
+    request->read_content(request, two_mega_bytes);
     unsigned char *body = request->content;
+    char *name = request->get_param(request, "name");
     int size = request->content_length;
 
-    dtw_write_any_content("test.png", body, size);
+    write_binary_file(name, body, size);
 
-    return cweb_send_text("Hello World", 200);
+    return cweb_send_text("File Written", 200);
     
 }
 
@@ -388,10 +423,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }  
 
 CWEB_START_MACRO(5001, main_sever);
+
 ~~~
-## CWEB_NO_STATIC
-when you pass the cweb no static, everything related to the static flag
-wont work
+
 
 ## CWEB_DEBUG FLAG
 with cweb debug Flag, it will print stages of aplications , like requests, and each stages 
@@ -407,86 +441,71 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 CWEB_START_MACRO(5001, main_sever);
 ~~~
-# Paramns 
-With Paramns Flags you can define comportaments of the sever, each flags define one atributes<br>
 
+# CWEB_ONCE
 
-### Single Processo
-<b style="color:red;">DONT USE THESE FLAG IF YOU DONT NEED </b><br>
-the single process param will execute your code in an single process, and if happen some 
-error, your aplicantion will crash, so, if you will use these flag, ensure that there is no error on your aplication, and use only if you are on an embed system that dont allow multprocess
+use these flag to execute the function only one time, it will be usefull for
+valgrind and other memory tools
 
 ~~~c
-#define CWEB_DEBUG
+#define CWEB_ONCE
 #include "CWebStudio.h"
+
+
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-
-    if(strcmp(request->route, "/test") == 0){
-        ///making an error
-        int x = 1/0;
-        //Your application will crash here if you are using single process
-        //because the error is not handled
-    }
+    
     return cweb_send_text("Hello World", 200);
-
+    
 }
 
 int main(){
-    cweb_run_server(
-            5000,
-            main_sever,
-            CWEB_DEFAULT_TIMEOUT,
-            CWEB_DANGEROUS_SINGLE_PROCESS
-            );
+    struct CwebSever *sever = newCwebSever(3001, main_sever);
+    sever->single_process = CWEB_DANGEROUS_SINGLE_PROCESS;
+    sever->start(sever);
+    sever->free(sever);
+    return 0;
 }
 ~~~
 
-If you dont need , is higly recomended you use the safify mode 
+## Sever Paramns 
 
-~~~c 
-#define CWEB_DEBUG
+You can use a lot of paramns into the sever for defining diferent comportaments 
+
+~~~c
+
 #include "CWebStudio.h"
+
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-
-    if(strcmp(request->route, "/test") == 0){
-        ///making an error
-        int x = 1/0;
-        //Your application wont crash here if you are using safity mode
-    }
+    
     return cweb_send_text("Hello World", 200);
-
+    
 }
 
 int main(){
-    cweb_run_server(
-            5000,
-            main_sever,
-            CWEB_DEFAULT_TIMEOUT,
-            CWEB_SAFTY_MODE
-    );
-}
-~~~
-### Timeout 
-you can set the max timeout your aplication will deal, if is the function takes more 
-than that time , the sever will return 500, the default time its 30 seconds
-~~~c 
-#define CWEB_DEBUG
-#include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+    struct CwebSever *sever = newCwebSever(3001, main_sever);
+    //the higher time of the request handler 
+    //after that , the sever will return 500 
+    // these is useful to prevent the server infinite loop
+    sever->function_timeout = 30;
+    //the higher time of the client
+    //after that , the sever will return 408
+    //these is useful to prevent invalid requests
+    sever->client_timeout = 5;
 
-    return cweb_send_text("Hello World", 200);
+    //the max queue of the server
+    sever->max_queue = 100;
+    //if true , the server will run in single process
+    sever->single_process = false;
+    //the max simultaneous requests
+    sever->max_requests = 1000;
+    //if true , the server will use the static files located into the folder "static"
+    sever->use_static = true;
 
+    sever->start(sever);
+    sever->free(sever);
+    return 0;
 }
 
-int main(){
-    int timeout = 2;
-    cweb_run_server(
-            5000,
-            main_sever,
-            timeout,
-            CWEB_SAFTY_MODE
-    );
-}
 ~~~
 
 
