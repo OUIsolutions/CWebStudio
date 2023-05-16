@@ -4,7 +4,7 @@ void private_cweb_run_server_in_single_process(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
-    int max_queue
+    long max_queue
 ){
 
 

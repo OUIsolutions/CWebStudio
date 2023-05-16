@@ -71,13 +71,20 @@ void private_cweb_execute_request_in_safty_mode(
     }
     
 }
+void handle_child_termination(int signal) {
+    pid_t terminated_child;
+    int status;
+    while ((terminated_child = waitpid(-1, &status, WNOHANG)) > 0) {
+        total_requests--;
+    }
+}
 
 void private_cweb_run_server_in_multiprocess(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     int timeout,
-    int max_process,
-    int max_queue
+    long max_queue,
+    long max_requests
 ){
 
     int port_socket;
@@ -102,7 +109,7 @@ void private_cweb_run_server_in_multiprocess(
         return;
     }
     
-    cweb_print("Port Socket %d\n", port_socket);
+
 
     // Waiting for connections
     if (listen(port_socket, max_queue) < 0)
@@ -115,9 +122,27 @@ void private_cweb_run_server_in_multiprocess(
     // Main loop
     printf("Sever is running on port:%d\n", port);
 
+
+
+    bool informed_mensage= false;
     while (true)
     {
+
+        if(total_requests >= max_requests){
+
+            if(!informed_mensage){
+                printf("max requests reached\n");
+                informed_mensage = true;
+            }
+
+            continue;
+        }
+
+        cweb_print("total request  runing %li\n",total_requests);
+
+        informed_mensage = false;
         actual_request++;
+        total_requests++;
 
         // Accepting a new connection in every socket
         int client_socket = accept(
@@ -143,7 +168,7 @@ void private_cweb_run_server_in_multiprocess(
             timer.tv_sec = timeout;  // tempo em segundos
             timer.tv_usec = 0;  //
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
-            
+
             cweb_print("----------------------------------------\n");
             cweb_print("Executing request:%lld\n", actual_request);
             cweb_print("Socket: %d\n", new_socket);
@@ -171,7 +196,7 @@ void private_cweb_run_server_in_multiprocess(
             close(client_socket);
             cweb_print("Closed Conection with socket %d\n", client_socket);
             //make the parent process ignore the SIGCHLD signal
-            signal(SIGCHLD, SIG_IGN);
+            signal(SIGCHLD, handle_child_termination);
             continue;
         }
         
