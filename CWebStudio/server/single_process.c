@@ -3,8 +3,8 @@
 void private_cweb_run_server_in_single_process(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    int timeout,
-    long max_queue
+    double client_timeout,
+    int max_queue
 ){
 
 
@@ -43,9 +43,16 @@ void private_cweb_run_server_in_single_process(
     // Main loop
     printf("Sever is running on port:%d\n", port);
 
+
+
+
+
+
     struct timeval timer;
-    timer.tv_sec = timeout;  // tempo em segundos
-    timer.tv_usec = 0;  //
+    long seconds =  (long)client_timeout;
+    timer.tv_sec =  seconds ;  // tempo em segundos
+    timer.tv_usec =(long)((client_timeout - seconds) * 1000000);
+
 
 
     while (1)

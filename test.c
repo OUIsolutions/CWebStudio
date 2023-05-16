@@ -1,8 +1,9 @@
+#include <stdio.h>
+
 #define CWEB_DEBUG
-#include "CWebStudio.h"
+#include "CWebStudio/CwebStudioMain.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    sleep(10);
     char *route = request->route;
     char mensage[1000];
     sprintf(mensage,"Route Passed: %s",route);
@@ -11,17 +12,22 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 int main(){
+
     for(int i =3000;i< 4000;i++){
 
      cweb_run_server(
              i,
              main_sever,
-             20,
+             1,
+             0.1,
              CWEB_DEFAULT_MAX_QUEUE,
              CWEB_SAFTY_MODE,
              CWEB_DEAFAULT_MAX_REQUESTS
              );
 
     }
+
+
+
 
 }

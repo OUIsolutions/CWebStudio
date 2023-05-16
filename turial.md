@@ -28,11 +28,13 @@ Web Aplications are Stateless , witch means its impossible, to store programn st
 in variable, so, there is just 3 ways for making an aplication works.
 
 
-
 1 You store the state of aplications in an database or in an markup language like XML or JSON 
 
 
 2 You store the state of aplications in the client side, using cookies/localstorage 
+
+
+
 
 3 You store the state of aplications in same document, using an hidden input 
 
