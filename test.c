@@ -26,9 +26,9 @@ int main(){
     //the max queue of the server
     sever->max_queue = 100;
     //if true , the server will run in single process
-    sever->single_process =false;
+    sever->single_process =true;
     //the max simultaneous requests
-    sever->max_requests = 10;
+    sever->max_requests = 1;
     //if true , the server will use the static files located into the folder "static"
     sever->use_static = true;
     sever->start(sever);
