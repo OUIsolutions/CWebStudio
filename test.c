@@ -1,26 +1,19 @@
-#include <stdio.h>
 
-#define CWEB_DEBUG
-#include "CWebStudio/CwebStudioMain.h"
+
+#include "CWebStudio.h"
+
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    char *route = request->route;
-    char mensage[1000];
-    sprintf(mensage,"Route Passed: %s",route);
-    struct CwebHttpResponse *response = cweb_send_text(mensage,200);
-    return response;
-}
 
-int main(){
-
-    for(int i =3000;i< 4000;i++){
-
-     struct CwebSever *sever = newCwebSever(i, main_sever);
-     sever->start(sever);
-     sever->free(sever);
+    struct CwebDict *query_paramns = request->params;
+    for(int i = 0; i < query_paramns->size; i++){
+        struct CwebKeyVal *key_val = query_paramns->keys_vals[i];
+        char *key = key_val->key;
+        char *value = key_val->value;
+        printf("%s : %s\n", key, value);
     }
-
-
-
-
+    return cweb_send_text("Hello World", 200);
+    
 }
+
+CWEB_START_MACRO(5001, main_sever);

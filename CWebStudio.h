@@ -4154,20 +4154,11 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
 
 struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request);
 
-static long long  actual_request = 0;
-static long total_requests = 0;
-
-#define CWEB_DEFAULT_TIMEOUT 30
-
-#define CWEB_DEFAULT_MAX_QUEUE 100
-#define CWEB_DANGEROUS_SINGLE_PROCESS true
-#define CWEB_SAFTY_MODE false
-#define CWEB_DEAFAULT_MAX_REQUESTS 1000
-
 
 void  private_cweb_execute_request(
     int socket,
-    struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request)
+    struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
+    bool use_static
 );
 
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket);
@@ -4178,46 +4169,78 @@ void private_cweb_treat_response(int new_socket);
 
 
 
-
-
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
-    int time_out,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
+    int function_timeout,
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+    bool use_static
 );
 
+
+
 void private_cweb_handle_child_termination(int signal);
-
-
 
 
 
 void private_cweb_run_server_in_multiprocess(
         int port,
         struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-        int timeout,
-        long max_queue,
-        long max_requests
+        int function_timeout,
+        double client_timeout,
+        int max_queue,
+        long max_requests,
+        bool use_static
 );
+
+
 
 void private_cweb_run_server_in_single_process(
         int port,
         struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-        int timeout,
-        long  max_queue
+        double client_timeout,
+        int  max_queue,
+        bool use_static
 );
 
-void cweb_run_server(
-    int port,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    int timeout,
-    long max_queue,
-    bool single_process,
-    long max_requests
-    );
+
+
+
+
+static long long  actual_request = 0;
+static long total_requests = 0;
+
+#define CWEB_DANGEROUS_SINGLE_PROCESS true
+#define CWEB_NO_STATIC false;
+
+ struct CwebSever{
+    int port;
+    int function_timeout;
+    double client_timeout;
+    int max_queue;
+    bool single_process;
+    long max_requests;
+    bool use_static;
+
+    //methods
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request);
+    void (*start)(struct  CwebSever *self);
+    void (*free)(struct  CwebSever *self);
+};
+
+
+
+
+struct CwebSever *newCwebSever(int port , struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request));
+void private_cweb_run_sever(struct  CwebSever *self);
+void private_cweb_free_sever(struct CwebSever *self);
+
+
+
 #define CWEB_START_MACRO(port, caller)\
 int main() {\
-cweb_run_server((port), (caller),CWEB_DEFAULT_TIMEOUT,CWEB_DEFAULT_MAX_QUEUE,);\
+     struct CwebSever *sever = newCwebSever(port, caller);\
+     sever->start(sever);\
+     sever->free(sever);\
 return 0;\
 }
 
@@ -5274,7 +5297,8 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
 void private_cweb_execute_request(
     int socket,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+    bool use_static
     ){
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = cweb_request_constructor(socket);
@@ -5305,14 +5329,17 @@ void private_cweb_execute_request(
 
 
     struct CwebHttpResponse *response;
-    #ifndef CWEB_NO_STATIC
+    if(use_static){
         response = private_cweb_generate_static_response(request);
         if(response == NULL){
             response = request_handler(request);
         }
-    #else
+    }
+
+    else{
         response = request_handler(request);
-    #endif
+
+    }
 
     cweb_print("executed client lambda\n");
 
@@ -5320,8 +5347,7 @@ void private_cweb_execute_request(
     //means that the main function respond nothing
     if (response == NULL){
 
-        #ifndef CWEB_NO_STATIC
-
+        if(use_static){
             char *formated_html = cweb_load_string_file_content("static/404.html");
             if(formated_html != NULL){
                 response = cweb_send_var_html_cleaning_memory(
@@ -5334,15 +5360,14 @@ void private_cweb_execute_request(
                         404
                 );
             }
-
-        #else
-
+        }
+        else{
             response = cweb_send_text(
                     "Error 404",
                     404
             );
 
-        #endif
+        }
 
 
     }
@@ -5401,8 +5426,9 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
 void private_cweb_run_server_in_single_process(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    int timeout,
-    long max_queue
+    double client_timeout,
+    int max_queue,
+    bool use_static
 ){
 
 
@@ -5441,9 +5467,16 @@ void private_cweb_run_server_in_single_process(
     // Main loop
     printf("Sever is running on port:%d\n", port);
 
+
+
+
+
+
     struct timeval timer;
-    timer.tv_sec = timeout;  // tempo em segundos
-    timer.tv_usec = 0;  //
+    long seconds =  (long)client_timeout;
+    timer.tv_sec =  seconds ;  // tempo em segundos
+    timer.tv_usec =(long)((client_timeout - seconds) * 1000000);
+
 
 
     while (1)
@@ -5472,7 +5505,7 @@ void private_cweb_run_server_in_single_process(
 
 
     
-        private_cweb_execute_request(client_socket,request_handler);
+        private_cweb_execute_request(client_socket,request_handler,use_static);
 
 
         close(client_socket);
@@ -5534,8 +5567,9 @@ void private_cweb_treat_response(int new_socket){
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
-    int time_out,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
+    int function_timeout,
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+    bool use_static
 )
 {
     cweb_print("Creating a new process\n");
@@ -5543,8 +5577,8 @@ void private_cweb_execute_request_in_safty_mode(
     if (pid == 0){
         // means that the process is the child
       
-        alarm(time_out);
-        private_cweb_execute_request(new_socket,request_handler);
+        alarm(function_timeout);
+        private_cweb_execute_request(new_socket,request_handler,use_static);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -5572,9 +5606,11 @@ void private_cweb_handle_child_termination(int signal) {
 void private_cweb_run_server_in_multiprocess(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    int timeout,
-    long max_queue,
-    long max_requests
+    int function_timeout,
+    double client_timeout,
+    int max_queue,
+    long max_requests,
+    bool use_static
 ){
 
     int port_socket;
@@ -5653,10 +5689,15 @@ void private_cweb_run_server_in_multiprocess(
             // creates an new socket and parse the request to the new socket
             int new_socket = dup(client_socket);
 
-            
+
+
             struct timeval timer;
-            timer.tv_sec = timeout;  // tempo em segundos
-            timer.tv_usec = 0;  //
+            long seconds =  (long)client_timeout;
+            timer.tv_sec =  seconds ;  // tempo em segundos
+            timer.tv_usec =(long)((client_timeout - seconds) * 1000000);
+
+
+
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
 
@@ -5667,8 +5708,9 @@ void private_cweb_run_server_in_multiprocess(
 
             private_cweb_execute_request_in_safty_mode(
                 new_socket,
-                timeout,
-                request_handler
+                function_timeout,
+                request_handler,
+                use_static
             );
 
             close(new_socket);
@@ -5696,34 +5738,47 @@ void private_cweb_run_server_in_multiprocess(
 }
 
 
-void cweb_run_server(
-        int port,
-        struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-        int timeout,
-        long max_queue,
-        bool single_process,
-        long max_requests
-){
+struct CwebSever * newCwebSever(int port , struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)){
+    struct CwebSever *self = (struct  CwebSever*) malloc(sizeof (struct CwebSever));
+    self->port = port;
+    self->function_timeout = 30;
+    self->client_timeout = 5;
+    self->max_queue = 100;
+    self->single_process = false;
+    self->max_requests = 1000;
+    self->use_static = true;
+    self->request_handler = request_handler;
+    self->start = private_cweb_run_sever;
+    self->free = private_cweb_free_sever;
+    return self;
+}
 
-    if (single_process){
+
+void private_cweb_run_sever(struct  CwebSever *self){
+    if (self->single_process){
 
         private_cweb_run_server_in_single_process(
-            port,
-            request_handler,
-            timeout,
-            max_queue
+            self->port,
+            self->request_handler,
+            self->client_timeout,
+            self->max_queue,
+            self->use_static
         );
     }
 
     else{
         private_cweb_run_server_in_multiprocess(
-            port,
-            request_handler,
-            timeout,
-            max_queue,
-            max_requests
+            self->port,
+            self->request_handler,
+            self->function_timeout,
+            self->client_timeout,
+            self->max_queue,
+            self->max_requests,
+            self->use_static
         );
     }
 }
-
+void private_cweb_free_sever(struct CwebSever *self){
+    free(self);
+}
 #endif
