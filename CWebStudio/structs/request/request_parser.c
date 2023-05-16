@@ -201,17 +201,14 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
     unsigned char raw_entries[20000] ={0};
 
     int i = 0;
-
     while (true) {
 
         if (i >= 20000) {
-            printf("Tamanho de i: %i\n", i);
             return MAX_HEADER_SIZE;
         }
 
         ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
- 
-     
+        
         if (res <= 0) {
             break;
         }
@@ -220,14 +217,14 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
             raw_entries[i - 3] == '\r' &&
             raw_entries[i - 2] == '\n' &&
             raw_entries[i - 1] == '\r' &&
-                raw_entries[i] == '\n') {
-     
+                raw_entries[i] == '\n'
+           ){
+            
             break;
         }
         i++;
     
     }
-
     if(i == 0){    
         return READ_ERROR;
         

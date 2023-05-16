@@ -1,6 +1,8 @@
 #define CWEB_START_MACRO(port, caller)\
 int main() {\
-cweb_run_server((port), (caller),CWEB_DEFAULT_TIMEOUT,CWEB_SAFTY_MODE);\
+     struct CwebSever *sever = newCwebSever(port, caller);\
+     sever->start(sever);\
+     sever->free(sever);\
 return 0;\
 }
 

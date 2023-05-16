@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+
 #ifndef __CWEBSTUDIO_H
 #define __CWEBSTUDIO_H
 
@@ -35,6 +36,7 @@ SOFTWARE.
 #include <string.h>
 #include <sys/socket.h>
 #include <signal.h>
+#include <sys/resource.h>
 
 
 #include <arpa/inet.h>
@@ -58,7 +60,8 @@ SOFTWARE.
 #include "headers/request.h"
 #include "headers/static.h"
 
-#include "headers/server.h"
+#include "headers/sever_functions.h"
+#include "headers/sever.h"
 #include "headers/main_macro.h"
 
 #include "strings.c"
@@ -71,6 +74,9 @@ SOFTWARE.
 #include "structs/dict.c"
 #include "structs/response.c"
 #include "static.c"
-#include "server.c"
+#include "server/request_execution.c"
+#include "server/single_process.c"
+#include "server/multi_process.c"
+#include "server/server.c"
 
 #endif
