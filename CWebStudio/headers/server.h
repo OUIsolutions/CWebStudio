@@ -31,15 +31,10 @@ void private_cweb_execute_request_in_safty_mode(
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
 );
 
+void private_cweb_handle_child_termination(int signal);
 
 
 
-void private_cweb_run_server_in_single_process(
-    int port,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    int timeout,
-    long  max_queue
-);
 
 
 void private_cweb_run_server_in_multiprocess(
@@ -50,6 +45,12 @@ void private_cweb_run_server_in_multiprocess(
         long max_requests
 );
 
+void private_cweb_run_server_in_single_process(
+        int port,
+        struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+        int timeout,
+        long  max_queue
+);
 
 void cweb_run_server(
     int port,

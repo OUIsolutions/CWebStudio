@@ -71,7 +71,7 @@ void private_cweb_execute_request_in_safty_mode(
     }
     
 }
-void handle_child_termination(int signal) {
+void private_cweb_handle_child_termination(int signal) {
     pid_t terminated_child;
     int status;
     while ((terminated_child = waitpid(-1, &status, WNOHANG)) > 0) {
@@ -169,6 +169,7 @@ void private_cweb_run_server_in_multiprocess(
             timer.tv_usec = 0;  //
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
+
             cweb_print("----------------------------------------\n");
             cweb_print("Executing request:%lld\n", actual_request);
             cweb_print("Socket: %d\n", new_socket);
@@ -196,7 +197,7 @@ void private_cweb_run_server_in_multiprocess(
             close(client_socket);
             cweb_print("Closed Conection with socket %d\n", client_socket);
             //make the parent process ignore the SIGCHLD signal
-            signal(SIGCHLD, handle_child_termination);
+            signal(SIGCHLD, private_cweb_handle_child_termination);
             continue;
         }
         
