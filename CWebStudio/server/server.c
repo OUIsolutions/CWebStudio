@@ -1,33 +1,43 @@
 
 
+struct CwebSever * neCwebSever(int port , struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)){
+    struct CwebSever *self = (struct  CwebSever*) malloc(sizeof (struct CwebSever));
+    self->port = port;
+    self->function_timeout = 30;
+    self->client_timeout = 5;
+    self->max_queue = 100;
+    self->single_process = false;
+    self->max_requests = 1000;
 
-void cweb_run_server(
-        int port,
-        struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-        int function_timeout,
-        double client_timeout,
-        int max_queue,
-        bool single_process,
-        long max_requests
-){
-    if (single_process){
+    self->request_handler = request_handler;
+    self->start = private_cweb_run_sever;
+    self->free = private_cweb_free_sever;
+    return self;
+}
+
+
+void private_cweb_run_sever(struct  CwebSever *self){
+    if (self->single_process){
 
         private_cweb_run_server_in_single_process(
-            port,
-            request_handler,
-            client_timeout,
-            max_queue
+            self->port,
+            self->request_handler,
+            self->client_timeout,
+            self->max_queue
         );
     }
 
     else{
         private_cweb_run_server_in_multiprocess(
-            port,
-            request_handler,
-            function_timeout,
-            client_timeout,
-            max_queue,
-            max_requests
+            self->port,
+            self->request_handler,
+            self->function_timeout,
+            self->client_timeout,
+            self->max_queue,
+            self->max_requests
         );
     }
+}
+void private_cweb_free_sever(struct CwebSever *self){
+    free(self);
 }

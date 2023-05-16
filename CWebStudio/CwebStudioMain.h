@@ -60,7 +60,8 @@ SOFTWARE.
 #include "headers/request.h"
 #include "headers/static.h"
 
-#include "headers/server.h"
+#include "headers/sever_functions.h"
+#include "headers/sever.h"
 #include "headers/main_macro.h"
 
 #include "strings.c"

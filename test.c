@@ -15,16 +15,9 @@ int main(){
 
     for(int i =3000;i< 4000;i++){
 
-     cweb_run_server(
-             i,
-             main_sever,
-             1,
-             0.1,
-             CWEB_DEFAULT_MAX_QUEUE,
-             CWEB_SAFTY_MODE,
-             CWEB_DEAFAULT_MAX_REQUESTS
-             );
-
+     struct CwebSever *sever = neCwebSever(i,main_sever);
+     sever->start(sever);
+     sever->free(sever);
     }
 
 
