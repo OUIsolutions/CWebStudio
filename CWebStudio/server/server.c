@@ -8,7 +8,7 @@ struct CwebSever * neCwebSever(int port , struct CwebHttpResponse *(*request_han
     self->max_queue = 100;
     self->single_process = false;
     self->max_requests = 1000;
-
+    self->use_static = true;
     self->request_handler = request_handler;
     self->start = private_cweb_run_sever;
     self->free = private_cweb_free_sever;
@@ -23,7 +23,8 @@ void private_cweb_run_sever(struct  CwebSever *self){
             self->port,
             self->request_handler,
             self->client_timeout,
-            self->max_queue
+            self->max_queue,
+            self->use_static
         );
     }
 
@@ -34,7 +35,8 @@ void private_cweb_run_sever(struct  CwebSever *self){
             self->function_timeout,
             self->client_timeout,
             self->max_queue,
-            self->max_requests
+            self->max_requests,
+            self->use_static
         );
     }
 }

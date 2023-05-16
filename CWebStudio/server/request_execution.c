@@ -2,7 +2,8 @@
 
 void private_cweb_execute_request(
     int socket,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+    bool use_static
     ){
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = cweb_request_constructor(socket);
@@ -33,14 +34,17 @@ void private_cweb_execute_request(
 
 
     struct CwebHttpResponse *response;
-    #ifndef CWEB_NO_STATIC
+    if(use_static){
         response = private_cweb_generate_static_response(request);
         if(response == NULL){
             response = request_handler(request);
         }
-    #else
+    }
+
+    else{
         response = request_handler(request);
-    #endif
+
+    }
 
     cweb_print("executed client lambda\n");
 
@@ -48,8 +52,7 @@ void private_cweb_execute_request(
     //means that the main function respond nothing
     if (response == NULL){
 
-        #ifndef CWEB_NO_STATIC
-
+        if(use_static){
             char *formated_html = cweb_load_string_file_content("static/404.html");
             if(formated_html != NULL){
                 response = cweb_send_var_html_cleaning_memory(
@@ -62,15 +65,14 @@ void private_cweb_execute_request(
                         404
                 );
             }
-
-        #else
-
+        }
+        else{
             response = cweb_send_text(
                     "Error 404",
                     404
             );
 
-        #endif
+        }
 
 
     }

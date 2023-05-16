@@ -45,7 +45,8 @@ void private_cweb_treat_response(int new_socket){
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
     int function_timeout,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)
+    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+    bool use_static
 )
 {
     cweb_print("Creating a new process\n");
@@ -54,7 +55,7 @@ void private_cweb_execute_request_in_safty_mode(
         // means that the process is the child
       
         alarm(function_timeout);
-        private_cweb_execute_request(new_socket,request_handler);
+        private_cweb_execute_request(new_socket,request_handler,use_static);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -85,7 +86,8 @@ void private_cweb_run_server_in_multiprocess(
     int function_timeout,
     double client_timeout,
     int max_queue,
-    long max_requests
+    long max_requests,
+    bool use_static
 ){
 
     int port_socket;
@@ -170,7 +172,7 @@ void private_cweb_run_server_in_multiprocess(
             long seconds =  (long)client_timeout;
             timer.tv_sec =  seconds ;  // tempo em segundos
             timer.tv_usec =(long)((client_timeout - seconds) * 1000000);
-            printf("tempo : %li l%i\n");
+
 
 
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
@@ -184,7 +186,8 @@ void private_cweb_run_server_in_multiprocess(
             private_cweb_execute_request_in_safty_mode(
                 new_socket,
                 function_timeout,
-                request_handler
+                request_handler,
+                use_static
             );
 
             close(new_socket);
