@@ -7,6 +7,7 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
         unsigned char *content;
         bool content_found = false;
         struct CwebHttpResponse * response;
+        
         content = cweb_load_binary_content("static/favicon.ico", &size);
         if(content != NULL){
             response = cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
