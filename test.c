@@ -1,5 +1,5 @@
 #define CWEB_DEBUG
-#include "CWebStudio/CwebStudioMain.h"
+#include "CWebStudio.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     sleep(10);
