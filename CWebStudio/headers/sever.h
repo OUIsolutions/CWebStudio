@@ -13,7 +13,10 @@ static long total_requests = 0;
     int max_queue;
     bool single_process;
     long max_requests;
+    
     bool use_static;
+    int max_cache_age;
+    bool use_smart_cache;
 
     //methods
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request);

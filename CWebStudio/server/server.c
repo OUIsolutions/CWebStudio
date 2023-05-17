@@ -8,7 +8,11 @@ struct CwebSever * newCwebSever(int port , struct CwebHttpResponse *(*request_ha
     self->max_queue = 100;
     self->single_process = false;
     self->max_requests = 1000;
+
     self->use_static = true;
+    self->max_cache_age = CWEB_ONE_HOUR;
+    self->use_smart_cache = true;
+    
     self->request_handler = request_handler;
     self->start = private_cweb_run_sever;
     self->free = private_cweb_free_sever;
