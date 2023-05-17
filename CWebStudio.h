@@ -4148,17 +4148,23 @@ void private_cweb_free_http_request(struct CwebHttpRequest *self);
 
 void private_cweb_represent_http_request(struct CwebHttpRequest *self);
 
-
+#define CWEB_ONE_MINUTE 60
+#define CWEB_ONE_HOUR 3600
+#define CWEB_ONE_DAY 86400
+#define CWEB_ONE_WEEK 604800
+#define CWEB_ONE_MONTH 2592000
+#define CWEB_ONE_YEAR 31536000
 
 struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request);
 
-struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request);
+struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,long max_cache_age);
 
 
 void  private_cweb_execute_request(
     int socket,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
-    bool use_static
+    bool use_static,
+    long max_cache_age
 );
 
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket);
@@ -4173,7 +4179,8 @@ void private_cweb_execute_request_in_safty_mode(
     int new_socket,
     int function_timeout,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    bool use_static
+    bool use_static,
+    long max_cache_age
 );
 
 
@@ -4189,7 +4196,8 @@ void private_cweb_run_server_in_multiprocess(
         double client_timeout,
         int max_queue,
         long max_requests,
-        bool use_static
+        bool use_static,
+        long max_cache_age
 );
 
 
@@ -4199,7 +4207,8 @@ void private_cweb_run_server_in_single_process(
         struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
         double client_timeout,
         int  max_queue,
-        bool use_static
+        bool use_static,
+        long max_cache_age
 );
 
 
@@ -4219,7 +4228,10 @@ static long total_requests = 0;
     int max_queue;
     bool single_process;
     long max_requests;
+    
     bool use_static;
+    int max_cache_age;
+    bool use_smart_cache;
 
     //methods
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request);
@@ -5245,6 +5257,7 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
         unsigned char *content;
         bool content_found = false;
         struct CwebHttpResponse * response;
+        
         content = cweb_load_binary_content("static/favicon.ico", &size);
         if(content != NULL){
             response = cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
@@ -5267,9 +5280,7 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
         if(!content_found){
               return cweb_send_text("",404);
         }
-        #ifndef CWEB_NO_CACHE
-                response->add_header(response,"Cache-Control:", "public, max-age=31536000");
-        #endif
+
         return response;
       
 
@@ -5277,7 +5288,7 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
     return NULL;
 }
 
-struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request){
+struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,long max_cache_age){
 
     struct CwebHttpResponse * icon_response = private_cweb_treat_five_icon(request);
 
@@ -5300,10 +5311,13 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
             
         struct CwebHttpResponse * response = cweb_send_file(securyt_path,CWEB_AUTO_SET_CONTENT,200);
-        #ifndef CWEB_NO_CACHE
-            response->add_header(response,"Cache-Control:", "public, max-age=31536000");
-        #endif
-            free(securyt_path);
+        if(max_cache_age > 0){
+            char response_code[40] = "";
+            sprintf(response_code, "public max-age=%ld", max_cache_age);
+            response->add_header(response,"Cache-Control:", response_code);
+        }
+        
+        free(securyt_path);
         return response;
     }
     return NULL;
@@ -5315,7 +5329,8 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 void private_cweb_execute_request(
     int socket,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    bool use_static
+    bool use_static,
+    long max_cache_age
     ){
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = cweb_request_constructor(socket);
@@ -5347,7 +5362,7 @@ void private_cweb_execute_request(
 
     struct CwebHttpResponse *response;
     if(use_static){
-        response = private_cweb_generate_static_response(request);
+        response = private_cweb_generate_static_response(request,max_cache_age);
         if(response == NULL){
             response = request_handler(request);
         }
@@ -5445,7 +5460,8 @@ void private_cweb_run_server_in_single_process(
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     double client_timeout,
     int max_queue,
-    bool use_static
+    bool use_static,
+    long max_cache_age
 ){
 
 
@@ -5522,7 +5538,7 @@ void private_cweb_run_server_in_single_process(
 
 
     
-        private_cweb_execute_request(client_socket,request_handler,use_static);
+        private_cweb_execute_request(client_socket,request_handler,use_static,max_cache_age);
 
 
         close(client_socket);
@@ -5586,7 +5602,8 @@ void private_cweb_execute_request_in_safty_mode(
     int new_socket,
     int function_timeout,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    bool use_static
+    bool use_static,
+    long max_cache_age
 )
 {
     cweb_print("Creating a new process\n");
@@ -5595,7 +5612,7 @@ void private_cweb_execute_request_in_safty_mode(
         // means that the process is the child
       
         alarm(function_timeout);
-        private_cweb_execute_request(new_socket,request_handler,use_static);
+        private_cweb_execute_request(new_socket,request_handler,use_static,max_cache_age);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -5627,7 +5644,8 @@ void private_cweb_run_server_in_multiprocess(
     double client_timeout,
     int max_queue,
     long max_requests,
-    bool use_static
+    bool use_static,
+    long max_cache_age
 ){
 
     int port_socket;
@@ -5727,7 +5745,8 @@ void private_cweb_run_server_in_multiprocess(
                 new_socket,
                 function_timeout,
                 request_handler,
-                use_static
+                use_static,
+                max_cache_age
             );
 
             close(new_socket);
@@ -5763,7 +5782,11 @@ struct CwebSever * newCwebSever(int port , struct CwebHttpResponse *(*request_ha
     self->max_queue = 100;
     self->single_process = false;
     self->max_requests = 1000;
+
     self->use_static = true;
+    self->max_cache_age = CWEB_ONE_HOUR;
+    self->use_smart_cache = true;
+    
     self->request_handler = request_handler;
     self->start = private_cweb_run_sever;
     self->free = private_cweb_free_sever;
@@ -5779,7 +5802,8 @@ void private_cweb_run_sever(struct  CwebSever *self){
             self->request_handler,
             self->client_timeout,
             self->max_queue,
-            self->use_static
+            self->use_static,
+            self->max_cache_age
         );
     }
 
@@ -5791,7 +5815,8 @@ void private_cweb_run_sever(struct  CwebSever *self){
             self->client_timeout,
             self->max_queue,
             self->max_requests,
-            self->use_static
+            self->use_static,
+            self->max_cache_age
         );
     }
 }
