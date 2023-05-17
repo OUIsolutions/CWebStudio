@@ -173,8 +173,9 @@ struct CTextStack{
 
     void (*close)(struct CTextStack *self, const char *tag);
 
-
     void (*free)(struct CTextStack *self);
+
+    void (*restart)(struct CTextStack *self);
 
 };
 
@@ -209,6 +210,7 @@ void ctext_close(struct CTextStack *self, const char *tag);
 
 void ctext_free(struct CTextStack *self);
 
+void ctext_restart(struct CTextStack *self);
 void private_ctext_generate_formated_text(
     struct CTextStack *stack,
     const char *format,
@@ -237,8 +239,10 @@ struct CTextStack * newCTextStack(const char *line_breaker, const char *separato
     self->open = ctext_open;
     self->close = ctext_close;
     self->free =  ctext_free;
+    self->restart = ctext_restart;
     return self;
 }
+
 
 void ctext_free(struct CTextStack *self){
     free(self->line_breaker);
@@ -247,14 +251,23 @@ void ctext_free(struct CTextStack *self){
     free(self);
 }
 
+void ctext_restart(struct CTextStack *self){
+    free(self->rendered_text);
+    self->rendered_text = (char*)malloc(2);
+    strcpy(self->rendered_text,"\0");
+    self->rendered_text_alocation_size = 2;
+    self->rendered_text_size = 0;
+    self->ident_level = 0;
+}
 void private_ctext_text_double_size_if_reachs(struct CTextStack *self){
     
-    if(self->rendered_text_size >= (self->rendered_text_alocation_size-2)){
+
+    while(self->rendered_text_size >= (self->rendered_text_alocation_size-2)){
       
         self->rendered_text_alocation_size  =  (self->rendered_text_alocation_size  * 2)+2;
         self->rendered_text = (char*)(realloc(
             self->rendered_text,self->rendered_text_alocation_size
-     ));
+        ));
 
     }
 }
@@ -5249,6 +5262,10 @@ void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char 
 void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,const  char *value){
     self->headers->set(self->headers, key, value);
 }
+
+
+
+
 struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request){
 
     if(strcmp(request->route,"/favicon.ico")== 0){

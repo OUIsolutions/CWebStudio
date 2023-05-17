@@ -5,6 +5,10 @@
 char * change_smart_cache(const char *content){
 
     struct CTextStack *code = newCTextStack("","");
+    struct CTextStack *buffer_pattern = newCTextStack("","");
+    struct CTextStack *src = newCTextStack("","");
+
+
     unsigned long content_size = strlen(content);
 
     const char *entry_pattern = "smart_cache:/)";
@@ -15,9 +19,6 @@ char * change_smart_cache(const char *content){
 
     int entry_founds = 0;
     bool found_entry = false;
-
-    struct CTextStack *buffer_pattern = newCTextStack("","");
-    struct CTextStack *src = newCTextStack("","");
 
     for(int i = 0; i < content_size; i++){
 
