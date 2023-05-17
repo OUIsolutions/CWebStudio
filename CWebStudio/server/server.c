@@ -28,7 +28,8 @@ void private_cweb_run_sever(struct  CwebSever *self){
             self->request_handler,
             self->client_timeout,
             self->max_queue,
-            self->use_static
+            self->use_static,
+            self->max_cache_age
         );
     }
 
@@ -40,7 +41,8 @@ void private_cweb_run_sever(struct  CwebSever *self){
             self->client_timeout,
             self->max_queue,
             self->max_requests,
-            self->use_static
+            self->use_static,
+            self->max_cache_age
         );
     }
 }

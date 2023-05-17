@@ -30,9 +30,7 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
         if(!content_found){
               return cweb_send_text("",404);
         }
-        #ifndef CWEB_NO_CACHE
-                response->add_header(response,"Cache-Control:", "public, max-age=31536000");
-        #endif
+
         return response;
       
 
@@ -40,7 +38,7 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
     return NULL;
 }
 
-struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request){
+struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,long max_cache_age){
 
     struct CwebHttpResponse * icon_response = private_cweb_treat_five_icon(request);
 
@@ -63,10 +61,13 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
             
         struct CwebHttpResponse * response = cweb_send_file(securyt_path,CWEB_AUTO_SET_CONTENT,200);
-        #ifndef CWEB_NO_CACHE
-            response->add_header(response,"Cache-Control:", "public, max-age=31536000");
-        #endif
-            free(securyt_path);
+        if(max_cache_age > 0){
+            char response_code[40] = "";
+            sprintf(response_code, "public max-age=%ld", max_cache_age);
+            response->add_header(response,"Cache-Control:", response_code);
+        }
+        
+        free(securyt_path);
         return response;
     }
     return NULL;

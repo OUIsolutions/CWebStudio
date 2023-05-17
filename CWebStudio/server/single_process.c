@@ -5,7 +5,8 @@ void private_cweb_run_server_in_single_process(
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     double client_timeout,
     int max_queue,
-    bool use_static
+    bool use_static,
+    long max_cache_age
 ){
 
 
@@ -82,7 +83,7 @@ void private_cweb_run_server_in_single_process(
 
 
     
-        private_cweb_execute_request(client_socket,request_handler,use_static);
+        private_cweb_execute_request(client_socket,request_handler,use_static,max_cache_age);
 
 
         close(client_socket);
