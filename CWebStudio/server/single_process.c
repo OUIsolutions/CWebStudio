@@ -63,12 +63,21 @@ void private_cweb_run_server_in_single_process(
             (struct sockaddr *)&address,
             (socklen_t *)&addrlen
         );
-        
+
+
+
         if ( client_socket< 0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
 
+        char buffer[1];
+        int peek_result = recv(client_socket, buffer, 1, MSG_PEEK);
+        if (peek_result == 0) {
+            cweb_print("Conection closed By the  Client\n");
+            close(client_socket);  // Fechar o socket do cliente
+            continue;
+        }
 
         struct timeval timer;
         long seconds =  (long)client_timeout;
