@@ -88,7 +88,6 @@ void private_cweb_execute_request(
     send(socket, response_str, strlen(response_str), MSG_NOSIGNAL);
 
 
-    //envia todo o content de uma vez 
 
 
     // Enviando conteúdo byte a byte

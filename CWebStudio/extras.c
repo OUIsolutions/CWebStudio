@@ -98,6 +98,10 @@ const char *cweb_generate_content_type(const char *file_name){
         else if(strcmp(extension, "png") == 0){
             strcpy(content_type_created, "image/png");
         }
+        else if(strcmp(extension, "ico") == 0){
+            strcpy(content_type_created, "image/x-icon");
+        }
+
         else if(strcmp(extension, "jpg") == 0){
             strcpy(content_type_created, "image/jpeg");
         }

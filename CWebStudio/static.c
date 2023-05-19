@@ -152,7 +152,7 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
         if(max_cache_age > 0){
             char response_code[40] = "";
             sprintf(response_code, "public max-age=%ld", max_cache_age);
-            response->add_header(response,"Cache-Control:", response_code);
+            response->add_header(response,"Cache-Control", response_code);
         }
         free(securyt_path);
         return response;
