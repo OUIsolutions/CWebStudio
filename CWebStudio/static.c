@@ -8,7 +8,7 @@ char * private_cweb_change_smart_cache(const char *content){
     struct CTextStack *src = newCTextStack("","");
 
     unsigned long content_size = strlen(content);
-    const char *entry_pattern = "\"smart_cache:/static/";
+    const char *entry_pattern = "update='";
     unsigned long entry_pattern_len = strlen(entry_pattern);
 
     int entry_founds = 0;
@@ -22,7 +22,7 @@ char * private_cweb_change_smart_cache(const char *content){
         if(found_entry){
 
             //means its cancel the operation
-            if( current == '\n'){
+            if( current == '\n' || current =='"'){
                 code->text(code,buffer_pattern->rendered_text);
                 buffer_pattern->restart(buffer_pattern);
                 src->restart(src);
@@ -32,29 +32,27 @@ char * private_cweb_change_smart_cache(const char *content){
             }
 
             //means its getts the src
-            if(current != '"'){
+            if(current != '\''){
                 src->format(src,"%c",current);
                 continue;
             }
 
-            if(current == '"'){
-                //means its gthe end of src
-                // printf("src=%s\n",src->rendered_text);
-                char filename[2000];
-                sprintf(filename,"static/%s",src->rendered_text);
-                struct stat file_stat;
-                long last_mofication = 0;
-                if (stat(filename, &file_stat) == 0) {
-                    last_mofication = file_stat.st_mtime;
-                }
-                code->format(code,"\"/static?path=%s&update=%i\"",filename,last_mofication);
 
-                buffer_pattern->restart(buffer_pattern);
-                src->restart(src);
-                found_entry = false;
-                entry_founds = 0;
-                continue;
+            struct stat file_stat;
+            long last_mofication = 0;
+
+            if (stat(src->rendered_text, &file_stat) == 0) {
+                last_mofication = file_stat.st_mtime;
             }
+            code->format(code,"update=%i",last_mofication);
+
+            buffer_pattern->restart(buffer_pattern);
+            src->restart(src);
+            found_entry = false;
+            entry_founds = 0;
+            continue;
+
+
         }
 
         if(entry_founds +1  == entry_pattern_len){
