@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define PORT 8081
+#define PORT 3000
 #define BUFFER_SIZE 1024
 
 int main() {
@@ -52,20 +52,25 @@ int main() {
         if (newsockfd < 0) {
             perror("webserver (accept)");
             continue;
+
         }
         printf("connection accepted %i\n",i);
 
         // Read from the socket
         int valread;
+    /*
         for(int x = 0; x < BUFFER_SIZE; x++){
+
             valread = read(newsockfd, &buffer+x, 1);
+
             if (valread < 0) {
-                perror("webserver (read)");
+                printf("leu até o %i\n",x);
+                ///perror("webserver (read)");
                 break;
             }
 
         }
-
+    */
         // Write to the socket
         int valwrite = write(newsockfd, resp, strlen(resp));
         if (valwrite < 0) {
