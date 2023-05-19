@@ -197,44 +197,47 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
 int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
 
-
-    unsigned char raw_entries[20000] ={0};
+        char raw_entries[20000] ={0};
 
     int i = 0;
-    while (true) {
+    for(i =0;i<=20000;i++){
 
-        if (i >= 20000) {
-            return MAX_HEADER_SIZE;
-        }
+        //ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
+        ssize_t  res = read(self->socket, &raw_entries[i],1);
 
-        ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
-        
         if (res <= 0) {
+            perror("webserver (read)");
             break;
         }
+
         //line break is \r\n\r\n
-        if (i >= 3 &&
-            raw_entries[i - 3] == '\r' &&
-            raw_entries[i - 2] == '\n' &&
-            raw_entries[i - 1] == '\r' &&
-                raw_entries[i] == '\n'
-           ){
-            
-            break;
+        if(i > 3){
+            char *aux = &raw_entries[i-3];
+
+            if(strcmp(aux,"\r\n\r\n") == 0){
+                printf("terminou em %i\n",i);
+
+
+                break;
+            }
         }
-        i++;
-    
     }
     if(i == 0){    
         return READ_ERROR;
         
     }
+
+    if (i >= 20000) {
+        return MAX_HEADER_SIZE;
+    }
+
     char last_string[10000]= {0};
     struct CwebStringArray *lines = cweb_constructor_string_array();
     int line_index = 0;
 
-    for(int l =0 ; l < i-1;l++){
-        if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){
+    for(int l =0 ; l < i;l++){
+        char *endline = &raw_entries[l];
+        if(strcmp(endline,"\r\n") ==0){
             lines->add_string(lines, last_string);
             memset(last_string, 0, 10000);
             line_index = 0;

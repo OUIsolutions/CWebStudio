@@ -75,7 +75,7 @@ void private_cweb_run_server_in_single_process(
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-
+        /*
         struct timeval timer1;
         timer1.tv_sec =  0;
         timer1.tv_usec =  0100000;
@@ -91,7 +91,7 @@ void private_cweb_run_server_in_single_process(
             close(client_socket);  // Fechar o socket do cliente
             continue;
         }
-
+        */
         struct timeval timer2;
         long seconds =  (long)client_timeout;
         timer2.tv_sec =  seconds ;  // tempo em segundos

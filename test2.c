@@ -1,85 +1,90 @@
-#include <arpa/inet.h>
-#include <errno.h>
+// Server side C program to demonstrate Socket programming
 #include <stdio.h>
-#include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <string.h>
 
-#define PORT 3000
-#define BUFFER_SIZE 1024
+#define PORT 5010
+int main(int argc, char const *argv[])
+{
+    int server_fd, new_socket; long valread;
+    struct sockaddr_in address;
+    int addrlen = sizeof(address);
+    char *mensagem = "<html>hello, world</html>";
+    int tamanho = strlen(mensagem);
+    char hello[3000] =  "HTTP/1.0 200 OK\r\n"
+                        "Server: webserver-c\r\n"
+                        "Content-type: text/html\r\n";
+    sprintf(hello,"%sContent-Length: %i\r\n\r\n",hello,tamanho);
 
-int main() {
-    char buffer[BUFFER_SIZE];
-    char resp[] = "HTTP/1.0 200 OK\r\n"
-                  "Server: webserver-c\r\n"
-                  "Content-type: text/html\r\n\r\n"
-                  "<html>hello, world</html>\r\n";
 
-    // Create a socket
-    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd == -1) {
-        perror("webserver (socket)");
-        return 1;
+    // Creating socket file descriptor
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    {
+        perror("In socket");
+        exit(EXIT_FAILURE);
     }
-    printf("socket created successfully\n");
 
-    // Create the address to bind the socket to
-    struct sockaddr_in host_addr;
-    int host_addrlen = sizeof(host_addr);
 
-    host_addr.sin_family = AF_INET;
-    host_addr.sin_port = htons(PORT);
-    host_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons( PORT );
 
-    // Bind the socket to the address
-    if (bind(sockfd, (struct sockaddr *)&host_addr, host_addrlen) != 0) {
-        perror("webserver (bind)");
-        return 1;
+    memset(address.sin_zero, '\0', sizeof address.sin_zero);
+
+
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address))<0)
+    {
+        perror("In bind");
+        exit(EXIT_FAILURE);
     }
-    printf("socket successfully bound to address\n");
-
-    // Listen for incoming connections
-    if (listen(sockfd, SOMAXCONN) != 0) {
-        perror("webserver (listen)");
-        return 1;
+    if (listen(server_fd, 1) < 0)
+    {
+        perror("In listen");
+        exit(EXIT_FAILURE);
     }
-    printf("server listening for connections\n");
-
-    for (int i =0;1==1;i++) {
-        // Accept incoming connections
-        int newsockfd = accept(sockfd, (struct sockaddr *)&host_addr,
-                               (socklen_t *)&host_addrlen);
-        if (newsockfd < 0) {
-            perror("webserver (accept)");
-            continue;
-
+    while(1)
+    {
+        printf("\n+++++++ Waiting for new connection ++++++++\n\n");
+        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0)
+        {
+            perror("In accept");
+            exit(EXIT_FAILURE);
         }
-        printf("connection accepted %i\n",i);
 
-        // Read from the socket
-        int valread;
-    /*
-        for(int x = 0; x < BUFFER_SIZE; x++){
+        char  *buffer  = malloc(30000);
+        printf("starting the loop read\n");
+        for(int x =0;x < 30000;x++){
 
-            valread = read(newsockfd, &buffer+x, 1);
-
+            valread = read(new_socket,&buffer[x], 1);
+            printf("caracter=%i\n",buffer[x]);
             if (valread < 0) {
                 printf("leu até o %i\n",x);
                 ///perror("webserver (read)");
                 break;
             }
 
-        }
-    */
-        // Write to the socket
-        int valwrite = write(newsockfd, resp, strlen(resp));
-        if (valwrite < 0) {
-            perror("webserver (write)");
-            continue;
+            if(x > 3){
+                char *aux = &buffer[x-3];
+                buffer[x+1] = '\0';
+                if(strcmp(aux,"\r\n\r\n") == 0){
+                    printf("terminou em %i\n",x);
+                    break;
+                }
+            }
+
         }
 
-        close(newsockfd);
+        printf("pegou aqui\n");
+
+
+        write(new_socket , hello , strlen(hello));
+        write(new_socket,mensagem, strlen(mensagem));
+        printf("------------------Hello message sent-------------------\n");
+        close(new_socket);
+        free(buffer);
     }
-
     return 0;
 }
