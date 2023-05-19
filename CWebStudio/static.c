@@ -8,7 +8,7 @@ char * private_cweb_change_smart_cache(const char *content){
     struct CTextStack *src = newCTextStack("","");
 
     unsigned long content_size = strlen(content);
-    const char *entry_pattern = "update='";
+    const char *entry_pattern = "smart-cache='";
     unsigned long entry_pattern_len = strlen(entry_pattern);
 
     int entry_founds = 0;
@@ -44,7 +44,7 @@ char * private_cweb_change_smart_cache(const char *content){
             if (stat(src->rendered_text, &file_stat) == 0) {
                 last_mofication = file_stat.st_mtime;
             }
-            code->format(code,"update=%i",last_mofication);
+            code->format(code,"/static?path=%s&unix-cache=%i",src->rendered_text, last_mofication);
 
             buffer_pattern->restart(buffer_pattern);
             src->restart(src);
