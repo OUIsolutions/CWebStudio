@@ -80,7 +80,7 @@ char * private_cweb_change_smart_cache(const char *content){
 struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request){
 
     if(strcmp(request->route,"/favicon.ico")== 0){
-
+        /*
         int size = 0;
         unsigned char *content;
         bool content_found = false;
@@ -108,8 +108,8 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
         if(!content_found){
               return cweb_send_text("",404);
         }
-
-        return response;
+        */
+        return  cweb_send_text("",404);
       
 
     }
@@ -151,8 +151,8 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
         struct CwebHttpResponse * response = cweb_send_any_cleaning_memory(content_type,size,content,200);
         if(max_cache_age > 0){
             char response_code[50] = "";
-            sprintf(response_code, "public max-age=%ld", max_cache_age);
-            response->add_header(response,"Cache-Control", response_code);
+            sprintf(response_code, "public, max-age=%ld", max_cache_age);
+            response->add_header(response,"cache-control", response_code);
         }
         free(securyt_path);
         return response;
