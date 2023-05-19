@@ -69,10 +69,9 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
 
     cweb_print("Writen size: %i\n",size);
     if(content == NULL){
-        char *mensage = (char*)malloc(100);
+        char mensage[100];
         sprintf(mensage, "File not found: %s", file_path);
         struct CwebHttpResponse* response =  cweb_send_text(mensage, CWEB_NOT_FOUND);
-        free(mensage);
         return response;
     }
 

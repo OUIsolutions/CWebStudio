@@ -137,6 +137,20 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
         bool is_binary;
         unsigned char *content = cweb_load_any_content(securyt_path,&size,&is_binary);
 
+        if(content == NULL){
+
+
+            char *not_found_html_page = cweb_load_string_file_content("static/404.html");
+            if(not_found_html_page != NULL){
+                return cweb_send_var_html_cleaning_memory(not_found_html_page,404);
+
+            }
+
+            char mensage[100];
+            sprintf(mensage, "File not found: %s", securyt_path);
+            struct CwebHttpResponse* response =  cweb_send_text(mensage, CWEB_NOT_FOUND);
+            return response;
+        }
 
         if(!is_binary){
             char *new_content = private_cweb_change_smart_cache((char*)content);
@@ -151,7 +165,7 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
         if(max_cache_age > 0){
             char response_code[50] = "";
-            sprintf(response_code, "public, max-age=%ld", max_cache_age);
+            sprintf(response_code, "public, max-age=%ld, immutable", max_cache_age);
             response->add_header(response,"cache-control", response_code);
         }
         free(securyt_path);

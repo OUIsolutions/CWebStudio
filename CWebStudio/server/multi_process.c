@@ -61,7 +61,7 @@ void private_cweb_execute_request_in_safty_mode(
         alarm(0);
         exit(0);
     }
-    
+
     else if (pid < 0){
         perror("Faluire to create a new process");
         exit(EXIT_FAILURE);
@@ -156,6 +156,12 @@ void private_cweb_run_server_in_multiprocess(
             (socklen_t *)&addrlen
         );
 
+
+        cweb_print("----------------------------------------\n");
+        cweb_print("Executing request:%lld\n", actual_request);
+        cweb_print("Socket: %d\n", client_socket);
+
+
         if (client_socket <  0){
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
@@ -167,21 +173,12 @@ void private_cweb_run_server_in_multiprocess(
             // creates an new socket and parse the request to the new socket
             int new_socket = dup(client_socket);
 
-
-
             struct timeval timer;
             long seconds =  (long)client_timeout;
             timer.tv_sec =  seconds ;  // tempo em segundos
             timer.tv_usec =(long)((client_timeout - seconds) * 1000000);
-
-
-
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
-
-            cweb_print("----------------------------------------\n");
-            cweb_print("Executing request:%lld\n", actual_request);
-            cweb_print("Socket: %d\n", new_socket);
 
 
             private_cweb_execute_request_in_safty_mode(

@@ -55,6 +55,9 @@ void private_cweb_run_server_in_single_process(
     {
         actual_request++;
 
+        //clear every trash 
+        
+
         // Accepting a new connection in every socket
         int client_socket = accept(
             port_socket,
@@ -93,7 +96,8 @@ void private_cweb_run_server_in_single_process(
                     return;
         #endif
         
-
+        char  trash[100];
+        //while(recv(port_socket, trash, 100, 0));
     }
 }
 
