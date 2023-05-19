@@ -171,12 +171,27 @@ void private_cweb_run_server_in_multiprocess(
             // creates an new socket and parse the request to the new socket
             int new_socket = dup(client_socket);
 
-            struct timeval timer;
-            long seconds =  (long)client_timeout;
-            timer.tv_sec =  seconds ;  // tempo em segundos
-            timer.tv_usec =(long)((client_timeout - seconds) * 1000000);
-            setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
+            struct timeval timer1;
+            timer1.tv_sec =  0;
+            timer1.tv_usec =  0100000;
+            setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer1, sizeof(timer1));
 
+
+            char buffer[1];
+            ssize_t peek_result = recv(new_socket, buffer, 1, MSG_PEEK);
+
+            if (peek_result <= 0) {
+                cweb_print("peek: %li\n",peek_result);
+                cweb_print("Conection closed By the  Client\n");
+                close(new_socket);  // Fechar o socket do cliente
+                continue;
+            }
+
+            struct timeval timer2;
+            long seconds =  (long)client_timeout;
+            timer2.tv_sec =  seconds ;  // tempo em segundos
+            timer2.tv_usec =(long)((client_timeout - seconds) * 1000000);
+            setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
             private_cweb_execute_request_in_safty_mode(
