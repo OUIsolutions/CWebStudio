@@ -160,8 +160,7 @@ void private_cweb_run_server_in_multiprocess(
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-        cweb_print("client_socket: %d\n", client_socket);
-    
+
         pid_t pid = fork();
         if (pid == 0){
             
