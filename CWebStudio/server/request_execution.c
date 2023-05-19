@@ -4,7 +4,7 @@ void private_cweb_execute_request(
     int socket,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,
-    long max_cache_age
+    bool use_cache
     ){
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = cweb_request_constructor(socket);
@@ -36,7 +36,7 @@ void private_cweb_execute_request(
 
     struct CwebHttpResponse *response;
     if(use_static){
-        response = private_cweb_generate_static_response(request,max_cache_age);
+        response = private_cweb_generate_static_response(request,use_cache);
         if(response == NULL){
             response = request_handler(request);
         }

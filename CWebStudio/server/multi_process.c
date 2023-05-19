@@ -47,16 +47,14 @@ void private_cweb_execute_request_in_safty_mode(
     int function_timeout,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,
-    long max_cache_age
-)
-{
+    bool use_cache){
     cweb_print("Creating a new process\n");
     pid_t pid = fork();
     if (pid == 0){
         // means that the process is the child
       
         alarm(function_timeout);
-        private_cweb_execute_request(new_socket,request_handler,use_static,max_cache_age);
+        private_cweb_execute_request(new_socket,request_handler,use_static,use_cache);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -89,7 +87,7 @@ void private_cweb_run_server_in_multiprocess(
     int max_queue,
     long max_requests,
     bool use_static,
-    long max_cache_age
+    bool use_cache
 ){
 
     int port_socket;
@@ -186,7 +184,7 @@ void private_cweb_run_server_in_multiprocess(
                 function_timeout,
                 request_handler,
                 use_static,
-                max_cache_age
+                use_cache
             );
 
             close(new_socket);

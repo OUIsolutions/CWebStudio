@@ -6,7 +6,7 @@ void private_cweb_run_server_in_single_process(
     double client_timeout,
     int max_queue,
     bool use_static,
-    long max_cache_age
+    bool use_cache
 ){
 
     int port_socket;
@@ -84,7 +84,7 @@ void private_cweb_run_server_in_single_process(
 
 
     
-        private_cweb_execute_request(client_socket,request_handler,use_static,max_cache_age);
+        private_cweb_execute_request(client_socket,request_handler,use_static,use_cache);
 
 
         close(client_socket);

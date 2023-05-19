@@ -114,7 +114,7 @@ struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *r
     return NULL;
 }
 
-struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,long max_cache_age){
+struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){
 
     struct CwebHttpResponse * icon_response = private_cweb_treat_five_icon(request);
 
@@ -163,13 +163,19 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
         struct CwebHttpResponse * response = cweb_send_any_cleaning_memory(content_type,size,content,200);
 
-        if(max_cache_age > 0){
-            char response_code[50] = "";
-            sprintf(response_code, "public, max-age=%ld, immutable", max_cache_age);
-            response->add_header(response,"cache-control", response_code);
+
+        if(use_cache){
+            char *unix_cache = request->get_param(request,"unix-cache");
+            if(unix_cache){
+                char response_code[50] = "";
+                sprintf(response_code, "public, max-age=31536000, immutable");
+                response->add_header(response,"cache-control", response_code);
+            }
         }
+
         free(securyt_path);
         return response;
+
     }
     return NULL;
 
