@@ -9,7 +9,6 @@ void private_cweb_run_server_in_single_process(
     long max_cache_age
 ){
 
-
     int port_socket;
 
     // Creating socket file descriptor
@@ -50,11 +49,6 @@ void private_cweb_run_server_in_single_process(
 
 
 
-    struct timeval timer;
-    long seconds =  (long)client_timeout;
-    timer.tv_sec =  seconds ;  // tempo em segundos
-    timer.tv_usec =(long)((client_timeout - seconds) * 1000000);
-
 
 
     while (1)
@@ -73,8 +67,13 @@ void private_cweb_run_server_in_single_process(
             exit(EXIT_FAILURE);
         }
 
-      
+
+        struct timeval timer;
+        long seconds =  (long)client_timeout;
+        timer.tv_sec =  seconds ;  // tempo em segundos
+        timer.tv_usec =(long)((client_timeout - seconds) * 1000000);
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
+
 
 
         cweb_print("----------------------------------------\n");
@@ -88,7 +87,6 @@ void private_cweb_run_server_in_single_process(
 
         close(client_socket);
 
-      
 
         cweb_print("Closed Conection with socket %d\n", client_socket);
         #ifdef CWEB_ONCE
