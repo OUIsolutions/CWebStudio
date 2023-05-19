@@ -133,7 +133,7 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
         }
 
         char *securyt_path = cweb_replace_string(full_path,"../","");
-        int size;
+        long size;
         bool is_binary;
         unsigned char *content = cweb_load_any_content(securyt_path,&size,&is_binary);
 
@@ -141,12 +141,14 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
         if(!is_binary){
             char *new_content = private_cweb_change_smart_cache((char*)content);
             free(content);
+            size = strlen(new_content);
             content = (unsigned char*)new_content;
         }
 
         char *content_type  = (char*)cweb_generate_content_type(securyt_path);
 
         struct CwebHttpResponse * response = cweb_send_any_cleaning_memory(content_type,size,content,200);
+
         if(max_cache_age > 0){
             char response_code[50] = "";
             sprintf(response_code, "public, max-age=%ld", max_cache_age);

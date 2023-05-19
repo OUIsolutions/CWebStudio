@@ -7,9 +7,9 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 int main(int argc, char *argv[]){
-    
 
-    struct CwebSever *sever = newCwebSever(5000, main_sever);
+
+    struct CwebSever *sever = newCwebSever(5001, main_sever);
     sever->single_process = CWEB_DANGEROUS_SINGLE_PROCESS;
     sever->max_cache_age = CWEB_ONE_YEAR;
     sever->start(sever);
