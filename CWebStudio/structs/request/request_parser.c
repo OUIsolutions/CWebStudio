@@ -163,24 +163,27 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
         bool key_found = false;
         int value_start_point = 0;
 
-
-        for(int j = 0; j<line_size;j++){
-            
+        for(int j = 0; j<line_size;j++){            
             if(current_line[j] == ':' && key_found == false){
+
                 key_found = true;
                 j+=1;
                 value_start_point = j;
                 continue;
+            
             }
+
 
             if(key_found == false){
                 key[j] = current_line[j];
             }
 
+
             if(key_found == true){
                 int size_point = j - value_start_point -1;
                value[size_point] = current_line[j];
             }
+
         }
 
         if(key_found){
