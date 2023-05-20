@@ -1,11 +1,9 @@
 #define CWEB_DEBUG
+#define CWEB_BREAK_IN 3
+
 #include "CWebStudio/CwebStudioMain.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
-    if(actual_request > 3){
-        request->free(request);
-        exit(0);
-    }
     const char *lang = "en";
     const char *text = "text exemple";
     struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
@@ -36,7 +34,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(int argc, char *argv[]){
 
    
-     struct CwebSever *sever = newCwebSever(5002, main_sever);
+     struct CwebSever *sever = newCwebSever(5001, main_sever);
      sever->single_process = true;
      sever->start(sever);
      sever->free(sever);

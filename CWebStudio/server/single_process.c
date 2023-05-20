@@ -53,6 +53,13 @@ void private_cweb_run_server_in_single_process(
 
     while (1)
     {
+
+        #ifdef  CWEB_BREAK_IN 
+                if(actual_request >= CWEB_BREAK_IN){
+                    cweb_print("Break in request %lld\n", actual_request);
+                    break;
+                }
+        #endif
         actual_request++;
 
         //clear every trash 
@@ -109,11 +116,9 @@ void private_cweb_run_server_in_single_process(
 
 
         cweb_print("Closed Conection with socket %d\n", client_socket);
-        #ifdef CWEB_ONCE
-                    return;
-        #endif
-        
 
+        
     }
+    return; 
 }
 
