@@ -80,35 +80,7 @@ char * private_cweb_change_smart_cache(const char *content){
 struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request){
 
     if(strcmp(request->route,"/favicon.ico")== 0){
-        /*
-        int size = 0;
-        unsigned char *content;
-        bool content_found = false;
-        struct CwebHttpResponse * response;
         
-        content = cweb_load_binary_content("static/favicon.ico", &size);
-        if(content != NULL){
-            response = cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
-            content_found = true;
-        }
-
-        content = cweb_load_binary_content("static/favicon.png", &size);
-        if(content != NULL){
-            response = cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
-            content_found = true;
-        }
-
-
-        content = cweb_load_binary_content("static/favicon.jpg", &size);
-        if(content != NULL){
-             response =  cweb_send_any_cleaning_memory("image/x-icon",size,content, 200);
-            content_found = true;
-        }
-
-        if(!content_found){
-              return cweb_send_text("",404);
-        }
-        */
         return  cweb_send_text("",404);
       
 
