@@ -49,15 +49,9 @@ char * private_cweb_change_smart_cache(const char *content){
                 continue;
             }
 
-
-            char file_name[1000];
-            sprintf(file_name,"static/%s",src->rendered_text);
-            struct stat file_stat;
-            long last_mofication = 0;
-            if (stat(file_name, &file_stat) == 0) {
-                last_mofication = file_stat.st_mtime;
-            }
-            code->format(code,"/static?path=%s&unix-cache=%i",file_name, last_mofication);
+            char *content = smart_static_ref(src->rendered_text);
+            code->text(code,content);
+            free(content);
 
 
             buffer_pattern->restart(buffer_pattern);
