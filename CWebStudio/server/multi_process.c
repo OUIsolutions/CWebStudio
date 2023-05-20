@@ -184,6 +184,7 @@ void private_cweb_run_server_in_multiprocess(
                 cweb_print("peek: %li\n",peek_result);
                 cweb_print("Conection closed By the  Client\n");
                 close(new_socket);  // Fechar o socket do cliente
+                exit(0);
                 continue;
             }
 

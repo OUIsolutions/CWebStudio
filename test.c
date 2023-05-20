@@ -1,3 +1,4 @@
+#define CWEB_DEBUG
 #include "CWebStudio/CwebStudioMain.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -31,4 +32,10 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
 }
 
-CWEB_START_MACRO(5002, main_sever)
+int main(int argc, char *argv[]){
+
+   
+     struct CwebSever *sever = newCwebSever(5003, main_sever);
+     sever->start(sever);
+     sever->free(sever);
+}
