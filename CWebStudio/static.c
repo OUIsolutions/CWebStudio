@@ -135,7 +135,7 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
         }
 
         char *securyt_path = cweb_replace_string(full_path,"../","");
-        long size;
+        int size;
         bool is_binary;
         unsigned char *content = cweb_load_any_content(securyt_path,&size,&is_binary);
 
