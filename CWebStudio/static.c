@@ -1,5 +1,17 @@
 
+char * smart_static_ref(const char *path){
+    char file_name[1000];
+    sprintf(file_name,"static/%s",path);
+    struct stat file_stat;
+    long last_mofication = 0;
+    if (stat(file_name, &file_stat) == 0) {
+        last_mofication = file_stat.st_mtime;
+    }
 
+    char * src_ref = (char*)malloc(2000);
+    sprintf(src_ref,"/static?path=%s&unix-cache=%li",file_name, last_mofication);
+    return src_ref;
+}
 
 char * private_cweb_change_smart_cache(const char *content){
 
@@ -37,16 +49,16 @@ char * private_cweb_change_smart_cache(const char *content){
                 continue;
             }
 
+
             char file_name[1000];
             sprintf(file_name,"static/%s",src->rendered_text);
             struct stat file_stat;
             long last_mofication = 0;
-
-
             if (stat(file_name, &file_stat) == 0) {
                 last_mofication = file_stat.st_mtime;
             }
             code->format(code,"/static?path=%s&unix-cache=%i",file_name, last_mofication);
+
 
             buffer_pattern->restart(buffer_pattern);
             src->restart(src);
