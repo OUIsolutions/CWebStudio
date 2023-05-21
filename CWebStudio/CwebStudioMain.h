@@ -37,6 +37,7 @@ SOFTWARE.
 #include <sys/socket.h>
 #include <signal.h>
 #include <sys/resource.h>
+#include <openssl/ssl.h>
 
 
 #include <arpa/inet.h>
