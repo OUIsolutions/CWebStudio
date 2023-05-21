@@ -6,7 +6,7 @@
 #include <netinet/in.h>
 #include <string.h>
 
-#define PORT 5010
+#define PORT 5001
 int main(int argc, char const *argv[])
 {
     int server_fd, new_socket; long valread;
@@ -17,7 +17,11 @@ int main(int argc, char const *argv[])
     char hello[3000] =  "HTTP/1.0 200 OK\r\n"
                         "Server: webserver-c\r\n"
                         "Content-type: text/html\r\n";
-    sprintf(hello,"%sContent-Length: %i\r\n\r\n",hello,tamanho);
+
+    char content_length[100];
+
+    sprintf(content_length,"Content-Length: %i\r\n\r\n",tamanho);
+    strcat(hello,content_length);
 
 
     // Creating socket file descriptor
@@ -45,9 +49,12 @@ int main(int argc, char const *argv[])
         perror("In listen");
         exit(EXIT_FAILURE);
     }
+    int total = 0;
     while(1)
     {
-        printf("\n+++++++ Waiting for new connection ++++++++\n\n");
+        total++;
+        printf("\n+++++++ Conection %i ++++++++\n\n",total);
+
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0)
         {
             perror("In accept");
@@ -58,8 +65,8 @@ int main(int argc, char const *argv[])
         printf("starting the loop read\n");
         for(int x =0;x < 30000;x++){
 
-            valread = read(new_socket,&buffer[x], 1);
-            printf("caracter=%i\n",buffer[x]);
+            valread = recv( new_socket , &buffer[x], 1,0);
+  
             if (valread < 0) {
                 printf("leu até o %i\n",x);
                 ///perror("webserver (read)");
@@ -80,11 +87,15 @@ int main(int argc, char const *argv[])
         printf("pegou aqui\n");
 
 
-        write(new_socket , hello , strlen(hello));
-        write(new_socket,mensagem, strlen(mensagem));
-        printf("------------------Hello message sent-------------------\n");
+
+        send(new_socket , hello , strlen(hello) , MSG_NOSIGNAL );
+        send(new_socket , mensagem , strlen(mensagem) , MSG_NOSIGNAL );
+
+   
         close(new_socket);
         free(buffer);
+        printf("Fechou a conexão\n");
+
     }
     return 0;
 }
