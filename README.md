@@ -23,6 +23,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## Full Folder 
 or you can download the entier **CWebStudio** folder to your project and run with 
 **#include "CWebStudio/CwebStudioMain.h"** header
+
 ~~~c
 
 #include "CWebStudio/CwebStudioMain.h"
@@ -392,12 +393,44 @@ if you put an file called 500.html into the static folder it will return these
 file,when happen an 500 error
 
 
-#### path 
-if you put an query param called path , into the /static route, it will understand these
-as the path of the folder
+#### smart cache
+you can use an dynamic  cache system inside an html,buy using an smart_cache , like these
 ~~~html
-    <img src="/static?path=static/captura2.png">
+    <img src="smart-cache='file.png'">
 ~~~
+#### smart cache inside rendered text
+and you also can run the smart cache inside the rendered text with **smart_static_ref**
+
+~~~c
+#include "CWebStudio/CwebStudioMain.h"
+
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    const char *lang = "en";
+    const char *text = "text exemple";
+    struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+
+    s->$open(s,HTML,"lang=\"%s\"",lang);
+        s->open(s,HEAD);
+            char *fav_icon_link = smart_static_ref("favicon.ico");
+            s->auto$close(s,LINK,"rel=\"shortcut icon\" href=\"%s\"",fav_icon_link);
+            free(fav_icon_link);
+        s->close(s,HEAD);
+        s->open(s,BODY);
+            char *img_link = smart_static_ref("my_image.png");
+            s->auto$close(s,IMG,"src=\"%s\" width=\"200px\"",img_link);
+            free(img_link);
+
+        s->close(s,BODY);
+    s->close(s,HTML);
+    return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
+    
+}
+CWEB_START_MACRO(5000,main_sever)
+
+~~~
+
+
 
 
 
