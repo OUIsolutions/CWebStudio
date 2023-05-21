@@ -2,6 +2,7 @@
 #define CWEB_BREAK_IN 3
 
 #include "CWebStudio/CwebStudioMain.h"
+
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     const char *lang = "en";
@@ -24,12 +25,12 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
             s->open(s,P);
                 s->segment_format(s,"This is a formated  text  %s",text);
             s->close(s,P);
-
         s->close(s,BODY);
     s->close(s,HTML);
- 
     return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
+    
 }
+
 
 int main(int argc, char *argv[]){
 
