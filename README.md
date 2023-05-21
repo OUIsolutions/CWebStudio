@@ -402,6 +402,7 @@ you can use an dynamic  cache system inside an html,buy using an smart_cache , l
 and you also can run the smart cache inside the rendered text with **smart_static_ref**
 
 ~~~c
+
 #include "CWebStudio/CwebStudioMain.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -412,11 +413,14 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     s->$open(s,HTML,"lang=\"%s\"",lang);
         s->open(s,HEAD);
+            
             char *fav_icon_link = smart_static_ref("favicon.ico");
             s->auto$close(s,LINK,"rel=\"shortcut icon\" href=\"%s\"",fav_icon_link);
             free(fav_icon_link);
+
         s->close(s,HEAD);
         s->open(s,BODY);
+            
             char *img_link = smart_static_ref("my_image.png");
             s->auto$close(s,IMG,"src=\"%s\" width=\"200px\"",img_link);
             free(img_link);
@@ -429,10 +433,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 CWEB_START_MACRO(5000,main_sever)
 
 ~~~
-
-
-
-
 
 
 
