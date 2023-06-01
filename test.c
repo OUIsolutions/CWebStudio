@@ -24,4 +24,11 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
     
 }
-CWEB_START_MACRO(5000,main_sever)
+int main(){
+    for(int x = 3000 ; x < 4000;x++){
+
+     struct CwebSever *sever = newCwebSever(x, main_sever);
+     sever->start(sever);
+     sever->free(sever);
+    }
+}
