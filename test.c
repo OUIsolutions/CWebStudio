@@ -1,4 +1,4 @@
-#include "CWebStudio/CwebStudioMain.h"
+#include "CWebStudio.h"
 
 void write_binary_file(char *path, unsigned char *content, int size)
 {
