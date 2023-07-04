@@ -242,6 +242,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
             lines->free_string_array(lines);
             return MAX_HEADER_SIZE;
         }
+
         if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){
             lines->add_string(lines, last_string);
             memset(last_string, 0, 10000);
