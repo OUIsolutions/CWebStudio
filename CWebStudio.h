@@ -4728,11 +4728,13 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
         return;
     }
     int paramns_size = strlen(query_params);
-    char key[1000] = {0};
-    char value[1000] = {0};
+    char key[5000] = {0};
+    char value[5000] = {0};
     bool key_found = false;
 
     for(int i =0; i<paramns_size; i++){
+        
+
 
         if(query_params[i] == '='&& key_found == false){
             key_found = true;
@@ -4742,8 +4744,8 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
         if(query_params[i] == '&'){
             key_found = false;
             self->params->set(self->params, key, value);
-            memset(key, 0, 1000);
-            memset(value, 0, 1000);
+            memset(key, 0, 5000);
+            memset(value, 0, 5000);
             continue;
         }
         
@@ -4803,10 +4805,10 @@ void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
 }
 
 int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
-    #define METHOD_MAX_SIZE 300
-    #define URL_MAX_SIZE 5000
-    char method[METHOD_MAX_SIZE] = {0};
-    char url[URL_MAX_SIZE] = {0};
+    #define CWEB_METHOD_MAX_SIZE 300
+    #define CWEB_URL_MAX_SIZE 5000
+    char method[CWEB_METHOD_MAX_SIZE] = {0};
+    char url[CWEB_URL_MAX_SIZE] = {0};
 
 
     int line_len = strlen(first_line);
@@ -4814,7 +4816,8 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
     //getting the method
 
     for (int i = 0; i < line_len; i++){
-        if(i >= METHOD_MAX_SIZE){
+        
+        if(i >= CWEB_METHOD_MAX_SIZE){
             return INVALID_HTTP;
         }
 
@@ -4842,7 +4845,7 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
     for (int i = method_end; i < line_len; i++){
 
         
-        if((i - url_start_position) >= URL_MAX_SIZE ){
+        if((i - url_start_position) >= CWEB_URL_MAX_SIZE){
             return INVALID_HTTP;
         }
         
@@ -4879,12 +4882,19 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
         int line_size = strlen(current_line);
-        char key[1000] = {0};
-        char value[10000] = {0};
+        char key[1100] = {0};
+        char value[11000] = {0};
         bool key_found = false;
         int value_start_point = 0;
 
-        for(int j = 0; j<line_size;j++){            
+        for(int j = 0; j<line_size;j++){       
+
+            if(key_found == false && j >= 1000){
+                return MAX_HEADER_SIZE;
+            }     
+            
+
+            
             if(current_line[j] == ':' && key_found == false){
 
                 key_found = true;
@@ -4958,6 +4968,12 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
     int line_index = 0;
 
     for(int l =0 ; l < i-1;l++){
+
+        if(line_index >= 10000){
+            lines->free_string_array(lines);
+            return MAX_HEADER_SIZE;
+        }
+
         if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){
             lines->add_string(lines, last_string);
             memset(last_string, 0, 10000);
@@ -4965,6 +4981,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
             l++;
             continue;
         }
+        
         last_string[line_index] = raw_entries[l];
         line_index++;
     }
