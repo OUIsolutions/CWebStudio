@@ -13,6 +13,7 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
 
     for(int i =0; i<paramns_size; i++){
 
+
         if(query_params[i] == '='&& key_found == false){
             key_found = true;
             continue;
@@ -93,6 +94,7 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
     //getting the method
 
     for (int i = 0; i < line_len; i++){
+        
         if(i >= METHOD_MAX_SIZE){
             return INVALID_HTTP;
         }
@@ -121,7 +123,7 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
     for (int i = method_end; i < line_len; i++){
 
         
-        if((i - url_start_position) >= URL_MAX_SIZE ){
+        if((i - url_start_position) >= URL_MAX_SIZE){
             return INVALID_HTTP;
         }
         
@@ -169,7 +171,7 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
                 return MAX_HEADER_SIZE;
             }     
             
-            
+
             
             if(current_line[j] == ':' && key_found == false){
 
