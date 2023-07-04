@@ -41,6 +41,7 @@ SOFTWARE.
 
 #include <arpa/inet.h>
 #include <unistd.h>
+
 /*
 MIT License
 
@@ -470,7 +471,9 @@ void private_ctext_generate_formated_text(
     va_end(argptr);
 }
 #endif // CTEXTENGINE_H
+
 #ifndef cJSON__h
+
 
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
@@ -771,7 +774,9 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 }
 #endif
 
-#endif/*
+#endif
+
+/*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -3889,7 +3894,9 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 {
     global_hooks.deallocate(object);
 }
+
 #endif    
+
 
 struct CwebStringArray {
   int size;         
@@ -3913,6 +3920,8 @@ struct CwebStringArray * cweb_constructor_string_array();
 
 
 
+
+
 char *cweb_parse_string_to_lower(const char *old_string);
 
 char *cweb_parse_string_to_upper(const char *old_string);
@@ -3924,6 +3933,8 @@ bool cweb_starts_with(const char *string, const char *prefix);
 char *cweb_replace_string_once(const char *target, const char *old_element, const char *new_element);
 
 char* cweb_replace_string(const char *target, const char *old_element, const char *new_element);
+
+
 
 
 unsigned char *cweb_load_any_content(const char * path,int *size,bool *is_binary);
@@ -3940,25 +3951,31 @@ char *private_cweb_convert_url_encoded_text(const char *text);
 
 
 
+
+
 #ifdef CWEB_DEBUG
 #define cweb_print(...) printf(__VA_ARGS__)
 #else 
 #define cweb_print(...) NULL;
 #endif 
 
-struct CwebKeyVal{
+
+
+typedef struct CwebKeyVal{
     char *key;
     char *value;
     void (*represent)(struct CwebKeyVal *key_val);
     void (*free)(struct CwebKeyVal *key_val);
-};
+}CwebKeyVal;
 
 struct CwebKeyVal* cweb_key_val_constructor(const char *key,const  char *value);
 void private_cweb_represent_key_val(struct CwebKeyVal *self);
 void private_cweb_free_key_val(struct CwebKeyVal *self);
 
 
-struct CwebDict {
+
+
+typedef struct CwebDict {
   int size;
   struct CwebKeyVal **keys_vals;
   void (*set)(struct CwebDict *dict,const char *key,const char *value);
@@ -3966,7 +3983,7 @@ struct CwebDict {
   char*(*find_value_by_normalized_key)(struct CwebDict *dict,const char *key,const char *chars_to_remove);
   void (*free)(struct CwebDict *dict);
   void (*represent)(struct CwebDict *dict);
-};
+}CwebDict;
 
 
 
@@ -3984,7 +4001,9 @@ void private_cweb_dict_represent(struct CwebDict *dict);
 void private_cweb_free_dict(struct CwebDict *self);
 
 
-struct CwebHttpResponse{
+
+
+typedef struct CwebHttpResponse{
     int status_code;
     struct CwebDict *headers;
     int content_length;
@@ -3994,7 +4013,7 @@ struct CwebHttpResponse{
     void (*add_header)(struct CwebHttpResponse *response,const char *key,const  char *value);
     char *(*generate_response)(struct CwebHttpResponse *response);
     void (*free)(struct CwebHttpResponse *response);
-};
+}CwebHttpResponse;
 
 struct CwebHttpResponse *create_http_response();
 
@@ -4017,6 +4036,8 @@ void private_cweb_http_add_header(
 );
 
 void private_cweb_http_response_free(struct CwebHttpResponse *self);
+
+
 
 
 
@@ -4062,13 +4083,15 @@ struct CwebHttpResponse * cweb_send_file(
     int status_code
 );
 
+
+
 #define INVALID_HTTP -1
 #define MAX_HEADER_SIZE -2
 #define READ_ERROR -3
 #define MAX_CONTENT_SIZE -4
 #define UNDEFINED_CONTENT -5
 
-struct CwebHttpRequest{
+typedef struct CwebHttpRequest{
 
     char *url;
     int socket;
@@ -4109,7 +4132,7 @@ struct CwebHttpRequest{
     int (*interpret_headders)(struct CwebHttpRequest *self, struct CwebStringArray *line_headers);
     void (*free)(struct CwebHttpRequest *request);
     void (*represent)(struct CwebHttpRequest *request);
-};
+}CwebHttpRequest;
 //algorithm functions
 
 int private_cweb_read_content(struct CwebHttpRequest *self,long max_content_size);
@@ -4163,6 +4186,8 @@ void private_cweb_represent_http_request(struct CwebHttpRequest *self);
 
 
 
+
+
 char * smart_static_ref(const char *path);
 
 char * private_cweb_change_smart_cache(const char *content);
@@ -4170,6 +4195,8 @@ char * private_cweb_change_smart_cache(const char *content);
 struct CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request);
 
 struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache);
+
+
 
 
 
@@ -4229,13 +4256,15 @@ void private_cweb_run_server_in_single_process(
 
 
 
+
+
 static long long  actual_request = 0;
 static long total_requests = 0;
 
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_NO_STATIC false;
 
- struct CwebSever{
+ typedef struct CwebSever{
     int port;
     int function_timeout;
     double client_timeout;
@@ -4251,7 +4280,7 @@ static long total_requests = 0;
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request);
     void (*start)(struct  CwebSever *self);
     void (*free)(struct  CwebSever *self);
-};
+}CwebSever;
 
 
 
@@ -4262,6 +4291,8 @@ void private_cweb_free_sever(struct CwebSever *self);
 
 
 
+
+
 #define CWEB_START_MACRO(port, caller)\
 int main() {\
      struct CwebSever *sever = newCwebSever(port, caller);\
@@ -4269,6 +4300,8 @@ int main() {\
      sever->free(sever);\
 return 0;\
 }
+
+
 
 
 
@@ -4358,6 +4391,8 @@ char* cweb_replace_string(const char *target, const char *old_element, const cha
     }
     return result;
 }
+
+
 
 
 
@@ -4502,6 +4537,8 @@ char *private_cweb_convert_url_encoded_text(const char *text){
     new_text[new_text_size] = '\0';
     return new_text;
 }
+
+
 
 
 
@@ -4681,6 +4718,8 @@ void private_cweb_free_http_request(struct CwebHttpRequest *self){
     free(self);
 
 }
+
+
 
 
 
@@ -4969,6 +5008,8 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
 
 
 
+
+
 struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_length,unsigned char *content,int status_code){
     struct CwebHttpResponse *response = create_http_response();
     response->add_header(response, "Content-Type", content_type);
@@ -5062,6 +5103,8 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
     return response;
 
 }
+
+
 struct CwebStringArray * cweb_constructor_string_array(){
     struct CwebStringArray *self = (struct CwebStringArray*)malloc(sizeof(struct CwebStringArray));
     self->size = 0;
@@ -5123,6 +5166,8 @@ void private_cweb_free_string_array(struct CwebStringArray *self){
 }
 
 
+
+
 struct CwebKeyVal* cweb_key_val_constructor(const char *key,const  char *value){
     struct CwebKeyVal *self = (struct CwebKeyVal*)malloc(sizeof(struct CwebKeyVal));
     self->key = (char*)malloc(strlen(key)+1);
@@ -5143,6 +5188,8 @@ void private_cweb_free_key_val(struct CwebKeyVal *self){
     free(self->value);
     free(self);
 }
+
+
 
 
 
@@ -5209,6 +5256,8 @@ void private_cweb_free_dict(struct CwebDict *self){
 }
 
 
+
+
 struct CwebHttpResponse *create_http_response(){
     struct CwebHttpResponse *self = (struct CwebHttpResponse *)malloc(
         sizeof(struct CwebHttpResponse)
@@ -5268,6 +5317,8 @@ void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char 
 void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,const  char *value){
     self->headers->set(self->headers, key, value);
 }
+
+
 char * smart_static_ref(const char *path){
     char file_name[1000];
     sprintf(file_name,"static/%s",path);
@@ -5430,6 +5481,8 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
 }
 
+
+
 void private_cweb_execute_request(
     int socket,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
@@ -5558,6 +5611,8 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
 
 
 
+
+
 void private_cweb_run_server_in_single_process(
     int port,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
@@ -5679,6 +5734,8 @@ void private_cweb_run_server_in_single_process(
     }
     return; 
 }
+
+
 
 
 
@@ -5910,6 +5967,8 @@ void private_cweb_run_server_in_multiprocess(
 }
 
 
+
+
 struct CwebSever * newCwebSever(int port , struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)){
     struct CwebSever *self = (struct  CwebSever*) malloc(sizeof (struct CwebSever));
     self->port = port;
@@ -5958,4 +6017,5 @@ void private_cweb_run_sever(struct  CwebSever *self){
 void private_cweb_free_sever(struct CwebSever *self){
     free(self);
 }
+
 #endif
