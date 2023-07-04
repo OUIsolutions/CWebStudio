@@ -237,6 +237,11 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
     int line_index = 0;
 
     for(int l =0 ; l < i-1;l++){
+
+        if(line_index >= 10000){
+            lines->free_string_array(lines);
+            return MAX_HEADER_SIZE;
+        }
         if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){
             lines->add_string(lines, last_string);
             memset(last_string, 0, 10000);
@@ -244,6 +249,7 @@ int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
             l++;
             continue;
         }
+        
         last_string[line_index] = raw_entries[l];
         line_index++;
     }
