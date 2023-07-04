@@ -1,8 +1,8 @@
 import requests
 text = ''
 for x in range(3000):
-    text+='w'
+    text+='c'
     
-r = requests.get(f'http://localhost:5001/?z={text}')
+r = requests.get(f'http://localhost:5000/?a={text}')
 
 print(r.content)
