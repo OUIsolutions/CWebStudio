@@ -1,6 +1,6 @@
 
 
-struct CwebHttpResponse{
+typedef struct CwebHttpResponse{
     int status_code;
     struct CwebDict *headers;
     int content_length;
@@ -10,7 +10,7 @@ struct CwebHttpResponse{
     void (*add_header)(struct CwebHttpResponse *response,const char *key,const  char *value);
     char *(*generate_response)(struct CwebHttpResponse *response);
     void (*free)(struct CwebHttpResponse *response);
-};
+}CwebHttpResponse;
 
 struct CwebHttpResponse *create_http_response();
 

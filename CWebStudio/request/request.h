@@ -5,7 +5,7 @@
 #define MAX_CONTENT_SIZE -4
 #define UNDEFINED_CONTENT -5
 
-struct CwebHttpRequest{
+typedef struct CwebHttpRequest{
 
     char *url;
     int socket;
@@ -46,7 +46,7 @@ struct CwebHttpRequest{
     int (*interpret_headders)(struct CwebHttpRequest *self, struct CwebStringArray *line_headers);
     void (*free)(struct CwebHttpRequest *request);
     void (*represent)(struct CwebHttpRequest *request);
-};
+}CwebHttpRequest;
 //algorithm functions
 
 int private_cweb_read_content(struct CwebHttpRequest *self,long max_content_size);

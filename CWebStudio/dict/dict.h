@@ -1,6 +1,6 @@
 
 
-struct CwebDict {
+typedef struct CwebDict {
   int size;
   struct CwebKeyVal **keys_vals;
   void (*set)(struct CwebDict *dict,const char *key,const char *value);
@@ -8,7 +8,7 @@ struct CwebDict {
   char*(*find_value_by_normalized_key)(struct CwebDict *dict,const char *key,const char *chars_to_remove);
   void (*free)(struct CwebDict *dict);
   void (*represent)(struct CwebDict *dict);
-};
+}CwebDict;
 
 
 
