@@ -7,11 +7,12 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
         return;
     }
     int paramns_size = strlen(query_params);
-    char key[1000] = {0};
-    char value[1000] = {0};
+    char key[5000] = {0};
+    char value[5000] = {0};
     bool key_found = false;
 
     for(int i =0; i<paramns_size; i++){
+        
 
 
         if(query_params[i] == '='&& key_found == false){
@@ -22,8 +23,8 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
         if(query_params[i] == '&'){
             key_found = false;
             self->params->set(self->params, key, value);
-            memset(key, 0, 1000);
-            memset(value, 0, 1000);
+            memset(key, 0, 5000);
+            memset(value, 0, 5000);
             continue;
         }
         
