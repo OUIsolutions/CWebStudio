@@ -1,8 +1,8 @@
 import requests
 text = ''
-for x in range(11000):
-    text+='v'
+for x in range(900):
+    text+='r'
     
-r = requests.get(f'http://localhost:5001/',headers={'a':text})
+r = requests.get(f'http://localhost:5002/',headers={text:text})
 
 print(r.content)

@@ -158,12 +158,19 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
         int line_size = strlen(current_line);
-        char key[1000] = {0};
-        char value[10000] = {0};
+        char key[1100] = {0};
+        char value[11000] = {0};
         bool key_found = false;
         int value_start_point = 0;
 
-        for(int j = 0; j<line_size;j++){            
+        for(int j = 0; j<line_size;j++){       
+
+            if(key_found == false && j >= 1000){
+                return MAX_HEADER_SIZE;
+            }     
+            
+            
+            
             if(current_line[j] == ':' && key_found == false){
 
                 key_found = true;
