@@ -37,7 +37,7 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 # Runing with Main
 if you need to make, main configurations before run the sever, you can run the function **cweb_run_server** without an macro , like these 
-
+<!--codeof:exemples/runing_with_main.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
 ## Route an Method
 
 for getting the "url" paramns , its very easy, follow the program above 
-
+<!--codeof:exemples/route_and_method.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -85,6 +85,7 @@ CWEB_START_MACRO(50010, main_sever);
 ## Iterating over query Paramns 
 
 for iterating over paramns, you can use the object **CwebDict** 
+<!--codeof:exemples/iterating_over_query_paramns.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -110,6 +111,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## UrlEncode Paramns
 Cweb Studio also suport url encode paramns, but you need to call the method 
 ** request->read_content** for parsing the body 
+<!--codeof:exemples/url_encoded_paramns.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -135,6 +137,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## Iterating over Headders
 
 The same way as iterating over paramns, iterate over headers still simple
+<!--codeof:exemples/iterating_over_headers.c-->
 ~~~c
 
 
@@ -159,7 +162,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## Reading body Content 
 you can acess the body content by calling the function **request->read_content**
 after it , it would be acessible by the **request->content** and **request->content_length**
-
+<!--codeof:exemples/reading_body_content.c-->
 ~~~c
 #include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -179,7 +182,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## Parsing Body Json 
 CwebStudio has cJSON integrated into the lib , for more informations read in 
 https://github.com/DaveGamble/cJSON
-
+<!--codeof:exemples/parsing_body_json.c-->
 ~~~c
 #include "CWebStudio.h"
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -207,7 +210,7 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 
 ## Reading binary Content
-
+<!--codeof:exemples/reading_binary_content.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -239,7 +242,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## Plain Text
 For returning plain text , you can return with the function  
 **cweb_send_text** 
-
+<!--codeof:exemples/returning_plain_text.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -254,6 +257,7 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 Or if you have memory alocated in string, dont worry, just call 
 **cweb_send_text_cleaning_memory**
+<!--codeof:exemples/returning_text_cleaning_memory.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -273,6 +277,7 @@ If you want to return a rendered html, you can use the function
 **cweb_send_rendered_CTextStack_cleaning_memory**, dont worry about cleaning memory, the function
 will do it for you .
 see more at : https://github.com/OUIsolutions/CTextEngine
+<!--codeof:exemples/rendering_html.c-->
 ~~~c
 
 #include "CWebStudio/CwebStudioMain.h"
@@ -309,6 +314,7 @@ CWEB_START_MACRO(5000, main_sever)
 ## HTML
 if you want to generate html from file from scratch , you can call
 **cweb_send_var_html** function
+<!--codeof:exemples/returing_var_html.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -323,9 +329,8 @@ CWEB_START_MACRO(5000, main_sever)
 
 ~~~
 as the  same as plain text , you can call cleaning memory too 
-
+<!--codeof:exemples/returning_var_html_cleaning_memory.c-->
 ~~~c
-
 #include "CWebStudio.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -342,6 +347,7 @@ CWEB_START_MACRO(5000, main_sever)
 
 ## Other Formats 
 You can return other formats like these 
+<!--codeof:exemples/sending_json.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -361,7 +367,7 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 ## Returning Files 
 if you know the path of your file , you can directly send files 
-
+<!--codeof:exemples/returning_files.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -399,7 +405,7 @@ you can use an dynamic  cache system inside an html,buy using an smart_cache , l
 ~~~
 #### smart cache inside rendered text
 and you also can run the smart cache inside the rendered text with **smart_static_ref**
-
+<!--codeof:exemples/smart_cache_inside_rendered_text.c-->
 ~~~c
 
 #include "CWebStudio/CwebStudioMain.h"
