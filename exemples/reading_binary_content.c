@@ -1,4 +1,5 @@
-#include "CWebStudio.h"
+#include "../CWebStudio_test.h"
+
 void write_binary_file(char *path, unsigned char *content, int size)
 {
     FILE *file = fopen(path, "wb");

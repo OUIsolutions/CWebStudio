@@ -1,5 +1,6 @@
-#include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+#include "../CWebStudio_test.h"
+
+ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
     request->read_content(request, one_mega_byte);
     unsigned char *body = request->content;

@@ -1,6 +1,6 @@
-#include "CWebStudio.h"
+#include "../CWebStudio_test.h"
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     char *teste = malloc(100);
     strcpy(teste, "Hello World");

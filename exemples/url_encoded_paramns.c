@@ -1,12 +1,11 @@
 
-#include "CWebStudio.h"
+#include "../CWebStudio_test.h"
 
-
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     request->read_content(request, 20000);
-    struct CwebDict *query_paramns = request->params;
+    CwebDict *query_paramns = request->params;
     for(int i = 0; i < query_paramns->size; i++){
-        struct CwebKeyVal *key_val = query_paramns->keys_vals[i];
+        CwebKeyVal *key_val = query_paramns->keys_vals[i];
         char *key = key_val->key;
         char *value = key_val->value;
         printf("%s : %s\n", key, value);

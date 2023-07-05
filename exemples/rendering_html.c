@@ -1,10 +1,11 @@
-#include "CWebStudio.h"
+#include "../CWebStudio_test.h"
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
     const char *lang = "en";
     const char *text = "text exemple";
-    struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+     CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
 
     s->$open(s,HTML,"lang=\"%s\"",lang);

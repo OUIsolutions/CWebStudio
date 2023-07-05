@@ -1,5 +1,6 @@
-#include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+#include "../CWebStudio_test.h"
+
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 
     return cweb_send_text("Exemple of Return", 200);

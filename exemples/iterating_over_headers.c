@@ -1,9 +1,9 @@
 
 
-#include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+#include "../CWebStudio_test.h"
+ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
-    struct CwebDict *headers = request->headers;
+     CwebDict *headers = request->headers;
     for(int i = 0; i < headers->size; i++){
         struct CwebKeyVal *key_val = headers->keys_vals[i];
         char *key = key_val->key;
