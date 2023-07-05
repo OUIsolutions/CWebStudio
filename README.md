@@ -37,12 +37,12 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 # Runing with Main
 if you need to make, main configurations before run the sever, you can run the function **cweb_run_server** without an macro , like these 
-<!--codeof:exemples/runing_with_main.c-->
+<!--codeof:exemples/runig_with_main.c-->
 ~~~c
 
 #include "CWebStudio.h"
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
     return cweb_send_text("Hello World", 200);
 }
@@ -67,7 +67,8 @@ for getting the "url" paramns , its very easy, follow the program above
 
 #include "CWebStudio.h"
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     char *url = request->url;
     char *method = request->method;
@@ -87,15 +88,13 @@ CWEB_START_MACRO(50010, main_sever);
 for iterating over paramns, you can use the object **CwebDict** 
 <!--codeof:exemples/iterating_over_query_paramns.c-->
 ~~~c
-
 #include "CWebStudio.h"
 
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-
-    struct CwebDict *query_paramns = request->params;
+    CwebDict *query_paramns = request->params;
     for(int i = 0; i < query_paramns->size; i++){
-        struct CwebKeyVal *key_val = query_paramns->keys_vals[i];
+        CwebKeyVal *key_val = query_paramns->keys_vals[i];
         char *key = key_val->key;
         char *value = key_val->value;
         printf("%s : %s\n", key, value);
@@ -116,12 +115,11 @@ Cweb Studio also suport url encode paramns, but you need to call the method
 
 #include "CWebStudio.h"
 
-
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     request->read_content(request, 20000);
-    struct CwebDict *query_paramns = request->params;
+    CwebDict *query_paramns = request->params;
     for(int i = 0; i < query_paramns->size; i++){
-        struct CwebKeyVal *key_val = query_paramns->keys_vals[i];
+        CwebKeyVal *key_val = query_paramns->keys_vals[i];
         char *key = key_val->key;
         char *value = key_val->value;
         printf("%s : %s\n", key, value);
@@ -141,11 +139,10 @@ The same way as iterating over paramns, iterate over headers still simple
 ~~~c
 
 
-
 #include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
-    struct CwebDict *headers = request->headers;
+     CwebDict *headers = request->headers;
     for(int i = 0; i < headers->size; i++){
         struct CwebKeyVal *key_val = headers->keys_vals[i];
         char *key = key_val->key;
@@ -165,7 +162,8 @@ after it , it would be acessible by the **request->content** and **request->cont
 <!--codeof:exemples/reading_body_content.c-->
 ~~~c
 #include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
     request->read_content(request, one_mega_byte);
     unsigned char *body = request->content;
@@ -185,7 +183,8 @@ https://github.com/DaveGamble/cJSON
 <!--codeof:exemples/parsing_body_json.c-->
 ~~~c
 #include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
     request->read_content(request, one_mega_byte);
     unsigned char *body = request->content;
@@ -212,8 +211,8 @@ CWEB_START_MACRO(5001, main_sever);
 ## Reading binary Content
 <!--codeof:exemples/reading_binary_content.c-->
 ~~~c
-
 #include "CWebStudio.h"
+
 void write_binary_file(char *path, unsigned char *content, int size)
 {
     FILE *file = fopen(path, "wb");
@@ -244,9 +243,9 @@ For returning plain text , you can return with the function
 **cweb_send_text** 
 <!--codeof:exemples/returning_plain_text.c-->
 ~~~c
-
 #include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 
     return cweb_send_text("Exemple of Return", 200);
@@ -261,7 +260,7 @@ Or if you have memory alocated in string, dont worry, just call
 ~~~c
 #include "CWebStudio.h"
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     char *teste = malloc(100);
     strcpy(teste, "Hello World");
@@ -269,7 +268,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 CWEB_START_MACRO(5000, main_sever)
-
 ~~~
 
 ## Rendered Html 
@@ -279,10 +277,10 @@ will do it for you .
 see more at : https://github.com/OUIsolutions/CTextEngine
 <!--codeof:exemples/rendering_html.c-->
 ~~~c
+#include "CWebStudio.h"
 
-#include "CWebStudio/CwebStudioMain.h"
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
     const char *lang = "en";
     const char *text = "text exemple";
@@ -308,7 +306,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 CWEB_START_MACRO(5000, main_sever)
 
-
 ~~~
 
 ## HTML
@@ -316,7 +313,6 @@ if you want to generate html from file from scratch , you can call
 **cweb_send_var_html** function
 <!--codeof:exemples/returing_var_html.c-->
 ~~~c
-
 #include "CWebStudio.h"
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -326,7 +322,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 CWEB_START_MACRO(5000, main_sever)
-
 ~~~
 as the  same as plain text , you can call cleaning memory too 
 <!--codeof:exemples/returning_var_html_cleaning_memory.c-->
@@ -342,7 +337,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 CWEB_START_MACRO(5000, main_sever)
 
-
 ~~~
 
 ## Other Formats 
@@ -351,7 +345,8 @@ You can return other formats like these
 ~~~c
 
 #include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     char *json = "{\"name\":\"CWebStudio\",\"version\":\"1.0.0\"}";
     return cweb_send_any(
@@ -369,9 +364,9 @@ CWEB_START_MACRO(5001, main_sever);
 if you know the path of your file , you can directly send files 
 <!--codeof:exemples/returning_files.c-->
 ~~~c
-
 #include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     return cweb_send_file(
         "my_image.png",
@@ -407,10 +402,9 @@ you can use an dynamic  cache system inside an html,buy using an smart_cache , l
 and you also can run the smart cache inside the rendered text with **smart_static_ref**
 <!--codeof:exemples/smart_cache_inside_rendered_text.c-->
 ~~~c
+#include "CWebStudio.h"
 
-#include "CWebStudio/CwebStudioMain.h"
-
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     const char *lang = "en";
     const char *text = "text exemple";
@@ -436,7 +430,6 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 CWEB_START_MACRO(5000,main_sever)
-
 ~~~
 
 
@@ -448,11 +441,11 @@ static Data
 ## CWEB_DEBUG FLAG
 with cweb debug Flag, it will print stages of aplications , like requests, and each stages 
 <!--codeof:exemples/cweb_debug.c-->
-~~~c 
+~~~c
 
 #define CWEB_DEBUG
 #include "CWebStudio.h"
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     return cweb_send_text("Hello World", 200);
     
@@ -471,7 +464,7 @@ valgrind and other memory tools
 #include "CWebStudio.h"
 
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     
     return cweb_send_text("Hello World", 200);
     
@@ -524,7 +517,6 @@ int main(){
     sever->free(sever);
     return 0;
 }
-
 ~~~
 
 
