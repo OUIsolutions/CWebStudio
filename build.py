@@ -30,4 +30,15 @@ def copile_all_exemples(folder:str):
 
 STARTER  = f'CWebStudio/CwebStudioMain.h'
 ct.generate_amalgamated_code(STARTER,'CWebStudio_test.h')
-copile_all_exemples('exemples')
+try:
+    copile_all_exemples('exemples')
+    remove('CWebStudio_test.h')
+except Exception as e:
+    remove('CWebStudio_test.h')
+    raise e
+
+def modifier(text:str):
+    return text.replace('../CWebStudio_test.h','CWebStudio.h')
+
+ct.include_code_in_markdown('README.md',True,modifier)
+
