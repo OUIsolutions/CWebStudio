@@ -5,7 +5,7 @@
 
     const char *lang = "en";
     const char *text = "text exemple";
-     CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+    struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
 
     s->$open(s,HTML,"lang=\"%s\"",lang);

@@ -1,5 +1,4 @@
-#include "CWebStudio.h"
-
+#include "../CWebStudio_test.h"
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
