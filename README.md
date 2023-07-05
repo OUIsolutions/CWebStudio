@@ -443,6 +443,7 @@ CWEB_START_MACRO(5000,main_sever)
 
 ## An Low level aproach 
 if you want to make an custon http response , you can construct the struct buy yourself 
+<!--codeof:exemples/custtom_http.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -470,6 +471,7 @@ static Data
 
 ## CWEB_DEBUG FLAG
 with cweb debug Flag, it will print stages of aplications , like requests, and each stages 
+<!--codeof:exemples/cweb_debug.c-->
 ~~~c 
 
 #define CWEB_DEBUG
@@ -487,7 +489,7 @@ CWEB_START_MACRO(5001, main_sever);
 
 use these flag to execute the function only one time, it will be usefull for
 valgrind and other memory tools
-
+<!--codeof:exemples/cweb_once.c-->
 ~~~c
 #define CWEB_ONCE
 #include "CWebStudio.h"
@@ -511,7 +513,7 @@ int main(){
 ## Sever Paramns 
 
 You can use a lot of paramns into the sever for defining diferent comportaments 
-
+<!--codeof:exemples/server_paramns.c-->
 ~~~c
 
 #include "CWebStudio.h"
