@@ -32,9 +32,7 @@ STARTER  = f'CWebStudio/CwebStudioMain.h'
 ct.generate_amalgamated_code(STARTER,'CWebStudio_test.h')
 try:
     copile_all_exemples('exemples')
-    remove('CWebStudio_test.h')
 except Exception as e:
-    remove('CWebStudio_test.h')
     raise e
 
 def modifier(text:str):
