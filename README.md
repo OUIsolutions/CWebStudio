@@ -13,7 +13,7 @@ for instalation you can just copy the **CWebStudio.h** into your project, and ex
 
 #include "CWebStudio.h"
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     return cweb_send_text("Hello World", 200);
 }
@@ -28,7 +28,7 @@ or you can download the entier **CWebStudio** folder to your project and run wit
 
 #include "CWebStudio/CwebStudioMain.h"
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
     return cweb_send_text("Hello World", 200);
 }
