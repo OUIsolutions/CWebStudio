@@ -1,13 +1,13 @@
 # CWebSudio 
-CWebSudio  its a micro framework to deal with web aplications in C/C++ , its an 
-single header library and provides a lot of funcionalitys , like readding headders
-query paramns, returning files and text.
+CWebSudio is a micro framework to deal with web aplications in C/C++. It's a 
+single header library that provides a lot of functionality such as reading headers,
+query parameters, returning files, and text.
 
-# Instalation 
+# Installation 
 
 ## Single File
-CWebSudio is made to be as dumb as possible, and adopt the idea of single file lib,
-for instalation you can just copy the **CWebStudio.h** into your project, and execute an normal copilation with gcc/g++ or clang 
+CWebSudio is made to be as dumb as possible and adopt the idea of single file library.
+For installation, simply copy the **CWebStudio.h** into your project and compile with gcc/g++ or clang. 
 
 ~~~c
 
@@ -21,8 +21,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 ## Full Folder 
-or you can download the entier **CWebStudio** folder to your project and run with 
-**#include "CWebStudio/CwebStudioMain.h"** header
+You can also download the entire **CWebStudio** folder to your project and run with the
+**#include "CWebStudio/CwebStudioMain.h"** header:
 
 ~~~c
 
@@ -35,8 +35,8 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
 CWEB_START_MACRO(5001, main_sever);
 ~~~
-# Runing with Main
-if you need to make, main configurations before run the sever, you can run the function **cweb_run_server** without an macro , like these 
+# Running with Main
+If making main configurations before running the server is needed, the function **cweb_run_server** may be ran without a macro: 
 <!--codeof:exemples/runig_with_main.c-->
 ~~~c
 
@@ -57,11 +57,11 @@ int main(int argc, char *argv[]){
 ~~~
 
 
-# Getting Entrys
+# Getting Entries
 
-## Route an Method
+## Route a Method
 
-for getting the "url" paramns , its very easy, follow the program above 
+Working with URL parameters is very easy, as seen in the following example:
 <!--codeof:exemples/route_and_method.c-->
 ~~~c
 
@@ -83,9 +83,9 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 CWEB_START_MACRO(50010, main_sever);
 ~~~
-## Iterating over query Paramns 
+## Iterating Query Parameters
 
-for iterating over paramns, you can use the object **CwebDict** 
+To iterate through parameters, the object **CwebDict** may be used like this:
 <!--codeof:exemples/iterating_over_query_paramns.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -107,9 +107,9 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 
 
-## UrlEncode Paramns
-Cweb Studio also suport url encode paramns, but you need to call the method 
-** request->read_content** for parsing the body 
+## UrlEncode Parameters
+Cweb Studio also supports url parameter encoding. To do so, call the method 
+**request->read_content** to parse the body: 
 <!--codeof:exemples/url_encoded_paramns.c-->
 ~~~c
 
@@ -132,9 +132,9 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 
 
-## Iterating over Headders
+## Iterating Headers
 
-The same way as iterating over paramns, iterate over headers still simple
+Similar to iterating through URL parameters, iterating through headers is equally as simple:
 <!--codeof:exemples/iterating_over_headers.c-->
 ~~~c
 
@@ -156,9 +156,9 @@ The same way as iterating over paramns, iterate over headers still simple
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 
-## Reading body Content 
-you can acess the body content by calling the function **request->read_content**
-after it , it would be acessible by the **request->content** and **request->content_length**
+## Reading Body Content 
+Accessing the body content may be done by calling the function **request->read_content**.
+The content will be accessible with **request->content** and **request->content_length**:
 <!--codeof:exemples/reading_body_content.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -177,9 +177,9 @@ after it , it would be acessible by the **request->content** and **request->cont
 
 CWEB_START_MACRO(5001, main_sever);
 ~~~
-## Parsing Body Json 
-CwebStudio has cJSON integrated into the lib , for more informations read in 
-https://github.com/DaveGamble/cJSON
+## Parsing JSON 
+CwebStudio has cJSON integrated into the library. For more information, see 
+https://github.com/DaveGamble/cJSON.
 <!--codeof:exemples/parsing_body_json.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -208,7 +208,7 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 
-## Reading binary Content
+## Reading Binary Content
 <!--codeof:exemples/reading_binary_content.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -239,8 +239,7 @@ CWEB_START_MACRO(5001, main_sever);
 
 # Returning Values
 ## Plain Text
-For returning plain text , you can return with the function  
-**cweb_send_text** 
+Returning plain text is simple with **cweb_send_text**:
 <!--codeof:exemples/returning_plain_text.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -254,8 +253,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 CWEB_START_MACRO(5001, main_sever);
 ~~~
-Or if you have memory alocated in string, dont worry, just call 
-**cweb_send_text_cleaning_memory**
+**cweb_send_text_cleaning_memory** can handle strings:
 <!--codeof:exemples/returning_text_cleaning_memory.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -270,11 +268,10 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 CWEB_START_MACRO(5000, main_sever)
 ~~~
 
-## Rendered Html 
-If you want to return a rendered html, you can use the function 
-**cweb_send_rendered_CTextStack_cleaning_memory**, dont worry about cleaning memory, the function
-will do it for you .
-see more at : https://github.com/OUIsolutions/CTextEngine
+## Rendered HTML 
+To return rendered HTML, the function **cweb_send_rendered_CTextStack_cleaning_memory** may be used. Memory will be automatically cleaned:
+
+see more at https://github.com/OUIsolutions/CTextEngine
 <!--codeof:exemples/rendering_html.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -309,8 +306,7 @@ CWEB_START_MACRO(5000, main_sever)
 ~~~
 
 ## HTML
-if you want to generate html from file from scratch , you can call
-**cweb_send_var_html** function
+To generate HTML from a file, the **cweb_send_var_html** function may be used:
 <!--codeof:exemples/returing_var_html.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -323,7 +319,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 CWEB_START_MACRO(5000, main_sever)
 ~~~
-as the  same as plain text , you can call cleaning memory too 
+As is done with returning plain text, memory will be automatically cleaned with **cweb_send_var_html_cleaning_memory**: 
 <!--codeof:exemples/returning_var_html_cleaning_memory.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -340,7 +336,7 @@ CWEB_START_MACRO(5000, main_sever)
 ~~~
 
 ## Other Formats 
-You can return other formats like these 
+Other formats may be returned like this: 
 <!--codeof:exemples/sending_json.c-->
 ~~~c
 
@@ -361,7 +357,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 ## Returning Files 
-if you know the path of your file , you can directly send files 
+Files can be directly returned by referencing the path:
 <!--codeof:exemples/returning_files.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -379,27 +375,24 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 
-### Static File
-if you want to return an static file (javascript/css/html) you can put everything
-on the static file , and will automaticly sended 
+### Static Files
+Static files (javascript/css/html) can be referenced and returned in the static directory:
 
 
 ~~~html
 
     <img src="/static/captura2.png">
 ~~~
-#### static error codes
-if you put an file called 500.html into the static folder it will return these 
-file,when happen an 500 error
+#### Custom Error Pages
+To return a custom error page, place the <error_code>.html in the static directory. Creating a 500.html into the static directory, for example, will return this page when a 500 error occurs.
 
-
-#### smart cache
-you can use an dynamic  cache system inside an html,buy using an smart_cache , like these
+#### Smart Cache
+Dynamic caching may be used inside HTML by using smart_cache:
 ~~~html
     <img src="smart-cache='file.png'">
 ~~~
-#### smart cache inside rendered text
-and you also can run the smart cache inside the rendered text with **smart_static_ref**
+#### Smart Cache in Rendered Text
+Smart caching with rendered text can be done with **smart_static_ref**:
 <!--codeof:exemples/smart_cache_inside_rendered_text.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -435,11 +428,10 @@ CWEB_START_MACRO(5000,main_sever)
 
 
 ## CWEB_NO_CACHE
-When you pass the **CWEB_NO_CACHE**  flag the browser wont cache the 
-static Data
+When the **CWEB_NO_CACHE** flag is passed to the browser, static data will not be cached.
 
 ## CWEB_DEBUG FLAG
-with cweb debug Flag, it will print stages of aplications , like requests, and each stages 
+**CWEB_DEBUG** will provide useful debugging information:
 <!--codeof:exemples/cweb_debug.c-->
 ~~~c
 
@@ -456,8 +448,7 @@ CWEB_START_MACRO(5001, main_sever);
 
 # CWEB_ONCE
 
-use these flag to execute the function only one time, it will be usefull for
-valgrind and other memory tools
+This flag will execute only one function call at a time. It is useful for debugging with valgrind and other memory tools:
 <!--codeof:exemples/cweb_once.c-->
 ~~~c
 #define CWEB_ONCE
@@ -479,9 +470,9 @@ int main(){
 }
 ~~~
 
-## Sever Paramns 
+## Sever Configuration Parameters 
 
-You can use a lot of paramns into the sever for defining diferent comportaments 
+Several server configuration parameters may be set:
 <!--codeof:exemples/server_paramns.c-->
 ~~~c
 
@@ -496,8 +487,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(){
     struct CwebSever *sever = newCwebSever(3001, main_sever);
     //the higher time of the request handler 
-    //after that , the sever will return 500 
-    // these is useful to prevent the server infinite loop
+    //after that, the sever will return 500 
+    // these is useful to prevent an infinite loop
     sever->function_timeout = 30;
     //the higher time of the client
     //after that , the sever will return 408
@@ -521,7 +512,7 @@ int main(){
 
 
 # Used Dependencies And Atributions
-DoTheWorld includes all self dependecies in the single file, so you dont need to care about it, but if you will use one of these librarys, dont include it in your code to avoid circular imports
+DoTheWorld includes all self dependecies in the single file. If one of these libraries is used in your code, be mindful of circular imports.
 
 ## CJson<br><br>
 **CJson**: from https://github.com/DaveGamble/cJSON <br>
