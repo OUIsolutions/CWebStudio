@@ -1,5 +1,5 @@
 
-
+import .CToolKit as ct
 from os import listdir,remove
 from os.path import  isdir
 from os import remove
@@ -8,7 +8,7 @@ from os import remove
 
 def copile_all_exemples(folder:str):
     print(f'folder: {folder}')
-    elements = listdir('exemples')
+    elements = listdir(folder)
 
     for file in elements:
         filepath = f'{folder}/{file}'
@@ -16,7 +16,7 @@ def copile_all_exemples(folder:str):
             copile_all_exemples(filepath)
         
         try:
-            output =   ct.compile_project('gcc',filepath)
+            output =   ct.compile_project(filepath)
             remove(output)
             print(f'\tpassed:{filepath}')
 
