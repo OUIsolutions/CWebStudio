@@ -7,7 +7,7 @@ from Build.full_folder_zip import zip_folder
 
 STARTER  = f'CWebStudio/CwebStudioMain.h'
 ct.generate_amalgamated_code(STARTER,'CWebStudio_test.h')
-copile_all_exemples('exemples')
+copile_all_exemples('examples')
 
 def modifier(text:str):
     return text.replace('../CWebStudio_test.h','CWebStudio.h')
