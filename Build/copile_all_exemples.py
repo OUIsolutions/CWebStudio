@@ -1,5 +1,5 @@
 
-import .CToolKit as ct
+from .CToolKit import compile_project
 from os import listdir,remove
 from os.path import  isdir
 from os import remove
@@ -16,7 +16,7 @@ def copile_all_exemples(folder:str):
             copile_all_exemples(filepath)
         
         try:
-            output =   ct.compile_project(filepath)
+            output =   compile_project(filepath)
             remove(output)
             print(f'\tpassed:{filepath}')
 

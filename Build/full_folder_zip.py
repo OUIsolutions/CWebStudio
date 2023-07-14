@@ -13,7 +13,7 @@ def create_full_folder_cleared(folder:str,dest:str,zip_name:str):
         if c == dest:
             continue
         
-        if c == zip_name:
+        if c == zip_name + '.zip':
             continue
 
         if c.startswith('.'):

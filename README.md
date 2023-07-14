@@ -37,7 +37,7 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 # Running with Main
 If making main configurations before running the server is needed, the function **cweb_run_server** may be ran without a macro: 
-<!--codeof:exemples/runig_with_main.c-->
+<!--codeof:examples/runig_with_main.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
 ## Route a Method
 
 Working with URL parameters is very easy, as seen in the following example:
-<!--codeof:exemples/route_and_method.c-->
+<!--codeof:examples/route_and_method.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -86,7 +86,7 @@ CWEB_START_MACRO(50010, main_sever);
 ## Iterating Query Parameters
 
 To iterate through parameters, the object **CwebDict** may be used like this:
-<!--codeof:exemples/iterating_over_query_paramns.c-->
+<!--codeof:examples/iterating_over_query_paramns.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -110,7 +110,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## UrlEncode Parameters
 Cweb Studio also supports url parameter encoding. To do so, call the method 
 **request->read_content** to parse the body: 
-<!--codeof:exemples/url_encoded_paramns.c-->
+<!--codeof:examples/url_encoded_paramns.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -135,7 +135,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## Iterating Headers
 
 Similar to iterating through URL parameters, iterating through headers is equally as simple:
-<!--codeof:exemples/iterating_over_headers.c-->
+<!--codeof:examples/iterating_over_headers.c-->
 ~~~c
 
 
@@ -159,7 +159,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## Reading Body Content 
 Accessing the body content may be done by calling the function **request->read_content**.
 The content will be accessible with **request->content** and **request->content_length**:
-<!--codeof:exemples/reading_body_content.c-->
+<!--codeof:examples/reading_body_content.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -180,7 +180,7 @@ CWEB_START_MACRO(5001, main_sever);
 ## Parsing JSON 
 CwebStudio has cJSON integrated into the library. For more information, see 
 https://github.com/DaveGamble/cJSON.
-<!--codeof:exemples/parsing_body_json.c-->
+<!--codeof:examples/parsing_body_json.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -209,7 +209,7 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 
 ## Reading Binary Content
-<!--codeof:exemples/reading_binary_content.c-->
+<!--codeof:examples/reading_binary_content.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -240,7 +240,7 @@ CWEB_START_MACRO(5001, main_sever);
 # Returning Values
 ## Plain Text
 Returning plain text is simple with **cweb_send_text**:
-<!--codeof:exemples/returning_plain_text.c-->
+<!--codeof:examples/returning_plain_text.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -254,7 +254,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 **cweb_send_text_cleaning_memory** can handle strings:
-<!--codeof:exemples/returning_text_cleaning_memory.c-->
+<!--codeof:examples/returning_text_cleaning_memory.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -272,7 +272,7 @@ CWEB_START_MACRO(5000, main_sever)
 To return rendered HTML, the function **cweb_send_rendered_CTextStack_cleaning_memory** may be used. Memory will be automatically cleaned:
 
 see more at https://github.com/OUIsolutions/CTextEngine
-<!--codeof:exemples/rendering_html.c-->
+<!--codeof:examples/rendering_html.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -307,7 +307,7 @@ CWEB_START_MACRO(5000, main_sever)
 
 ## HTML
 To generate HTML from a file, the **cweb_send_var_html** function may be used:
-<!--codeof:exemples/returing_var_html.c-->
+<!--codeof:examples/returing_var_html.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -320,7 +320,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 CWEB_START_MACRO(5000, main_sever)
 ~~~
 As is done with returning plain text, memory will be automatically cleaned with **cweb_send_var_html_cleaning_memory**: 
-<!--codeof:exemples/returning_var_html_cleaning_memory.c-->
+<!--codeof:examples/returning_var_html_cleaning_memory.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -337,7 +337,7 @@ CWEB_START_MACRO(5000, main_sever)
 
 ## Other Formats 
 Other formats may be returned like this: 
-<!--codeof:exemples/sending_json.c-->
+<!--codeof:examples/sending_json.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -358,7 +358,7 @@ CWEB_START_MACRO(5001, main_sever);
 ~~~
 ## Returning Files 
 Files can be directly returned by referencing the path:
-<!--codeof:exemples/returning_files.c-->
+<!--codeof:examples/returning_files.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -393,7 +393,7 @@ Dynamic caching may be used inside HTML by using smart_cache:
 ~~~
 #### Smart Cache in Rendered Text
 Smart caching with rendered text can be done with **smart_static_ref**:
-<!--codeof:exemples/smart_cache_inside_rendered_text.c-->
+<!--codeof:examples/smart_cache_inside_rendered_text.c-->
 ~~~c
 #include "CWebStudio.h"
 
@@ -432,7 +432,7 @@ When the **CWEB_NO_CACHE** flag is passed to the browser, static data will not b
 
 ## CWEB_DEBUG FLAG
 **CWEB_DEBUG** will provide useful debugging information:
-<!--codeof:exemples/cweb_debug.c-->
+<!--codeof:examples/cweb_debug.c-->
 ~~~c
 
 #define CWEB_DEBUG
@@ -449,7 +449,7 @@ CWEB_START_MACRO(5001, main_sever);
 # CWEB_ONCE
 
 This flag will execute only one function call at a time. It is useful for debugging with valgrind and other memory tools:
-<!--codeof:exemples/cweb_once.c-->
+<!--codeof:examples/cweb_once.c-->
 ~~~c
 #define CWEB_ONCE
 #include "CWebStudio.h"
@@ -473,7 +473,7 @@ int main(){
 ## Sever Configuration Parameters 
 
 Several server configuration parameters may be set:
-<!--codeof:exemples/server_paramns.c-->
+<!--codeof:examples/server_paramns.c-->
 ~~~c
 
 #include "CWebStudio.h"
@@ -487,8 +487,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(){
     struct CwebSever *sever = newCwebSever(3001, main_sever);
     //the higher time of the request handler 
-    //after that, the sever will return 500 
-    // these is useful to prevent an infinite loop
+    //after that , the sever will return 500 
+    // these is useful to prevent the server infinite loop
     sever->function_timeout = 30;
     //the higher time of the client
     //after that , the sever will return 408
