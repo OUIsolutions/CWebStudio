@@ -678,7 +678,7 @@ struct CTextStack *CTextStack_trim(struct CTextStack *self){
         }
     }
     CTextStack_free(invalid_elements);
-    CTextStack_substr(self,start_point,end_point);
+    return CTextStack_substr(self,start_point,end_point);
 
 }
 
