@@ -2,26 +2,26 @@
 
 
  CwebHttpResponse *main_sever( CwebHttpRequest *request ){
-
     const char *lang = "en";
     const char *text = "text exemple";
-    struct CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+    CTextStackModule m = newCTextStackModule();
+    CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
 
-    s->$open(s,HTML,"lang=\"%s\"",lang);
-        s->open(s,HEAD);
-     
-        s->close(s,HEAD);
-        s->open(s,BODY);
-            s->open(s,H1);
-                s->segment_text(s,"This is a text");
-            s->close(s,H1);
-            s->open(s,P);
-                s->segment_format(s,"This is a formated  text  %s",text);
-            s->close(s,P);
+    m.$open(s,CTEXT_HTML,"lang=\"%s\"",lang);
+        m.open(s,CTEXT_HEAD);
 
-        s->close(s,BODY);
-    s->close(s,HTML);
+        m.close(s,CTEXT_HEAD);
+        m.open(s,CTEXT_BODY);
+            m.open(s,CTEXT_H1);
+                m.segment_text(s,"This is a text");
+            m.close(s,CTEXT_H1);
+            m.open(s,CTEXT_P);
+                m.segment_format(s,"This is a formated  text  %s",text);
+            m.close(s,CTEXT_P);
+
+        m.close(s,CTEXT_BODY);
+    m.close(s,CTEXT_HTML);
     return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
 }
 

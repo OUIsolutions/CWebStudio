@@ -15,6 +15,7 @@ char * smart_static_ref(const char *path){
 
 char * private_cweb_change_smart_cache(const char *content){
 
+    CTextStackModule m = newCTextStackModule();
     struct CTextStack *code = newCTextStack("","");
     struct CTextStack *buffer_pattern = newCTextStack("","");
     struct CTextStack *src = newCTextStack("","");
@@ -29,15 +30,15 @@ char * private_cweb_change_smart_cache(const char *content){
     for(int i = 0; i < content_size; i++){
 
         char current = content[i];
-        buffer_pattern->format(buffer_pattern,"%c",current);
+        m.format(buffer_pattern,"%c",current);
 
         if(found_entry){
 
             //means its cancel the operation
             if( current == '\n' || current =='"'){
-                code->text(code,buffer_pattern->rendered_text);
-                buffer_pattern->restart(buffer_pattern);
-                src->restart(src);
+                m.text(code,buffer_pattern->rendered_text);
+                m.restart(buffer_pattern);
+                m.restart(src);
                 found_entry = false;
                 entry_founds = 0;
                 continue;
@@ -45,17 +46,17 @@ char * private_cweb_change_smart_cache(const char *content){
 
             //means its getts the src
             if(current != '\''){
-                src->format(src,"%c",current);
+                m.format(src,"%c",current);
                 continue;
             }
 
             char *content = smart_static_ref(src->rendered_text);
-            code->text(code,content);
+            m.text(code,content);
             free(content);
 
 
-            buffer_pattern->restart(buffer_pattern);
-            src->restart(src);
+            m.restart(buffer_pattern);
+            m.restart(src);
             found_entry = false;
             entry_founds = 0;
             continue;
@@ -74,8 +75,8 @@ char * private_cweb_change_smart_cache(const char *content){
         }
 
         //means didnt get the  pattern
-        code->text(code,buffer_pattern->rendered_text);
-        buffer_pattern->restart(buffer_pattern);
+        m.text(code,buffer_pattern->rendered_text);
+        m.restart(buffer_pattern);
         entry_founds = 0;
 
     }
