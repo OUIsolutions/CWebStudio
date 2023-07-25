@@ -15,4 +15,5 @@ def modifier(text:str):
 
 ct.include_code_in_markdown('README.md',True,modifier)
 
+ct.generate_amalgamated_code(STARTER,'CWebStudio.h')
 zip_folder('CWebStudio')
