@@ -390,7 +390,7 @@ struct CTextStack * newCTextStack(const char *line_breaker, const char *separato
 struct CTextStack *newCTextStack_string(const char *starter){
     CTextStack *self = newCTextStack("","");
     if(starter){
-        CTextStack_format(self,starter);
+        CTextStack_format(self,"%s", starter);
     }
     return self;
 }
