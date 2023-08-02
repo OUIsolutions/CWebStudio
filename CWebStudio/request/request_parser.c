@@ -37,7 +37,12 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
         }
     }
     if(key_found){
-        self->params->set(self->params, key, value);
+        char *sanitized_key = private_cweb_convert_url_encoded_text(key);
+        char *sanitized_value = private_cweb_convert_url_encoded_text(value);
+        self->params->set(self->params, sanitized_key, sanitized_value);
+        free(sanitized_key);
+        free(sanitized_value);
+        
     }
 
 }
