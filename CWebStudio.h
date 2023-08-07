@@ -341,6 +341,11 @@ void CTextArray_represent(CTextArray *self);
 typedef struct CTextStackModule{
 
     //admnistrative methods
+    CTextStack  *(*newStack)(const char *line_breaker, const char *separator);
+    CTextStack *(*newStack_string)(const char *starter);
+    CTextStack *(*newStack_string_getting_ownership)(const char *starter);
+    CTextStack *(*newStack_string_empty)();
+
     void (*free)(struct CTextStack *self);
     struct CTextStack *(*clone)(struct CTextStack *self);
     void (*represent)(struct CTextStack *self);
@@ -427,7 +432,7 @@ CTextStackModule newCTextStackModule();
 
 
 typedef struct CTextArrayModule{
-
+    CTextArray *(*newArray)();
     void (*append)(CTextArray *self,CTextStack *element);
     void (*append_string)(CTextArray *self,const char *element);
     CTextStack * (*join)(CTextArray *self,const char *separator);
@@ -1311,7 +1316,10 @@ void CTextArray_represent(CTextArray *self){
 
 CTextStackModule newCTextStackModule(){
     struct CTextStackModule self = {0};
-
+    self.newStack = newCTextStack;
+    self.newStack_string = newCTextStack_string;
+    self.newStack_string_empty = newCTextStack_string_empty;
+    self.newStack_string_getting_ownership = newCTextStack_string_getting_ownership;
     self.text = CTextStack_text;
     self.segment_text = CTextStack_segment_text;
     self.format = CTextStack_format;
@@ -1382,6 +1390,7 @@ CTextStackModule newCTextStackModule(){
 
 CTextArrayModule newCTextArrayModule(){
     CTextArrayModule module = {0};
+    module.newArray = newCTextArray;
     module.append = CTextArray_append;
     module.append_string = CTextArray_append_string;
     module.join = CTextArray_join;
