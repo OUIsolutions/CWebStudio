@@ -109,7 +109,6 @@ SOFTWARE.
 
 
 
-
 #define CTEXT_LINE_BREAKER "\n"
 #define CTEXT_SEPARATOR "   "
 
@@ -248,6 +247,53 @@ void CTextStack_self_reverse(struct CTextStack *self);
 
 
 
+long private_CText_transform_index(long size, long value);
+
+
+void private_ctext_generate_formated_text(
+    struct CTextStack *stack,
+    const char *format,
+    va_list argptr
+    );
+
+
+
+typedef struct CTextArray{
+
+    CTextStack **stacks;
+    long size;
+
+
+}CTextArray;
+
+CTextArray * newCTextArray();
+
+
+void CTextArray_append(CTextArray *self,CTextStack *element);
+
+
+void CTextArray_append_string(CTextArray *self,const char *element);
+
+CTextStack * CTextArray_join(CTextArray *self,const char *separator);
+
+CTextArray * CTextArray_split(const char *element,const char *target);
+
+CTextArray * CTextArray_map(CTextArray *self, CTextStack *(caller)(CTextStack* element));
+
+CTextArray * CTextArray_filter(CTextArray *self, bool (caller)(CTextStack* element));
+
+void  CTextArray_foreach(CTextArray *self, void (*caller)(CTextStack* element));
+
+bool CTextArray_includes(CTextArray *self,const char *element);
+
+void  CTextArray_free(CTextArray *self);
+
+void CTextArray_represent(CTextArray *self);
+
+
+
+
+
 typedef struct CTextStackModule{
 
     //admnistrative methods
@@ -336,55 +382,6 @@ typedef struct CTextStackModule{
 CTextStackModule newCTextStackModule();
 
 
-
-
-long private_CText_transform_index(long size, long value);
-
-
-void private_ctext_generate_formated_text(
-    struct CTextStack *stack,
-    const char *format,
-    va_list argptr
-    );
-
-
-
-
-
-typedef struct CTextArray{
-
-    CTextStack **stacks;
-    long size;
-
-
-}CTextArray;
-
-CTextArray * newCTextArray();
-
-
-void CTextArray_append(CTextArray *self,CTextStack *element);
-
-
-void CTextArray_append_string(CTextArray *self,const char *element);
-
-CTextStack * CTextArray_join(CTextArray *self,const char *separator);
-
-CTextArray * CTextArray_split(const char *element,const char *target);
-
-CTextArray * CTextArray_map(CTextArray *self, CTextStack *(caller)(CTextStack* element));
-
-CTextArray * CTextArray_filter(CTextArray *self, bool (caller)(CTextStack* element));
-
-void  CTextArray_foreach(CTextArray *self, void (*caller)(CTextStack* element));
-
-bool CTextArray_includes(CTextArray *self,const char *element);
-
-void  CTextArray_free(CTextArray *self);
-
-void CTextArray_represent(CTextArray *self);
-
-
-
 typedef struct CTextArrayModule{
 
     void (*append)(CTextArray *self,CTextStack *element);
@@ -404,43 +401,15 @@ CTextArrayModule newCTextArrayModule();
 
 
 
+typedef struct CTextNamespace{
 
-//
-// Created by jurandi on 14-06-2023.
-//
-struct CTextStack * newCTextStack(const char *line_breaker, const char *separator){
-    struct CTextStack *self = (struct CTextStack*)malloc(sizeof(struct CTextStack));
-    self->rendered_text = (char*)malloc(2);
-    strcpy(self->rendered_text,"\0");
-    self->rendered_text_alocation_size = 2;
-    self->size = 0;
-    self->ident_level = 0;
-    self->line_breaker = strdup(line_breaker);
-    self->separator = strdup(separator);
+    CTextArrayModule array;
+    CTextStackModule stack;
 
+}CTextNamespace;
 
-    return self;
-}
+CTextNamespace newCTextNamespace();
 
-struct CTextStack *newCTextStack_string(const char *starter){
-    CTextStack *self = newCTextStack("","");
-    if(starter){
-        CTextStack_format(self,"%s", starter);
-    }
-    return self;
-}
-
-struct CTextStack *newCTextStack_string_getting_ownership(const char *starter){
-    CTextStack *self = newCTextStack("","");
-    free(self->rendered_text);
-    self->rendered_text = (char*)starter;
-    self->size = strlen(starter);
-    self->rendered_text_alocation_size = self->size;
-    return self;
-}
-struct CTextStack *newCTextStack_string_empty(){
-    return  newCTextStack("","");
-}
 
 
 
@@ -767,6 +736,124 @@ void CTextStack_self_trim(struct CTextStack *self){
     private_CTextStack_parse_ownership(self,new_stack);
 }
 
+//
+// Created by jurandi on 14-06-2023.
+//
+struct CTextStack * newCTextStack(const char *line_breaker, const char *separator){
+    struct CTextStack *self = (struct CTextStack*)malloc(sizeof(struct CTextStack));
+    self->rendered_text = (char*)malloc(2);
+    strcpy(self->rendered_text,"\0");
+    self->rendered_text_alocation_size = 2;
+    self->size = 0;
+    self->ident_level = 0;
+    self->line_breaker = strdup(line_breaker);
+    self->separator = strdup(separator);
+
+
+    return self;
+}
+
+struct CTextStack *newCTextStack_string(const char *starter){
+    CTextStack *self = newCTextStack("","");
+    if(starter){
+        CTextStack_format(self,"%s", starter);
+    }
+    return self;
+}
+
+struct CTextStack *newCTextStack_string_getting_ownership(const char *starter){
+    CTextStack *self = newCTextStack("","");
+    free(self->rendered_text);
+    self->rendered_text = (char*)starter;
+    self->size = strlen(starter);
+    self->rendered_text_alocation_size = self->size;
+    return self;
+}
+struct CTextStack *newCTextStack_string_empty(){
+    return  newCTextStack("","");
+}
+
+
+int CTextStack_typeof(struct CTextStack *self){
+    if(self->size == 0){
+        return CTEXT_STRING;
+    }
+
+    if(CTextStack_equal(self,"true") ||CTextStack_equal(self,"false") ){
+        return CTEXT_BOOL;
+    }
+
+    double data;
+    int result = sscanf(self->rendered_text,"%lf",&data);
+    if(!result){
+        return CTEXT_STRING;
+    }
+    if(CTextStack_index_of(self,".") == -1){
+        return CTEXT_LONG;
+    }
+    return CTEXT_DOUBLE;
+
+
+}
+bool CTextStack_is_a_num(struct CTextStack *self){
+    int type = CTextStack_typeof(self);
+    if(type == CTEXT_DOUBLE || type == CTEXT_LONG){
+        return true;
+    }
+    return false;
+}
+
+
+const char * CTextStack_typeof_in_str(struct CTextStack *self){
+    int current_type = CTextStack_typeof(self);
+
+    if(current_type == CTEXT_BOOL){
+        return "bool";
+    }
+
+    else if(current_type == CTEXT_STRING){
+        return "string";
+    }
+
+    else if(current_type == CTEXT_LONG){
+        return "long";
+    }
+    
+    else if(current_type == CTEXT_DOUBLE){
+        return "double";
+    }
+    
+    else{
+        return "invalid";
+    }
+}
+
+bool  CTextStack_parse_to_bool(struct CTextStack *self){
+    if(CTextStack_equal(self,"true")){
+        return true;
+    }
+    return false;
+}
+
+long  CTextStack_parse_to_integer(struct CTextStack *self){
+    long value;
+    int result = sscanf(self->rendered_text,"%ld",&value);
+    if(!result){
+        return -1;
+    }
+    return value;
+}
+
+double  CTextStack_parse_to_double(struct CTextStack *self){
+    double value;
+    int result = sscanf(self->rendered_text,"%lf",&value);
+    if(!result){
+        return -1;
+    }
+    return value;
+}
+
+
 
 void private_ctext_text_double_size_if_reachs(struct CTextStack *self){
 
@@ -920,155 +1007,6 @@ void ctext_close(struct CTextStack *self, const char *tag){
 
 
 
-int CTextStack_typeof(struct CTextStack *self){
-    if(self->size == 0){
-        return CTEXT_STRING;
-    }
-
-    if(CTextStack_equal(self,"true") ||CTextStack_equal(self,"false") ){
-        return CTEXT_BOOL;
-    }
-
-    double data;
-    int result = sscanf(self->rendered_text,"%lf",&data);
-    if(!result){
-        return CTEXT_STRING;
-    }
-    if(CTextStack_index_of(self,".") == -1){
-        return CTEXT_LONG;
-    }
-    return CTEXT_DOUBLE;
-
-
-}
-bool CTextStack_is_a_num(struct CTextStack *self){
-    int type = CTextStack_typeof(self);
-    if(type == CTEXT_DOUBLE || type == CTEXT_LONG){
-        return true;
-    }
-    return false;
-}
-
-
-const char * CTextStack_typeof_in_str(struct CTextStack *self){
-    int current_type = CTextStack_typeof(self);
-
-    if(current_type == CTEXT_BOOL){
-        return "bool";
-    }
-
-    else if(current_type == CTEXT_STRING){
-        return "string";
-    }
-    else if(current_type == CTEXT_LONG){
-        return "long";
-    }
-    else if(current_type == CTEXT_DOUBLE){
-        return "double";
-    }
-    else{
-        return "invalid";
-    }
-}
-
-bool  CTextStack_parse_to_bool(struct CTextStack *self){
-    if(CTextStack_equal(self,"true")){
-        return true;
-    }
-    return false;
-}
-
-long  CTextStack_parse_to_integer(struct CTextStack *self){
-    long value;
-    int result = sscanf(self->rendered_text,"%ld",&value);
-    if(!result){
-        return -1;
-    }
-    return value;
-}
-
-double  CTextStack_parse_to_double(struct CTextStack *self){
-    double value;
-    int result = sscanf(self->rendered_text,"%lf",&value);
-    if(!result){
-        return -1;
-    }
-    return value;
-}
-
-
-
-
-CTextStackModule newCTextStackModule(){
-    struct CTextStackModule self = {0};
-
-    self.text = CTextStack_text;
-    self.segment_text = CTextStack_segment_text;
-    self.format = CTextStack_format;
-    self.segment = CTextStack_segment;
-    self.segment_format = CTextStack_segment_format;
-    self.$open = CTextStack_$open;
-    self.only$open =CTextStack_only$open;
-    self.auto$close = CTextStack_auto$close;
-    self.open = ctext_open;
-    self.close = ctext_close;
-    self.free =  CTextStack_free;
-    self.clone = CTextStack_clone;
-    self.represent = CTextStack_represent;
-    self.self_transform_in_string_and_self_clear = CTextStack_self_transform_in_string_and_self_clear;
-    self.restart = CTextStack_restart;
-    self.substr = CTextStack_substr;
-    self.self_substr =CTextStack_self_substr;
-
-    self.pop = CTextStack_pop;
-    self.self_pop =CTextStack_self_pop;
-
-    self.replace = CTextStack_replace;
-    self.self_replace = CTextStack_self_replace;
-
-    self.replace_long = CTextStack_replace_long;
-    self.self_replace_long =CTextStack_self_replace_long;
-
-
-    self.replace_double = CTextStack_replace_double;
-    self.self_replace_double =CTextStack_self_replace_double;
-
-    self.insert_at = CTextStack_insert_at;
-    self.self_insert_at  = CTextStack_self_insert_at;
-
-
-    self.index_of = CTextStack_index_of;
-    self.index_of_char = CTextStack_index_of_char;
-
-    self.lower = CTextStack_lower;
-    self.self_lower = CTextStack_self_lower;
-
-    self.upper = CTextStack_upper;
-    self.self_upper = CTextStack_self_upper;
-
-    self.starts_with = CTextStack_starts_with;
-    self.ends_with = CTextStack_ends_with;
-
-    self.equal = CTextStack_equal;
-    self.reverse = CTextStack_reverse;
-    self.self_reverse = CTextStack_self_reverse;
-
-
-    self.typeof_element = CTextStack_typeof;
-    self.is_a_num = CTextStack_is_a_num;
-    self.typeof_in_str = CTextStack_typeof_in_str;
-    self.parse_to_bool = CTextStack_parse_to_bool;
-    self.parse_to_integer = CTextStack_parse_to_integer;
-    self.parse_to_double = CTextStack_parse_to_double;
-
-    self.trim = CTextStack_trim;
-    self.self_trim = CTextStack_self_trim;
-
-
-    return self;
-}
-
-
 
 
 void private_ctext_generate_formated_text(
@@ -1204,8 +1142,6 @@ long private_CText_transform_index(long size , long value){
 }
 
 
-
-
 CTextArray * newCTextArray(){
     CTextArray  *self = (CTextArray*) malloc(sizeof (CTextArray));
     self->size = 0;
@@ -1329,6 +1265,77 @@ void CTextArray_represent(CTextArray *self){
 
 
 
+CTextStackModule newCTextStackModule(){
+    struct CTextStackModule self = {0};
+
+    self.text = CTextStack_text;
+    self.segment_text = CTextStack_segment_text;
+    self.format = CTextStack_format;
+    self.segment = CTextStack_segment;
+    self.segment_format = CTextStack_segment_format;
+    self.$open = CTextStack_$open;
+    self.only$open =CTextStack_only$open;
+    self.auto$close = CTextStack_auto$close;
+    self.open = ctext_open;
+    self.close = ctext_close;
+    self.free =  CTextStack_free;
+    self.clone = CTextStack_clone;
+    self.represent = CTextStack_represent;
+    self.self_transform_in_string_and_self_clear = CTextStack_self_transform_in_string_and_self_clear;
+    self.restart = CTextStack_restart;
+    self.substr = CTextStack_substr;
+    self.self_substr =CTextStack_self_substr;
+
+    self.pop = CTextStack_pop;
+    self.self_pop =CTextStack_self_pop;
+
+    self.replace = CTextStack_replace;
+    self.self_replace = CTextStack_self_replace;
+
+    self.replace_long = CTextStack_replace_long;
+    self.self_replace_long =CTextStack_self_replace_long;
+
+
+    self.replace_double = CTextStack_replace_double;
+    self.self_replace_double =CTextStack_self_replace_double;
+
+    self.insert_at = CTextStack_insert_at;
+    self.self_insert_at  = CTextStack_self_insert_at;
+
+
+    self.index_of = CTextStack_index_of;
+    self.index_of_char = CTextStack_index_of_char;
+
+    self.lower = CTextStack_lower;
+    self.self_lower = CTextStack_self_lower;
+
+    self.upper = CTextStack_upper;
+    self.self_upper = CTextStack_self_upper;
+
+    self.starts_with = CTextStack_starts_with;
+    self.ends_with = CTextStack_ends_with;
+
+    self.equal = CTextStack_equal;
+    self.reverse = CTextStack_reverse;
+    self.self_reverse = CTextStack_self_reverse;
+
+
+    self.typeof_element = CTextStack_typeof;
+    self.is_a_num = CTextStack_is_a_num;
+    self.typeof_in_str = CTextStack_typeof_in_str;
+    self.parse_to_bool = CTextStack_parse_to_bool;
+    self.parse_to_integer = CTextStack_parse_to_integer;
+    self.parse_to_double = CTextStack_parse_to_double;
+
+    self.trim = CTextStack_trim;
+    self.self_trim = CTextStack_self_trim;
+
+
+    return self;
+}
+
+
+
 CTextArrayModule newCTextArrayModule(){
     CTextArrayModule module = {0};
     module.append = CTextArray_append;
@@ -1343,6 +1350,15 @@ CTextArrayModule newCTextArrayModule(){
     return module;
 }
 
+
+
+
+CTextNamespace newCTextNamespace(){
+    CTextNamespace self  = {0};
+    self.stack = newCTextStackModule();
+    self.array = newCTextArrayModule();
+    return self;
+}
 
 
 #endif // CTEXTENGINE_H
