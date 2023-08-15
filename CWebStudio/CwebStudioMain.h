@@ -28,55 +28,8 @@ SOFTWARE.
 #ifndef __CWEBSTUDIO_H
 #define __CWEBSTUDIO_H
 
-#include <sys/wait.h>
-#include <stdio.h>
-#include <sys/stat.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <signal.h>
-#include <sys/resource.h>
-
-
-#include <arpa/inet.h>
-#include <unistd.h>
-#include "dependencies/CTextEngine.h"
-
-#ifndef cJSON__h
-
-#include "dependencies/cJson/cJSON.h"
-#include "dependencies/cJson/cJSON.c"
-
-#endif    
-#include "string_array/string_array.h"
-#include "strings/strings.h"
-#include "extras/extras.h"
-#include "debug/debug.h"
-#include "keyval/key_val.h"
-#include "dict/dict.h"
-#include "response/response/response.h"
-#include "response/response_functions/response_functions.h"
-#include "request/request.h"
-#include "static/static.h"
-
-#include "server/server_functions/sever_functions.h"
-#include "server/server/sever.h"
-#include "main_macro.h"
-
-#include "strings/strings.c"
-#include "extras/extras.c"
-#include "request/request.c"
-#include "request/request_parser.c"
-#include "response/response_functions/response_functions.c"
-#include "string_array/string_array.c"
-#include "keyval/key_val.c"
-#include "dict/dict.c"
-#include "response/response/response.c"
-#include "static/static.c"
-#include "server/server_functions/request_execution.c"
-#include "server/server_functions/single_process.c"
-#include "server/server_functions/multi_process.c"
-#include "server/server/server.c"
+#include "dependencies.h"
+#include "declaration.h"
+#include "definition.h"
 
 #endif
