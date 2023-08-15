@@ -1,6 +1,6 @@
 
 
-struct CwebSever * newCwebSever(int port ,CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request)){
+struct CwebSever * newCwebSever(int port ,CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
     struct CwebSever *self = (struct  CwebSever*) malloc(sizeof (struct CwebSever));
     self->port = port;
     self->function_timeout = 30;
