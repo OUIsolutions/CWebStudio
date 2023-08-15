@@ -9,22 +9,22 @@ void private_cweb_execute_request(
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = newCwebHttpRequest(socket);
 
-    int result = request->parse_http_request(request);
+    int result =CwebHttpRequest_parse_http_request(request);
     
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");
-        request->free(request);
+        CwebHttpRequest_free(request);
         return;
     }
 
     if(result == READ_ERROR){
         cweb_print("Read Error \n");
-        request->free(request);
+        CwebHttpRequest_free(request);
         return;
     }
     if(result == MAX_HEADER_SIZE){
         cweb_print("Max Header Size\n");
-        request->free(request);
+        CwebHttpRequest_free(request);
         return;
     }
 
@@ -110,7 +110,7 @@ void private_cweb_execute_request(
     
     free(response_str);
     response->free(response);
-    request->free(request);
+    CwebHttpRequest_free(request);
     cweb_print("Cleared memory\n");
 }
 

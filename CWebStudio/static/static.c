@@ -108,7 +108,7 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
         char *full_path = request->route;
         full_path+=1;
 
-        char *path = request->get_param(request,"path");
+        char *path = CwebHttpRequest_get_param(request,"path");
         if(path != NULL){
             full_path = path;
         }
@@ -146,7 +146,7 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
 
 
         if(use_cache){
-            char *unix_cache = request->get_param(request,"unix-cache");
+            char *unix_cache = CwebHttpRequest_get_param(request,"unix-cache");
             if(unix_cache){
                 char response_code[50] = "";
                 sprintf(response_code, "public, max-age=31536000, immutable");
