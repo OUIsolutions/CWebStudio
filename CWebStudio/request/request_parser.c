@@ -254,12 +254,12 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
     for(int l =0 ; l < i-1;l++){
 
         if(line_index >= 10000){
-            lines->free_string_array(lines);
+            CwebStringArray_free(lines);
             return MAX_HEADER_SIZE;
         }
 
         if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){
-            lines->add_string(lines, last_string);
+            CwebStringArray_add(lines, last_string);
             memset(last_string, 0, 10000);
             line_index = 0;
             l++;
@@ -276,12 +276,12 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
 
     if(line_error){
 
-        lines->free_string_array(lines);
+        CwebStringArray_free(lines);
         return line_error;
     }
 
     int headers_error = CwebHttpRequest_interpret_headders(self, lines);
-    lines->free_string_array(lines);
+    CwebStringArray_free(lines);
     
     
     if(headers_error){

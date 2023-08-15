@@ -4853,7 +4853,7 @@ struct CwebStringArray {
   void (*free_string_array)(struct CwebStringArray *self);
   int (*find_position)(struct CwebStringArray *self,const char *string);
 }; // End the structure with a semicolon
-int  CwebStringArray_find_position(struct CwebStringArray *self, const char *string);
+int  CwebStringArray_find(struct CwebStringArray *self, const char *string);
 void CwebStringArray_add(struct CwebStringArray *self, const char *string);
 void CwebStringArray_merge(struct CwebStringArray *self, struct CwebStringArray *other);
 void CwebStringArray_represent(struct CwebStringArray *self);
@@ -6087,7 +6087,7 @@ struct CwebStringArray * newCwebStringArray(){
     return self;
 }
 
-int CwebStringArray_find_position(struct CwebStringArray *self, const char *string){
+int CwebStringArray_find(struct CwebStringArray *self, const char *string){
     for(int i = 0; i < self->size; i++){
         if(strcmp(self->strings[i], string) == 0){
             return i;

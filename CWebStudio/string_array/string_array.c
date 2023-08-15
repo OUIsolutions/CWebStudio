@@ -4,16 +4,11 @@ struct CwebStringArray * newCwebStringArray(){
     self->size = 0;
 
     self->strings = (char**)malloc(1);
-    self->add_string = CwebStringArray_add;
-    self->set_value = CwebStringArray_set;
-    self->merge_string_array = CwebStringArray_merge;
-    self->represent= CwebStringArray_represent;
-    self->free_string_array = CwebStringArray_free;
-    self->find_position = CwebStringArray_find_position;
+
     return self;
 }
 
-int CwebStringArray_find_position(struct CwebStringArray *self, const char *string){
+int CwebStringArray_find(struct CwebStringArray *self, const char *string){
     for(int i = 0; i < self->size; i++){
         if(strcmp(self->strings[i], string) == 0){
             return i;
@@ -41,7 +36,7 @@ void CwebStringArray_add(struct CwebStringArray *self, const char *string){
 
 void CwebStringArray_merge(struct CwebStringArray *self, struct CwebStringArray *other){
     for(int i = 0; i < other->size; i++){
-        self->add_string(self, other->strings[i]);
+        CwebStringArray_add(self, other->strings[i]);
     }
 }
 
