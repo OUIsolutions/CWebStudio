@@ -13,13 +13,12 @@ struct CwebSever * newCwebSever(int port , struct CwebHttpResponse *(*request_ha
     self->use_cache = true;
     
     self->request_handler = request_handler;
-    self->start = private_cweb_run_sever;
-    self->free = private_cweb_free_sever;
+
     return self;
 }
 
 
-void private_cweb_run_sever(struct  CwebSever *self){
+void CwebSever_start(struct  CwebSever *self){
     if (self->single_process){
 
         private_cweb_run_server_in_single_process(
@@ -45,6 +44,7 @@ void private_cweb_run_sever(struct  CwebSever *self){
         );
     }
 }
-void private_cweb_free_sever(struct CwebSever *self){
+
+void CwebSever_free(struct CwebSever *self){
     free(self);
 }

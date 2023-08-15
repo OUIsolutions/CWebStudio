@@ -5230,8 +5230,8 @@ static long total_requests = 0;
 
 
 struct CwebSever *newCwebSever(int port , struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request));
-void private_cweb_run_sever(struct  CwebSever *self);
-void private_cweb_free_sever(struct CwebSever *self);
+void CwebSever_start(struct  CwebSever *self);
+void CwebSever_free(struct CwebSever *self);
 
 
 
@@ -6957,7 +6957,7 @@ struct CwebSever * newCwebSever(int port , struct CwebHttpResponse *(*request_ha
 }
 
 
-void private_cweb_run_sever(struct  CwebSever *self){
+void CwebSever_start(struct  CwebSever *self){
     if (self->single_process){
 
         private_cweb_run_server_in_single_process(
@@ -6983,7 +6983,7 @@ void private_cweb_run_sever(struct  CwebSever *self){
         );
     }
 }
-void private_cweb_free_sever(struct CwebSever *self){
+void CwebSever_free(struct CwebSever *self){
     free(self);
 }
 

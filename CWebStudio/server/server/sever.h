@@ -19,17 +19,16 @@ static long total_requests = 0;
     bool use_cache;
 
     //methods
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request);
-    void (*start)(struct  CwebSever *self);
-    void (*free)(struct  CwebSever *self);
+    CwebHttpResponse *(*request_handler)(CwebHttpRequest *request);
+
 }CwebSever;
 
 
 
 
 struct CwebSever *newCwebSever(int port , struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request));
-void private_cweb_run_sever(struct  CwebSever *self);
-void private_cweb_free_sever(struct CwebSever *self);
+void CwebSever_start(struct  CwebSever *self);
+void CwebSever_free(struct CwebSever *self);
 
 
 
