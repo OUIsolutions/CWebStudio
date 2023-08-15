@@ -6,10 +6,7 @@ typedef struct CwebHttpResponse{
     int content_length;
     bool exist_content;
     unsigned char *content;
-    void (*set_content)(struct CwebHttpResponse *response, unsigned char *content, int content_length);
-    void (*add_header)(struct CwebHttpResponse *response,const char *key,const  char *value);
-    char *(*generate_response)(struct CwebHttpResponse *response);
-    void (*free)(struct CwebHttpResponse *response);
+
 }CwebHttpResponse;
 
 

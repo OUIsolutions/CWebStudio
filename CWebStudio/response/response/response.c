@@ -9,10 +9,6 @@ struct CwebHttpResponse *newCwebHttpResponse(){
     self->content_length = 0;
     self->exist_content = false;
     self->content = NULL;
-    self->free = CwebHttpResponse_free;
-    self->set_content = CwebHttpResponse_set_content;
-    self->generate_response = CwebHttpResponse_generate_response;
-    self->add_header = CwebHttpResponse_add_header;
     //self->add_header(self, "connection", "close");
     
     return self;

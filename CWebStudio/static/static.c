@@ -150,7 +150,7 @@ struct CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpR
             if(unix_cache){
                 char response_code[50] = "";
                 sprintf(response_code, "public, max-age=31536000, immutable");
-                response->add_header(response,"cache-control", response_code);
+                CwebHttpResponse_add_header(response,"cache-control", response_code);
             }
         }
 

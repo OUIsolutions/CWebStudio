@@ -78,7 +78,7 @@ void private_cweb_execute_request(
 
     }
 
-    char *response_str = response->generate_response(response);
+    char *response_str = CwebHttpResponse_generate_response(response);
     cweb_print("Response created\n");
 
 
@@ -109,7 +109,7 @@ void private_cweb_execute_request(
 
     
     free(response_str);
-    response->free(response);
+    CwebHttpResponse_free(response);
     CwebHttpRequest_free(request);
     cweb_print("Cleared memory\n");
 }
@@ -118,7 +118,7 @@ void private_cweb_execute_request(
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket)
 {
     struct CwebHttpResponse *response = cweb_send_text(mensage,status_code);
-    char *response_str = response->generate_response(response);
+    char *response_str = CwebHttpResponse_generate_response(response);
     send(socket, response_str, strlen(response_str), 0);
     send(socket, response->content, response->content_length, 0);
 
