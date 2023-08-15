@@ -28,6 +28,7 @@ SOFTWARE.
 #ifndef __CWEBSTUDIO_H
 #define __CWEBSTUDIO_H
 
+
 #include <sys/wait.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -37,7 +38,6 @@ SOFTWARE.
 #include <sys/socket.h>
 #include <signal.h>
 #include <sys/resource.h>
-
 
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -1415,9 +1415,7 @@ CTextNamespace newCTextNamespace(){
 
 
 #endif // CTEXTENGINE_H
-
 #ifndef cJSON__h
-
 
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
@@ -4838,8 +4836,10 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 {
     global_hooks.deallocate(object);
 }
+#endif
 
-#endif    
+
+
 
 
 struct CwebStringArray {
@@ -5244,6 +5244,8 @@ int main() {\
      sever->free(sever);\
 return 0;\
 }
+
+
 
 
 
@@ -6984,5 +6986,6 @@ void private_cweb_run_sever(struct  CwebSever *self){
 void private_cweb_free_sever(struct CwebSever *self){
     free(self);
 }
+
 
 #endif
