@@ -28,7 +28,7 @@ char *CwebDict_get_by_normalized_key(CwebDict *self, const char *key, const char
 
 }
 void CwebDict_set(CwebDict *self, const char *key, const char *value){
-    CwebKeyVal *key_val = cweb_key_val_constructor(key, value);
+    CwebKeyVal *key_val = newCwebKeyVal(key, value);
     self->keys_vals = (CwebKeyVal**)realloc(self->keys_vals, (self->size+1)*sizeof(CwebKeyVal*));
     self->keys_vals[self->size] = key_val;
     self->size++;
@@ -45,7 +45,7 @@ char * CwebDict_get(CwebDict *self, const  char *key){
 
 void CwebDict_represent(CwebDict *dict){
     for(int i = 0; i < dict->size; i++){
-        dict->keys_vals[i]->represent(dict->keys_vals[i]);
+        CwebKeyVal_represent(dict->keys_vals[i]);
     }
 }
 
@@ -53,7 +53,7 @@ void CwebDict_free(CwebDict *self){
     
     for(int i = 0; i < self->size; i++){
         CwebKeyVal *key_val = self->keys_vals[i];
-         key_val->free(key_val);
+         CwebKeyVal_free(key_val);
     }
     free(self->keys_vals);
     free(self);

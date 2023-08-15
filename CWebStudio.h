@@ -4912,9 +4912,9 @@ typedef struct CwebKeyVal{
     void (*free)(struct CwebKeyVal *key_val);
 }CwebKeyVal;
 
-struct CwebKeyVal* cweb_key_val_constructor(const char *key,const  char *value);
-void private_cweb_represent_key_val(struct CwebKeyVal *self);
-void private_cweb_free_key_val(struct CwebKeyVal *self);
+struct CwebKeyVal* newCwebKeyVal(const char *key, const  char *value);
+void CwebKeyVal_represent(struct CwebKeyVal *self);
+void CwebKeyVal_free(struct CwebKeyVal *self);
 
 
 
@@ -6136,7 +6136,7 @@ void private_cweb_free_string_array(struct CwebStringArray *self){
 
 
 
-struct CwebKeyVal* cweb_key_val_constructor(const char *key,const  char *value){
+struct CwebKeyVal* newCwebKeyVal(const char *key, const  char *value){
     struct CwebKeyVal *self = (struct CwebKeyVal*)malloc(sizeof(struct CwebKeyVal));
     self->key = (char*)malloc(strlen(key)+1);
     strcpy(self->key,key);
@@ -6147,11 +6147,11 @@ struct CwebKeyVal* cweb_key_val_constructor(const char *key,const  char *value){
     return self;
 }
 
-void private_cweb_represent_key_val(struct CwebKeyVal *self){
+void CwebKeyVal_represent(struct CwebKeyVal *self){
     printf("%s : %s\n",self->key,self->value);
 }
 
-void private_cweb_free_key_val(struct CwebKeyVal *self){
+void CwebKeyVal_free(struct CwebKeyVal *self){
     free(self->key);
     free(self->value);
     free(self);

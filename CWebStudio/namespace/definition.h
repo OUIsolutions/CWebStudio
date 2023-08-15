@@ -1,3 +1,2 @@
-#include "keyval_module/keyval_module.c"
-#include "dict_module/dict_module.c"
+#include "dict_module/definition.h"
 #include "namespace/namespace.c"
