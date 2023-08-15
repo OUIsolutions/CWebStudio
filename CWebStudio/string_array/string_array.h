@@ -1,5 +1,5 @@
 
-struct CwebStringArray {
+typedef struct CwebStringArray {
   int size;         
 
   char **strings;       
@@ -9,7 +9,8 @@ struct CwebStringArray {
   void (*represent)(struct CwebStringArray *self);
   void (*free_string_array)(struct CwebStringArray *self);
   int (*find_position)(struct CwebStringArray *self,const char *string);
-}; // End the structure with a semicolon
+}CwebStringArray; // End the structure with a semicolon
+
 int  private_cweb_find_position(struct CwebStringArray *self,const char *string);
 void private_cweb_add_string(struct CwebStringArray *self,const char *string);
 void private_cweb_merge_string_array(struct CwebStringArray *self, struct CwebStringArray *other);

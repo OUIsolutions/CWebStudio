@@ -5079,54 +5079,54 @@ typedef struct CwebHttpRequest{
 }CwebHttpRequest;
 //algorithm functions
 
-int private_cweb_read_content(struct CwebHttpRequest *self,long max_content_size);
+int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_size);
 
 
-char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key);
-char * private_cweb_get_header_by_sanitized_key(
+char * CwebHttpRequest_get_header(struct CwebHttpRequest *self, const char *key);
+char * CwebHttpRequest_get_header_by_sanitized_key(
     struct CwebHttpRequest *self,
     const char *key,
     const char *chars_to_remove
 );
-char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key);
-char * private_cweb_get_param_by_sanitized_key(
+char * CwebHttpRequest_get_param(struct CwebHttpRequest *self, const char *key);
+char * CwebHttpRequest_get_param_by_sanitized_key(
     struct CwebHttpRequest *self,
     const char *key,
     const char *chars_to_remove
 );
 
-void private_cweb_set_url(struct CwebHttpRequest *self,const char *url);
+void CwebHttpRequest_set_url(struct CwebHttpRequest *self, const char *url);
 
-void private_cweb_set_route(struct CwebHttpRequest *self,const char *route);
+void CwebHttpRequest_set_route(struct CwebHttpRequest *self, const char *route);
 
-void private_cweb_add_header(struct CwebHttpRequest *self,const char *key,const char *value);
+void CwebHttpRequest_add_header(struct CwebHttpRequest *self, const char *key, const char *value);
 
-void private_cweb_add_param(struct CwebHttpRequest *self,const char *key,const char *value);
+void CwebHttpRequest_add_param(struct CwebHttpRequest *self, const char *key, const char *value);
 
-void private_cweb_set_method(struct CwebHttpRequest *self,const char *method);
+void CwebHttpRequest_set_method(struct CwebHttpRequest *self, const char *method);
 
-void private_cweb_set_content_string(struct CwebHttpRequest *self,const char *content);
+void CwebHttpRequest_set_content_string(struct CwebHttpRequest *self, const char *content);
 
-struct CwebHttpRequest *cweb_request_constructor(int socket);
-
-
-int  private_cweb_parse_http_request(struct CwebHttpRequest *self);
+struct CwebHttpRequest *newCwebHttpRequest(int socket);
 
 
-void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params);
-
-int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
+int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self);
 
 
-int private_cweb_interpret_headders(
+void CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self, const char *query_params);
+
+int CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, char *first_line);
+
+
+int CwebHttpRequest_interpret_headders(
     struct CwebHttpRequest *self,
     struct CwebStringArray *line_headers
 );
 
-void private_cweb_free_http_request(struct CwebHttpRequest *self);
+void CwebHttpRequest_free(struct CwebHttpRequest *self);
 
 
-void private_cweb_represent_http_request(struct CwebHttpRequest *self);
+void CwebHttpRequest_represent(struct CwebHttpRequest *self);
 
 
 
@@ -5489,7 +5489,7 @@ char *private_cweb_convert_url_encoded_text(const char *text){
 
 
 
-struct CwebHttpRequest *cweb_request_constructor(int socket){
+struct CwebHttpRequest *newCwebHttpRequest(int socket){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
     
     self->socket = socket;
@@ -5527,7 +5527,7 @@ struct CwebHttpRequest *cweb_request_constructor(int socket){
 }
 
 
-int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_size) {
+int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_size) {
 
 
    
@@ -5583,42 +5583,42 @@ int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_siz
     return 0;
 }
 
-char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
+char * CwebHttpRequest_get_header(struct CwebHttpRequest *self, const char *key){
     return self->headers->get_value(self->headers,key);
 }
 
-char * private_cweb_get_param_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
+char * CwebHttpRequest_get_param_by_sanitized_key(struct CwebHttpRequest *self, const char *key, const char *chars_to_remove){
     return self->params->find_value_by_normalized_key(self->params,key,chars_to_remove);
 }
 
-char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key){
+char * CwebHttpRequest_get_param(struct CwebHttpRequest *self, const char *key){
     return self->params->get_value(self->params,key);
 }
-char * private_cweb_get_header_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
+char * CwebHttpRequest_get_header_by_sanitized_key(struct CwebHttpRequest *self, const char *key, const char *chars_to_remove){
     return self->headers->find_value_by_normalized_key(self->headers,key,chars_to_remove);
 }
 
 
 
-void private_cweb_set_route(struct CwebHttpRequest *self,const char *route){
+void CwebHttpRequest_set_route(struct CwebHttpRequest *self, const char *route){
     self->route = (char*) malloc(strlen(route) +2);
     strcpy(self->route,route);
 }
 
-void private_cweb_add_header(struct CwebHttpRequest *self,const char *key,const char *value){
+void CwebHttpRequest_add_header(struct CwebHttpRequest *self, const char *key, const char *value){
     self->headers->set(self->headers,key,value);
 }
-void private_cweb_add_param(struct CwebHttpRequest *self,const char *key,const char *value){
+void CwebHttpRequest_add_param(struct CwebHttpRequest *self, const char *key, const char *value){
     self->params->set(self->params,key,value);
 }
 
-void private_cweb_set_method(struct CwebHttpRequest *self,const char *method){
+void CwebHttpRequest_set_method(struct CwebHttpRequest *self, const char *method){
     self->method = (char*) malloc(strlen(method)+2);
     strcpy(self->method,method);
 }
 
 
-void private_cweb_set_content_string(struct CwebHttpRequest *self,const char *content){
+void CwebHttpRequest_set_content_string(struct CwebHttpRequest *self, const char *content){
     self->content_length = strlen(content);
     self->content = (unsigned char*) malloc(strlen(content) +2);
     for(int i =0;i<strlen(content);i++){
@@ -5627,7 +5627,7 @@ void private_cweb_set_content_string(struct CwebHttpRequest *self,const char *co
 }
 
 
-void private_cweb_represent_http_request(struct CwebHttpRequest *self){
+void CwebHttpRequest_represent(struct CwebHttpRequest *self){
     
     printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
@@ -5641,7 +5641,7 @@ void private_cweb_represent_http_request(struct CwebHttpRequest *self){
 }
 
 
-void private_cweb_free_http_request(struct CwebHttpRequest *self){
+void CwebHttpRequest_free(struct CwebHttpRequest *self){
 
 
 
@@ -5669,7 +5669,7 @@ void private_cweb_free_http_request(struct CwebHttpRequest *self){
 
 
 
-void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char *query_params){
+void CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self, const char *query_params){
     if(!query_params){
         return;
     }
@@ -5714,7 +5714,7 @@ void private_cweb_interpret_query_params(struct CwebHttpRequest *self,const char
 
 }
 
-void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
+void CwebHttpRequest_set_url(struct CwebHttpRequest *self, const char *url){
     int size_url = strlen(url);
     self->url = (char*) malloc(size_url+2);
     strcpy(self->url,url);
@@ -5755,7 +5755,7 @@ void private_cweb_set_url(struct CwebHttpRequest *self,const char *url){
 
 }
 
-int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+int CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
     #define CWEB_METHOD_MAX_SIZE 300
     #define CWEB_URL_MAX_SIZE 5000
     char method[CWEB_METHOD_MAX_SIZE] = {0};
@@ -5828,7 +5828,7 @@ int private_cweb_interpret_first_line(struct CwebHttpRequest *self, char *first_
 }
 
 
-int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStringArray *line_headers){
+int CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, struct CwebStringArray *line_headers){
     
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
@@ -5879,7 +5879,7 @@ int private_cweb_interpret_headders(struct CwebHttpRequest *self,struct CwebStri
 
 }
 
-int  private_cweb_parse_http_request(struct CwebHttpRequest *self){
+int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
 
 

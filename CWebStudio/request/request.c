@@ -2,7 +2,7 @@
 
 
 
-struct CwebHttpRequest *cweb_request_constructor(int socket){
+struct CwebHttpRequest *newCwebHttpRequest(int socket){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
     
     self->socket = socket;
@@ -13,34 +13,17 @@ struct CwebHttpRequest *cweb_request_constructor(int socket){
     self->content_length = 0;
 
 
-    self->read_content = private_cweb_read_content;
-    self->set_url = private_cweb_set_url;
-    self->set_method = private_cweb_set_method;
-    self->add_header = private_cweb_add_header;
-    self->add_param = private_cweb_add_param;
-    self->set_route = private_cweb_set_route;
-    self->set_content_string = private_cweb_set_content_string;
-
-    self->get_header = private_cweb_get_header;
-    self->get_header_by_sanitized_key = private_cweb_get_header_by_sanitized_key;
-    self->get_param = private_cweb_get_param;
-    self->get_param_by_sanitized_key = private_cweb_get_param_by_sanitized_key;
 
     self->params = newCwebDict();
     self->headers = newCwebDict();
-    self->parse_http_request = private_cweb_parse_http_request;
-    self->interpret_query_params = private_cweb_interpret_query_params;
-    self->interpret_first_line = private_cweb_interpret_first_line;
-    self->interpret_headders = private_cweb_interpret_headders;
-    self->free = private_cweb_free_http_request;
-    self->represent = private_cweb_represent_http_request;
+
     
     return self;
     
 }
 
 
-int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_size) {
+int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_size) {
 
 
    
@@ -83,12 +66,12 @@ int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_siz
     self->content[total_bytes_received] = '\0';
 
     //extracting url encoded data
-    char *content_type = self->get_header_by_sanitized_key(self, "contenttype", "- ");
+    char *content_type = CwebHttpRequest_get_header_by_sanitized_key(self, "contenttype", "- ");
 
     if (content_type != NULL) {
         if (strcmp(content_type, "application/x-www-form-urlencoded") == 0) {
             char *decoded = private_cweb_convert_url_encoded_text((char*) self->content);
-            self->interpret_query_params(self, decoded);
+            CwebHttpRequest_interpret_query_params(self, decoded);
             free(decoded);
         }
     }
@@ -96,42 +79,42 @@ int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_siz
     return 0;
 }
 
-char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
+char * CwebHttpRequest_get_header(struct CwebHttpRequest *self, const char *key){
     return CwebDict_get(self->headers,key);
 }
 
-char * private_cweb_get_param_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
+char * CwebHttpRequest_get_param_by_sanitized_key(struct CwebHttpRequest *self, const char *key, const char *chars_to_remove){
     return CwebDict_get_by_normalized_key(self->params,key,chars_to_remove);
 }
 
-char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key){
+char * CwebHttpRequest_get_param(struct CwebHttpRequest *self, const char *key){
     return CwebDict_get(self->params,key);
 }
-char * private_cweb_get_header_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
+char * CwebHttpRequest_get_header_by_sanitized_key(struct CwebHttpRequest *self, const char *key, const char *chars_to_remove){
     return CwebDict_get_by_normalized_key(self->headers,key,chars_to_remove);
 }
 
 
 
-void private_cweb_set_route(struct CwebHttpRequest *self,const char *route){
+void CwebHttpRequest_set_route(struct CwebHttpRequest *self, const char *route){
     self->route = (char*) malloc(strlen(route) +2);
     strcpy(self->route,route);
 }
 
-void private_cweb_add_header(struct CwebHttpRequest *self,const char *key,const char *value){
+void CwebHttpRequest_add_header(struct CwebHttpRequest *self, const char *key, const char *value){
     CwebDict_set(self->headers,key,value);
 }
-void private_cweb_add_param(struct CwebHttpRequest *self,const char *key,const char *value){
+void CwebHttpRequest_add_param(struct CwebHttpRequest *self, const char *key, const char *value){
     CwebDict_set(self->params,key,value);
 }
 
-void private_cweb_set_method(struct CwebHttpRequest *self,const char *method){
+void CwebHttpRequest_set_method(struct CwebHttpRequest *self, const char *method){
     self->method = (char*) malloc(strlen(method)+2);
     strcpy(self->method,method);
 }
 
 
-void private_cweb_set_content_string(struct CwebHttpRequest *self,const char *content){
+void CwebHttpRequest_set_content_string(struct CwebHttpRequest *self, const char *content){
     self->content_length = strlen(content);
     self->content = (unsigned char*) malloc(strlen(content) +2);
     for(int i =0;i<strlen(content);i++){
@@ -140,7 +123,7 @@ void private_cweb_set_content_string(struct CwebHttpRequest *self,const char *co
 }
 
 
-void private_cweb_represent_http_request(struct CwebHttpRequest *self){
+void CwebHttpRequest_represent(struct CwebHttpRequest *self){
     
     printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
@@ -154,7 +137,7 @@ void private_cweb_represent_http_request(struct CwebHttpRequest *self){
 }
 
 
-void private_cweb_free_http_request(struct CwebHttpRequest *self){
+void CwebHttpRequest_free(struct CwebHttpRequest *self){
 
 
 

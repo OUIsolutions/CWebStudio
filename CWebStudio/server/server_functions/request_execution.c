@@ -7,7 +7,7 @@ void private_cweb_execute_request(
     bool use_cache
     ){
     cweb_print("Parsing Request\n");
-    struct CwebHttpRequest *request = cweb_request_constructor(socket);
+    struct CwebHttpRequest *request = newCwebHttpRequest(socket);
 
     int result = request->parse_http_request(request);
     
