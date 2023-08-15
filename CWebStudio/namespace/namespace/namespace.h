@@ -1,5 +1,6 @@
 
 typedef struct CwebNamespace{
+    CwebDictModule dict;
 
 }CwebNamespace;
 
