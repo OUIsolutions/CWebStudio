@@ -26,9 +26,9 @@ static long total_requests = 0;
 
 
 
-struct CwebSever *newCwebSever(int port , struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request));
-void CwebSever_start(struct  CwebSever *self);
-void CwebSever_free(struct CwebSever *self);
+CwebSever *newCwebSever(int port , struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request));
+void CwebSever_start(CwebSever *self);
+void CwebSever_free(CwebSever *self);
 
 
 
