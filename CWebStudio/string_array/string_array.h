@@ -11,11 +11,12 @@ typedef struct CwebStringArray {
   int (*find_position)(struct CwebStringArray *self,const char *string);
 }CwebStringArray; // End the structure with a semicolon
 
-int  private_cweb_find_position(struct CwebStringArray *self,const char *string);
-void private_cweb_add_string(struct CwebStringArray *self,const char *string);
-void private_cweb_merge_string_array(struct CwebStringArray *self, struct CwebStringArray *other);
-void private_cweb_represent_string_array(struct CwebStringArray *self);
-void private_cweb_free_string_array(struct CwebStringArray *self);
-void private_cweb_set_value(struct CwebStringArray *self,int index,const char *value);
+struct CwebStringArray * newCwebStringArray();
 
-struct CwebStringArray * cweb_constructor_string_array();
+int  CwebStringArray_find_position(struct CwebStringArray *self, const char *string);
+void CwebStringArray_add(struct CwebStringArray *self, const char *string);
+void CwebStringArray_merge(struct CwebStringArray *self, struct CwebStringArray *other);
+void CwebStringArray_represent(struct CwebStringArray *self);
+void CwebStringArray_free(struct CwebStringArray *self);
+void CwebStringArray_set(struct CwebStringArray *self, int index, const char *value);
+

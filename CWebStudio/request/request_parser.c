@@ -248,7 +248,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         
     }
     char last_string[10000]= {0};
-    struct CwebStringArray *lines = cweb_constructor_string_array();
+    struct CwebStringArray *lines = newCwebStringArray();
     int line_index = 0;
 
     for(int l =0 ; l < i-1;l++){
