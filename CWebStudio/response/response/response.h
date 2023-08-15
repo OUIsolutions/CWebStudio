@@ -12,25 +12,26 @@ typedef struct CwebHttpResponse{
     void (*free)(struct CwebHttpResponse *response);
 }CwebHttpResponse;
 
-struct CwebHttpResponse *create_http_response();
+
+CwebHttpResponse *newCwebHttpResponse();
 
 
-char *private_cweb_generate_response(struct CwebHttpResponse*self);
+char *CwebHttpResponse_generate_response(CwebHttpResponse*self);
 
 
 
-void private_cweb_http_set_content(
-    struct CwebHttpResponse *self, 
+void CwebHttpResponse_set_content(
+        CwebHttpResponse *self,
     unsigned char *content,
     int content_length
 );
 
 
-void private_cweb_http_add_header(
-    struct CwebHttpResponse *self, 
+void CwebHttpResponse_add_header(
+     CwebHttpResponse *self,
     const char *key, 
     const char *value
 );
 
-void private_cweb_http_response_free(struct CwebHttpResponse *self);
+void CwebHttpResponse_free(struct CwebHttpResponse *self);
 

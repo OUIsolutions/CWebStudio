@@ -2,7 +2,7 @@
 
 
 struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_length,unsigned char *content,int status_code){
-    struct CwebHttpResponse *response = create_http_response();
+    struct CwebHttpResponse *response = newCwebHttpResponse();
     response->add_header(response, "Content-Type", content_type);
     response->set_content(response, content, content_length);
     response->status_code = status_code;

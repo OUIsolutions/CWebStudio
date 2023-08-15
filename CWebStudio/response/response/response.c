@@ -1,6 +1,6 @@
 
 
-struct CwebHttpResponse *create_http_response(){
+struct CwebHttpResponse *newCwebHttpResponse(){
     struct CwebHttpResponse *self = (struct CwebHttpResponse *)malloc(
         sizeof(struct CwebHttpResponse)
     );
@@ -9,16 +9,16 @@ struct CwebHttpResponse *create_http_response(){
     self->content_length = 0;
     self->exist_content = false;
     self->content = NULL;
-    self->free = private_cweb_http_response_free;
-    self->set_content = private_cweb_http_set_content;
-    self->generate_response = private_cweb_generate_response;
-    self->add_header = private_cweb_http_add_header;
+    self->free = CwebHttpResponse_free;
+    self->set_content = CwebHttpResponse_set_content;
+    self->generate_response = CwebHttpResponse_generate_response;
+    self->add_header = CwebHttpResponse_add_header;
     //self->add_header(self, "connection", "close");
     
     return self;
 }
 
-char *private_cweb_generate_response(struct CwebHttpResponse*self){
+char *CwebHttpResponse_generate_response(struct CwebHttpResponse*self){
    
     char *response_string = (char*)malloc(20000);
     sprintf(response_string, "HTTP/1.1 %d OK\r\n", self->status_code);
@@ -43,19 +43,19 @@ char *private_cweb_generate_response(struct CwebHttpResponse*self){
     return response_string;
 }
 
-void private_cweb_http_response_free(struct CwebHttpResponse *self){
+void CwebHttpResponse_free(struct CwebHttpResponse *self){
     CwebDict_free(self->headers);
     free(self->content);
     free(self);
 }
 
-void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char *content,int content_length){
+void CwebHttpResponse_set_content(struct CwebHttpResponse *self, unsigned char *content, int content_length){
     self->content = (unsigned char*)malloc(content_length+2);
     memcpy(self->content, content, content_length);
     self->exist_content = true;
     self->content_length = content_length;
 }
 
-void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,const  char *value){
+void CwebHttpResponse_add_header(struct CwebHttpResponse *self, const char *key, const  char *value){
     CwebDict_set(self->headers, key, value);
 }
