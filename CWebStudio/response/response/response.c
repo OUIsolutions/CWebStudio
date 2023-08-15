@@ -5,7 +5,7 @@ struct CwebHttpResponse *create_http_response(){
         sizeof(struct CwebHttpResponse)
     );
     self->status_code = 200;
-    self->headers = cweb_create_dict();
+    self->headers = newCwebDict();
     self->content_length = 0;
     self->exist_content = false;
     self->content = NULL;
@@ -44,7 +44,7 @@ char *private_cweb_generate_response(struct CwebHttpResponse*self){
 }
 
 void private_cweb_http_response_free(struct CwebHttpResponse *self){
-    self->headers->free(self->headers);
+    CwebDict_free(self->headers);
     free(self->content);
     free(self);
 }
@@ -57,5 +57,5 @@ void private_cweb_http_set_content(struct CwebHttpResponse *self, unsigned char 
 }
 
 void private_cweb_http_add_header(struct CwebHttpResponse *self,const char *key,const  char *value){
-    self->headers->set(self->headers, key, value);
+    CwebDict_set(self->headers, key, value);
 }

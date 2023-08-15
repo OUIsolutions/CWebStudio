@@ -26,8 +26,8 @@ struct CwebHttpRequest *cweb_request_constructor(int socket){
     self->get_param = private_cweb_get_param;
     self->get_param_by_sanitized_key = private_cweb_get_param_by_sanitized_key;
 
-    self->params = cweb_create_dict();
-    self->headers = cweb_create_dict();
+    self->params = newCwebDict();
+    self->headers = newCwebDict();
     self->parse_http_request = private_cweb_parse_http_request;
     self->interpret_query_params = private_cweb_interpret_query_params;
     self->interpret_first_line = private_cweb_interpret_first_line;
@@ -97,18 +97,18 @@ int private_cweb_read_content(struct CwebHttpRequest *self, long max_content_siz
 }
 
 char * private_cweb_get_header(struct CwebHttpRequest *self,const char *key){
-    return self->headers->get_value(self->headers,key);
+    return CwebDict_get(self->headers,key);
 }
 
 char * private_cweb_get_param_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
-    return self->params->find_value_by_normalized_key(self->params,key,chars_to_remove);
+    return CwebDict_get_by_normalized_key(self->params,key,chars_to_remove);
 }
 
 char * private_cweb_get_param(struct CwebHttpRequest *self,const char *key){
-    return self->params->get_value(self->params,key);
+    return CwebDict_get(self->params,key);
 }
 char * private_cweb_get_header_by_sanitized_key(struct CwebHttpRequest *self,const char *key,const char *chars_to_remove){
-    return self->headers->find_value_by_normalized_key(self->headers,key,chars_to_remove);
+    return CwebDict_get_by_normalized_key(self->headers,key,chars_to_remove);
 }
 
 
@@ -119,10 +119,10 @@ void private_cweb_set_route(struct CwebHttpRequest *self,const char *route){
 }
 
 void private_cweb_add_header(struct CwebHttpRequest *self,const char *key,const char *value){
-    self->headers->set(self->headers,key,value);
+    CwebDict_set(self->headers,key,value);
 }
 void private_cweb_add_param(struct CwebHttpRequest *self,const char *key,const char *value){
-    self->params->set(self->params,key,value);
+    CwebDict_set(self->params,key,value);
 }
 
 void private_cweb_set_method(struct CwebHttpRequest *self,const char *method){
@@ -146,9 +146,9 @@ void private_cweb_represent_http_request(struct CwebHttpRequest *self){
     printf("route: %s\n", self->route);
     printf("method: %s\n", self->method);
     printf("params:-----------------------------\n");
-    self->params->represent(self->params);
+    CwebDict_represent(self->params);
     printf("headers:----------------------------\n");
-    self->headers->represent(self->headers);
+    CwebDict_represent(self->headers);
     printf("content: %s\n", self->content);
 
 }
@@ -171,9 +171,9 @@ void private_cweb_free_http_request(struct CwebHttpRequest *self){
         free(self->method);
     }
 
-    self->params->free(self->params);
+    CwebDict_free(self->params);
 
-    self->headers->free(self->headers);
+    CwebDict_free(self->headers);
     free(self);
 
 }

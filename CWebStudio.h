@@ -4931,18 +4931,18 @@ typedef struct CwebDict {
 
 
 
-struct CwebDict *cweb_create_dict();
-void private_cweb_dict_set(struct CwebDict *self,const  char *key,const char *value);
-char *private_cweb_dict_get(struct CwebDict *self,const char *key);
+struct CwebDict *newCwebDict();
+void CwebDict_set(struct CwebDict *self, const  char *key, const char *value);
+char *CwebDict_get(struct CwebDict *self, const char *key);
 
-char *private_cweb_find_value_by_normalized_key(
+char *CwebDict_get_by_normalized_key(
   struct CwebDict *self,
   const char *key,
   const char *chars_to_remove
 );
 
-void private_cweb_dict_represent(struct CwebDict *dict);
-void private_cweb_free_dict(struct CwebDict *self);
+void CwebDict_represent(struct CwebDict *dict);
+void CwebDict_free(struct CwebDict *self);
 
 
 
@@ -6162,7 +6162,7 @@ void private_cweb_free_key_val(struct CwebKeyVal *self){
 
 
 
-struct CwebDict *cweb_create_dict(){
+struct CwebDict *newCwebDict(){
     struct CwebDict *self = (struct CwebDict *)malloc(sizeof(struct CwebDict));
     self->keys_vals = (struct CwebKeyVal**)malloc(1);
     self->size = 0;
@@ -6174,7 +6174,7 @@ struct CwebDict *cweb_create_dict(){
     return self;
 }
 
-char *private_cweb_find_value_by_normalized_key(struct CwebDict *self,const char *key,const char *chars_to_remove){
+char *CwebDict_get_by_normalized_key(struct CwebDict *self, const char *key, const char *chars_to_remove){
 
     for(int i = 0;i < self->size;i++){
         char *current_key = self->keys_vals[i]->key;
@@ -6191,14 +6191,14 @@ char *private_cweb_find_value_by_normalized_key(struct CwebDict *self,const char
     return NULL;
 
 }
-void private_cweb_dict_set(struct CwebDict *self,const char *key,const char *value){
+void CwebDict_set(struct CwebDict *self, const char *key, const char *value){
     struct CwebKeyVal *key_val = cweb_key_val_constructor(key, value);
     self->keys_vals = (struct CwebKeyVal**)realloc(self->keys_vals, (self->size+1)*sizeof(struct CwebKeyVal*));
     self->keys_vals[self->size] = key_val;
     self->size++;
 }
 
-char * private_cweb_dict_get(struct CwebDict *self,const  char *key){
+char * CwebDict_get(struct CwebDict *self, const  char *key){
     for(int i = 0; i < self->size; i++){
         if(strcmp(self->keys_vals[i]->key, key) == 0){
             return self->keys_vals[i]->value;
@@ -6207,13 +6207,13 @@ char * private_cweb_dict_get(struct CwebDict *self,const  char *key){
     return NULL;
 }
 
-void private_cweb_dict_represent(struct CwebDict *self){
-    for(int i = 0; i < self->size; i++){
-        self->keys_vals[i]->represent(self->keys_vals[i]);
+void CwebDict_represent(struct CwebDict *dict){
+    for(int i = 0; i < dict->size; i++){
+        dict->keys_vals[i]->represent(dict->keys_vals[i]);
     }
 }
 
-void private_cweb_free_dict(struct CwebDict *self){
+void CwebDict_free(struct CwebDict *self){
     
     for(int i = 0; i < self->size; i++){
         struct CwebKeyVal *key_val = self->keys_vals[i];

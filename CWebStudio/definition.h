@@ -13,3 +13,4 @@
 #include "server/server_functions/single_process.c"
 #include "server/server_functions/multi_process.c"
 #include "server/server/server.c"
+#include "namespace/definition.h"
