@@ -18,6 +18,17 @@ typedef struct CwebHttpResponseModule{
             char *content,
             int status_code
     );
+    CwebHttpResponse * (*send_cJSON)(
+            cJSON *content,
+            int status_code
+    );
+
+
+    CwebHttpResponse * (*send_cJSON_cleaning_memory)(
+            cJSON *content,
+            int status_code
+    );
+
 
     CwebHttpResponse * (*send_text)(
             const char *content,

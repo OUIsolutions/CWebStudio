@@ -279,6 +279,33 @@ int main(int argc, char *argv[]){
     return 0;
 }
 ~~~
+## Returning Json from cJSON 
+if you want to return values from cJSON , 
+
+## Returning an Json String 
+<!--codeof:examples/sending_json.c-->
+~~~c
+
+#include "CWebStudio.h"
+
+CwebNamespace cweb;
+
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
+
+    const char *json = "{\"name\":\"CWebStudio\",\"version\":\"1.0.0\"}";
+    return cweb.response.send_json_string(json,200);
+
+}
+
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
+~~~
+
 
 ## Reading Binary Content
 <!--codeof:examples/reading_binary_content.c-->
@@ -453,28 +480,7 @@ int main(int argc, char *argv[]){
 
 ## Other Formats 
 Other formats may be returned like this: 
-<!--codeof:examples/sending_json.c-->
-~~~c
 
-#include "CWebStudio.h"
-
-CwebNamespace cweb;
-
-CwebHttpResponse *main_sever(CwebHttpRequest *request ){
-
-    const char *json = "{\"name\":\"CWebStudio\",\"version\":\"1.0.0\"}";
-    return cweb.response.send_json_string(json,200);
-
-}
-
-int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
-    return 0;
-}
-~~~
 ## Returning Files 
 Files can be directly returned by referencing the path:
 <!--codeof:examples/returning_files.c-->
@@ -616,7 +622,7 @@ int main(int argc, char *argv[]){
     return 0;
 }
 ~~~
-
+# Configuring The Server
 Several server configuration parameters may be set:
 <!--codeof:examples/server_paramns.c-->
 ~~~c

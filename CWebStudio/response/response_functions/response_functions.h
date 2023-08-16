@@ -24,10 +24,23 @@ CwebHttpResponse * cweb_send_json_string(
         const char *content,
         int status_code
 );
+
 CwebHttpResponse * cweb_send_json_string_cleaning_memory(
         char *content,
         int status_code
 );
+
+CwebHttpResponse * cweb_send_cJSON(
+        cJSON *content,
+        int status_code
+);
+
+
+CwebHttpResponse * cweb_send_cJSON_cleaning_memory(
+        cJSON *content,
+        int status_code
+);
+
 
 CwebHttpResponse * cweb_send_text_cleaning_memory(
     char *content,

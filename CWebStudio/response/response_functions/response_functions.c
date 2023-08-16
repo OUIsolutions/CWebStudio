@@ -25,6 +25,38 @@ CwebHttpResponse * cweb_send_json_string_cleaning_memory(
     return response;
 }
 
+CwebHttpResponse * cweb_send_cJSON(
+        cJSON *content,
+        int status_code
+){
+    char *rendered = cJSON_Print(content);
+    CwebHttpResponse  *response =cweb_send_any(
+            "application/json",
+            strlen(rendered),
+            (unsigned char*)content,
+            status_code
+            );
+    free(rendered);
+    return response;
+}
+
+
+
+CwebHttpResponse * cweb_send_cJSON_cleaning_memory(
+        cJSON *content,
+        int status_code
+){
+    char *rendered = cJSON_Print(content);
+    CwebHttpResponse  *response =cweb_send_any(
+            "application/json",
+            strlen(rendered),
+            (unsigned char*)content,
+            status_code
+    );
+    free(rendered);
+    cJSON_free(content);
+    return response;
+}
 
 
 struct CwebHttpResponse* cweb_send_any_cleaning_memory(const char *content_type,size_t content_length,unsigned char *content,int status_code){

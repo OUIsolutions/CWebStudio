@@ -7,6 +7,8 @@ CwebHttpResponseModule newCwebHttpResponseModule(){
     self.newHttpResponse  = newCwebHttpResponse;
     self.send_any = cweb_send_any;
     self.send_json_string = cweb_send_json_string;
+    self.send_cJSON = cweb_send_cJSON;
+    self.send_cJSON_cleaning_memory = cweb_send_cJSON_cleaning_memory;
     self.send_var_html_cleaning_memory = cweb_send_json_string_cleaning_memory;
     self.send_text = cweb_send_text;
     self.send_text_cleaning_memory = cweb_send_text_cleaning_memory;
