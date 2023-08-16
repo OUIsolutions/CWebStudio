@@ -3,9 +3,9 @@
 void private_cweb_treat_response(int new_socket){
     cweb_print("New request %lld\n", cweb_actual_request);
     cweb_print("Waiting for child process\n");
-    pid_t wpid;
+
     int status = 0;
-    while (wpid = wait(&status) > 0);
+    while (wait(&status) > 0);
 
     if (WIFEXITED(status)){
         cweb_print("Sucess\n");
@@ -26,10 +26,9 @@ void private_cweb_treat_response(int new_socket){
                 exit(EXIT_FAILURE);
     }
     else{
-        pid_t wpid2;
         int status2 = 0;
         /// Wait for the child process to finish
-        while (wpid2 = wait(&status2) > 0);
+        while (wait(&status2) > 0);
         if (WIFEXITED(status2)){
             cweb_print("Mensage sent\n");
         }
