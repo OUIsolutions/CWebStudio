@@ -10,16 +10,26 @@ CWebSudio is made to be as dumb as possible and adopt the idea of single file li
 For installation, simply copy the **CWebStudio.h** into your project and compile with gcc/g++ or clang. 
 
 ~~~c
-
 #include "CWebStudio.h"
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-    return cweb_send_text("Hello World", 200);
+
+    return cweb.response.send_text("Hello World", 200);
+
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *server = newCwebSever(5000, main_sever);
+    cweb.server.start(server);
+    cweb.server.free(server);
+    return 0;
+}
 ~~~
+
+
 ## Full Folder 
 You can also download the entire **CWebStudio** folder to your project and run with the
 **#include "CWebStudio/CwebStudioMain.h"** header:
@@ -27,34 +37,24 @@ You can also download the entire **CWebStudio** folder to your project and run w
 ~~~c
 
 #include "CWebStudio/CwebStudioMain.h"
+CwebNamespace cweb;
 
-CwebHttpResponse *main_sever( CwebHttpRequest *request ){
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-    return cweb_send_text("Hello World", 200);
-}
 
-CWEB_START_MACRO(5001, main_sever);
-~~~
-# Running with Main
-If making main configurations before running the server is needed, the function **cweb_run_server** may be ran without a macro: 
-<!--codeof:examples/runig_with_main.c-->
-~~~c
+    return cweb.response.send_text("Hello World", 200);
 
-#include "CWebStudio.h"
-
- CwebHttpResponse *main_sever( CwebHttpRequest *request ){
-
-    return cweb_send_text("Hello World", 200);
 }
 
 int main(int argc, char *argv[]){
-
-   
-     struct CwebServer *sever = newCwebSever(5000, main_sever);
-     sever->start(sever);
-     sever->free(sever);
+    cweb = newCwebNamespace();
+    struct CwebServer *server = newCwebSever(5000, main_sever);
+    cweb.server.start(server);
+    cweb.server.free(server);
+    return 0;
 }
 ~~~
+
 
 
 # Getting Entries
@@ -67,6 +67,7 @@ Working with URL parameters is very easy, as seen in the following example:
 
 #include "CWebStudio.h"
 
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
@@ -77,11 +78,17 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     printf("URL: %s\n", url);
     printf("Method: %s\n", method);
     printf("Route: %s\n", route);
-    return cweb_send_text("Hello World", 200);
-    
+    return cweb.response.send_text("Hello World", 200);
+
 }
 
-CWEB_START_MACRO(50010, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 ## Iterating Query Parameters
 
@@ -89,6 +96,7 @@ To iterate through parameters, the object **CwebDict** may be used like this:
 <!--codeof:examples/iterating_over_query_paramns.c-->
 ~~~c
 #include "CWebStudio.h"
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
@@ -99,11 +107,19 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
         char *value = key_val->value;
         printf("%s : %s\n", key, value);
     }
-    return cweb_send_text("Hello World", 200);
-    
+    printf("------------------------------------------\n");
+    return cweb.response.send_text("Hello World", 200);
+
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+
+    cweb = newCwebNamespace();
+    struct CwebServer *server = newCwebSever(5000, main_sever);
+    cweb.server.start(server);
+    cweb.server.free(server);
+    return 0;
+}
 ~~~
 
 
@@ -114,9 +130,10 @@ Cweb Studio also supports url parameter encoding. To do so, call the method
 ~~~c
 
 #include "CWebStudio.h"
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
-    request->read_content(request, 20000);
+    cweb.request.read_content(request, 20000);
     CwebDict *query_paramns = request->params;
     for(int i = 0; i < query_paramns->size; i++){
         CwebKeyVal *key_val = query_paramns->keys_vals[i];
@@ -124,11 +141,18 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
         char *value = key_val->value;
         printf("%s : %s\n", key, value);
     }
-    return cweb_send_text("Hello World", 200);
-    
+    printf("-----------------------------------------------\n");;
+    return cweb.response.send_text("Url readed", 200);
+
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 
@@ -140,20 +164,31 @@ Similar to iterating through URL parameters, iterating through headers is equall
 
 
 #include "CWebStudio.h"
- CwebHttpResponse *main_sever( CwebHttpRequest *request ){
+CwebNamespace cweb;
 
-     CwebDict *headers = request->headers;
+CwebHttpResponse *main_sever( CwebHttpRequest *request ){
+
+    CwebDict *headers = request->headers;
     for(int i = 0; i < headers->size; i++){
         struct CwebKeyVal *key_val = headers->keys_vals[i];
         char *key = key_val->key;
         char *value = key_val->value;
         printf("%s : %s\n", key, value);
     }
-    return cweb_send_text("Hello World", 200);
-    
+    printf("-------------------------------\n");
+    return cweb.response.send_text("Headers Iterated", 200);
+
 }
 
-CWEB_START_MACRO(5001, main_sever);
+
+
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 ## Reading Body Content 
@@ -163,19 +198,27 @@ The content will be accessible with **request->content** and **request->content_
 ~~~c
 #include "CWebStudio.h"
 
- CwebHttpResponse *main_sever( CwebHttpRequest *request ){
+CwebNamespace cweb;
+
+CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
-    request->read_content(request, one_mega_byte);
+    cweb.request.read_content(request, one_mega_byte);
     unsigned char *body = request->content;
     int size = request->content_length;
 
     printf("body: %s",body);
 
-    return cweb_send_text("Hello World", 200);
-    
+    return cweb_send_text("Body Readed", 200);
+
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 ## Parsing JSON 
 CwebStudio has cJSON integrated into the library. For more information, see 
@@ -183,35 +226,66 @@ https://github.com/DaveGamble/cJSON.
 <!--codeof:examples/parsing_body_json.c-->
 ~~~c
 #include "CWebStudio.h"
-
+CwebNamespace cweb;
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
-    request->read_content(request, one_mega_byte);
-    unsigned char *body = request->content;
-    int size = request->content_length;
+    cweb.request.read_content(request, one_mega_byte);
 
-    //parse with cJson the body 
+    cJSON *json = cJSON_Parse((char*)request->content);
+    if(!json){
+        return cweb.response.send_text("json its not readble",404);
+    }
 
-    cJSON *json = cJSON_Parse(body);
     cJSON *name = cJSON_GetObjectItemCaseSensitive(json, "name");
     cJSON *age = cJSON_GetObjectItemCaseSensitive(json, "age");
 
+    if(!name){
+        cJSON_free(json);
+        return cweb.response.send_text("name not provided",404);
+    }
+
+    if(name->type != cJSON_String){
+        cJSON_free(json);
+        return cweb.response.send_text("name its not a string",404);
+    }
+    if(!age){
+        cJSON_free(json);
+        return cweb.response.send_text("age not provided",404);
+    }
+
+    if(age->type != cJSON_Number){
+        cJSON_free(json);
+        return cweb.response.send_text("age its not a number",404);
+    }
 
     printf("Name: %s\n", name->valuestring);
     printf("Age: %d\n", age->valueint);
 
 
-    return cweb_send_text("Hello World", 200);
-    
+
+    cJSON_free(json);
+
+
+
+    return cweb_send_text("json parserd", 200);
+
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 ## Reading Binary Content
 <!--codeof:examples/reading_binary_content.c-->
 ~~~c
 #include "CWebStudio.h"
+CwebNamespace cweb;
+
 
 void write_binary_file(char *path, unsigned char *content, int size)
 {
@@ -223,18 +297,26 @@ void write_binary_file(char *path, unsigned char *content, int size)
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     int two_mega_bytes = 2097152;
-    request->read_content(request, two_mega_bytes);
-    unsigned char *body = request->content;
-    char *name = request->get_param(request, "name");
+    cweb.request.read_content(request, two_mega_bytes);
+    char *name = cweb.request.get_param(request, "name");
+    if(!name){
+        return cweb.response.send_text("name not provided\n",404);
+    }
     int size = request->content_length;
 
-    write_binary_file(name, body, size);
+    write_binary_file(name, request->content, size);
 
     return cweb_send_text("File Written", 200);
-    
+
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 # Returning Values
@@ -243,29 +325,44 @@ Returning plain text is simple with **cweb_send_text**:
 <!--codeof:examples/returning_plain_text.c-->
 ~~~c
 #include "CWebStudio.h"
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 
-    return cweb_send_text("Exemple of Return", 200);
+    return cweb.response.send_text("Exemple of Return", 200);
     
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 **cweb_send_text_cleaning_memory** can handle strings:
 <!--codeof:examples/returning_text_cleaning_memory.c-->
 ~~~c
 #include "CWebStudio.h"
 
+CwebNamespace cweb;
+
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     char *teste = malloc(100);
     strcpy(teste, "Hello World");
-    return cweb_send_text_cleaning_memory(teste,200);
+    return cweb.response.send_text_cleaning_memory(teste,200);
 }
 
-CWEB_START_MACRO(5000, main_sever)
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 ## Rendered HTML 
@@ -277,12 +374,13 @@ see more at https://github.com/OUIsolutions/CTextEngine
 #include "CWebStudio.h"
 
 
- CwebHttpResponse *main_sever( CwebHttpRequest *request ){
+CwebNamespace cweb;
+
+CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     const char *lang = "en";
     const char *text = "text exemple";
     CTextStackModule m = newCTextStackModule();
     CTextStack *s = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
-
 
     m.$open(s,CTEXT_HTML,"lang=\"%s\"",lang);
         m.open(s,CTEXT_HEAD);
@@ -290,19 +388,24 @@ see more at https://github.com/OUIsolutions/CTextEngine
         m.close(s,CTEXT_HEAD);
         m.open(s,CTEXT_BODY);
             m.open(s,CTEXT_H1);
-                m.segment_text(s,"This is a text");
+                    m.segment_text(s,"This is a text");
             m.close(s,CTEXT_H1);
             m.open(s,CTEXT_P);
                 m.segment_format(s,"This is a formated  text  %s",text);
             m.close(s,CTEXT_P);
-
-        m.close(s,CTEXT_BODY);
+         m.close(s,CTEXT_BODY);
     m.close(s,CTEXT_HTML);
     return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
 }
 
-CWEB_START_MACRO(5000, main_sever)
 
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 ## HTML
@@ -310,6 +413,7 @@ To generate HTML from a file, the **cweb_send_var_html** function may be used:
 <!--codeof:examples/returing_var_html.c-->
 ~~~c
 #include "CWebStudio.h"
+CwebNamespace cweb;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
@@ -317,22 +421,34 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     return cweb_send_var_html(html,200);
 }
 
-CWEB_START_MACRO(5000, main_sever)
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 As is done with returning plain text, memory will be automatically cleaned with **cweb_send_var_html_cleaning_memory**: 
 <!--codeof:examples/returning_var_html_cleaning_memory.c-->
 ~~~c
 #include "CWebStudio.h"
+CwebNamespace cweb;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     char *html = malloc(1000);
     strcat(html, "<html><body><h1>Hello World</h1></body></html>");
-    return cweb_send_var_html_cleaning_memory(html,200);
+    return cweb.response.send_var_html_cleaning_memory(html,200);
 }
 
-CWEB_START_MACRO(5000, main_sever)
-
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 ## Other Formats 
@@ -342,19 +458,22 @@ Other formats may be returned like this:
 
 #include "CWebStudio.h"
 
+CwebNamespace cweb;
+
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-    char *json = "{\"name\":\"CWebStudio\",\"version\":\"1.0.0\"}";
-    return cweb_send_any(
-        "application/json",
-        strlen(json),
-        json,
-        200
-    );
-    
+    const char *json = "{\"name\":\"CWebStudio\",\"version\":\"1.0.0\"}";
+    return cweb.response.send_json_string(json,200);
+
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 ## Returning Files 
 Files can be directly returned by referencing the path:
@@ -362,17 +481,26 @@ Files can be directly returned by referencing the path:
 ~~~c
 #include "CWebStudio.h"
 
+CwebNamespace cweb;
+
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     return cweb_send_file(
-        "my_image.png",
-        CWEB_AUTO_SET_CONTENT,
-        200
+            "my_image.png",
+            CWEB_AUTO_SET_CONTENT,
+            200
     );
-    
+
 }
 
-CWEB_START_MACRO(5001, main_sever);
+
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 ### Static Files
@@ -396,6 +524,7 @@ Smart caching with rendered text can be done with **smart_static_ref**:
 <!--codeof:examples/smart_cache_inside_rendered_text.c-->
 ~~~c
 #include "CWebStudio.h"
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
@@ -423,7 +552,14 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
     
 }
-CWEB_START_MACRO(5000,main_sever)
+
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 
@@ -436,13 +572,20 @@ CWEB_START_MACRO(5000,main_sever)
 
 #define CWEB_DEBUG
 #include "CWebStudio.h"
+CwebNamespace cweb;
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-    return cweb_send_text("Hello World", 200);
+    return cweb.response.send_text("Hello World", 200);
     
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
 ~~~
 
 # KIlling the server
@@ -450,43 +593,67 @@ CWEB_START_MACRO(5001, main_sever);
 if you want to kill the server for any reason, like testing memory leaks or finish the server
 you can just change the var **cweb_end_server** to true
 <!--codeof:examples/kill.c-->
+~~~c
+#include "CWebStudio.h"
 
-## Sever Configuration Parameters 
+CwebNamespace cweb;
+
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
+
+    if(strcmp(request->route,"/kill") == 0){
+        cweb_end_server = true;
+    }
+    return cweb.response.send_text("Working", 200);
+
+}
+
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *server = newCwebSever(5000, main_sever);
+    server->single_process = true;
+    cweb.server.start(server);
+    cweb.server.free(server);
+    return 0;
+}
+~~~
 
 Several server configuration parameters may be set:
 <!--codeof:examples/server_paramns.c-->
 ~~~c
 
 #include "CWebStudio.h"
+CwebNamespace cweb;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    
-    return cweb_send_text("Hello World", 200);
-    
+
+    return cweb.response.send_text("Hello World", 200);
+
 }
 
 int main(){
-    struct CwebServer *sever = newCwebSever(3001, main_sever);
-    //the higher time of the request handler 
-    //after that , the sever will return 500 
+    cweb = newCwebNamespace();
+
+    CwebServer *server = newCwebSever(5000, main_sever);
+    //the higher time of the request handler
+    //after that , the sever will return 500
     // these is useful to prevent the server infinite loop
-    sever->function_timeout = 30;
+    server->function_timeout = 30;
     //the higher time of the client
     //after that , the sever will return 408
     //these is useful to prevent invalid requests
-    sever->client_timeout = 5;
+    server->client_timeout = 5;
 
     //the max queue of the server
-    sever->max_queue = 100;
+    server->max_queue = 100;
     //if true , the server will run in single process
-    sever->single_process = false;
+    server->single_process = false;
     //the max simultaneous requests
-    sever->max_requests = 1000;
+    server->max_requests = 1000;
     //if true , the server will use the static files located into the folder "static"
-    sever->use_static = true;
+    server->use_static = true;
 
-    sever->start(sever);
-    sever->free(sever);
+    cweb.server.start(server);
+    cweb.server.free(server);
     return 0;
 }
 ~~~
