@@ -1,6 +1,7 @@
 
 #include "../CWebStudio_test.h"
 
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
@@ -11,8 +12,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     printf("URL: %s\n", url);
     printf("Method: %s\n", method);
     printf("Route: %s\n", route);
-    return cweb_send_text("Hello World", 200);
-    
+    return cweb.response.send_text("Hello World", 200);
+
 }
 
 int main(int argc, char *argv[]){

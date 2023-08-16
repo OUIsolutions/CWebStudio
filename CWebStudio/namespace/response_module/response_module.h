@@ -10,6 +10,14 @@ typedef struct CwebHttpResponseModule{
             unsigned char *content,
             int status_code
     );
+    CwebHttpResponse * (*send_json_string)(
+            const char *content,
+            int status_code
+    );
+    CwebHttpResponse * (*send_json_string_cleaning_memory)(
+            char *content,
+            int status_code
+    );
 
     CwebHttpResponse * (*send_text)(
             const char *content,

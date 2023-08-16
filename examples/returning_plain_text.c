@@ -1,9 +1,10 @@
 #include "../CWebStudio_test.h"
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 
-    return cweb_send_text("Exemple of Return", 200);
+    return cweb.response.send_text("Exemple of Return", 200);
     
 }
 

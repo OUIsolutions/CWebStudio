@@ -1,14 +1,17 @@
 #include "../CWebStudio_test.h"
 
+CwebNamespace cweb;
+
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     return cweb_send_file(
-        "my_image.png",
-        CWEB_AUTO_SET_CONTENT,
-        200
+            "my_image.png",
+            CWEB_AUTO_SET_CONTENT,
+            200
     );
-    
+
 }
+
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();

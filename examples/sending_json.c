@@ -1,16 +1,13 @@
 
 #include "../CWebStudio_test.h"
 
+CwebNamespace cweb;
+
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-    char *json = "{\"name\":\"CWebStudio\",\"version\":\"1.0.0\"}";
-    return cweb_send_any(
-        "application/json",
-        strlen(json),
-        json,
-        200
-    );
-    
+    const char *json = "{\"name\":\"CWebStudio\",\"version\":\"1.0.0\"}";
+    return cweb.response.send_json_string(json,200);
+
 }
 
 int main(int argc, char *argv[]){

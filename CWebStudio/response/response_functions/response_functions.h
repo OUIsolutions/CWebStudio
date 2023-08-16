@@ -20,6 +20,15 @@ CwebHttpResponse * cweb_send_text(
     int status_code
 );
 
+CwebHttpResponse * cweb_send_json_string(
+        const char *content,
+        int status_code
+);
+CwebHttpResponse * cweb_send_json_string_cleaning_memory(
+        char *content,
+        int status_code
+);
+
 CwebHttpResponse * cweb_send_text_cleaning_memory(
     char *content,
     int status_code

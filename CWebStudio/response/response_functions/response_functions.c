@@ -8,6 +8,24 @@ struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_l
     response->status_code = status_code;
     return response;
 }
+CwebHttpResponse * cweb_send_json_string(
+        const char *content,
+        int status_code
+){
+   return cweb_send_any(   "application/json", strlen(content),(unsigned char*)content,status_code);
+}
+
+
+CwebHttpResponse * cweb_send_json_string_cleaning_memory(
+        char *content,
+        int status_code
+){
+    CwebHttpResponse  *response =cweb_send_any(   "application/json", strlen(content),(unsigned char*)content,status_code);
+    free(content);
+    return response;
+}
+
+
 
 struct CwebHttpResponse* cweb_send_any_cleaning_memory(const char *content_type,size_t content_length,unsigned char *content,int status_code){
     struct CwebHttpResponse *response = cweb_send_any(content_type,content_length,content,status_code);
