@@ -4,6 +4,7 @@ CwebHttpRequestModule newCwebRequestModule(){
     CwebHttpRequestModule self = {0};
     self.newCwebHttpRequest = newCwebHttpRequest;
     self.read_content = CwebHttpRequest_read_content;
+    self.read_cJSON = CWebHttpRequest_read_cJSON;
     self.set_url = CwebHttpRequest_set_url;
     self.set_route = CwebHttpRequest_set_route;
     self.set_method = CwebHttpRequest_set_method;

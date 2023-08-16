@@ -280,7 +280,10 @@ int main(int argc, char *argv[]){
 }
 ~~~
 ## Returning Json from cJSON 
-if you want to return values from cJSON , 
+if you want to return values from cJSON, you can call the **cweb.response.send_cJSON_cleaning_memory** or 
+**cweb.response.send_cJSON** to return cjson values 
+<!--codeof:examples/returning_cjson.c-->
+
 
 ## Returning an Json String 
 <!--codeof:examples/sending_json.c-->

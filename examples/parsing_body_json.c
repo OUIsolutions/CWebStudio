@@ -13,21 +13,21 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     cJSON *age = cJSON_GetObjectItemCaseSensitive(json, "age");
 
     if(!name){
-        cJSON_free(json);
+        cJSON_Delete(json);
         return cweb.response.send_text("name not provided",404);
     }
 
     if(name->type != cJSON_String){
-        cJSON_free(json);
+        cJSON_Delete(json);
         return cweb.response.send_text("name its not a string",404);
     }
     if(!age){
-        cJSON_free(json);
+        cJSON_Delete(json);
         return cweb.response.send_text("age not provided",404);
     }
 
     if(age->type != cJSON_Number){
-        cJSON_free(json);
+        cJSON_Delete(json);
         return cweb.response.send_text("age its not a number",404);
     }
 
@@ -36,7 +36,7 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
 
 
-    cJSON_free(json);
+    cJSON_Delete(json);
 
 
 

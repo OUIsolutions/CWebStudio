@@ -4,6 +4,7 @@
 #define READ_ERROR -3
 #define MAX_CONTENT_SIZE -4
 #define UNDEFINED_CONTENT -5
+#define INVALID_JSON -6
 
 typedef struct CwebHttpRequest{
 
@@ -15,6 +16,7 @@ typedef struct CwebHttpRequest{
     CwebDict *headers;
     int content_length;
     unsigned char *content;
+    cJSON *json;
 
 }CwebHttpRequest;
 //algorithm functions
@@ -22,6 +24,7 @@ typedef struct CwebHttpRequest{
 
 int CwebHttpRequest_read_content(CwebHttpRequest *self, long max_content_size);
 
+int CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
 
 char * CwebHttpRequest_get_header(CwebHttpRequest *self, const char *key);
 

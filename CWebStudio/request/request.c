@@ -10,6 +10,7 @@ struct CwebHttpRequest *newCwebHttpRequest(int socket){
     self->method = NULL;
     self->route = NULL;
     self->content = NULL;
+    self->json = NULL;
     self->content_length = 0;
 
 
@@ -80,6 +81,20 @@ int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_
     return 0;
 }
 
+
+int CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size){
+    int read_error =CwebHttpRequest_read_content(self,max_content_size);
+    if(read_error){
+        return read_error;
+    }
+    self->json = cJSON_Parse((char*)self->content);
+    if(!self->json){
+        return INVALID_JSON;
+    }
+    return 0;
+}
+
+
 char * CwebHttpRequest_get_header(struct CwebHttpRequest *self, const char *key){
     return CwebDict_get(self->headers,key);
 }
@@ -142,16 +157,20 @@ void CwebHttpRequest_free(struct CwebHttpRequest *self){
 
 
 
-    if(self->url != NULL){
+    if(self->url){
         free(self->url);
     }
-    if(self->route != NULL){
+    if(self->route){
         free(self->route);
     }
-    if(self->content != NULL){
+    if(self->content){
         free(self->content);
     }
-    if(self->method != NULL){
+    if(self->json){
+        cJSON_Delete(self->json);
+    }
+
+    if(self->method){
         free(self->method);
     }
 
