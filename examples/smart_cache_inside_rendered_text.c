@@ -1,4 +1,5 @@
 #include "../CWebStudio_test.h"
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
@@ -26,6 +27,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
     
 }
+
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
     struct CwebServer *sever = newCwebSever(5000, main_sever);

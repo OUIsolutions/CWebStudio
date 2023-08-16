@@ -1,8 +1,9 @@
 
 #include "../CWebStudio_test.h"
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
-    request->read_content(request, 20000);
+    cweb.request.read_content(request, 20000);
     CwebDict *query_paramns = request->params;
     for(int i = 0; i < query_paramns->size; i++){
         CwebKeyVal *key_val = query_paramns->keys_vals[i];
@@ -10,8 +11,9 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
         char *value = key_val->value;
         printf("%s : %s\n", key, value);
     }
-    return cweb_send_text("Hello World", 200);
-    
+    printf("-----------------------------------------------\n");;
+    return cweb.response.send_text("Url readed", 200);
+
 }
 
 int main(int argc, char *argv[]){
