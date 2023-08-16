@@ -22,7 +22,13 @@ void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self
 
         if(query_params[i] == '&'){
             key_found = false;
-            CwebDict_set(self->params, key, value);
+            char *sanitized_key = private_cweb_convert_url_encoded_text(key);
+            char *sanitized_value = private_cweb_convert_url_encoded_text(value);
+
+            CwebDict_set(self->params, sanitized_key, sanitized_value);
+            free(sanitized_key);
+            free(sanitized_value);
+
             memset(key, 0, 5000);
             memset(value, 0, 5000);
             continue;
@@ -37,6 +43,7 @@ void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self
         }
     }
     if(key_found){
+
         char *sanitized_key = private_cweb_convert_url_encoded_text(key);
         char *sanitized_value = private_cweb_convert_url_encoded_text(value);
         CwebDict_set(self->params, sanitized_key, sanitized_value);

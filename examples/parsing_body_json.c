@@ -1,25 +1,47 @@
 #include "../CWebStudio_test.h"
 CwebNamespace cweb;
-
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
-    request->read_content(request, one_mega_byte);
-    unsigned char *body = request->content;
-    int size = request->content_length;
+    cweb.request.read_content(request, one_mega_byte);
 
-    //parse with cJson the body 
+    cJSON *json = cJSON_Parse((char*)request->content);
+    if(!json){
+        return cweb.response.send_text("json its not readble",404);
+    }
 
-    cJSON *json = cJSON_Parse(body);
     cJSON *name = cJSON_GetObjectItemCaseSensitive(json, "name");
     cJSON *age = cJSON_GetObjectItemCaseSensitive(json, "age");
 
+    if(!name){
+        cJSON_free(json);
+        return cweb.response.send_text("name not provided",404);
+    }
+
+    if(name->type != cJSON_String){
+        cJSON_free(json);
+        return cweb.response.send_text("name its not a string",404);
+    }
+    if(!age){
+        cJSON_free(json);
+        return cweb.response.send_text("age not provided",404);
+    }
+
+    if(age->type != cJSON_Number){
+        cJSON_free(json);
+        return cweb.response.send_text("age its not a number",404);
+    }
 
     printf("Name: %s\n", name->valuestring);
     printf("Age: %d\n", age->valueint);
 
 
-    return cweb_send_text("Hello World", 200);
-    
+
+    cJSON_free(json);
+
+
+
+    return cweb_send_text("json parserd", 200);
+
 }
 
 int main(int argc, char *argv[]){

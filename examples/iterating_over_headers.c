@@ -13,7 +13,7 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
         printf("%s : %s\n", key, value);
     }
     printf("-------------------------------\n");
-    return cweb.response.send_text("Hello World", 200);
+    return cweb.response.send_text("Headers Iterated", 200);
 
 }
 

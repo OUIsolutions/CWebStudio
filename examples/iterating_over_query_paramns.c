@@ -10,14 +10,16 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
         char *value = key_val->value;
         printf("%s : %s\n", key, value);
     }
-    return cweb_send_text("Hello World", 200);
-    
+    printf("------------------------------------------\n");
+    return cweb.response.send_text("Hello World", 200);
+
 }
 
 int main(int argc, char *argv[]){
+
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    struct CwebServer *server = newCwebSever(5000, main_sever);
+    cweb.server.start(server);
+    cweb.server.free(server);
     return 0;
 }
