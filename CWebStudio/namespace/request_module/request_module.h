@@ -1,8 +1,8 @@
 
 typedef struct CwebHttpRequestModule{
     CwebHttpRequest *(*newCwebHttpRequest)(int socket);
-    int (*read_content)(struct CwebHttpRequest *self,long max_content_size);
-    int (*read_cJSON)(CwebHttpRequest *self, long max_content_size);
+    unsigned char*(*read_content)(struct CwebHttpRequest *self,long max_content_size);
+    cJSON * (*read_cJSON)(CwebHttpRequest *self, long max_content_size);
 
     void (*set_url)(struct CwebHttpRequest *self,const char *url);
     void (*set_route)(struct CwebHttpRequest *self,const char *route);

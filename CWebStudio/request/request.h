@@ -12,6 +12,7 @@ typedef struct CwebHttpRequest{
     int socket;
     char *route;
     char *method;
+    int content_error;
     CwebDict *params;
     CwebDict *headers;
     int content_length;
@@ -22,9 +23,9 @@ typedef struct CwebHttpRequest{
 //algorithm functions
  CwebHttpRequest *newCwebHttpRequest(int socket);
 
-int CwebHttpRequest_read_content(CwebHttpRequest *self, long max_content_size);
+unsigned char * CwebHttpRequest_read_content(CwebHttpRequest *self, long max_content_size);
 
-int CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
+cJSON * CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
 
 char * CwebHttpRequest_get_header(CwebHttpRequest *self, const char *key);
 
