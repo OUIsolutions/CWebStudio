@@ -4,13 +4,16 @@ CwebNamespace cweb;
 
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
-    cweb.request.read_content(request, one_mega_byte);
-    unsigned char *body = request->content;
-    int size = request->content_length;
 
-    printf("body: %s",body);
+    unsigned char *body =  cweb.request.read_content(request, one_mega_byte);
 
-    return cweb_send_text("Body Readed", 200);
+    if(body){
+        printf("body: %s",(char*)body);
+         return cweb_send_text("Body Readed", 200);
+
+    }
+    return cweb_send_text("Body Not Readed", 200);
+
 
 }
 

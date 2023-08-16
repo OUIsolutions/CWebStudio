@@ -202,13 +202,16 @@ CwebNamespace cweb;
 
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
-    cweb.request.read_content(request, one_mega_byte);
-    unsigned char *body = request->content;
-    int size = request->content_length;
 
-    printf("body: %s",body);
+    unsigned char *body =  cweb.request.read_content(request, one_mega_byte);
 
-    return cweb_send_text("Body Readed", 200);
+    if(body){
+        printf("body: %s",(char*)body);
+         return cweb_send_text("Body Readed", 200);
+
+    }
+    return cweb_send_text("Body Not Readed", 200);
+
 
 }
 
@@ -229,16 +232,14 @@ https://github.com/DaveGamble/cJSON.
 CwebNamespace cweb;
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
-
     int one_mega_byte = 1048576;
-    int error = cweb.request.read_cJSON(request,one_mega_byte);
-
-    if(error != 0){
-        return cweb.response.send_text("json its not readble",404);
+    cJSON *json  = cweb.request.read_cJSON(request,one_mega_byte);
+    if(!json){
+        return cweb.response.send_text("not passed or not valid json",404);
     }
 
-    cJSON *name = cJSON_GetObjectItemCaseSensitive(request->json, "name");
-    cJSON *age = cJSON_GetObjectItemCaseSensitive(request->json, "age");
+    cJSON *name = cJSON_GetObjectItemCaseSensitive(json, "name");
+    cJSON *age = cJSON_GetObjectItemCaseSensitive(json, "age");
 
     if(!name){
         return cweb.response.send_text("name not provided",404);
@@ -327,6 +328,7 @@ int main(int argc, char *argv[]){
 <!--codeof:examples/reading_binary_content.c-->
 ~~~c
 #include "CWebStudio.h"
+
 CwebNamespace cweb;
 
 
@@ -339,23 +341,26 @@ void write_binary_file(char *path, unsigned char *content, int size)
 
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
     int two_mega_bytes = 2097152;
-    cweb.request.read_content(request, two_mega_bytes);
     char *name = cweb.request.get_param(request, "name");
     if(!name){
         return cweb.response.send_text("name not provided\n",404);
     }
-    int size = request->content_length;
+    unsigned char *content = cweb.request.read_content(request, two_mega_bytes);
+    if(content){
+        write_binary_file(name,content, request->content_length);
+        return cweb_send_text("File Written", 200);
+    }
+    return cweb_send_text("No Content Provided", 200);
 
-    write_binary_file(name, request->content, size);
-
-    return cweb_send_text("File Written", 200);
 
 }
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
     struct CwebServer *sever = newCwebSever(5000, main_sever);
+
     cweb.server.start(sever);
     cweb.server.free(sever);
     return 0;

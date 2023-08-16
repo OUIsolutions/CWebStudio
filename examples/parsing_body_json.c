@@ -2,16 +2,14 @@
 CwebNamespace cweb;
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
-
     int one_mega_byte = 1048576;
-    int error = cweb.request.read_cJSON(request,one_mega_byte);
-
-    if(error != 0){
-        return cweb.response.send_text("json its not readble",404);
+    cJSON *json  = cweb.request.read_cJSON(request,one_mega_byte);
+    if(!json){
+        return cweb.response.send_text("not passed or not valid json",404);
     }
 
-    cJSON *name = cJSON_GetObjectItemCaseSensitive(request->json, "name");
-    cJSON *age = cJSON_GetObjectItemCaseSensitive(request->json, "age");
+    cJSON *name = cJSON_GetObjectItemCaseSensitive(json, "name");
+    cJSON *age = cJSON_GetObjectItemCaseSensitive(json, "age");
 
     if(!name){
         return cweb.response.send_text("name not provided",404);

@@ -4897,7 +4897,7 @@ char *private_cweb_convert_url_encoded_text(const char *text);
 #ifdef CWEB_DEBUG
 #define cweb_print(...) printf(__VA_ARGS__)
 #else 
-#define cweb_print(...) NULL;
+#define cweb_print(...);
 #endif
 
 #define CWEB_END_ROUTE()\
@@ -5064,6 +5064,7 @@ typedef struct CwebHttpRequest{
     int socket;
     char *route;
     char *method;
+    int content_error;
     CwebDict *params;
     CwebDict *headers;
     int content_length;
@@ -5074,9 +5075,9 @@ typedef struct CwebHttpRequest{
 //algorithm functions
  CwebHttpRequest *newCwebHttpRequest(int socket);
 
-int CwebHttpRequest_read_content(CwebHttpRequest *self, long max_content_size);
+unsigned char * CwebHttpRequest_read_content(CwebHttpRequest *self, long max_content_size);
 
-int CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
+cJSON * CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
 
 char * CwebHttpRequest_get_header(CwebHttpRequest *self, const char *key);
 
@@ -5276,8 +5277,8 @@ CwebDictModule newCwebDictModule();
 
 typedef struct CwebHttpRequestModule{
     CwebHttpRequest *(*newCwebHttpRequest)(int socket);
-    int (*read_content)(struct CwebHttpRequest *self,long max_content_size);
-    int (*read_cJSON)(CwebHttpRequest *self, long max_content_size);
+    unsigned char*(*read_content)(struct CwebHttpRequest *self,long max_content_size);
+    cJSON * (*read_cJSON)(CwebHttpRequest *self, long max_content_size);
 
     void (*set_url)(struct CwebHttpRequest *self,const char *url);
     void (*set_route)(struct CwebHttpRequest *self,const char *route);
@@ -5648,6 +5649,7 @@ struct CwebHttpRequest *newCwebHttpRequest(int socket){
     self->route = NULL;
     self->content = NULL;
     self->json = NULL;
+    self->content_error = 0;
     self->content_length = 0;
 
 
@@ -5662,24 +5664,25 @@ struct CwebHttpRequest *newCwebHttpRequest(int socket){
 
 
 
-int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_size) {
+unsigned char * CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_size) {
 
+    if (self->content != NULL) {
+        return self->content;
+    }
 
    
     if (self->content_length == 0) {
         cweb_print("no content lenght provided\n");
-        return UNDEFINED_CONTENT;
+        self->content_error = UNDEFINED_CONTENT;
+        return NULL;
     }
 
     if (self->content_length > max_content_size) {
         cweb_print("content size is too big\n");
-        return MAX_CONTENT_SIZE;
+        self->content_error = MAX_CONTENT_SIZE;
+        return NULL;
     }
 
-    if (self->content != NULL) {
-        
-        return 0;
-    }
 
     struct timeval timer;
     timer.tv_sec = 5;  // tempo em segundos
@@ -5695,7 +5698,8 @@ int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_
     while (bytes_remaining > 0) {
         int bytes_received = recv(self->socket, self->content + total_bytes_received, bytes_remaining, 0);
         if (bytes_received <= 0) {
-            return READ_ERROR;
+            self->content_error =READ_ERROR;
+            return NULL;
         }
 
         total_bytes_received += bytes_received;
@@ -5715,21 +5719,24 @@ int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_
         }
     }
 
-    return 0;
+    return self->content;
 }
 
 
-int CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size){
-    int read_error =CwebHttpRequest_read_content(self,max_content_size);
-    if(read_error != 0){
-        return read_error;
+cJSON * CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size){
+    unsigned  char *content =CwebHttpRequest_read_content(self,max_content_size);
+    if(!content){
+        return NULL;
     }
+
     self->json = cJSON_Parse((char*)self->content);
     if(!self->json){
-        return INVALID_JSON;
+        self->content_error= INVALID_JSON;
+        return NULL;
     }
-    return 0;
+    return self->json;
 }
+
 
 
 char * CwebHttpRequest_get_header(struct CwebHttpRequest *self, const char *key){
