@@ -1,10 +1,14 @@
+
+
 typedef struct CwebStringArrayModule{
-    void (*set)(struct CwebStringArray *self,int index,const char *value);
-    void (*add)(struct CwebStringArray *self,const char *string);
-    void (*merge)(struct CwebStringArray *self, struct CwebStringArray *other);
-    void (*represent)(struct CwebStringArray *self);
-    void (*free)(struct CwebStringArray *self);
-    int (*find)(struct CwebStringArray *self,const char *string);
+    CwebStringArray *(*newStringArray)();
+    void (*set)( CwebStringArray *self,int index,const char *value);
+    void (*add)( CwebStringArray *self,const char *string);
+    void (*merge)(CwebStringArray *self, CwebStringArray *other);
+    void (*represent)(CwebStringArray *self);
+    int (*find)(CwebStringArray *self,const char *string);
+
+    void (*free)(CwebStringArray *self);
 }CwebStringArrayModule;
 
 CwebStringArrayModule newCwebStringArrayModule();
