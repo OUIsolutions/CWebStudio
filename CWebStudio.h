@@ -4898,7 +4898,16 @@ char *private_cweb_convert_url_encoded_text(const char *text);
 #define cweb_print(...) printf(__VA_ARGS__)
 #else 
 #define cweb_print(...) NULL;
-#endif 
+#endif
+
+#define CWEB_END_ROUTE()\
+if(strcmp(request->route,"/end" ) ==0){ \
+        cweb_end_server = true;\
+}
+
+
+
+
 
 
 
@@ -5002,10 +5011,23 @@ CwebHttpResponse * cweb_send_json_string(
         const char *content,
         int status_code
 );
+
 CwebHttpResponse * cweb_send_json_string_cleaning_memory(
         char *content,
         int status_code
 );
+
+CwebHttpResponse * cweb_send_cJSON(
+        cJSON *content,
+        int status_code
+);
+
+
+CwebHttpResponse * cweb_send_cJSON_cleaning_memory(
+        cJSON *content,
+        int status_code
+);
+
 
 CwebHttpResponse * cweb_send_text_cleaning_memory(
     char *content,
@@ -5034,6 +5056,7 @@ CwebHttpResponse * cweb_send_file(
 #define READ_ERROR -3
 #define MAX_CONTENT_SIZE -4
 #define UNDEFINED_CONTENT -5
+#define INVALID_JSON -6
 
 typedef struct CwebHttpRequest{
 
@@ -5045,6 +5068,7 @@ typedef struct CwebHttpRequest{
     CwebDict *headers;
     int content_length;
     unsigned char *content;
+    cJSON *json;
 
 }CwebHttpRequest;
 //algorithm functions
@@ -5052,6 +5076,7 @@ typedef struct CwebHttpRequest{
 
 int CwebHttpRequest_read_content(CwebHttpRequest *self, long max_content_size);
 
+int CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
 
 char * CwebHttpRequest_get_header(CwebHttpRequest *self, const char *key);
 
@@ -5252,6 +5277,7 @@ CwebDictModule newCwebDictModule();
 typedef struct CwebHttpRequestModule{
     CwebHttpRequest *(*newCwebHttpRequest)(int socket);
     int (*read_content)(struct CwebHttpRequest *self,long max_content_size);
+    int (*read_cJSON)(CwebHttpRequest *self, long max_content_size);
 
     void (*set_url)(struct CwebHttpRequest *self,const char *url);
     void (*set_route)(struct CwebHttpRequest *self,const char *route);
@@ -5302,6 +5328,17 @@ typedef struct CwebHttpResponseModule{
             char *content,
             int status_code
     );
+    CwebHttpResponse * (*send_cJSON)(
+            cJSON *content,
+            int status_code
+    );
+
+
+    CwebHttpResponse * (*send_cJSON_cleaning_memory)(
+            cJSON *content,
+            int status_code
+    );
+
 
     CwebHttpResponse * (*send_text)(
             const char *content,
@@ -5610,6 +5647,7 @@ struct CwebHttpRequest *newCwebHttpRequest(int socket){
     self->method = NULL;
     self->route = NULL;
     self->content = NULL;
+    self->json = NULL;
     self->content_length = 0;
 
 
@@ -5680,6 +5718,20 @@ int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_
     return 0;
 }
 
+
+int CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size){
+    int read_error =CwebHttpRequest_read_content(self,max_content_size);
+    if(read_error != 0){
+        return read_error;
+    }
+    self->json = cJSON_Parse((char*)self->content);
+    if(!self->json){
+        return INVALID_JSON;
+    }
+    return 0;
+}
+
+
 char * CwebHttpRequest_get_header(struct CwebHttpRequest *self, const char *key){
     return CwebDict_get(self->headers,key);
 }
@@ -5742,16 +5794,20 @@ void CwebHttpRequest_free(struct CwebHttpRequest *self){
 
 
 
-    if(self->url != NULL){
+    if(self->url){
         free(self->url);
     }
-    if(self->route != NULL){
+    if(self->route){
         free(self->route);
     }
-    if(self->content != NULL){
+    if(self->content){
         free(self->content);
     }
-    if(self->method != NULL){
+    if(self->json){
+        cJSON_Delete(self->json);
+    }
+
+    if(self->method){
         free(self->method);
     }
 
@@ -6101,11 +6157,36 @@ CwebHttpResponse * cweb_send_json_string_cleaning_memory(
         char *content,
         int status_code
 ){
-    CwebHttpResponse  *response =cweb_send_any(   "application/json", strlen(content),(unsigned char*)content,status_code);
+    CwebHttpResponse  *response = cweb_send_json_string(content,status_code);
     free(content);
     return response;
 }
 
+CwebHttpResponse * cweb_send_cJSON(
+        cJSON *content,
+        int status_code
+){
+    char *rendered = cJSON_Print(content);
+    CwebHttpResponse  *response =cweb_send_any(
+            "application/json",
+            strlen(rendered),
+            (unsigned char*)rendered,
+            status_code
+            );
+    free(rendered);
+    return response;
+}
+
+
+
+CwebHttpResponse * cweb_send_cJSON_cleaning_memory(
+        cJSON *content,
+        int status_code
+){
+    CwebHttpResponse  *response = cweb_send_cJSON(content,status_code);
+    cJSON_Delete(content);
+    return response;
+}
 
 
 struct CwebHttpResponse* cweb_send_any_cleaning_memory(const char *content_type,size_t content_length,unsigned char *content,int status_code){
@@ -7141,6 +7222,7 @@ CwebHttpRequestModule newCwebRequestModule(){
     CwebHttpRequestModule self = {0};
     self.newCwebHttpRequest = newCwebHttpRequest;
     self.read_content = CwebHttpRequest_read_content;
+    self.read_cJSON = CWebHttpRequest_read_cJSON;
     self.set_url = CwebHttpRequest_set_url;
     self.set_route = CwebHttpRequest_set_route;
     self.set_method = CwebHttpRequest_set_method;
@@ -7167,6 +7249,8 @@ CwebHttpResponseModule newCwebHttpResponseModule(){
     self.newHttpResponse  = newCwebHttpResponse;
     self.send_any = cweb_send_any;
     self.send_json_string = cweb_send_json_string;
+    self.send_cJSON = cweb_send_cJSON;
+    self.send_cJSON_cleaning_memory = cweb_send_cJSON_cleaning_memory;
     self.send_var_html_cleaning_memory = cweb_send_json_string_cleaning_memory;
     self.send_text = cweb_send_text;
     self.send_text_cleaning_memory = cweb_send_text_cleaning_memory;
