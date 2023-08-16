@@ -65,6 +65,7 @@ void private_cweb_execute_request_in_safty_mode(
     }
 
     else{
+        //means its the current process
         private_cweb_treat_response(new_socket);
     
     }
@@ -204,6 +205,7 @@ void private_cweb_run_server_in_multiprocess(
 
             close(new_socket);
             cweb_print("Closed Conection with socket %d\n", new_socket);
+
             exit(0);
         }
 

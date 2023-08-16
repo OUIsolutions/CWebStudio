@@ -1,18 +1,18 @@
 
 
-struct CwebServer * newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
-    struct CwebServer *self = (struct  CwebServer*) malloc(sizeof (struct CwebServer));
-    self->port = port;
-    self->function_timeout = 30;
-    self->client_timeout = 5;
-    self->max_queue = 100;
-    self->single_process = false;
-    self->max_requests = 1000;
+struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
+    struct CwebServer self = {0};
+    self.port = port;
+    self.function_timeout = 30;
+    self.client_timeout = 5;
+    self.max_queue = 100;
+    self.single_process = false;
+    self.max_requests = 1000;
 
-    self->use_static = true;
-    self->use_cache = true;
+    self.use_static = true;
+    self.use_cache = true;
     
-    self->request_handler = request_handler;
+    self.request_handler = request_handler;
 
     return self;
 }
@@ -45,6 +45,3 @@ void CwebServer_start(CwebServer *self){
     }
 }
 
-void CwebServer_free(CwebServer *self){
-    free(self);
-}

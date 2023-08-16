@@ -27,9 +27,8 @@ static bool cweb_end_server = false;
 
 
 
-CwebServer *newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
+CwebServer newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
 void CwebServer_start(CwebServer *self);
-void CwebServer_free(CwebServer *self);
 
 
 

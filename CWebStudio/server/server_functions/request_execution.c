@@ -39,6 +39,7 @@ void private_cweb_execute_request(
         response = private_cweb_generate_static_response(request,use_cache);
         if(response == NULL){
             response = request_handler(request);
+
         }
     }
 
@@ -115,14 +116,14 @@ void private_cweb_execute_request(
 }
 
 
-void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket)
-{
+void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket){
+
     struct CwebHttpResponse *response = cweb_send_text(mensage,status_code);
     char *response_str = CwebHttpResponse_generate_response(response);
     send(socket, response_str, strlen(response_str), 0);
     send(socket, response->content, response->content_length, 0);
-
     free(response_str);
+    CwebHttpResponse_free(response);
 
 }
 
