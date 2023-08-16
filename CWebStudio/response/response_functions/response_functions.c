@@ -20,7 +20,7 @@ CwebHttpResponse * cweb_send_json_string_cleaning_memory(
         char *content,
         int status_code
 ){
-    CwebHttpResponse  *response =cweb_send_any(   "application/json", strlen(content),(unsigned char*)content,status_code);
+    CwebHttpResponse  *response = cweb_send_json_string(content,status_code);
     free(content);
     return response;
 }
@@ -33,7 +33,7 @@ CwebHttpResponse * cweb_send_cJSON(
     CwebHttpResponse  *response =cweb_send_any(
             "application/json",
             strlen(rendered),
-            (unsigned char*)content,
+            (unsigned char*)rendered,
             status_code
             );
     free(rendered);
@@ -46,15 +46,8 @@ CwebHttpResponse * cweb_send_cJSON_cleaning_memory(
         cJSON *content,
         int status_code
 ){
-    char *rendered = cJSON_Print(content);
-    CwebHttpResponse  *response =cweb_send_any(
-            "application/json",
-            strlen(rendered),
-            (unsigned char*)content,
-            status_code
-    );
-    free(rendered);
-    cJSON_free(content);
+    CwebHttpResponse  *response = cweb_send_cJSON(content,status_code);
+    cJSON_Delete(content);
     return response;
 }
 
