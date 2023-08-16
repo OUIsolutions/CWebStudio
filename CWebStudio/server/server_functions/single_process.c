@@ -54,13 +54,12 @@ void private_cweb_run_server_in_single_process(
     while (1)
     {
 
-        #ifdef  CWEB_BREAK_IN 
-                if(actual_request >= CWEB_BREAK_IN){
-                    cweb_print("Break in request %lld\n", actual_request);
+        if(cweb_end_server){
+                    cweb_print("Break in request %lld\n", cweb_actual_request);
                     break;
-                }
-        #endif
-        actual_request++;
+        }
+
+        cweb_actual_request++;
 
         //clear every trash 
 
@@ -74,7 +73,7 @@ void private_cweb_run_server_in_single_process(
 
 
         cweb_print("----------------------------------------\n");
-        cweb_print("Executing request:%lld\n", actual_request);
+        cweb_print("Executing request:%lld\n", cweb_actual_request);
         cweb_print("Socket: %d\n", client_socket);
 
 

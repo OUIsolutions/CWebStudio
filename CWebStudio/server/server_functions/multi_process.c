@@ -1,7 +1,7 @@
 
 
 void private_cweb_treat_response(int new_socket){
-    cweb_print("New request %lld\n", actual_request);
+    cweb_print("New request %lld\n", cweb_actual_request);
     cweb_print("Waiting for child process\n");
     pid_t wpid;
     int status = 0;
@@ -75,7 +75,7 @@ void private_cweb_handle_child_termination(int signal) {
     pid_t terminated_child;
     int status;
     while ((terminated_child = waitpid(-1, &status, WNOHANG)) > 0) {
-        total_requests--;
+        cweb_total_requests--;
     }
 }
 
@@ -131,7 +131,7 @@ void private_cweb_run_server_in_multiprocess(
     while (true)
     {
 
-        if(total_requests >= max_requests){
+        if(cweb_total_requests >= max_requests){
 
             if(!informed_mensage){
                 printf("max requests reached\n");
@@ -141,11 +141,11 @@ void private_cweb_run_server_in_multiprocess(
             continue;
         }
 
-        cweb_print("total request  runing %li\n",total_requests);
+        cweb_print("total request  runing %li\n", cweb_total_requests);
 
         informed_mensage = false;
-        actual_request++;
-        total_requests++;
+        cweb_actual_request++;
+        cweb_total_requests++;
 
         // Accepting a new connection in every socket
         int client_socket = accept(
@@ -156,7 +156,7 @@ void private_cweb_run_server_in_multiprocess(
 
 
         cweb_print("----------------------------------------\n");
-        cweb_print("Executing request:%lld\n", actual_request);
+        cweb_print("Executing request:%lld\n", cweb_actual_request);
         cweb_print("Socket: %d\n", client_socket);
 
 
