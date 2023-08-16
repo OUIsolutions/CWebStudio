@@ -1,7 +1,8 @@
 
-typedef struct CwebSeverModule{
-    void (*start)(struct  CwebSever *self);
-    void (*free)(struct  CwebSever *self);
-}CwebSeverModule;
+typedef struct CwebServerModule{
+    CwebServer *(*newServer)(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
+    void (*start)(struct  CwebServer *self);
+    void (*free)(struct  CwebServer *self);
+}CwebServerModule;
 
-CwebSeverModule newCwebSeverModule();
+CwebServerModule newCwebServerModule();

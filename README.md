@@ -50,7 +50,7 @@ If making main configurations before running the server is needed, the function 
 int main(int argc, char *argv[]){
 
    
-     struct CwebSever *sever = newCwebSever(5000, main_sever);
+     struct CwebServer *sever = newCwebSever(5000, main_sever);
      sever->start(sever);
      sever->free(sever);
 }
@@ -463,7 +463,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 }
 
 int main(){
-    struct CwebSever *sever = newCwebSever(3001, main_sever);
+    struct CwebServer *sever = newCwebSever(3001, main_sever);
     sever->single_process = CWEB_DANGEROUS_SINGLE_PROCESS;
     sever->start(sever);
     sever->free(sever);
@@ -486,7 +486,7 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 }
 
 int main(){
-    struct CwebSever *sever = newCwebSever(3001, main_sever);
+    struct CwebServer *sever = newCwebSever(3001, main_sever);
     //the higher time of the request handler 
     //after that , the sever will return 500 
     // these is useful to prevent the server infinite loop

@@ -1,7 +1,7 @@
 
 
-struct CwebSever * newCwebSever(int port ,CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
-    struct CwebSever *self = (struct  CwebSever*) malloc(sizeof (struct CwebSever));
+struct CwebServer * newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
+    struct CwebServer *self = (struct  CwebServer*) malloc(sizeof (struct CwebServer));
     self->port = port;
     self->function_timeout = 30;
     self->client_timeout = 5;
@@ -18,7 +18,7 @@ struct CwebSever * newCwebSever(int port ,CwebHttpResponse *(*request_handler)(C
 }
 
 
-void CwebSever_start(CwebSever *self){
+void CwebServer_start(CwebServer *self){
     if (self->single_process){
 
         private_cweb_run_server_in_single_process(
@@ -45,6 +45,6 @@ void CwebSever_start(CwebSever *self){
     }
 }
 
-void CwebSever_free(CwebSever *self){
+void CwebServer_free(CwebServer *self){
     free(self);
 }
