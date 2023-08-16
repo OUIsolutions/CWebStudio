@@ -84,7 +84,7 @@ int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_
 
 int CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size){
     int read_error =CwebHttpRequest_read_content(self,max_content_size);
-    if(read_error){
+    if(read_error != 0){
         return read_error;
     }
     self->json = cJSON_Parse((char*)self->content);
