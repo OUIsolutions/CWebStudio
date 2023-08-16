@@ -1,4 +1,5 @@
 #include "../CWebStudio_test.h"
+CwebNamespace cweb;
 
 void write_binary_file(char *path, unsigned char *content, int size)
 {
@@ -21,4 +22,10 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
     
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}

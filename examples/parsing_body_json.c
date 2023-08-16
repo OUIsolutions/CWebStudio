@@ -1,4 +1,5 @@
 #include "../CWebStudio_test.h"
+CwebNamespace cweb;
 
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
@@ -21,4 +22,10 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     
 }
 
-CWEB_START_MACRO(5001, main_sever);
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer *sever = newCwebSever(5000, main_sever);
+    cweb.server.start(sever);
+    cweb.server.free(sever);
+    return 0;
+}
