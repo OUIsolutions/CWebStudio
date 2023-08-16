@@ -451,7 +451,7 @@ CwebNamespace cweb;
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
     char *html = "<html><body><h1>Hello World</h1></body></html>";
-    return cweb_send_var_html(html,200);
+    return cweb.response.send_var_html(html,200);
 }
 
 int main(int argc, char *argv[]){
@@ -484,8 +484,24 @@ int main(int argc, char *argv[]){
 
 ## Other Formats 
 Other formats may be returned like this: 
+<!--codeof:examples/returning_any.c-->
+~~~c
+#include "CWebStudio.h"
+CwebNamespace cweb;
 
-## Returning Files 
+struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
+
+    const char *html = "<html><body><h1>Hello World</h1></body></html>";
+    return cweb.response.send_any("text/html",strlen(html),(unsigned char*)html,200);
+}
+
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
+    return 0;
+}
+~~~
 Files can be directly returned by referencing the path:
 <!--codeof:examples/returning_files.c-->
 ~~~c
