@@ -1,5 +1,5 @@
 
-typedef struct CwebRequestModule{
+typedef struct CwebHttpRequestModule{
     CwebHttpRequest *(*newCwebHttpRequest)(int socket);
     int (*read_content)(struct CwebHttpRequest *self,long max_content_size);
 
@@ -28,6 +28,6 @@ typedef struct CwebRequestModule{
 
     void (*free)(struct CwebHttpRequest *request);
     void (*represent)(struct CwebHttpRequest *request);
-}CwebRequestModule;
+}CwebHttpRequestModule;
 
-CwebRequestModule newCwebRequestModule();
+CwebHttpRequestModule newCwebRequestModule();

@@ -1,7 +1,7 @@
 
 
-CwebRequestModule newCwebRequestModule(){
-    CwebRequestModule self = {0};
+CwebHttpRequestModule newCwebRequestModule(){
+    CwebHttpRequestModule self = {0};
     self.newCwebHttpRequest = newCwebHttpRequest;
     self.read_content = CwebHttpRequest_read_content;
     self.set_url = CwebHttpRequest_set_url;
