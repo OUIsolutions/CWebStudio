@@ -2,7 +2,7 @@
 
 
 
-void CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self, const char *query_params){
+void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self, const char *query_params){
     if(!query_params){
         return;
     }
@@ -82,13 +82,13 @@ void CwebHttpRequest_set_url(struct CwebHttpRequest *self, const char *url){
 
     if(route_end_position){
         params[i-route_end_position] = '\0';
-        CwebHttpRequest_interpret_query_params(self, params);
+        private_CwebHttpRequest_interpret_query_params(self, params);
     }
 
 
 }
 
-int CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+int private_CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
     #define CWEB_METHOD_MAX_SIZE 300
     #define CWEB_URL_MAX_SIZE 5000
     char method[CWEB_METHOD_MAX_SIZE] = {0};
@@ -161,7 +161,7 @@ int CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, char *fir
 }
 
 
-int CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, struct CwebStringArray *line_headers){
+int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, struct CwebStringArray *line_headers){
     
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
@@ -272,7 +272,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
 
 
 
-    int line_error = CwebHttpRequest_interpret_first_line(self, lines->strings[0]);
+    int line_error = private_CwebHttpRequest_interpret_first_line(self, lines->strings[0]);
 
     if(line_error){
 
@@ -280,7 +280,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         return line_error;
     }
 
-    int headers_error = CwebHttpRequest_interpret_headders(self, lines);
+    int headers_error = private_CwebHttpRequest_interpret_headders(self, lines);
     CwebStringArray_free(lines);
     
     
@@ -288,8 +288,8 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         return headers_error;
     }
     //const char *content_lenght_str = self->get_header(self, "Content-Length");
-    const char *content_lenght_str = CwebHttpRequest_get_header_by_sanitized_key(
-        self, "contentlength","- "
+    const char *content_lenght_str = CwebHttpRequest_get_header_by_normalized_key(
+            self, "contentlength", "- "
     );
 
     if(content_lenght_str != NULL){

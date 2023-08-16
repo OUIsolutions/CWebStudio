@@ -25,10 +25,10 @@ int CwebHttpRequest_read_content(CwebHttpRequest *self, long max_content_size);
 
 char * CwebHttpRequest_get_header(CwebHttpRequest *self, const char *key);
 
-char * CwebHttpRequest_get_header_by_sanitized_key(
-    CwebHttpRequest *self,
-    const char *key,
-    const char *chars_to_remove
+char * CwebHttpRequest_get_header_by_normalized_key(
+        struct CwebHttpRequest *self,
+        const char *key,
+        const char *chars_to_remove
 );
 char * CwebHttpRequest_get_param(CwebHttpRequest *self, const char *key);
 
@@ -52,12 +52,12 @@ void CwebHttpRequest_set_content_string(CwebHttpRequest *self, const char *conte
 
 int  CwebHttpRequest_parse_http_request(CwebHttpRequest *self);
 
-void CwebHttpRequest_interpret_query_params(CwebHttpRequest *self, const char *query_params);
+void private_CwebHttpRequest_interpret_query_params(CwebHttpRequest *self, const char *query_params);
 
-int CwebHttpRequest_interpret_first_line(CwebHttpRequest *self, char *first_line);
+int private_CwebHttpRequest_interpret_first_line(CwebHttpRequest *self, char *first_line);
 
 
-int CwebHttpRequest_interpret_headders(
+int private_CwebHttpRequest_interpret_headders(
     CwebHttpRequest *self,
     CwebStringArray *line_headers
 );

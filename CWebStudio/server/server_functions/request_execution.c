@@ -9,7 +9,7 @@ void private_cweb_execute_request(
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = newCwebHttpRequest(socket);
 
-    int result =CwebHttpRequest_parse_http_request(request);
+    int result = CwebHttpRequest_parse_http_request(request);
     
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");

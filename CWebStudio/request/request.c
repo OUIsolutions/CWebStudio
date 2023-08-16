@@ -23,6 +23,7 @@ struct CwebHttpRequest *newCwebHttpRequest(int socket){
 }
 
 
+
 int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_size) {
 
 
@@ -66,12 +67,12 @@ int CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_
     self->content[total_bytes_received] = '\0';
 
     //extracting url encoded data
-    char *content_type = CwebHttpRequest_get_header_by_sanitized_key(self, "contenttype", "- ");
+    char *content_type = CwebHttpRequest_get_header_by_normalized_key(self, "contenttype", "- ");
 
     if (content_type != NULL) {
         if (strcmp(content_type, "application/x-www-form-urlencoded") == 0) {
             char *decoded = private_cweb_convert_url_encoded_text((char*) self->content);
-            CwebHttpRequest_interpret_query_params(self, decoded);
+            private_CwebHttpRequest_interpret_query_params(self, decoded);
             free(decoded);
         }
     }
@@ -90,7 +91,7 @@ char * CwebHttpRequest_get_param_by_sanitized_key(struct CwebHttpRequest *self, 
 char * CwebHttpRequest_get_param(struct CwebHttpRequest *self, const char *key){
     return CwebDict_get(self->params,key);
 }
-char * CwebHttpRequest_get_header_by_sanitized_key(struct CwebHttpRequest *self, const char *key, const char *chars_to_remove){
+char * CwebHttpRequest_get_header_by_normalized_key(struct CwebHttpRequest *self, const char *key, const char *chars_to_remove){
     return CwebDict_get_by_normalized_key(self->headers,key,chars_to_remove);
 }
 
