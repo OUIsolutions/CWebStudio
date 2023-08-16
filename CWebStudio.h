@@ -5224,9 +5224,8 @@ static bool cweb_end_server = false;
 
 
 
-CwebServer *newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
+CwebServer newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
 void CwebServer_start(CwebServer *self);
-void CwebServer_free(CwebServer *self);
 
 
 
@@ -5379,9 +5378,8 @@ CwebHttpResponseModule newCwebHttpResponseModule();
 
 
 typedef struct CwebServerModule{
-    CwebServer *(*newServer)(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
+    CwebServer (*newServer)(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
     void (*start)(struct  CwebServer *self);
-    void (*free)(struct  CwebServer *self);
 }CwebServerModule;
 
 CwebServerModule newCwebServerModule();
@@ -6687,6 +6685,7 @@ void private_cweb_execute_request(
         response = private_cweb_generate_static_response(request,use_cache);
         if(response == NULL){
             response = request_handler(request);
+
         }
     }
 
@@ -6763,14 +6762,14 @@ void private_cweb_execute_request(
 }
 
 
-void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket)
-{
+void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket){
+
     struct CwebHttpResponse *response = cweb_send_text(mensage,status_code);
     char *response_str = CwebHttpResponse_generate_response(response);
     send(socket, response_str, strlen(response_str), 0);
     send(socket, response->content, response->content_length, 0);
-
     free(response_str);
+    CwebHttpResponse_free(response);
 
 }
 
@@ -6968,6 +6967,7 @@ void private_cweb_execute_request_in_safty_mode(
     }
 
     else{
+        //means its the current process
         private_cweb_treat_response(new_socket);
     
     }
@@ -7107,6 +7107,7 @@ void private_cweb_run_server_in_multiprocess(
 
             close(new_socket);
             cweb_print("Closed Conection with socket %d\n", new_socket);
+
             exit(0);
         }
 
@@ -7132,19 +7133,19 @@ void private_cweb_run_server_in_multiprocess(
 
 
 
-struct CwebServer * newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
-    struct CwebServer *self = (struct  CwebServer*) malloc(sizeof (struct CwebServer));
-    self->port = port;
-    self->function_timeout = 30;
-    self->client_timeout = 5;
-    self->max_queue = 100;
-    self->single_process = false;
-    self->max_requests = 1000;
+struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
+    struct CwebServer self = {0};
+    self.port = port;
+    self.function_timeout = 30;
+    self.client_timeout = 5;
+    self.max_queue = 100;
+    self.single_process = false;
+    self.max_requests = 1000;
 
-    self->use_static = true;
-    self->use_cache = true;
+    self.use_static = true;
+    self.use_cache = true;
     
-    self->request_handler = request_handler;
+    self.request_handler = request_handler;
 
     return self;
 }
@@ -7177,9 +7178,7 @@ void CwebServer_start(CwebServer *self){
     }
 }
 
-void CwebServer_free(CwebServer *self){
-    free(self);
-}
+
 
 
 
@@ -7279,7 +7278,6 @@ CwebServerModule newCwebServerModule(){
     CwebServerModule self = {0};
     self.newServer = newCwebSever;
     self.start = CwebServer_start;
-    self.free = CwebServer_free;
     return self;
 }
 

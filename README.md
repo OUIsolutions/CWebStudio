@@ -84,9 +84,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -113,11 +112,9 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 }
 
 int main(int argc, char *argv[]){
-
     cweb = newCwebNamespace();
-    struct CwebServer *server = newCwebSever(5000, main_sever);
-    cweb.server.start(server);
-    cweb.server.free(server);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -148,9 +145,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -181,12 +177,10 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 }
 
 
-
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -217,9 +211,8 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -266,9 +259,8 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -294,9 +286,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *server = newCwebSever(5000, main_sever);
-    cweb.server.start(server);
-    cweb.server.free(server);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -314,11 +305,12 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 }
 
+
+
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -359,10 +351,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -384,9 +374,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -404,11 +393,11 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     return cweb.response.send_text_cleaning_memory(teste,200);
 }
 
+
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -449,9 +438,8 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -471,9 +459,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -492,9 +479,8 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -520,12 +506,10 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 }
 
-
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -582,9 +566,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -608,9 +591,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *sever = newCwebSever(5000, main_sever);
-    cweb.server.start(sever);
-    cweb.server.free(sever);
+    CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -636,10 +618,9 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *server = newCwebSever(5000, main_sever);
-    server->single_process = true;
-    cweb.server.start(server);
-    cweb.server.free(server);
+    CwebServer server = newCwebSever(5000, main_sever);
+    server.single_process = true;
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -660,27 +641,26 @@ struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
 int main(){
     cweb = newCwebNamespace();
 
-    CwebServer *server = newCwebSever(5000, main_sever);
+    CwebServer server = newCwebSever(5000, main_sever);
     //the higher time of the request handler
     //after that , the sever will return 500
     // these is useful to prevent the server infinite loop
-    server->function_timeout = 30;
+    server.function_timeout = 30;
     //the higher time of the client
     //after that , the sever will return 408
     //these is useful to prevent invalid requests
-    server->client_timeout = 5;
+    server.client_timeout = 5;
 
     //the max queue of the server
-    server->max_queue = 100;
+    server.max_queue = 100;
     //if true , the server will run in single process
-    server->single_process = false;
+    server.single_process = false;
     //the max simultaneous requests
-    server->max_requests = 1000;
+    server.max_requests = 1000;
     //if true , the server will use the static files located into the folder "static"
-    server->use_static = true;
+    server.use_static = true;
 
-    cweb.server.start(server);
-    cweb.server.free(server);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
