@@ -22,9 +22,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *server = newCwebSever(5000, main_sever);
-    cweb.server.start(server);
-    cweb.server.free(server);
+    struct CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
@@ -35,7 +34,6 @@ You can also download the entire **CWebStudio** folder to your project and run w
 **#include "CWebStudio/CwebStudioMain.h"** header:
 
 ~~~c
-
 #include "CWebStudio/CwebStudioMain.h"
 CwebNamespace cweb;
 
@@ -48,9 +46,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    struct CwebServer *server = newCwebSever(5000, main_sever);
-    cweb.server.start(server);
-    cweb.server.free(server);
+    struct CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
     return 0;
 }
 ~~~
