@@ -428,8 +428,6 @@ CWEB_START_MACRO(5000,main_sever)
 
 
 
-## CWEB_NO_CACHE
-When the **CWEB_NO_CACHE** flag is passed to the browser, static data will not be cached.
 
 ## CWEB_DEBUG FLAG
 **CWEB_DEBUG** will provide useful debugging information:
@@ -447,29 +445,11 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 CWEB_START_MACRO(5001, main_sever);
 ~~~
 
-# CWEB_ONCE
+# KIlling the server
 
-This flag will execute only one function call at a time. It is useful for debugging with valgrind and other memory tools:
-<!--codeof:examples/cweb_once.c-->
-~~~c
-#define CWEB_ONCE
-#include "CWebStudio.h"
-
-
-CwebHttpResponse *main_sever(CwebHttpRequest *request ){
-    
-    return cweb_send_text("Hello World", 200);
-    
-}
-
-int main(){
-    struct CwebServer *sever = newCwebSever(3001, main_sever);
-    sever->single_process = CWEB_DANGEROUS_SINGLE_PROCESS;
-    sever->start(sever);
-    sever->free(sever);
-    return 0;
-}
-~~~
+if you want to kill the server for any reason, like testing memory leaks or finish the server
+you can just change the var **cweb_end_server** to true
+<!--codeof:examples/kill.c-->
 
 ## Sever Configuration Parameters 
 
