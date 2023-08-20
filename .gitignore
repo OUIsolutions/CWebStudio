@@ -20,7 +20,7 @@ trash
 # Precompiled Headers
 *.gch
 *.pch
-
+*.png
 # Libraries
 *.lib
 *.a

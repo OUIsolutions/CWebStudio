@@ -70,15 +70,17 @@ const char *cweb_generate_content_type(const char *file_name){
 
         //iterate in negative
         char *extension;
-        for(int i = 0; i < file_name_size-1; i++){
+          for(int i = file_name_size -2; i >= 0;  i--){
 
            //makes extension to point to i
+            
             extension = (char*)&file_name[i+1];
             //if found a dot, break
             if(file_name[i] =='.'){
                 break;
             }        
         }
+
 
 
         
