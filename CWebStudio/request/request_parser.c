@@ -183,6 +183,11 @@ int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, str
             if(key_found == false && j >= 1000){
                 return MAX_HEADER_SIZE;
             }     
+
+            
+            if(key_found == true && j > 10000){
+                return MAX_HEADER_SIZE;
+            }
             
 
             

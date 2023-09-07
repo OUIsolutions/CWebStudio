@@ -154,7 +154,9 @@ void CwebHttpRequest_represent(struct CwebHttpRequest *self){
     CwebDict_represent(self->params);
     printf("headers:----------------------------\n");
     CwebDict_represent(self->headers);
-    printf("content: %s\n", self->content);
+    if(self->content){
+        printf("content: %s\n", self->content);
+    }
 
 }
 
