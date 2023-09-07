@@ -5792,7 +5792,9 @@ void CwebHttpRequest_represent(struct CwebHttpRequest *self){
     CwebDict_represent(self->params);
     printf("headers:----------------------------\n");
     CwebDict_represent(self->headers);
-    printf("content: %s\n", self->content);
+    if(self->content){
+        printf("content: %s\n", self->content);
+    }
 
 }
 
@@ -6010,6 +6012,11 @@ int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, str
             if(key_found == false && j >= 1000){
                 return MAX_HEADER_SIZE;
             }     
+
+            
+            if(key_found == true && j > 10000){
+                return MAX_HEADER_SIZE;
+            }
             
 
             
