@@ -1,6 +1,6 @@
 
 #define CWEB_DEBUG
-#include "../CWebStudio_test.h"
+#include "../CWebStudio.h"
 CwebNamespace cweb;
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 

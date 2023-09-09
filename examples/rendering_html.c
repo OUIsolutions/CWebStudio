@@ -1,4 +1,4 @@
-#include "../CWebStudio_test.h"
+#include "../CWebStudio.h"
 
 
 CwebNamespace cweb;

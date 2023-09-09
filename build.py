@@ -6,14 +6,13 @@ from Build.full_folder_zip import zip_folder
 
 from os import remove
 STARTER  = f'CWebStudio/CwebStudioMain.h'
-ct.generate_amalgamated_code(STARTER,'CWebStudio_test.h')
+ct.generate_amalgamated_code(STARTER,'CWebStudio.h')
+
 copile_all_exemples('examples')
-remove('CWebStudio_test.h')
+
 
 def modifier(text:str):
-    return text.replace('../CWebStudio_test.h','CWebStudio.h')
-
+    return text.replace('../CWebStudio.h','CWebStudio.h')
 ct.include_code_in_markdown('README.md',True,modifier)
 
-ct.generate_amalgamated_code(STARTER,'CWebStudio.h')
 zip_folder('CWebStudio')
