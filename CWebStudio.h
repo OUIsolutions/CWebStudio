@@ -6057,7 +6057,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         //ssize_t res = read(self->socket, &raw_entries[i],1);
 
         if (res <= 0) {
-            break;
+            return READ_ERROR;
         }
         //line break is \r\n\r\n
         if (i >= 3 &&
