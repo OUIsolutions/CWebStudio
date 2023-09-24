@@ -174,6 +174,9 @@ void CwebHttpRequest_free(struct CwebHttpRequest *self){
     if(self->content){
         free(self->content);
     }
+    if(self->client_ip){
+        free(self->client_ip);
+    }
     if(self->json){
         cJSON_Delete(self->json);
     }
