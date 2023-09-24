@@ -5064,6 +5064,7 @@ typedef struct CwebHttpRequest{
     int socket;
     char *route;
     char *method;
+    char *client_ip;
     int content_error;
     CwebDict *params;
     CwebDict *headers;
@@ -5142,6 +5143,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
 void  private_cweb_execute_request(
     int socket,
+    const char *ip,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
     bool use_static,
     bool use_cache
@@ -5157,6 +5159,7 @@ void private_cweb_treat_response(int new_socket);
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
+    const char *client_ip,
     int function_timeout,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,
@@ -6657,12 +6660,15 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
 void private_cweb_execute_request(
     int socket,
+    const char *client_ip,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,
     bool use_cache
     ){
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = newCwebHttpRequest(socket);
+    request->client_ip = strdup(client_ip);
+
 
     int result = CwebHttpRequest_parse_http_request(request);
     
@@ -6812,6 +6818,9 @@ void private_cweb_run_server_in_single_process(
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
 
+    char client_ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
+
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
@@ -6892,9 +6901,7 @@ void private_cweb_run_server_in_single_process(
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
-
-    
-        private_cweb_execute_request(client_socket,request_handler,use_static,use_cache);
+        private_cweb_execute_request(client_socket,client_ip,request_handler,use_static,use_cache);
 
 
         close(client_socket);
@@ -6954,6 +6961,7 @@ void private_cweb_treat_response(int new_socket){
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
+    const char *client_ip,
     int function_timeout,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,
@@ -6964,7 +6972,7 @@ void private_cweb_execute_request_in_safty_mode(
         // means that the process is the child
       
         alarm(function_timeout);
-        private_cweb_execute_request(new_socket,request_handler,use_static,use_cache);
+        private_cweb_execute_request(new_socket, client_ip,request_handler,use_static,use_cache);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -7016,6 +7024,9 @@ void private_cweb_run_server_in_multiprocess(
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
+
+    char client_ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0){
@@ -7108,6 +7119,7 @@ void private_cweb_run_server_in_multiprocess(
 
             private_cweb_execute_request_in_safty_mode(
                 new_socket,
+                client_ip,
                 function_timeout,
                 request_handler,
                 use_static,

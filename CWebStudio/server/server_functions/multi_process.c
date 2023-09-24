@@ -107,8 +107,6 @@ void private_cweb_run_server_in_multiprocess(
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
 
-    char client_ip[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0){
@@ -158,6 +156,8 @@ void private_cweb_run_server_in_multiprocess(
             (socklen_t *)&addrlen
         );
 
+        char client_ip[INET_ADDRSTRLEN];
+        inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
         cweb_print("----------------------------------------\n");
         cweb_print("Executing request:%lld\n", cweb_actual_request);
