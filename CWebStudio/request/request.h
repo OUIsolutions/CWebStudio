@@ -12,6 +12,7 @@ typedef struct CwebHttpRequest{
     int socket;
     char *route;
     char *method;
+    char *client_ip;
     int content_error;
     CwebDict *params;
     CwebDict *headers;

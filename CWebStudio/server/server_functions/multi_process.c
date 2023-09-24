@@ -43,6 +43,7 @@ void private_cweb_treat_response(int new_socket){
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
+    const char *client_ip,
     int function_timeout,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,
@@ -53,7 +54,7 @@ void private_cweb_execute_request_in_safty_mode(
         // means that the process is the child
       
         alarm(function_timeout);
-        private_cweb_execute_request(new_socket,request_handler,use_static,use_cache);
+        private_cweb_execute_request(new_socket, client_ip,request_handler,use_static,use_cache);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -105,6 +106,9 @@ void private_cweb_run_server_in_multiprocess(
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
+
+    char client_ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0){
@@ -197,6 +201,7 @@ void private_cweb_run_server_in_multiprocess(
 
             private_cweb_execute_request_in_safty_mode(
                 new_socket,
+                client_ip,
                 function_timeout,
                 request_handler,
                 use_static,

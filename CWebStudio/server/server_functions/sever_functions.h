@@ -2,6 +2,7 @@
 
 void  private_cweb_execute_request(
     int socket,
+    const char *ip,
     struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
     bool use_static,
     bool use_cache
@@ -17,6 +18,7 @@ void private_cweb_treat_response(int new_socket);
 
 void private_cweb_execute_request_in_safty_mode(
     int new_socket,
+    const char *client_ip,
     int function_timeout,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,

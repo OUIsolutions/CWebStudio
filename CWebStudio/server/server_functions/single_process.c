@@ -26,6 +26,9 @@ void private_cweb_run_server_in_single_process(
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
 
+    char client_ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
+
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
@@ -106,9 +109,7 @@ void private_cweb_run_server_in_single_process(
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
-
-    
-        private_cweb_execute_request(client_socket,request_handler,use_static,use_cache);
+        private_cweb_execute_request(client_socket,client_ip,request_handler,use_static,use_cache);
 
 
         close(client_socket);

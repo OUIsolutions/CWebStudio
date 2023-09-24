@@ -2,12 +2,15 @@
 
 void private_cweb_execute_request(
     int socket,
+    const char *client_ip,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,
     bool use_cache
     ){
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = newCwebHttpRequest(socket);
+    request->client_ip = strdup(client_ip);
+
 
     int result = CwebHttpRequest_parse_http_request(request);
     
