@@ -11,13 +11,10 @@
 int main() {
     // Endereço e porta do servidor web
     char *server_ip = "localhost"; // Substitua pelo endereço IP ou nome de domínio do servidor
-    int server_port = 5000; // Porta HTTP padrão
+    int server_port = 5004; // Porta HTTP padrão
 
     // Construindo a solicitação HTTP GET
-    char *request = "GET /sss53ssse HTTP/1.1\r\n"
-                    "Host:example.com\r\n"
-                    "Connection: close\r\n"
-                    
+    char *request = "GET /sss53ssse \r\n"
                     "\r\n";
 
     // Criação do socket
