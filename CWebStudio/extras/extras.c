@@ -80,43 +80,35 @@ const char *cweb_generate_content_type(const char *file_name){
                 break;
             }        
         }
-
-
-
-        
-        char *content_type_created = (char*)malloc(100);
-       
+               
         if(strcmp(extension, "html") == 0){
-            strcpy(content_type_created, "text/html");
+           return "text/html";
         }
        
         else if(strcmp(extension, "css") == 0){
-            strcpy(content_type_created, "text/css");
+            return "text/css";
         }
        
         else if(strcmp(extension, "js") == 0){
-            strcpy(content_type_created, "text/javascript");
+            return  "text/javascript";
         }
         else if(strcmp(extension, "png") == 0){
-            strcpy(content_type_created, "image/png");
+            return "image/png";
         }
         else if(strcmp(extension, "ico") == 0){
-            strcpy(content_type_created, "image/x-icon");
+            return "image/x-icon";
         }
 
         else if(strcmp(extension, "jpg") == 0){
-            strcpy(content_type_created, "image/jpeg");
+            return  "image/jpeg";
         }
         else if(strcmp(extension, "jpeg") == 0){
-            strcpy(content_type_created, "image/jpeg");
+            return "image/jpeg";
         }
         else{
-            strcpy(content_type_created, "text/plain");
+            return  "text/plain";
         }
      
-
-
-        return content_type_created;
 }
 
 

@@ -118,18 +118,17 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         return response;
     }
 
-    char *content_type_created;
+    const char *content_type_created;
     if(content_type == NULL){
-        content_type_created  = (char*)cweb_generate_content_type(file_path);
+        content_type_created  = cweb_generate_content_type(file_path);
     }
     else{
-        content_type_created = (char*)content_type;
+        content_type_created = content_type;
     }
 
     struct CwebHttpResponse *response =  cweb_send_any(content_type_created, size, content, status_code);
-    if(content_type == NULL){
-        free(content_type_created);
-    }
+
+
     if(content != NULL){
         free(content);
     }
