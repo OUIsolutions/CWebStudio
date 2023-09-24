@@ -156,7 +156,7 @@ void private_cweb_run_server_in_multiprocess(
             (socklen_t *)&addrlen
         );
 
-        char client_ip[INET_ADDRSTRLEN+2];
+        char client_ip[INET_ADDRSTRLEN] ={0};
         inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
         cweb_print("----------------------------------------\n");
