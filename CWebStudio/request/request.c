@@ -150,6 +150,7 @@ void CwebHttpRequest_represent(struct CwebHttpRequest *self){
     printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
     printf("method: %s\n", self->method);
+    printf("client-ip: %s\n",self->client_ip);
     printf("params:-----------------------------\n");
     CwebDict_represent(self->params);
     printf("headers:----------------------------\n");
