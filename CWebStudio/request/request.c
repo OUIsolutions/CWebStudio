@@ -6,13 +6,9 @@ struct CwebHttpRequest *newCwebHttpRequest(int socket){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
     *self = (CwebHttpRequest){0};
     self->socket = socket;
-
     self->params = newCwebDict();
     self->headers = newCwebDict();
-
-    
     return self;
-    
 }
 
 
