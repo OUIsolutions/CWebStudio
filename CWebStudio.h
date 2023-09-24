@@ -5573,43 +5573,35 @@ const char *cweb_generate_content_type(const char *file_name){
                 break;
             }        
         }
-
-
-
-        
-        char *content_type_created = (char*)malloc(100);
-       
+               
         if(strcmp(extension, "html") == 0){
-            strcpy(content_type_created, "text/html");
+           return "text/html";
         }
        
         else if(strcmp(extension, "css") == 0){
-            strcpy(content_type_created, "text/css");
+            return "text/css";
         }
        
         else if(strcmp(extension, "js") == 0){
-            strcpy(content_type_created, "text/javascript");
+            return  "text/javascript";
         }
         else if(strcmp(extension, "png") == 0){
-            strcpy(content_type_created, "image/png");
+            return "image/png";
         }
         else if(strcmp(extension, "ico") == 0){
-            strcpy(content_type_created, "image/x-icon");
+            return "image/x-icon";
         }
 
         else if(strcmp(extension, "jpg") == 0){
-            strcpy(content_type_created, "image/jpeg");
+            return  "image/jpeg";
         }
         else if(strcmp(extension, "jpeg") == 0){
-            strcpy(content_type_created, "image/jpeg");
+            return "image/jpeg";
         }
         else{
-            strcpy(content_type_created, "text/plain");
+            return  "text/plain";
         }
      
-
-
-        return content_type_created;
 }
 
 
@@ -6270,18 +6262,17 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
         return response;
     }
 
-    char *content_type_created;
+    const char *content_type_created;
     if(content_type == NULL){
-        content_type_created  = (char*)cweb_generate_content_type(file_path);
+        content_type_created  = cweb_generate_content_type(file_path);
     }
     else{
-        content_type_created = (char*)content_type;
+        content_type_created = content_type;
     }
 
     struct CwebHttpResponse *response =  cweb_send_any(content_type_created, size, content, status_code);
-    if(content_type == NULL){
-        free(content_type_created);
-    }
+
+
     if(content != NULL){
         free(content);
     }
