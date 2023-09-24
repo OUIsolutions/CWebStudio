@@ -5645,17 +5645,8 @@ char *private_cweb_convert_url_encoded_text(const char *text){
 
 struct CwebHttpRequest *newCwebHttpRequest(int socket){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
-    
+    *self = (CwebHttpRequest){0};
     self->socket = socket;
-    self->url = NULL;
-    self->method = NULL;
-    self->route = NULL;
-    self->content = NULL;
-    self->json = NULL;
-    self->content_error = 0;
-    self->content_length = 0;
-
-
 
     self->params = newCwebDict();
     self->headers = newCwebDict();
@@ -5932,6 +5923,7 @@ void CwebHttpRequest_set_url(struct CwebHttpRequest *self, const char *url){
 }
 
 int private_CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+
     #define CWEB_METHOD_MAX_SIZE 300
     #define CWEB_URL_MAX_SIZE 5000
     char method[CWEB_METHOD_MAX_SIZE] = {0};
@@ -6074,7 +6066,8 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         }
 
         ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
-        
+        //ssize_t res = read(self->socket, &raw_entries[i],1);
+
         if (res <= 0) {
             break;
         }
@@ -6118,6 +6111,11 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         line_index++;
     }
 
+    if(lines->size == 0){
+        CwebStringArray_free(lines);
+        return READ_ERROR;
+    }
+    
 
 
     int line_error = private_CwebHttpRequest_interpret_first_line(self, lines->strings[0]);
