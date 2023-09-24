@@ -24,10 +24,8 @@ void escreva(const char *teste ){
 
 int main(){
     escreva(
-        "GET /sss HTTP/1.1 \r\n"
-        "teste :a aaa\r\n"
-        "\r\n\r\n"
-        
+        "GET /sss HTTP/1.1 "
+    
     );
 
     int fd = open("teste.txt", O_RDONLY);
@@ -39,5 +37,6 @@ int main(){
     if(result ==0){
         CwebHttpRequest_represent(r);
     }
+    CwebHttpRequest_free(r);
 
 }
