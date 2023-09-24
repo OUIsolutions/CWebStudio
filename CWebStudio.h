@@ -6072,7 +6072,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         i++;
     
     }
-    if(i == 0){    
+    if(i <= 4){    
         return READ_ERROR;
         
     }
