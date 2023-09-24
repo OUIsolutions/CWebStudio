@@ -4,17 +4,8 @@
 
 struct CwebHttpRequest *newCwebHttpRequest(int socket){
     struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
-    
+    *self = (CwebHttpRequest){0};
     self->socket = socket;
-    self->url = NULL;
-    self->method = NULL;
-    self->route = NULL;
-    self->content = NULL;
-    self->json = NULL;
-    self->content_error = 0;
-    self->content_length = 0;
-
-
 
     self->params = newCwebDict();
     self->headers = newCwebDict();
