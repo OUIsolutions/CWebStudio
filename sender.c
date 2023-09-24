@@ -14,9 +14,10 @@ int main() {
     int server_port = 5000; // Porta HTTP padrão
 
     // Construindo a solicitação HTTP GET
-    char *request = "GET /sss53sss HTTP/1.1\r\n"
+    char *request = "GET /sss53ssse HTTP/1.1\r\n"
                     "Host:example.com\r\n"
                     "Connection: close\r\n"
+                    
                     "\r\n";
 
     // Criação do socket
