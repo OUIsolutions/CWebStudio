@@ -5815,6 +5815,9 @@ void CwebHttpRequest_free(struct CwebHttpRequest *self){
     if(self->content){
         free(self->content);
     }
+    if(self->client_ip){
+        free(self->client_ip);
+    }
     if(self->json){
         cJSON_Delete(self->json);
     }
@@ -6863,7 +6866,7 @@ void private_cweb_run_server_in_single_process(
             (socklen_t *)&addrlen
         );
 
-        char client_ip[INET_ADDRSTRLEN];
+        char client_ip[INET_ADDRSTRLEN+2];
         inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
 
@@ -7074,7 +7077,7 @@ void private_cweb_run_server_in_multiprocess(
             (socklen_t *)&addrlen
         );
 
-        char client_ip[INET_ADDRSTRLEN];
+        char client_ip[INET_ADDRSTRLEN+2];
         inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
         cweb_print("----------------------------------------\n");
