@@ -96,6 +96,7 @@ void CwebHttpRequest_set_url(struct CwebHttpRequest *self, const char *url){
 }
 
 int private_CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, char *first_line){
+
     #define CWEB_METHOD_MAX_SIZE 300
     #define CWEB_URL_MAX_SIZE 5000
     char method[CWEB_METHOD_MAX_SIZE] = {0};
@@ -282,6 +283,11 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         line_index++;
     }
 
+    if(lines->size == 0){
+        CwebStringArray_free(lines);
+        return READ_ERROR;
+    }
+    
 
 
     int line_error = private_CwebHttpRequest_interpret_first_line(self, lines->strings[0]);
