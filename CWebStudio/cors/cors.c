@@ -2,10 +2,11 @@
 
 
 
-CwebHttpResponse * private_cweb_generate_cors_response(struct CwebHttpRequest *request) {
+void  private_cweb_generate_cors_response(struct CwebHttpResponse *response) {
 #ifndef CWEB_USE_CORS
-    return NULL;
+    return ;
 #endif
+    CwebHttpResponse_add_header(response,"Access-Control-Allow-Origin","*");
+    CwebHttpResponse_add_header(response,"Access-Control-Allow-Method","*");
 
-    return NULL;
 }

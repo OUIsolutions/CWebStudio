@@ -43,16 +43,17 @@ void private_cweb_execute_request(
         response = private_cweb_generate_static_response(request,use_cache);
     }
 
-    if(!response){
-        response = private_cweb_generate_cors_response(request);
-    }
+
 
 
     if(!response){
         response = request_handler(request);
+
     }
 
-
+    if(response){
+        private_cweb_generate_cors_response(response);
+    }
     cweb_print("executed client lambda\n");
 
 
