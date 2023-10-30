@@ -1,13 +1,13 @@
 
 
 void private_cweb_run_server_in_single_process(
-    int port,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    double client_timeout,
-    int max_queue,
-    bool use_static,
-    bool use_cache
-){
+        int port,
+        CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
+        double client_timeout,
+        int max_queue,
+        bool use_static,
+        bool use_cache,
+        bool allow_cors) {
 
     int port_socket;
 
@@ -109,7 +109,7 @@ void private_cweb_run_server_in_single_process(
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
-        private_cweb_execute_request(client_socket,client_ip,request_handler,use_static,use_cache);
+        private_cweb_execute_request(client_socket,client_ip,request_handler,use_static,use_cache,allow_cors);
 
 
         close(client_socket);

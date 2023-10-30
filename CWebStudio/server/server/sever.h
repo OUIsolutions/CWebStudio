@@ -14,7 +14,7 @@ static bool cweb_end_server = false;
     int max_queue;
     bool single_process;
     long max_requests;
-    
+    bool allow_cors;
     bool use_static;
 
     bool use_cache;

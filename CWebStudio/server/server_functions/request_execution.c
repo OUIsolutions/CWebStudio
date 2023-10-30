@@ -5,7 +5,8 @@ void private_cweb_execute_request(
     const char *client_ip,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,
-    bool use_cache
+    bool use_cache,
+    bool allow_cors
     ){
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = newCwebHttpRequest(socket);
@@ -51,7 +52,7 @@ void private_cweb_execute_request(
 
     }
 
-    if(response){
+    if(response && allow_cors){
         private_cweb_generate_cors_response(response);
     }
     cweb_print("executed client lambda\n");
