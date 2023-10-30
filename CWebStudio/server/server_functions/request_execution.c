@@ -37,19 +37,19 @@ void private_cweb_execute_request(
 
 
 
-    struct CwebHttpResponse *response;
+    CwebHttpResponse *response = NULL;
+
     if(use_static){
         response = private_cweb_generate_static_response(request,use_cache);
-        if(response == NULL){
-            response = request_handler(request);
-
-        }
     }
 
-    else{
+
+
+
+    if(!response){
         response = request_handler(request);
-
     }
+
 
     cweb_print("executed client lambda\n");
 
