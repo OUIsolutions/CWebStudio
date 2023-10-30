@@ -7,7 +7,7 @@ struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(
     self.client_timeout = 5;
     self.max_queue = 100;
     self.single_process = false;
-    self.allow_cors = false;
+    self.allow_cors = true;
     self.max_requests = 1000;
 
     self.use_static = true;

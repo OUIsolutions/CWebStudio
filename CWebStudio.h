@@ -5141,12 +5141,18 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
 
 
-void  private_cweb_execute_request(
-    int socket,
-    const char *ip,
-    struct CwebHttpResponse*(*request_handler)( struct CwebHttpRequest *request),
-    bool use_static,
-    bool use_cache
+void  private_cweb_generate_cors_response(struct CwebHttpResponse *response);
+
+
+
+
+void private_cweb_execute_request(
+        int socket,
+        const char *client_ip,
+        struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+        bool use_static,
+        bool use_cache,
+        bool allow_cors
 );
 
 void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket);
@@ -5157,14 +5163,9 @@ void private_cweb_treat_response(int new_socket);
 
 
 
-void private_cweb_execute_request_in_safty_mode(
-    int new_socket,
-    const char *client_ip,
-    int function_timeout,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    bool use_static,
-    bool use_cache
-);
+void private_cweb_execute_request_in_safty_mode(int new_socket, const char *client_ip, int function_timeout,
+                                                CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
+                                                bool use_static, bool use_cache, bool allow_cors);
 
 
 
@@ -5172,27 +5173,15 @@ void private_cweb_handle_child_termination(int signal);
 
 
 
-void private_cweb_run_server_in_multiprocess(
-        int port,
-        struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-        int function_timeout,
-        double client_timeout,
-        int max_queue,
-        long max_requests,
-        bool use_static,
-        bool use_cache
-);
+void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
+                                             int function_timeout, double client_timeout, int max_queue,
+                                             long max_requests, bool use_static, bool use_cache, bool allow_cors);
 
 
 
-void private_cweb_run_server_in_single_process(
-        int port,
-        struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-        double client_timeout,
-        int  max_queue,
-        bool use_static,
-        bool use_cache
-);
+void private_cweb_run_server_in_single_process(int port, CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
+                                               double client_timeout, int max_queue, bool use_static, bool use_cache,
+                                               bool allow_cors);
 
 
 
@@ -5214,7 +5203,7 @@ static bool cweb_end_server = false;
     int max_queue;
     bool single_process;
     long max_requests;
-    
+    bool allow_cors;
     bool use_static;
 
     bool use_cache;
@@ -6647,12 +6636,24 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
 
 
+
+
+void  private_cweb_generate_cors_response(struct CwebHttpResponse *response) {
+
+    CwebHttpResponse_add_header(response,"Access-Control-Allow-Origin","*");
+    CwebHttpResponse_add_header(response,"Access-Control-Allow-Method","*");
+
+}
+
+
+
 void private_cweb_execute_request(
     int socket,
     const char *client_ip,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
     bool use_static,
-    bool use_cache
+    bool use_cache,
+    bool allow_cors
     ){
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = newCwebHttpRequest(socket);
@@ -6684,20 +6685,23 @@ void private_cweb_execute_request(
 
 
 
-    struct CwebHttpResponse *response;
+    CwebHttpResponse *response = NULL;
+
     if(use_static){
         response = private_cweb_generate_static_response(request,use_cache);
-        if(response == NULL){
-            response = request_handler(request);
-
-        }
     }
 
-    else{
+
+
+
+    if(!response){
         response = request_handler(request);
 
     }
 
+    if(response && allow_cors){
+        private_cweb_generate_cors_response(response);
+    }
     cweb_print("executed client lambda\n");
 
 
@@ -6782,13 +6786,13 @@ void private_cweb_send_error_mensage( const char*mensage,int status_code, int so
 
 
 void private_cweb_run_server_in_single_process(
-    int port,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    double client_timeout,
-    int max_queue,
-    bool use_static,
-    bool use_cache
-){
+        int port,
+        CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
+        double client_timeout,
+        int max_queue,
+        bool use_static,
+        bool use_cache,
+        bool allow_cors) {
 
     int port_socket;
 
@@ -6890,7 +6894,7 @@ void private_cweb_run_server_in_single_process(
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
-        private_cweb_execute_request(client_socket,client_ip,request_handler,use_static,use_cache);
+        private_cweb_execute_request(client_socket,client_ip,request_handler,use_static,use_cache,allow_cors);
 
 
         close(client_socket);
@@ -6949,19 +6953,21 @@ void private_cweb_treat_response(int new_socket){
 
 
 void private_cweb_execute_request_in_safty_mode(
-    int new_socket,
-    const char *client_ip,
-    int function_timeout,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    bool use_static,
-    bool use_cache){
+        int new_socket,
+        const char *client_ip,
+        int function_timeout,
+        CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
+        bool use_static,
+        bool use_cache,
+        bool allow_cors
+        ) {
     cweb_print("Creating a new process\n");
     pid_t pid = fork();
     if (pid == 0){
         // means that the process is the child
       
         alarm(function_timeout);
-        private_cweb_execute_request(new_socket, client_ip,request_handler,use_static,use_cache);
+        private_cweb_execute_request(new_socket, client_ip,request_handler,use_static,use_cache,allow_cors);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -6987,16 +6993,9 @@ void private_cweb_handle_child_termination(int signal) {
     }
 }
 
-void private_cweb_run_server_in_multiprocess(
-    int port,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    int function_timeout,
-    double client_timeout,
-    int max_queue,
-    long max_requests,
-    bool use_static,
-    bool use_cache
-){
+void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
+                                             int function_timeout, double client_timeout, int max_queue,
+                                             long max_requests, bool use_static, bool use_cache, bool allow_cors) {
 
     int port_socket;
 
@@ -7107,13 +7106,15 @@ void private_cweb_run_server_in_multiprocess(
 
 
             private_cweb_execute_request_in_safty_mode(
-                new_socket,
-                client_ip,
-                function_timeout,
-                request_handler,
-                use_static,
-                use_cache
+                    new_socket,
+                    client_ip,
+                    function_timeout,
+                    request_handler,
+                    use_static,
+                    use_cache,
+                    allow_cors
             );
+
 
             close(new_socket);
             cweb_print("Closed Conection with socket %d\n", new_socket);
@@ -7150,6 +7151,7 @@ struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(
     self.client_timeout = 5;
     self.max_queue = 100;
     self.single_process = false;
+    self.allow_cors = true;
     self.max_requests = 1000;
 
     self.use_static = true;
@@ -7165,25 +7167,27 @@ void CwebServer_start(CwebServer *self){
     if (self->single_process){
 
         private_cweb_run_server_in_single_process(
-            self->port,
-            self->request_handler,
-            self->client_timeout,
-            self->max_queue,
-            self->use_static,
-            self->use_cache
-        );
+                self->port,
+                self->request_handler,
+                self->client_timeout,
+                self->max_queue,
+                self->use_static,
+                self->use_cache,
+                self->allow_cors
+                );
     }
 
     else{
         private_cweb_run_server_in_multiprocess(
-            self->port,
-            self->request_handler,
-            self->function_timeout,
-            self->client_timeout,
-            self->max_queue,
-            self->max_requests,
-            self->use_static,
-            self->use_cache
+                self->port,
+                self->request_handler,
+                self->function_timeout,
+                self->client_timeout,
+                self->max_queue,
+                self->max_requests,
+                self->use_static,
+                self->use_cache,
+                self->allow_cors
         );
     }
 }

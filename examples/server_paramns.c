@@ -21,6 +21,9 @@ int main(){
     //these is useful to prevent invalid requests
     server.client_timeout = 5;
 
+    //these atributes define to allow cros origins domains
+    server.allow_cors = true;
+    
     //the max queue of the server
     server.max_queue = 100;
     //if true , the server will run in single process
