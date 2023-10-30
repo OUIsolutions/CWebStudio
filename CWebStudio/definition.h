@@ -8,6 +8,7 @@
 #include "dict/definition.h"
 #include "response/response/response.c"
 #include "static/static.c"
+#include "cors/cors.c"
 #include "server/server_functions/request_execution.c"
 #include "server/server_functions/single_process.c"
 #include "server/server_functions/multi_process.c"

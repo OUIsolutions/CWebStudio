@@ -43,7 +43,9 @@ void private_cweb_execute_request(
         response = private_cweb_generate_static_response(request,use_cache);
     }
 
-
+    if(!response){
+        response = private_cweb_generate_cors_response(request);
+    }
 
 
     if(!response){

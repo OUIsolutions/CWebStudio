@@ -10,6 +10,7 @@
 #include "response/response_functions/response_functions.h"
 #include "request/request.h"
 #include "static/static.h"
+#include "cors/cors.h"
 
 #include "server/server_functions/sever_functions.h"
 #include "server/server/sever.h"
