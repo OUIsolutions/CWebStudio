@@ -36,7 +36,6 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self);
 void private_CWebServer_run_server_in_multiprocess(CwebServer *self);
 
 
-
 void private_cweb_execute_request(
         int socket,
         const char *client_ip,

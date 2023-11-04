@@ -23,19 +23,9 @@ void CwebServer_start(CwebServer *self){
     if (self->single_process){
         private_CWebServer_run_server_in_single_process(self);
     }
-
-    else{
-        private_CWebServer_run_server_in_multiprocess(
-                self->port,
-                self->request_handler,
-                self->function_timeout,
-                self->client_timeout,
-                self->max_queue,
-                self->max_requests,
-                self->use_static,
-                self->use_cache,
-                self->allow_cors
-        );
+    bool multiprocess = self->single_process == false;
+    if(multiprocess){
+        private_CWebServer_run_server_in_multiprocess(self);
     }
 }
 

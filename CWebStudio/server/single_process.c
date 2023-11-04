@@ -43,7 +43,7 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
     {
 
         if(cweb_end_server){
-                    cweb_print("Break in request %lld\n", cweb_actual_request);
+                    cweb_print("Break in request %lld\n", cweb_actual_request)
                     break;
         }
 
@@ -62,9 +62,9 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
         inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
 
-        cweb_print("----------------------------------------\n");
-        cweb_print("Executing request:%lld\n", cweb_actual_request);
-        cweb_print("Socket: %d\n", client_socket);
+        cweb_print("----------------------------------------\n")
+        cweb_print("Executing request:%lld\n", cweb_actual_request)
+        cweb_print("Socket: %d\n", client_socket)
 
 
         if ( client_socket< 0){
@@ -82,8 +82,8 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
         ssize_t peek_result = recv(client_socket, buffer, 1, MSG_PEEK);
 
         if (peek_result <= 0) {
-            cweb_print("peek: %li\n",peek_result);
-            cweb_print("Conection closed By the  Client\n");
+            cweb_print("peek: %li\n",peek_result)
+            cweb_print("Conection closed By the  Client\n")
             close(client_socket);  // Fechar o socket do cliente
             continue;
         }
@@ -92,7 +92,7 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
         struct timeval timer2;
         long seconds =  (long)self->client_timeout;
         timer2.tv_sec =  seconds ;  // tempo em segundos
-        timer2.tv_usec =(long)((self->client_timeout - seconds) * 1000000);
+        timer2.tv_usec =(long)((self->client_timeout - (double )seconds) * 1000000);
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
@@ -102,10 +102,10 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
         close(client_socket);
 
 
-        cweb_print("Closed Conection with socket %d\n", client_socket);
+        cweb_print("Closed Conection with socket %d\n", client_socket)
 
         
     }
-    return; 
+
 }
 
