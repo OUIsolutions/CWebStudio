@@ -96,8 +96,7 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
-        private_CWebServer_execute_request(client_socket, client_ip, self->request_handler, self->use_static,
-                                           self->use_cache, self->allow_cors);
+        private_CWebServer_execute_request(self,client_socket, client_ip);
 
 
         close(client_socket);
