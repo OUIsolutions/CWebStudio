@@ -95,69 +95,69 @@ CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request)
     return NULL;
 }
 
-CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){
+CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache,const char *static_folder){
 
-    struct CwebHttpResponse * icon_response = private_cweb_treat_five_icon(request);
+    CwebHttpResponse * icon_response = private_cweb_treat_five_icon(request);
 
     if(icon_response !=  NULL){
         return icon_response;
     }
-
-    if(cweb_starts_with(request->route,"/static")){
-
-        char *full_path = request->route;
-        full_path+=1;
-
-        char *path = CwebHttpRequest_get_param(request,"path");
-        if(path != NULL){
-            full_path = path;
-        }
-
-        char *securyt_path = cweb_replace_string(full_path,"../","");
-        int size;
-        bool is_binary;
-        unsigned char *content = cweb_load_any_content(securyt_path,&size,&is_binary);
-
-        if(content == NULL){
-
-
-            char *not_found_html_page = cweb_load_string_file_content("static/404.html");
-            if(not_found_html_page != NULL){
-                return cweb_send_var_html_cleaning_memory(not_found_html_page,404);
-
-            }
-
-            char mensage[100];
-            sprintf(mensage, "File not found: %s", securyt_path);
-            struct CwebHttpResponse* response =  cweb_send_text(mensage, CWEB_NOT_FOUND);
-            return response;
-        }
-
-        if(!is_binary){
-            char *new_content = private_cweb_change_smart_cache((char*)content);
-            free(content);
-            size = strlen(new_content);
-            content = (unsigned char*)new_content;
-        }
-
-        char *content_type  = (char*)cweb_generate_content_type(securyt_path);
-
-        struct CwebHttpResponse * response = cweb_send_any_cleaning_memory(content_type,size,content,200);
-
-
-        if(use_cache){
-            char *unix_cache = CwebHttpRequest_get_param(request,"unix-cache");
-            if(unix_cache){
-                char response_code[50] = "";
-                sprintf(response_code, "public, max-age=31536000, immutable");
-                CwebHttpResponse_add_header(response,"cache-control", response_code);
-            }
-        }
-
-        free(securyt_path);
-        return response;
-
+    if(!cweb_starts_with(request->route,static_folder)){
+        return  NULL;
     }
-    return NULL;
+
+    char *full_path = request->route;
+    full_path+=1;
+
+    char *path = CwebHttpRequest_get_param(request,"path");
+    if(path != NULL){
+        full_path = path;
+    }
+
+    char *securyt_path = cweb_replace_string(full_path,"../","");
+    int size;
+    bool is_binary;
+    unsigned char *content = cweb_load_any_content(securyt_path,&size,&is_binary);
+
+    if(content == NULL){
+
+
+        char *not_found_html_page = cweb_load_string_file_content("static/404.html");
+        if(not_found_html_page != NULL){
+            return cweb_send_var_html_cleaning_memory(not_found_html_page,404);
+
+        }
+
+        char mensage[100];
+        sprintf(mensage, "File not found: %s", securyt_path);
+        struct CwebHttpResponse* response =  cweb_send_text(mensage, CWEB_NOT_FOUND);
+        return response;
+    }
+
+    if(!is_binary){
+        char *new_content = private_cweb_change_smart_cache((char*)content);
+        free(content);
+        size = strlen(new_content);
+        content = (unsigned char*)new_content;
+    }
+
+    char *content_type  = (char*)cweb_generate_content_type(securyt_path);
+
+    struct CwebHttpResponse * response = cweb_send_any_cleaning_memory(content_type,size,content,200);
+
+
+    if(use_cache){
+        char *unix_cache = CwebHttpRequest_get_param(request,"unix-cache");
+        if(unix_cache){
+            char response_code[50] = "";
+            sprintf(response_code, "public, max-age=31536000, immutable");
+            CwebHttpResponse_add_header(response,"cache-control", response_code);
+        }
+    }
+
+    free(securyt_path);
+    return response;
+
+
 
 }
