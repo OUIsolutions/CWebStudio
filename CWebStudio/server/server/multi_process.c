@@ -16,7 +16,7 @@ void private_cweb_execute_request_in_safty_mode(
         // means that the process is the child
       
         alarm(function_timeout);
-        private_cweb_execute_request(new_socket, client_ip,request_handler,use_static,use_cache,allow_cors);
+        private_CWebServer_execute_request(new_socket, client_ip, request_handler, use_static, use_cache, allow_cors);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);

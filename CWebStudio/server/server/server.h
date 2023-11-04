@@ -37,10 +37,10 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self);
 void private_CWebServer_run_server_in_multiprocess(CwebServer *self);
 
 
-void private_cweb_execute_request(
+void private_CWebServer_execute_request(
         int socket,
         const char *client_ip,
-        struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
+        struct CwebHttpResponse (*request_handler)(struct CwebHttpRequest *request),
         bool use_static,
         bool use_cache,
         bool allow_cors

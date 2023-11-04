@@ -1,6 +1,6 @@
 
 
-void private_cweb_execute_request(
+void private_CWebServer_execute_request(
     int socket,
     const char *client_ip,
     struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
