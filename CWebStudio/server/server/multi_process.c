@@ -1,22 +1,15 @@
 
 
 
-void private_cweb_execute_request_in_safty_mode(
-        int new_socket,
-        const char *client_ip,
-        int function_timeout,
-        CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
-        bool use_static,
-        bool use_cache,
-        bool allow_cors
-        ) {
+void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket, const char *client_ip){
+
     cweb_print("Creating a new process\n");
     pid_t pid = fork();
     if (pid == 0){
         // means that the process is the child
       
-        alarm(function_timeout);
-        private_CWebServer_execute_request(new_socket, client_ip, request_handler, use_static, use_cache, allow_cors);
+        alarm(self->function_timeout);
+        private_CWebServer_execute_request(self,new_socket, client_ip);
         cweb_print("Request executed\n");
         alarm(0);
         exit(0);
@@ -144,15 +137,8 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
-            private_cweb_execute_request_in_safty_mode(
-                    new_socket,
-                    client_ip,
-                    self->function_timeout,
-                    self->request_handler,
-                    self->use_static,
-                    self->use_cache,
-                    self->allow_cors
-            );
+            
+            private_cweb_execute_request_in_safty_mode(self,new_socket,client_ip);
 
 
             close(new_socket);

@@ -46,9 +46,7 @@ void private_CWebServer_execute_request(
 
 
 
-void private_cweb_execute_request_in_safty_mode(int new_socket, const char *client_ip, int function_timeout,
-                                                CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
-                                                bool use_static, bool use_cache, bool allow_cors);
+void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket, const char *client_ip);
 
 
 
