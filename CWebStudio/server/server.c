@@ -9,7 +9,7 @@ struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(
     self.single_process = false;
     self.allow_cors = true;
     self.max_requests = 1000;
-
+    self.static_folder = "/static";
     self.use_static = true;
     self.use_cache = true;
     

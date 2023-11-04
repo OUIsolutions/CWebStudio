@@ -12,6 +12,6 @@
 #include "static/static.h"
 #include "cors/cors.h"
 
-#include "server/server_functions/sever_functions.h"
-#include "server/server/sever.h"
+
+#include "server/sever.h"
 #include "namespace/declaration.h"
