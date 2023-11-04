@@ -1,13 +1,10 @@
 
 
-void private_CWebServer_execute_request(
-    int socket,
-    const char *client_ip,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    bool use_static,
-    bool use_cache,
-    bool allow_cors
-    ){
+
+
+
+void private_CWebServer_execute_request(CwebServer *self,int socket,const char *client_ip){
+
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = newCwebHttpRequest(socket);
     request->client_ip = strdup(client_ip);
@@ -40,19 +37,19 @@ void private_CWebServer_execute_request(
 
     CwebHttpResponse *response = NULL;
 
-    if(use_static){
-        response = private_cweb_generate_static_response(request,use_cache);
+    if(self->use_static){
+        response = private_cweb_generate_static_response(request,self->use_cache);
     }
 
 
 
 
     if(!response){
-        response = request_handler(request);
+        response = self->request_handler(request);
 
     }
 
-    if(response && allow_cors){
+    if(response && self->allow_cors){
         private_cweb_generate_cors_response(response);
     }
     cweb_print("executed client lambda\n");
@@ -61,7 +58,7 @@ void private_CWebServer_execute_request(
     //means that the main function respond nothing
     if (response == NULL){
 
-        if(use_static){
+        if(self->use_static){
             char *formated_html = cweb_load_string_file_content("static/404.html");
             if(formated_html != NULL){
                 response = cweb_send_var_html_cleaning_memory(
