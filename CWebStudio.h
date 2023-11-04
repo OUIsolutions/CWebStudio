@@ -5173,9 +5173,9 @@ void private_cweb_handle_child_termination(int signal);
 
 
 
-void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
-                                             int function_timeout, double client_timeout, int max_queue,
-                                             long max_requests, bool use_static, bool use_cache, bool allow_cors);
+void private_CWebServer_run_server_in_multiprocess(int port, CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
+                                                   int function_timeout, double client_timeout, int max_queue,
+                                                   long max_requests, bool use_static, bool use_cache, bool allow_cors);
 
 
 
@@ -6993,9 +6993,9 @@ void private_cweb_handle_child_termination(int signal) {
     }
 }
 
-void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
-                                             int function_timeout, double client_timeout, int max_queue,
-                                             long max_requests, bool use_static, bool use_cache, bool allow_cors) {
+void private_CWebServer_run_server_in_multiprocess(int port, CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
+                                                   int function_timeout, double client_timeout, int max_queue,
+                                                   long max_requests, bool use_static, bool use_cache, bool allow_cors) {
 
     int port_socket;
 

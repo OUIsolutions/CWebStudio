@@ -1,13 +1,6 @@
 
 
-void private_cweb_run_server_in_single_process(
-        int port,
-        CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
-        double client_timeout,
-        int max_queue,
-        bool use_static,
-        bool use_cache,
-        bool allow_cors) {
+void private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
     int port_socket;
 
@@ -24,32 +17,26 @@ void private_cweb_run_server_in_single_process(
     // Configurando a estrutura de endereço do servidor
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(port);
+    address.sin_port = htons(self->port);
 
 
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
-        printf("Faluire to bind socket to port %d\n", port);
+        printf("Faluire to bind socket to port %d\n", self->port);
         return;
       
     }
 
     // Waiting for connections
-    if (listen(port_socket, max_queue) < 0)
+    if (listen(port_socket, self->max_queue) < 0)
     {
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
     }
 
     // Main loop
-    printf("Sever is running on port:%d\n", port);
-
-
-
-
-
-
+    printf("Sever is running on port:%d\n", self->port);
 
 
     while (1)
@@ -103,13 +90,13 @@ void private_cweb_run_server_in_single_process(
         
         
         struct timeval timer2;
-        long seconds =  (long)client_timeout;
+        long seconds =  (long)self->client_timeout;
         timer2.tv_sec =  seconds ;  // tempo em segundos
-        timer2.tv_usec =(long)((client_timeout - seconds) * 1000000);
+        timer2.tv_usec =(long)((self->client_timeout - seconds) * 1000000);
         setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
-        private_cweb_execute_request(client_socket,client_ip,request_handler,use_static,use_cache,allow_cors);
+        private_cweb_execute_request(client_socket,client_ip,self->request_handler,self->use_static,self->use_cache,self->allow_cors);
 
 
         close(client_socket);

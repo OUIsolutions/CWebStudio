@@ -21,20 +21,11 @@ struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(
 
 void CwebServer_start(CwebServer *self){
     if (self->single_process){
-
-        private_cweb_run_server_in_single_process(
-                self->port,
-                self->request_handler,
-                self->client_timeout,
-                self->max_queue,
-                self->use_static,
-                self->use_cache,
-                self->allow_cors
-                );
+        private_CWebServer_run_server_in_single_process(self);
     }
 
     else{
-        private_cweb_run_server_in_multiprocess(
+        private_CWebServer_run_server_in_multiprocess(
                 self->port,
                 self->request_handler,
                 self->function_timeout,
