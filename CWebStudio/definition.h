@@ -9,8 +9,6 @@
 #include "response/definition.h"
 #include "static/static.c"
 #include "cors/cors.c"
-#include "server/request_execution.c"
-#include "server/single_process.c"
-#include "server/multi_process.c"
+
 #include "server/definition.h"
 #include "namespace/definition.h"

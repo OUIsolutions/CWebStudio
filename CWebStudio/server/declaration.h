@@ -1,1 +1,2 @@
-#include "server/sever.h"
+#include "server_functions/server_functions.h"
+#include "server/server.h"

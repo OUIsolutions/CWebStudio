@@ -28,6 +28,7 @@ static bool cweb_end_server = false;
 
 
 CwebServer newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
+
 void CwebServer_start(CwebServer *self);
 
 
@@ -45,10 +46,6 @@ void private_cweb_execute_request(
         bool allow_cors
 );
 
-void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket);
-
-
-void private_cweb_treat_response(int new_socket);
 
 
 
@@ -59,7 +56,6 @@ void private_cweb_execute_request_in_safty_mode(int new_socket, const char *clie
 
 
 
-void private_cweb_handle_child_termination(int signal);
 
 
 
