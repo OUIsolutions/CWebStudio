@@ -6472,7 +6472,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
 
 
 char * cweb_smart_static_ref(const char *path){
-    char file_name[1000];
+    char file_name[1000] ={0};
     sprintf(file_name,"%s/%s", cweb_static_folder,path);
     struct stat file_stat;
     long last_mofication = 0;
@@ -6480,8 +6480,8 @@ char * cweb_smart_static_ref(const char *path){
         last_mofication = file_stat.st_mtime;
     }
 
-    char * src_ref = (char*)malloc(2000);
-    sprintf(src_ref,"/%s?path=%s&unix-cache=%li",cweb_static_folder,file_name, last_mofication);
+    char * src_ref = (char*)calloc(2000,sizeof(char));
+    sprintf(src_ref,"/static?path=%s&unix-cache=%li",path, last_mofication);
     return src_ref;
 }
 
