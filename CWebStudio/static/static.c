@@ -124,14 +124,22 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
         return private_cweb_treat_five_icon();
     }
 
+    int  base_route_size = (int)strlen("/static");
+    int min_size = base_route_size +2;
 
-    if(!cweb_starts_with(request->route,cweb_static_folder)){
+
+    if(strlen(request->route) < min_size){
+        return NULL;
+    }
+
+    if(!cweb_starts_with(request->route,"/static")){
         return  NULL;
     }
 
-
     char *full_path = request->route;
-    full_path+=1;
+
+    full_path+= base_route_size;
+
 
     char *path = CwebHttpRequest_get_param(request,"path");
     if(path != NULL){
@@ -148,7 +156,6 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
         char not_found_html_page_path[1000] ={0};
         sprintf(not_found_html_page_path,"%s/404.html",cweb_static_folder);
-        printf("not found: %s\n",not_found_html_page_path);
         char *not_found_html_page = cweb_load_string_file_content(not_found_html_page_path);
         if(not_found_html_page != NULL){
             return cweb_send_var_html_cleaning_memory(not_found_html_page,404);
