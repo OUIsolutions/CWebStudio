@@ -128,7 +128,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
     if(icon_response !=  NULL){
         return icon_response;
     }
-    if(!cweb_starts_with(request->route,"/static")){
+    if(!cweb_starts_with(request->route,cweb_static_folder)){
         return  NULL;
     }
 
@@ -142,6 +142,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
     }
 
     char *securyt_path = cweb_replace_string(full_path,"../","");
+
     int size;
     bool is_binary;
     unsigned char *content = cweb_load_any_content(securyt_path,&size,&is_binary);
