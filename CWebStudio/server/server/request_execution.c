@@ -60,11 +60,13 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
             char formated_404_path[1000]={0};
             sprintf(formated_404_path,"%s/404.html",cweb_static_folder);
             char *formated_html = cweb_load_string_file_content(formated_404_path);
+
             if(formated_html != NULL){
                 response = cweb_send_var_html_cleaning_memory(
                         formated_html,
                         404);
             }
+
             else{
                 response = cweb_send_text(
                         "Error 404",
