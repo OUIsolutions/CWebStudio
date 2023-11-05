@@ -148,13 +148,14 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
         }
         full_path+= base_route_size;
     }
-    const int MAX_PATH = 900;
+
+    const int MAX_PATH = 20;
     if(strlen(full_path) > MAX_PATH){
         return NULL;
     }
 
     char formated_full_path[2000] = {0};
-    sprintf(formated_full_path,"%s%s",cweb_static_folder,full_path);
+    sprintf(formated_full_path,"%s/%s",cweb_static_folder,full_path);
 
     char *security_path = cweb_replace_string(formated_full_path,"../","");
     int size;
@@ -163,7 +164,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
     if(content == NULL){
 
-        char not_found_html_page_path[2000] ={0};
+        char not_found_html_page_path[1100] ={0};
         sprintf(not_found_html_page_path,"%s/404.html",cweb_static_folder);
         char *not_found_html_page = cweb_load_string_file_content(not_found_html_page_path);
         if(not_found_html_page != NULL){
@@ -172,7 +173,9 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
         }
 
-        struct CwebHttpResponse* response =  cweb_send_text("File not found", CWEB_NOT_FOUND);
+        char menssage[1100] = {0};
+        sprintf(menssage,"File %s not found",security_path);
+        struct CwebHttpResponse* response =  cweb_send_text(menssage, CWEB_NOT_FOUND);
         free(security_path);
 
         return response;
