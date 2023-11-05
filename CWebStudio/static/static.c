@@ -84,13 +84,7 @@ char * private_cweb_change_smart_cache(const char *content){
     return code->rendered_text;
 }
 
-CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request){
-
-    bool is_faviocon_route = strcmp(request->route,"/favicon.ico")== 0;
-    if(!is_faviocon_route){
-        return NULL;
-    }
-    printf("pegouaqui\n");
+CwebHttpResponse * private_cweb_treat_five_icon(){
 
 
     char possible_ico_path[1000] = {0};
@@ -123,11 +117,14 @@ CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request)
 }
 
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){
-    CwebHttpResponse * icon_response = private_cweb_treat_five_icon(request);
 
-    if(icon_response !=  NULL){
-        return icon_response;
+
+    bool is_faviocon_route = strcmp(request->route,"/favicon.ico")== 0;
+    if(is_faviocon_route){
+        return private_cweb_treat_five_icon();
     }
+
+
     if(!cweb_starts_with(request->route,cweb_static_folder)){
         return  NULL;
     }
@@ -151,6 +148,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
         char not_found_html_page_path[1000] ={0};
         sprintf(not_found_html_page_path,"%s/404.html",cweb_static_folder);
+        printf("not found: %s\n",not_found_html_page_path);
         char *not_found_html_page = cweb_load_string_file_content(not_found_html_page_path);
         if(not_found_html_page != NULL){
             return cweb_send_var_html_cleaning_memory(not_found_html_page,404);
