@@ -5130,7 +5130,7 @@ void CwebHttpRequest_represent(struct CwebHttpRequest *self);
 
 
 
-char * smart_static_ref(const char *path);
+char * cweb_smart_static_ref(const char *path);
 
 char * private_cweb_change_smart_cache(const char *content);
 
@@ -6469,7 +6469,7 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
 
 
 
-char * smart_static_ref(const char *path){
+char * cweb_smart_static_ref(const char *path){
     char file_name[1000];
     sprintf(file_name,"static/%s",path);
     struct stat file_stat;

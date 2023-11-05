@@ -547,7 +547,7 @@ Dynamic caching may be used inside HTML by using smart_cache:
     <img src="smart-cache='file.png'">
 ~~~
 #### Smart Cache in Rendered Text
-Smart caching with rendered text can be done with **smart_static_ref**:
+Smart caching with rendered text can be done with **cweb_smart_static_ref**:
 <!--codeof:examples/smart_cache_inside_rendered_text.c-->
 ~~~c
 #include "CWebStudio.h"
@@ -563,14 +563,14 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     m.$open(s,CTEXT_HTML,"lang=\"%s\"",lang);
         m.open(s,CTEXT_HEAD);
             
-            char *fav_icon_link = smart_static_ref("favicon.ico");
+            char *fav_icon_link = cweb_smart_static_ref("favicon.ico");
             m.auto$close(s,CTEXT_LINK,"rel=\"shortcut icon\" href=\"%s\"",fav_icon_link);
             free(fav_icon_link);
 
         m.close(s,CTEXT_HEAD);
         m.open(s,CTEXT_BODY);
             
-            char *img_link = smart_static_ref("my_image.png");
+            char *img_link = cweb_smart_static_ref("my_image.png");
             m.auto$close(s,CTEXT_IMG,"src=\"%s\" width=\"200px\"",img_link);
             free(img_link);
 

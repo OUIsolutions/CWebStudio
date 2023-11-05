@@ -1,7 +1,7 @@
 
-char * smart_static_ref(const char *path){
+char * cweb_smart_static_ref(const char *path){
     char file_name[1000];
-    sprintf(file_name,"static/%s",path);
+    sprintf(file_name,"%s/%s", cweb_static_folder,path);
     struct stat file_stat;
     long last_mofication = 0;
     if (stat(file_name, &file_stat) == 0) {
@@ -9,7 +9,7 @@ char * smart_static_ref(const char *path){
     }
 
     char * src_ref = (char*)malloc(2000);
-    sprintf(src_ref,"/static?path=%s&unix-cache=%li",file_name, last_mofication);
+    sprintf(src_ref,"/%s?path=%s&unix-cache=%li",cweb_static_folder,file_name, last_mofication);
     return src_ref;
 }
 
@@ -50,7 +50,7 @@ char * private_cweb_change_smart_cache(const char *content){
                 continue;
             }
 
-            char *content = smart_static_ref(src->rendered_text);
+            char *content = cweb_smart_static_ref(src->rendered_text);
             m.text(code,content);
             free(content);
 
@@ -90,6 +90,7 @@ CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request)
     if(!is_faviocon_route){
         return NULL;
     }
+    printf("pegouaqui\n");
 
 
     char possible_ico_path[1000] = {0};
@@ -116,13 +117,12 @@ CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request)
         fclose(possible_jpg_file);
         return cweb_send_file(possible_jpg_path,CWEB_AUTO_SET_CONTENT,200);
     }
-
+    return NULL;
 
 
 }
 
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){
-    CwebHttpRequest_represent(request);
     CwebHttpResponse * icon_response = private_cweb_treat_five_icon(request);
 
     if(icon_response !=  NULL){
