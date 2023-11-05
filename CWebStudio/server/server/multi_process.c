@@ -131,7 +131,7 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
 
             struct timeval timer2;
             long seconds =  (long)self->client_timeout;
-            timer2.tv_sec =  seconds ;  // tempo em segundos
+            timer2.tv_sec =  seconds;  // tempo em segundos
             timer2.tv_usec =(long)((self->client_timeout - (double)seconds) * 1000000);
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
@@ -148,7 +148,6 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
 
 
         else if (pid < 0){
-
             perror("Faluire to create a new process");
             exit(EXIT_FAILURE);
         }
