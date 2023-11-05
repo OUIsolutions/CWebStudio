@@ -5,8 +5,7 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
     int port_socket;
 
     // Creating socket file descriptor
-    if ((port_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-    {
+    if ((port_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0){
         perror("Faluire to create socket");
         exit(EXIT_FAILURE);
     }

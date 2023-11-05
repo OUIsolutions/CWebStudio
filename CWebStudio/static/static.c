@@ -86,25 +86,44 @@ char * private_cweb_change_smart_cache(const char *content){
 
 CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request){
 
-    if(strcmp(request->route,"/favicon.ico")== 0){
-        
-        return  cweb_send_text("",404);
-      
-
+    bool is_faviocon_route = strcmp(request->route,"/favicon.ico")== 0;
+    if(!is_faviocon_route){
+        return NULL;
     }
-    return NULL;
+
+
+    char possible_ico_path[1000] = {0};
+    sprintf(possible_ico_path,"%s/favicon.ico",cweb_static_folder);
+    FILE  *possible_ico_file = fopen(possible_ico_path,"rb");
+    if(possible_ico_file){
+        fclose(possible_ico_file);
+        return cweb_send_file(possible_ico_path,CWEB_AUTO_SET_CONTENT,200);
+    }
+
+
+    char possible_png_path[1000] = {0};
+    sprintf(possible_png_path,"%s/favicon.png",cweb_static_folder);
+    FILE  *possible_png_file = fopen(possible_png_path,"rb");
+    if(possible_png_file){
+        fclose(possible_png_file);
+        return cweb_send_file(possible_png_path,CWEB_AUTO_SET_CONTENT,200);
+    }
+
+    
+
 }
 
-CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache,const char *static_folder){
+CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){
 
     CwebHttpResponse * icon_response = private_cweb_treat_five_icon(request);
 
     if(icon_response !=  NULL){
         return icon_response;
     }
-    if(!cweb_starts_with(request->route,static_folder)){
+    if(!cweb_starts_with(request->route,cweb_static_folder)){
         return  NULL;
     }
+
 
     char *full_path = request->route;
     full_path+=1;
@@ -121,8 +140,9 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
     if(content == NULL){
 
-
-        char *not_found_html_page = cweb_load_string_file_content("static/404.html");
+        char not_found_html_page_path[1000] ={0};
+        sprintf(not_found_html_page_path,"%s/404.html",cweb_static_folder);
+        char *not_found_html_page = cweb_load_string_file_content(not_found_html_page_path);
         if(not_found_html_page != NULL){
             return cweb_send_var_html_cleaning_memory(not_found_html_page,404);
 
