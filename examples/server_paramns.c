@@ -23,7 +23,7 @@ int main(){
 
     //these atributes define to allow cros origins domains
     server.allow_cors = true;
-    
+
     //the max queue of the server
     server.max_queue = 100;
     //if true , the server will run in single process
@@ -32,6 +32,9 @@ int main(){
     server.max_requests = 1000;
     //if true , the server will use the static files located into the folder "static"
     server.use_static = true;
+
+    //define where to loock for static content
+    server.static_folder = "static";
 
     cweb.server.start(&server);
     return 0;
