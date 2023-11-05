@@ -38,7 +38,7 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
     CwebHttpResponse *response = NULL;
 
     if(self->use_static){
-        response = private_cweb_generate_static_response(request,self->use_cache,self->static_folder);
+        response = private_cweb_generate_static_response(request,self->use_cache);
     }
 
 

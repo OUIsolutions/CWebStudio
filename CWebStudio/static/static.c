@@ -116,7 +116,7 @@ CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request)
         fclose(possible_jpg_file);
         return cweb_send_file(possible_jpg_path,CWEB_AUTO_SET_CONTENT,200);
     }
-    
+
 
 
 }
@@ -128,7 +128,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
     if(icon_response !=  NULL){
         return icon_response;
     }
-    if(!cweb_starts_with(request->route,cweb_static_folder)){
+    if(!cweb_starts_with(request->route,"/static")){
         return  NULL;
     }
 
