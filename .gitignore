@@ -17,6 +17,7 @@ aaa.jpg
 *.map
 *.exp
 trash
+static
 # Precompiled Headers
 *.gch
 *.pch
