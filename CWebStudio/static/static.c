@@ -124,33 +124,36 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
         return private_cweb_treat_five_icon();
     }
 
-    int  base_route_size = (int)strlen("/static");
-    int min_size = base_route_size +2;
-    const int MAX_ROUTE_SIZE = 900;
-    long route_size = (long)strlen(request->route);
-
-    if(route_size< min_size){
-        return NULL;
-    }
-
-    if(route_size > MAX_ROUTE_SIZE){
-        return NULL;
-    }
-
 
     if(!cweb_starts_with(request->route,"/static")){
         return  NULL;
     }
 
-    char *full_path = request->route;
+    char *full_path = NULL;
 
-    full_path+= base_route_size;
 
-    char *path = CwebHttpRequest_get_param(request,"path");
-    if(path != NULL){
-        full_path = path;
+    char *param_path = CwebHttpRequest_get_param(request,"path");
+
+    if(param_path){
+        full_path = param_path;
     }
-    char formated_full_path[1000] = {0};
+
+    if(!param_path){
+        full_path = request->route;
+        int  base_route_size = (int)strlen("/static");
+        int min_size = base_route_size +2;
+
+        if(strlen(full_path) < min_size){
+            return NULL;
+        }
+        full_path+= base_route_size;
+    }
+    const int MAX_PATH = 900;
+    if(strlen(full_path) > MAX_PATH){
+        return NULL;
+    }
+
+    char formated_full_path[2000] = {0};
     sprintf(formated_full_path,"%s%s",cweb_static_folder,full_path);
 
     char *security_path = cweb_replace_string(formated_full_path,"../","");
@@ -160,7 +163,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
     if(content == NULL){
 
-        char not_found_html_page_path[1000] ={0};
+        char not_found_html_page_path[2000] ={0};
         sprintf(not_found_html_page_path,"%s/404.html",cweb_static_folder);
         char *not_found_html_page = cweb_load_string_file_content(not_found_html_page_path);
         if(not_found_html_page != NULL){
@@ -169,9 +172,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
         }
 
-        char mensage[1000];
-        sprintf(mensage, "File not found: %s", security_path);
-        struct CwebHttpResponse* response =  cweb_send_text(mensage, CWEB_NOT_FOUND);
+        struct CwebHttpResponse* response =  cweb_send_text("File not found", CWEB_NOT_FOUND);
         free(security_path);
 
         return response;
