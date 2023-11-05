@@ -149,7 +149,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
         full_path+= base_route_size;
     }
 
-    const int MAX_PATH = 20;
+    const int MAX_PATH = 900;
     if(strlen(full_path) > MAX_PATH){
         return NULL;
     }
