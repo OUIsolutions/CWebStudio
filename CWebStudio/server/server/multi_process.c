@@ -3,14 +3,14 @@
 
 void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket, const char *client_ip){
 
-    cweb_print("Creating a new process\n");
+    cweb_print("Creating a new process\n")
     pid_t pid = fork();
     if (pid == 0){
         // means that the process is the child
       
         alarm(self->function_timeout);
         private_CWebServer_execute_request(self,new_socket, client_ip);
-        cweb_print("Request executed\n");
+        cweb_print("Request executed\n")
         alarm(0);
         exit(0);
     }
@@ -81,7 +81,7 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
             continue;
         }
 
-        cweb_print("total request  runing %li\n", cweb_total_requests);
+        cweb_print("total request  runing %li\n", cweb_total_requests)
 
         informed_mensage = false;
         cweb_actual_request++;
@@ -97,8 +97,8 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
         char client_ip[INET_ADDRSTRLEN] ={0};
         inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
-        cweb_print("----------------------------------------\n");
-        cweb_print("Executing request:%lld\n", cweb_actual_request);
+        cweb_print("----------------------------------------\n")
+        cweb_print("Executing request:%lld\n", cweb_actual_request)
         cweb_print("Socket: %d\n", client_socket);
 
 
@@ -127,13 +127,12 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
                 cweb_print("Conection closed By the  Client\n");
                 close(new_socket);  // Fechar o socket do cliente
                 exit(0);
-                continue;
             }
 
             struct timeval timer2;
             long seconds =  (long)self->client_timeout;
             timer2.tv_sec =  seconds ;  // tempo em segundos
-            timer2.tv_usec =(long)((self->client_timeout - seconds) * 1000000);
+            timer2.tv_usec =(long)((self->client_timeout - (double)seconds) * 1000000);
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 

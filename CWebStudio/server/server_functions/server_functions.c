@@ -11,6 +11,7 @@ void private_cweb_treat_response(bool use_static,int new_socket){
         return;
     }
 
+
     pid_t pid_error = fork();
     if (pid_error == 0){
         cweb_print("Sending error mensage\n");
@@ -18,15 +19,18 @@ void private_cweb_treat_response(bool use_static,int new_socket){
         bool send_text_menssage = true;
 
         if(use_static){
+
             char possible_500_html_path[1000] = {0};
             sprintf(possible_500_html_path,"%s/500.html",cweb_static_folder);
             FILE *possible_500_html = fopen(possible_500_html_path,"r");
             if(possible_500_html){
+
                 fclose(possible_500_html);
                 CwebHttpResponse  *response = cweb_send_file(possible_500_html_path,CWEB_AUTO_SET_CONTENT,500);
                 private_cweb_send_error_mensage(response,new_socket);
                 send_text_menssage = false;
             }
+
         }
 
         if(send_text_menssage){
