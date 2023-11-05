@@ -109,7 +109,15 @@ CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request)
         return cweb_send_file(possible_png_path,CWEB_AUTO_SET_CONTENT,200);
     }
 
+    char possible_jpg_path[1000] = {0};
+    sprintf(possible_jpg_path,"%s/favicon.png",cweb_static_folder);
+    FILE  *possible_jpg_file = fopen(possible_jpg_path,"rb");
+    if(possible_jpg_file){
+        fclose(possible_jpg_file);
+        return cweb_send_file(possible_jpg_path,CWEB_AUTO_SET_CONTENT,200);
+    }
     
+
 
 }
 
