@@ -22,7 +22,7 @@ void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket
 
     else{
         //means its the current process
-        private_cweb_treat_response(new_socket);
+        private_cweb_treat_response(self->use_static,new_socket);
     
     }
     
