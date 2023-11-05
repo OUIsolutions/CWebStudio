@@ -1,63 +1,16 @@
 
 
-void private_cweb_treat_response(int new_socket){
-    cweb_print("New request %lld\n", cweb_actual_request);
-    cweb_print("Waiting for child process\n");
 
-    int status = 0;
-    while (wait(&status) > 0);
+void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket, const char *client_ip){
 
-    if (WIFEXITED(status)){
-        cweb_print("Sucess\n");
-        return;
-    }
-
-    pid_t pid_error = fork();
-    if (pid_error == 0){
-        cweb_print("Sending error mensage\n");
-        alarm(2);
-        private_cweb_send_error_mensage("Internal Sever Error",500,new_socket);
-        alarm(0);
-        exit(0);
-    }
-
-    else if (pid_error < 0){
-                perror("Faluire to create a new process");
-                exit(EXIT_FAILURE);
-    }
-    else{
-        int status2 = 0;
-        /// Wait for the child process to finish
-        while (wait(&status2) > 0);
-        if (WIFEXITED(status2)){
-            cweb_print("Mensage sent\n");
-        }
-
-        else{
-            cweb_print("Error sending mensage\n");
-        }
-    }
-}
-
-
-
-void private_cweb_execute_request_in_safty_mode(
-        int new_socket,
-        const char *client_ip,
-        int function_timeout,
-        CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
-        bool use_static,
-        bool use_cache,
-        bool allow_cors
-        ) {
-    cweb_print("Creating a new process\n");
+    cweb_print("Creating a new process\n")
     pid_t pid = fork();
     if (pid == 0){
         // means that the process is the child
       
-        alarm(function_timeout);
-        private_cweb_execute_request(new_socket, client_ip,request_handler,use_static,use_cache,allow_cors);
-        cweb_print("Request executed\n");
+        alarm(self->function_timeout);
+        private_CWebServer_execute_request(self,new_socket, client_ip);
+        cweb_print("Request executed\n")
         alarm(0);
         exit(0);
     }
@@ -69,23 +22,13 @@ void private_cweb_execute_request_in_safty_mode(
 
     else{
         //means its the current process
-        private_cweb_treat_response(new_socket);
+        private_cweb_treat_response(self->use_static,new_socket);
     
     }
     
 }
-void private_cweb_handle_child_termination(int signal) {
-    pid_t terminated_child;
-    int status;
-    while ((terminated_child = waitpid(-1, &status, WNOHANG)) > 0) {
-        cweb_total_requests--;
-    }
-}
 
-void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *),
-                                             int function_timeout, double client_timeout, int max_queue,
-                                             long max_requests, bool use_static, bool use_cache, bool allow_cors) {
-
+void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
     int port_socket;
 
     // Creating socket file descriptor
@@ -100,7 +43,7 @@ void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*reque
     // Configurando a estrutura de endereço do servidor
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(port);
+    address.sin_port = htons(self->port);
 
 
     // Vinculando o socket à porta especificada
@@ -112,7 +55,7 @@ void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*reque
 
 
     // Waiting for connections
-    if (listen(port_socket, max_queue) < 0)
+    if (listen(port_socket, self->max_queue) < 0)
     {
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
@@ -120,7 +63,7 @@ void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*reque
     
 
     // Main loop
-    printf("Sever is running on port:%d\n", port);
+    printf("Sever is running on port:%d\n", self->port);
 
 
 
@@ -128,7 +71,7 @@ void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*reque
     while (true)
     {
 
-        if(cweb_total_requests >= max_requests){
+        if(cweb_total_requests >= self->max_requests){
 
             if(!informed_mensage){
                 printf("max requests reached\n");
@@ -138,7 +81,7 @@ void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*reque
             continue;
         }
 
-        cweb_print("total request  runing %li\n", cweb_total_requests);
+        cweb_print("total request  runing %li\n", cweb_total_requests)
 
         informed_mensage = false;
         cweb_actual_request++;
@@ -154,8 +97,8 @@ void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*reque
         char client_ip[INET_ADDRSTRLEN] ={0};
         inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
-        cweb_print("----------------------------------------\n");
-        cweb_print("Executing request:%lld\n", cweb_actual_request);
+        cweb_print("----------------------------------------\n")
+        cweb_print("Executing request:%lld\n", cweb_actual_request)
         cweb_print("Socket: %d\n", client_socket);
 
 
@@ -184,25 +127,17 @@ void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*reque
                 cweb_print("Conection closed By the  Client\n");
                 close(new_socket);  // Fechar o socket do cliente
                 exit(0);
-                continue;
             }
 
             struct timeval timer2;
-            long seconds =  (long)client_timeout;
-            timer2.tv_sec =  seconds ;  // tempo em segundos
-            timer2.tv_usec =(long)((client_timeout - seconds) * 1000000);
+            long seconds =  (long)self->client_timeout;
+            timer2.tv_sec =  seconds;  // tempo em segundos
+            timer2.tv_usec =(long)((self->client_timeout - (double)seconds) * 1000000);
             setsockopt(new_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
-            private_cweb_execute_request_in_safty_mode(
-                    new_socket,
-                    client_ip,
-                    function_timeout,
-                    request_handler,
-                    use_static,
-                    use_cache,
-                    allow_cors
-            );
+
+            private_cweb_execute_request_in_safty_mode(self,new_socket,client_ip);
 
 
             close(new_socket);
@@ -213,7 +148,6 @@ void private_cweb_run_server_in_multiprocess(int port, CwebHttpResponse *(*reque
 
 
         else if (pid < 0){
-
             perror("Faluire to create a new process");
             exit(EXIT_FAILURE);
         }

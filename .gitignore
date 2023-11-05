@@ -12,6 +12,7 @@ a.png
 main.c
 requisicao
 aaa.jpg
+static
 # Linker output
 *.ilk
 *.map

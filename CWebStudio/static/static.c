@@ -1,7 +1,7 @@
 
-char * smart_static_ref(const char *path){
+char * cweb_smart_static_ref(const char *path){
     char file_name[1000];
-    sprintf(file_name,"static/%s",path);
+    sprintf(file_name,"%s/%s", cweb_static_folder,path);
     struct stat file_stat;
     long last_mofication = 0;
     if (stat(file_name, &file_stat) == 0) {
@@ -9,7 +9,7 @@ char * smart_static_ref(const char *path){
     }
 
     char * src_ref = (char*)malloc(2000);
-    sprintf(src_ref,"/static?path=%s&unix-cache=%li",file_name, last_mofication);
+    sprintf(src_ref,"/%s?path=%s&unix-cache=%li",cweb_static_folder,file_name, last_mofication);
     return src_ref;
 }
 
@@ -50,7 +50,7 @@ char * private_cweb_change_smart_cache(const char *content){
                 continue;
             }
 
-            char *content = smart_static_ref(src->rendered_text);
+            char *content = cweb_smart_static_ref(src->rendered_text);
             m.text(code,content);
             free(content);
 
@@ -84,80 +84,127 @@ char * private_cweb_change_smart_cache(const char *content){
     return code->rendered_text;
 }
 
-CwebHttpResponse * private_cweb_treat_five_icon(struct CwebHttpRequest *request){
+CwebHttpResponse * private_cweb_treat_five_icon(){
 
-    if(strcmp(request->route,"/favicon.ico")== 0){
-        
-        return  cweb_send_text("",404);
-      
 
+    char possible_ico_path[1000] = {0};
+    sprintf(possible_ico_path,"%s/favicon.ico",cweb_static_folder);
+    FILE  *possible_ico_file = fopen(possible_ico_path,"rb");
+    if(possible_ico_file){
+        fclose(possible_ico_file);
+        return cweb_send_file(possible_ico_path,CWEB_AUTO_SET_CONTENT,200);
+    }
+
+
+    char possible_png_path[1000] = {0};
+    sprintf(possible_png_path,"%s/favicon.png",cweb_static_folder);
+    FILE  *possible_png_file = fopen(possible_png_path,"rb");
+    if(possible_png_file){
+        fclose(possible_png_file);
+        return cweb_send_file(possible_png_path,CWEB_AUTO_SET_CONTENT,200);
+    }
+
+    char possible_jpg_path[1000] = {0};
+    sprintf(possible_jpg_path,"%s/favicon.png",cweb_static_folder);
+    FILE  *possible_jpg_file = fopen(possible_jpg_path,"rb");
+    if(possible_jpg_file){
+        fclose(possible_jpg_file);
+        return cweb_send_file(possible_jpg_path,CWEB_AUTO_SET_CONTENT,200);
     }
     return NULL;
+
+
 }
 
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){
 
-    struct CwebHttpResponse * icon_response = private_cweb_treat_five_icon(request);
 
-    if(icon_response !=  NULL){
-        return icon_response;
+    bool is_faviocon_route = strcmp(request->route,"/favicon.ico")== 0;
+    if(is_faviocon_route){
+        return private_cweb_treat_five_icon();
     }
 
-    if(cweb_starts_with(request->route,"/static")){
 
-        char *full_path = request->route;
-        full_path+=1;
+    if(!cweb_starts_with(request->route,"/static")){
+        return  NULL;
+    }
 
-        char *path = CwebHttpRequest_get_param(request,"path");
-        if(path != NULL){
-            full_path = path;
+    char *full_path = NULL;
+
+
+    char *param_path = CwebHttpRequest_get_param(request,"path");
+
+    if(param_path){
+        full_path = param_path;
+    }
+
+    if(!param_path){
+        full_path = request->route;
+        int  base_route_size = (int)strlen("/static");
+        int min_size = base_route_size +2;
+
+        if(strlen(full_path) < min_size){
+            return NULL;
+        }
+        full_path+= base_route_size;
+    }
+
+    const int MAX_PATH = 900;
+    if(strlen(full_path) > MAX_PATH){
+        return NULL;
+    }
+
+    char formated_full_path[2000] = {0};
+    sprintf(formated_full_path,"%s/%s",cweb_static_folder,full_path);
+
+    char *security_path = cweb_replace_string(formated_full_path,"../","");
+    int size;
+    bool is_binary;
+    unsigned char *content = cweb_load_any_content(security_path,&size,&is_binary);
+
+    if(content == NULL){
+
+        char not_found_html_page_path[1100] ={0};
+        sprintf(not_found_html_page_path,"%s/404.html",cweb_static_folder);
+        char *not_found_html_page = cweb_load_string_file_content(not_found_html_page_path);
+        if(not_found_html_page != NULL){
+            free(security_path);
+            return cweb_send_var_html_cleaning_memory(not_found_html_page,404);
+
         }
 
-        char *securyt_path = cweb_replace_string(full_path,"../","");
-        int size;
-        bool is_binary;
-        unsigned char *content = cweb_load_any_content(securyt_path,&size,&is_binary);
+        char menssage[1100] = {0};
+        sprintf(menssage,"File %s not found",security_path);
+        struct CwebHttpResponse* response =  cweb_send_text(menssage, CWEB_NOT_FOUND);
+        free(security_path);
 
-        if(content == NULL){
-
-
-            char *not_found_html_page = cweb_load_string_file_content("static/404.html");
-            if(not_found_html_page != NULL){
-                return cweb_send_var_html_cleaning_memory(not_found_html_page,404);
-
-            }
-
-            char mensage[100];
-            sprintf(mensage, "File not found: %s", securyt_path);
-            struct CwebHttpResponse* response =  cweb_send_text(mensage, CWEB_NOT_FOUND);
-            return response;
-        }
-
-        if(!is_binary){
-            char *new_content = private_cweb_change_smart_cache((char*)content);
-            free(content);
-            size = strlen(new_content);
-            content = (unsigned char*)new_content;
-        }
-
-        char *content_type  = (char*)cweb_generate_content_type(securyt_path);
-
-        struct CwebHttpResponse * response = cweb_send_any_cleaning_memory(content_type,size,content,200);
-
-
-        if(use_cache){
-            char *unix_cache = CwebHttpRequest_get_param(request,"unix-cache");
-            if(unix_cache){
-                char response_code[50] = "";
-                sprintf(response_code, "public, max-age=31536000, immutable");
-                CwebHttpResponse_add_header(response,"cache-control", response_code);
-            }
-        }
-
-        free(securyt_path);
         return response;
-
     }
-    return NULL;
+
+    if(!is_binary){
+        char *new_content = private_cweb_change_smart_cache((char*)content);
+        free(content);
+        size = strlen(new_content);
+        content = (unsigned char*)new_content;
+    }
+
+    char *content_type  = (char*)cweb_generate_content_type(security_path);
+
+    struct CwebHttpResponse * response = cweb_send_any_cleaning_memory(content_type,size,content,200);
+
+
+    if(use_cache){
+        char *unix_cache = CwebHttpRequest_get_param(request,"unix-cache");
+        if(unix_cache){
+            char response_code[50] = "";
+            sprintf(response_code, "public, max-age=31536000, immutable");
+            CwebHttpResponse_add_header(response,"cache-control", response_code);
+        }
+    }
+
+    free(security_path);
+    return response;
+
+
 
 }

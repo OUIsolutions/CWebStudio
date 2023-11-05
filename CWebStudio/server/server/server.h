@@ -4,6 +4,8 @@ static long long  cweb_actual_request = 0;
 static long cweb_total_requests = 0;
 static bool cweb_end_server = false;
 
+static const char* cweb_static_folder;
+
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_NO_STATIC false;
 
@@ -16,7 +18,7 @@ static bool cweb_end_server = false;
     long max_requests;
     bool allow_cors;
     bool use_static;
-
+    const char *static_folder;
     bool use_cache;
 
     //methods
@@ -28,7 +30,33 @@ static bool cweb_end_server = false;
 
 
 CwebServer newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
+
 void CwebServer_start(CwebServer *self);
+
+
+void private_CWebServer_run_server_in_single_process(CwebServer *self);
+
+void private_CWebServer_run_server_in_multiprocess(CwebServer *self);
+
+
+void private_CWebServer_execute_request(
+        CwebServer *self,
+        int socket,
+        const char *client_ip
+);
+
+
+
+
+void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket, const char *client_ip);
+
+
+
+
+
+
+
+
 
 
 

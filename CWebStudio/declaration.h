@@ -6,12 +6,9 @@
 #include "debug/debug.h"
 
 #include "dict/declaration.h"
-#include "response/response/response.h"
-#include "response/response_functions/response_functions.h"
+#include "response/declaration.h"
 #include "request/request.h"
 #include "static/static.h"
 #include "cors/cors.h"
-
-#include "server/server_functions/sever_functions.h"
-#include "server/server/sever.h"
+#include "server/declaration.h"
 #include "namespace/declaration.h"

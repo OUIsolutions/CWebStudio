@@ -1,13 +1,10 @@
 
 
-void private_cweb_execute_request(
-    int socket,
-    const char *client_ip,
-    struct CwebHttpResponse *(*request_handler)(struct CwebHttpRequest *request),
-    bool use_static,
-    bool use_cache,
-    bool allow_cors
-    ){
+
+
+
+void private_CWebServer_execute_request(CwebServer *self,int socket,const char *client_ip){
+
     cweb_print("Parsing Request\n");
     struct CwebHttpRequest *request = newCwebHttpRequest(socket);
     request->client_ip = strdup(client_ip);
@@ -40,19 +37,17 @@ void private_cweb_execute_request(
 
     CwebHttpResponse *response = NULL;
 
-    if(use_static){
-        response = private_cweb_generate_static_response(request,use_cache);
+    if(self->use_static){
+        response = private_cweb_generate_static_response(request,self->use_cache);
     }
-
-
 
 
     if(!response){
-        response = request_handler(request);
+        response = self->request_handler(request);
 
     }
 
-    if(response && allow_cors){
+    if(response && self->allow_cors){
         private_cweb_generate_cors_response(response);
     }
     cweb_print("executed client lambda\n");
@@ -61,13 +56,17 @@ void private_cweb_execute_request(
     //means that the main function respond nothing
     if (response == NULL){
 
-        if(use_static){
-            char *formated_html = cweb_load_string_file_content("static/404.html");
+        if(self->use_static){
+            char formated_404_path[1000]={0};
+            sprintf(formated_404_path,"%s/404.html",cweb_static_folder);
+            char *formated_html = cweb_load_string_file_content(formated_404_path);
+
             if(formated_html != NULL){
                 response = cweb_send_var_html_cleaning_memory(
                         formated_html,
                         404);
             }
+
             else{
                 response = cweb_send_text(
                         "Error 404",
@@ -123,14 +122,4 @@ void private_cweb_execute_request(
 }
 
 
-void private_cweb_send_error_mensage( const char*mensage,int status_code, int socket){
-
-    struct CwebHttpResponse *response = cweb_send_text(mensage,status_code);
-    char *response_str = CwebHttpResponse_generate_response(response);
-    send(socket, response_str, strlen(response_str), 0);
-    send(socket, response->content, response->content_length, 0);
-    free(response_str);
-    CwebHttpResponse_free(response);
-
-}
 
