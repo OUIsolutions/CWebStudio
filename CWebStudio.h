@@ -69,6 +69,7 @@ SOFTWARE.
 #define CTEXTENGINE_H
 
 
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -76,6 +77,16 @@ SOFTWARE.
 #include <stdio.h>
 #include <ctype.h>
 
+
+
+
+#define CTextScope(s,t)\
+ctext_open(s, t);\
+for(int i = 0; i < 1; ctext_close(s, t), ++i)
+
+#define CText$Scope(s,t, ...)\
+CTextStack_$open(s,t,__VA_ARGS__);\
+for(int i = 0; i < 1; ctext_close(s, t), ++i)
 
 
 
@@ -166,7 +177,7 @@ typedef struct CTextStack{
     char *rendered_text;
     size_t rendered_text_alocation_size;
     size_t size;
-    
+
     char *line_breaker;
     char *separator;
     int ident_level;
@@ -177,6 +188,8 @@ struct CTextStack *newCTextStack(const char *line_breaker, const char *separator
 
 
 struct CTextStack *newCTextStack_string(const char *starter);
+
+struct CTextStack *newCTextStack_string_format(const char *format, ...);
 
 struct CTextStack *newCTextStack_string_getting_ownership(const char *starter);
 
@@ -198,6 +211,7 @@ void CTextStack_segment(struct CTextStack *self);
 void CTextStack_$open(struct CTextStack *self, const char *tag, const char *format, ...);
 
 
+
 void CTextStack_only$open(struct CTextStack *self, const char *tag, const char *format, ...);
 
 
@@ -211,6 +225,7 @@ void CTextStack_segment_format(struct CTextStack *self, const char *format, ...)
 
 
 void ctext_open(struct CTextStack *self, const char *tag);
+
 
 
 void ctext_close(struct CTextStack *self, const char *tag);
@@ -268,6 +283,9 @@ void CTextStack_self_trim(struct CTextStack *self);
 
 struct CTextStack *CTextStack_lower(struct CTextStack *self);
 void CTextStack_self_lower(struct CTextStack *self);
+
+struct CTextStack *CTextStack_captalize(struct CTextStack *self);
+void CTextStack_self_captalize(struct CTextStack *self);
 
 struct CTextStack *CTextStack_upper(struct CTextStack *self);
 void CTextStack_self_upper(struct CTextStack *self);
@@ -343,6 +361,8 @@ typedef struct CTextStackModule{
     //admnistrative methods
     CTextStack  *(*newStack)(const char *line_breaker, const char *separator);
     CTextStack *(*newStack_string)(const char *starter);
+    CTextStack *(*newStack_string_format)(const char *format, ...);
+
     CTextStack *(*newStack_string_getting_ownership)(const char *starter);
     CTextStack *(*newStack_string_empty)();
 
@@ -405,6 +425,8 @@ typedef struct CTextStackModule{
     struct CTextStack * (*upper)(struct CTextStack *self);
     void(*self_upper)(struct CTextStack *self);
 
+    struct CTextStack *(*captalize)(struct CTextStack *self);
+    void (*self_captalize)(struct CTextStack *self);
 
     struct CTextStack * (*reverse)(struct CTextStack *self);
     void(*self_reverse)(struct CTextStack *self);
@@ -458,6 +480,9 @@ typedef struct CTextNamespace{
 }CTextNamespace;
 
 CTextNamespace newCTextNamespace();
+
+
+
 
 
 
@@ -682,6 +707,37 @@ struct CTextStack *CTextStack_upper(struct CTextStack *self){
     return new_element;
 }
 
+struct CTextStack *CTextStack_captalize(struct CTextStack *self){
+    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
+    new_element->ident_level = self->ident_level;
+    if(self->size  ==0){
+        return  new_element;
+    }
+
+    CTextStack_format(new_element,"%c", toupper(self->rendered_text[0]));
+
+    for(long i =1; i < self->size; i++){
+        char  last = self->rendered_text[i-1];
+        char current = self->rendered_text[i];
+
+
+        if(last == ' '){
+            CTextStack_format(new_element,"%c",toupper(current));
+        }
+        else{
+            CTextStack_format(new_element,"%c", tolower(current));
+
+        }
+
+    }
+    return new_element;
+}
+
+void CTextStack_self_captalize(struct CTextStack *self){
+    CTextStack *new_stack = CTextStack_captalize(self);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
 
 void CTextStack_self_upper(struct CTextStack *self){
     CTextStack *new_stack = CTextStack_upper(self);
@@ -790,11 +846,11 @@ void CTextStack_self_trim(struct CTextStack *self){
 //
 struct CTextStack * newCTextStack(const char *line_breaker, const char *separator){
     struct CTextStack *self = (struct CTextStack*)malloc(sizeof(struct CTextStack));
+    *self = (CTextStack){0};
     self->rendered_text = (char*)malloc(2);
     strcpy(self->rendered_text,"\0");
     self->rendered_text_alocation_size = 2;
-    self->size = 0;
-    self->ident_level = 0;
+
     self->line_breaker = strdup(line_breaker);
     self->separator = strdup(separator);
 
@@ -807,6 +863,14 @@ struct CTextStack *newCTextStack_string(const char *starter){
     if(starter){
         CTextStack_format(self,"%s", starter);
     }
+    return self;
+}
+
+struct CTextStack *newCTextStack_string_format(const char *format, ...){
+    CTextStack *self = newCTextStack("","");
+    va_list  argptr;
+    va_start(argptr, format);
+    private_ctext_generate_formated_text(self,format,argptr);
     return self;
 }
 
@@ -987,6 +1051,8 @@ void CTextStack_$open(struct CTextStack *self, const char *tag, const char *form
     self->ident_level += 1;
 }
 
+
+
 void CTextStack_only$open(struct CTextStack *self, const char *tag, const char *format, ...){
     CTextStack_segment(self);
     CTextStack_format(self, "%c",'<');
@@ -1031,7 +1097,6 @@ void ctext_open(struct CTextStack *self, const char *tag){
     }
     CTextStack_$open(self, tag, NULL);
 }
-
 
 
 
@@ -1318,6 +1383,7 @@ CTextStackModule newCTextStackModule(){
     struct CTextStackModule self = {0};
     self.newStack = newCTextStack;
     self.newStack_string = newCTextStack_string;
+    self.newStack_string_format = newCTextStack_string_format;
     self.newStack_string_empty = newCTextStack_string_empty;
     self.newStack_string_getting_ownership = newCTextStack_string_getting_ownership;
     self.text = CTextStack_text;
@@ -1363,6 +1429,9 @@ CTextStackModule newCTextStackModule(){
 
     self.upper = CTextStack_upper;
     self.self_upper = CTextStack_self_upper;
+
+    self.captalize = CTextStack_captalize;
+    self.self_captalize = CTextStack_self_captalize;
 
     self.starts_with = CTextStack_starts_with;
     self.ends_with = CTextStack_ends_with;
@@ -1412,6 +1481,7 @@ CTextNamespace newCTextNamespace(){
     self.array = newCTextArrayModule();
     return self;
 }
+
 
 
 #endif // CTEXTENGINE_H
