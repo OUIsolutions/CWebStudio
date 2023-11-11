@@ -44,7 +44,16 @@ char *cweb_load_string_file_content(const char * path){
     fclose(file);
     return content;
 }
+void cweb_write_string_file_content(const char *path,const char *value){
+    FILE *file = fopen(path,"w");
 
+    if (file == NULL) {
+        return;
+    }
+    fputs(value, file);
+
+    fclose(file);
+}
 
 unsigned char *cweb_load_binary_content(const char * path,int *size){
     FILE *file = fopen(path,"rb");

@@ -79,18 +79,19 @@ void private_cweb_send_error_mensage( CwebHttpResponse *response, int socket){
 
 }
 bool private_cweb_verify_if_kill_server(){
-    char *kill_message =  getenv("CWEB_KILL_SERVER");
-
-    if(!kill_message){
-        return false;
-    }
-
-    if(strcmp(kill_message,"true")==0){
-        return true;
-    }
+   char *kill_message = cweb_load_string_file_content("cweb.kill");
+   if(!kill_message){
+       return false;
+   }
+   if(strcmp(kill_message,"true")==0){
+       free(kill_message);
+       return true;
+   }
+    free(kill_message);
     return false;
 }
 
+
 void cweb_kill_server(){
-    putenv("CWEB_KILL_SERVER=true");
+    cweb_write_string_file_content("cweb.kill","true");
 }

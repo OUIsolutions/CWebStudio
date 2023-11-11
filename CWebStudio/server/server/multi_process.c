@@ -71,6 +71,7 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
     while (true)
     {
         if(private_cweb_verify_if_kill_server()){
+            printf("pegou aqui\n");
             cweb_print("Break in request %lld\n", cweb_actual_request)
             break;
         }
