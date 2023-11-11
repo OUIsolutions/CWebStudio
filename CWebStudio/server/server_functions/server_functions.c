@@ -78,3 +78,19 @@ void private_cweb_send_error_mensage( CwebHttpResponse *response, int socket){
     CwebHttpResponse_free(response);
 
 }
+bool private_cweb_verify_if_kill_server(){
+    char *kill_message =  getenv("CWEB_KILL_SERVER");
+
+    if(!kill_message){
+        return false;
+    }
+
+    if(strcmp(kill_message,"true")==0){
+        return true;
+    }
+    return false;
+}
+
+void cweb_kill_server(){
+    putenv("CWEB_KILL_SERVER=true");
+}
