@@ -67,6 +67,10 @@ void private_cweb_handle_child_termination(int signal) {
     while ((terminated_child = waitpid(-1, &status, WNOHANG)) > 0) {
         cweb_total_requests--;
     }
+    if(private_cweb_verify_if_kill_server()){
+        cweb_print("Break in request %lld\n", cweb_actual_request)
+        exit(0);
+    }
 }
 
 void private_cweb_send_error_mensage( CwebHttpResponse *response, int socket){
