@@ -7,7 +7,7 @@ static const char* cweb_static_folder;
 
 #define CWEB_DANGEROUS_SINGLE_PROCESS true
 #define CWEB_NO_STATIC false;
-
+#define CWEB_KILL_FILE "cweb.kill"
  typedef struct CwebServer{
     int port;
     int function_timeout;
