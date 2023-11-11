@@ -80,7 +80,8 @@ char * private_cweb_change_smart_cache(const char *content){
         entry_founds = 0;
 
     }
-
+    m.free(buffer_pattern);
+    m.free(src);
     return code->rendered_text;
 }
 
