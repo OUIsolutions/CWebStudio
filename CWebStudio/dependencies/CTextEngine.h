@@ -1151,30 +1151,39 @@ void private_ctext_generate_formated_text(
 
         else if(strcmp(double_test,"%sc") == 0){
             char *value = va_arg(argptr,char*);
-            CTextStack_text(stack,value);
-            free(value);
+            if(value){
+                CTextStack_text(stack,value);
+                free(value);
+            }
             i+=2;
             continue;
         }
 
         else if(strcmp(single_test,"%s") == 0){
             const char *value = va_arg(argptr,const char*);
-            CTextStack_text(stack,value);
+            if(value){
+                CTextStack_text(stack,value);
+            }
+
             i+=1;
             continue;
         }
         else if(strcmp(double_test,"%tc") == 0){
             struct CTextStack *new_stack = (struct  CTextStack*)va_arg(argptr,void *);
-            char *result = CTextStack_self_transform_in_string_and_self_clear(new_stack);
-            CTextStack_text(stack,result);
-            free(result);
+            if(new_stack){
+                char *result = CTextStack_self_transform_in_string_and_self_clear(new_stack);
+                CTextStack_text(stack,result);
+                free(result);
+            }
             i+=2;
             continue;
         }
 
         else if(strcmp(single_test,"%t") == 0){
             struct CTextStack *new_stack = (struct  CTextStack*)va_arg(argptr,void *);
-            CTextStack_text(stack,new_stack->rendered_text);
+            if(new_stack){
+                CTextStack_text(stack,new_stack->rendered_text);
+            }
             i+=1;
             continue;
         }
