@@ -148,14 +148,17 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
     char *param_path = CwebHttpRequest_get_param(request,"path");
 
+
     if(param_path){
         full_path = param_path;
     }
+
 
     if(!param_path){
         full_path = request->route;
         int  base_route_size = (int)strlen("/static");
         int min_size = base_route_size +2;
+
 
         if(strlen(full_path) < min_size){
             return NULL;
