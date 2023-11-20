@@ -1,24 +1,37 @@
 
 char * cweb_smart_static_ref(const char *path){
-    char file_name[1000] ={0};
-    sprintf(file_name,"%s/%s", cweb_static_folder,path);
+
+    CTextStack * filename = NULL;
+    bool full_path = cweb_starts_with(path,cweb_static_folder);
+
+    if(full_path){
+        filename = newCTextStack_string(path);
+    }
+    else{
+        filename = newCTextStack_string_format("%s/%s",cweb_static_folder,path);
+    }
+
     struct stat file_stat;
     long last_mofication = 0;
-    if (stat(file_name, &file_stat) == 0) {
+    if (stat(filename->rendered_text, &file_stat) == 0) {
         last_mofication = file_stat.st_mtime;
     }
 
-    char * src_ref = (char*)calloc(2000,sizeof(char));
-    sprintf(src_ref,"/static?path=%s&unix-cache=%li",path, last_mofication);
-    return src_ref;
+    CTextStack_self_substr(filename,(long)strlen(cweb_static_folder),-1);
+
+    CTextStack *src_ref = newCTextStack_string_format(
+            "/static?path=%tc&unix-cache=%li",
+            filename,
+            last_mofication
+    );
+    return CTextStack_self_transform_in_string_and_self_clear(src_ref);
 }
 
 char * private_cweb_change_smart_cache(const char *content){
 
-    CTextStackModule m = newCTextStackModule();
-    struct CTextStack *code = newCTextStack("","");
-    struct CTextStack *buffer_pattern = newCTextStack("","");
-    struct CTextStack *src = newCTextStack("","");
+    struct CTextStack *code = newCTextStack_string_empty();
+    struct CTextStack *buffer_pattern = newCTextStack_string_empty();
+    struct CTextStack *src = newCTextStack_string_empty();
 
     unsigned long content_size = strlen(content);
     const char *entry_pattern = "smart-cache='";
@@ -30,15 +43,15 @@ char * private_cweb_change_smart_cache(const char *content){
     for(int i = 0; i < content_size; i++){
 
         char current = content[i];
-        m.format(buffer_pattern,"%c",current);
+        CTextStack_format(buffer_pattern,"%c",current);
 
         if(found_entry){
 
             //means its cancel the operation
             if( current == '\n' || current =='"'){
-                m.text(code,buffer_pattern->rendered_text);
-                m.restart(buffer_pattern);
-                m.restart(src);
+                CTextStack_text(code,buffer_pattern->rendered_text);
+                CTextStack_restart(buffer_pattern);
+                CTextStack_restart(src);
                 found_entry = false;
                 entry_founds = 0;
                 continue;
@@ -46,17 +59,17 @@ char * private_cweb_change_smart_cache(const char *content){
 
             //means its getts the src
             if(current != '\''){
-                m.format(src,"%c",current);
+                CTextStack_format(src,"%c",current);
                 continue;
             }
 
             char *content = cweb_smart_static_ref(src->rendered_text);
-            m.text(code,content);
+            CTextStack_text(code,content);
             free(content);
 
 
-            m.restart(buffer_pattern);
-            m.restart(src);
+            CTextStack_restart(buffer_pattern);
+            CTextStack_restart(src);
             found_entry = false;
             entry_founds = 0;
             continue;
@@ -75,13 +88,13 @@ char * private_cweb_change_smart_cache(const char *content){
         }
 
         //means didnt get the  pattern
-        m.text(code,buffer_pattern->rendered_text);
-        m.restart(buffer_pattern);
+        CTextStack_text(code,buffer_pattern->rendered_text);
+        CTextStack_restart(buffer_pattern);
         entry_founds = 0;
 
     }
-    m.free(buffer_pattern);
-    m.free(src);
+    CTextStack_free(buffer_pattern);
+    CTextStack_free(src);
     return code->rendered_text;
 }
 
