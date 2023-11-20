@@ -63,9 +63,9 @@ char * private_cweb_change_smart_cache(const char *content){
                 continue;
             }
 
-            char *content = cweb_smart_static_ref(src->rendered_text);
-            CTextStack_text(code,content);
-            free(content);
+            char *create_content = cweb_smart_static_ref(src->rendered_text);
+            CTextStack_text(code,create_content);
+            free(create_content);
 
 
             CTextStack_restart(buffer_pattern);
@@ -95,7 +95,7 @@ char * private_cweb_change_smart_cache(const char *content){
     }
     CTextStack_free(buffer_pattern);
     CTextStack_free(src);
-    return code->rendered_text;
+    return CTextStack_self_transform_in_string_and_self_clear(src);
 }
 
 CwebHttpResponse * private_cweb_treat_five_icon(){
