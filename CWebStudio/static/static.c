@@ -95,7 +95,7 @@ char * private_cweb_change_smart_cache(const char *content){
     }
     CTextStack_free(buffer_pattern);
     CTextStack_free(src);
-    return CTextStack_self_transform_in_string_and_self_clear(src);
+    return CTextStack_self_transform_in_string_and_self_clear(code);
 }
 
 CwebHttpResponse * private_cweb_treat_five_icon(){
