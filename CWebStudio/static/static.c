@@ -20,7 +20,7 @@ char * cweb_smart_static_ref(const char *path){
     CTextStack_self_substr(filename,(long)strlen(cweb_static_folder),-1);
 
     CTextStack *src_ref = newCTextStack_string_format(
-            "/static?path=%tc&unix-cache=%li",
+            "/static?path=%tc&unix-cache=%d",
             filename,
             last_mofication
     );
