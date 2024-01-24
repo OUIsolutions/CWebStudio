@@ -17,7 +17,6 @@ CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-
     return cweb.response.send_text("Hello World", 200);
 
 }
