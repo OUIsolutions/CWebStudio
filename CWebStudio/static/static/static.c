@@ -105,7 +105,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
         char *new_content = private_cweb_change_smart_cache((const char*)inclusion->rendered_text);
         CTextStack_free(inclusion);
-        
+
         free(content);
         size = strlen(new_content);
         content = (unsigned char*)new_content;

@@ -40,7 +40,6 @@ void private_cweb_generate_inline_inclusion(CTextStack *code, const char *conten
 
             if(new_content && !new_content_is_binary){
                 private_cweb_generate_inline_inclusion(code,new_content,content_size);
-                free(new_content);
             }
             if(new_content){
                 free(new_content);
