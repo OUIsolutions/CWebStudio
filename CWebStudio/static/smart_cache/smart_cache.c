@@ -21,13 +21,13 @@ char * cweb_smart_static_ref(CTextStack *src){
     return CTextStack_self_transform_in_string_and_self_clear(src_ref);
 }
 
-char * private_cweb_change_smart_cache(const char *content){
+CTextStack * private_cweb_change_smart_cache(CTextStack *content){
 
     CTextStack *code = newCTextStack_string_empty();
     CTextStack *buffer_pattern = newCTextStack_string_empty();
     CTextStack *src = newCTextStack_string_empty();
 
-    unsigned long content_size = strlen(content);
+    unsigned long content_size = content->size;
     const char *ENTRY_PATTERN = "smart-cache='";
     unsigned long ENTRY_PATTERN_LEN = strlen(ENTRY_PATTERN);
 
@@ -36,7 +36,7 @@ char * private_cweb_change_smart_cache(const char *content){
 
     for(int i = 0; i < content_size; i++){
 
-        char current = content[i];
+        char current = content->rendered_text[i];
         CTextStack_format(buffer_pattern,"%c",current);
 
         if(found_entry){
@@ -92,5 +92,5 @@ char * private_cweb_change_smart_cache(const char *content){
     }
     CTextStack_free(buffer_pattern);
     CTextStack_free(src);
-    return CTextStack_self_transform_in_string_and_self_clear(code);
+    return code;
 }

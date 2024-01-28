@@ -42,6 +42,13 @@ CwebHttpResponse * private_cweb_treat_five_icon(){
 
 
 }
+char * cweb_aply_macro_modifiers_in_content(const char *content,long content_size){
+    CTextStack *code = newCTextStack_string_empty();
+    private_cweb_generate_inline_inclusion(code,content,content_size);
+    CTextStack  *result = private_cweb_change_smart_cache(code);
+    CTextStack_free(code);
+    return CTextStack_self_transform_in_string_and_self_clear(result);
+}
 
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){
 
@@ -112,12 +119,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
     }
 
     if(!is_binary){
-        CTextStack *inclusion = newCTextStack_string_empty();
-        private_cweb_generate_inline_inclusion(inclusion,(const char*)content,size);
-
-        char *new_content = private_cweb_change_smart_cache((const char*)inclusion->rendered_text);
-        CTextStack_free(inclusion);
-
+        char *new_content = cweb_aply_macro_modifiers_in_content((const char *)content,size);
         free(content);
         size = strlen(new_content);
         content = (unsigned char*)new_content;
