@@ -1,14 +1,15 @@
 
-void private_cweb_load_file_and_include(CTextStack *code,const char *path){
+void private_cweb_load_file_and_include(CTextStack *code,CTextStack *src){
 
+    CTextStack_self_trim(src);
     CTextStack * filename = NULL;
-    bool full_path = cweb_starts_with(path,cweb_static_folder);
+    bool full_path = cweb_starts_with(src->rendered_text,cweb_static_folder);
 
     if(full_path){
-        filename = newCTextStack_string(path);
+        filename = newCTextStack_string(src->rendered_text);
     }
     else{
-        filename = newCTextStack_string_format("%s/%s",cweb_static_folder,path);
+        filename = newCTextStack_string_format("%s/%s",cweb_static_folder,src->rendered_text);
     }
 
 
@@ -44,7 +45,7 @@ void private_cweb_generate_inline_inclusion(CTextStack *code, const char *conten
         CTextStack_format(buffer_pattern,"%c",current);
 
         if(found_entry){
-
+            //printf("current :%c\n",current);
             //means its cancel the operation
             if( current == '\n' || current =='"'){
                 CTextStack_text(code,buffer_pattern->rendered_text);
@@ -60,7 +61,8 @@ void private_cweb_generate_inline_inclusion(CTextStack *code, const char *conten
                 CTextStack_format(src,"%c",current);
                 continue;
             }
-            private_cweb_load_file_and_include(code,src->rendered_text);
+
+            private_cweb_load_file_and_include(code,src);
 
 
             CTextStack_restart(buffer_pattern);
@@ -72,16 +74,19 @@ void private_cweb_generate_inline_inclusion(CTextStack *code, const char *conten
 
         }
 
-        if(entry_founds +1 == ENTRY_PATTERN_LEN){
+        if(current == ' '){
+            continue;
+        }
+        if(entry_founds+1 == ENTRY_PATTERN_LEN){
             found_entry = true;
             continue;
         }
-
 
         if(current == ENTRY_PATTERN[entry_founds]){
             entry_founds+=1;
             continue;
         }
+
 
         //means didnt get the  pattern
         CTextStack_text(code,buffer_pattern->rendered_text);
