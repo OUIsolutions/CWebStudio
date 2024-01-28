@@ -12,13 +12,12 @@ a.png
 main.c
 requisicao
 aaa.jpg
-static
 # Linker output
 *.ilk
 *.map
 *.exp
 trash
-static
+
 # Precompiled Headers
 *.gch
 *.pch
