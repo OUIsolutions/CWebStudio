@@ -136,3 +136,20 @@ char *private_cweb_convert_url_encoded_text(const char *text){
     new_text[new_text_size] = '\0';
     return new_text;
 }
+bool private_cweb_is_string_from_point(const char *content, long content_size, const char *test_string, long test_string_size, long point){
+
+    long  end_point = point + test_string_size;
+
+    if(content_size < end_point){
+        return  false;
+    }
+
+    for(long i = 0; i < test_string_size; i++){
+        char current_char = test_string[i];
+        char test_char = content[i+point];
+        if(current_char != test_char){
+            return  false;
+        }
+    }
+    return true;
+}
