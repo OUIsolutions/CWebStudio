@@ -1,6 +1,7 @@
 
 char * cweb_smart_static_ref(const char *path){
 
+
     CTextStack * filename = NULL;
     bool full_path = cweb_starts_with(path,cweb_static_folder);
 
@@ -10,6 +11,7 @@ char * cweb_smart_static_ref(const char *path){
     else{
         filename = newCTextStack_string_format("%s/%s",cweb_static_folder,path);
     }
+
 
     struct stat file_stat;
     long last_mofication = 0;
