@@ -21,6 +21,7 @@ static const char* cweb_static_folder;
     const char *static_folder;
     bool use_cache;
 
+
     //methods
     CwebHttpResponse *(*request_handler)(CwebHttpRequest *request);
 
