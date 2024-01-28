@@ -29,13 +29,13 @@ char * cweb_smart_static_ref(const char *path){
 
 char * private_cweb_change_smart_cache(const char *content){
 
-    struct CTextStack *code = newCTextStack_string_empty();
-    struct CTextStack *buffer_pattern = newCTextStack_string_empty();
-    struct CTextStack *src = newCTextStack_string_empty();
+    CTextStack *code = newCTextStack_string_empty();
+    CTextStack *buffer_pattern = newCTextStack_string_empty();
+    CTextStack *src = newCTextStack_string_empty();
 
     unsigned long content_size = strlen(content);
-    const char *entry_pattern = "smart-cache='";
-    unsigned long entry_pattern_len = strlen(entry_pattern);
+    const char *ENTRY_PATTERN = "smart-cache='";
+    unsigned long ENTRY_PATTERN_LEN = strlen(ENTRY_PATTERN);
 
     int entry_founds = 0;
     bool found_entry = false;
@@ -77,12 +77,12 @@ char * private_cweb_change_smart_cache(const char *content){
 
         }
 
-        if(entry_founds +1  == entry_pattern_len){
+        if(entry_founds +1 == ENTRY_PATTERN_LEN){
             found_entry = true;
             continue;
         }
 
-        if(current == entry_pattern[entry_founds]){
+        if(current == ENTRY_PATTERN[entry_founds]){
             entry_founds+=1;
             continue;
         }

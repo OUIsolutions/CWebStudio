@@ -1,3 +1,3 @@
 
 
-void private_cweb_generate_inline_inclusion(CTextStack *element,const char *start_content,const char *filename);
+void private_cweb_generate_inline_inclusion(CTextStack *code, const char *content,long content_size);
