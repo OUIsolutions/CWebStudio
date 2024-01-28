@@ -1,4 +1,16 @@
 
+CTextStack * private_cweb_format_filename(CTextStack *src){
+    bool full_path = CTextStack_starts_with(src,cweb_static_folder);
+
+    if(full_path){
+        return  newCTextStack_string(src->rendered_text);
+    }
+    else{
+        return  newCTextStack_string_format("%s/%t",cweb_static_folder,src);
+    }
+
+}
+
 CwebHttpResponse * private_cweb_treat_five_icon(){
 
 

@@ -1,6 +1,7 @@
 
 
 
+CTextStack * private_cweb_format_filename(CTextStack *src);
 
 
 CwebHttpResponse * private_cweb_treat_five_icon();

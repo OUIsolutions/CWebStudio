@@ -1,16 +1,8 @@
 
-char * cweb_smart_static_ref(const char *path){
+char * cweb_smart_static_ref(CTextStack *src){
 
 
-    CTextStack * filename = NULL;
-    bool full_path = cweb_starts_with(path,cweb_static_folder);
-
-    if(full_path){
-        filename = newCTextStack_string(path);
-    }
-    else{
-        filename = newCTextStack_string_format("%s/%s",cweb_static_folder,path);
-    }
+    CTextStack * filename = private_cweb_format_filename(src);
 
 
     struct stat file_stat;
@@ -65,7 +57,7 @@ char * private_cweb_change_smart_cache(const char *content){
                 continue;
             }
 
-            char *create_content = cweb_smart_static_ref(src->rendered_text);
+            char *create_content = cweb_smart_static_ref(src);
             CTextStack_text(code,create_content);
             free(create_content);
 
@@ -79,7 +71,10 @@ char * private_cweb_change_smart_cache(const char *content){
 
         }
 
-        if(entry_founds +1 == ENTRY_PATTERN_LEN){
+        if(current == ' '){
+            continue;
+        }
+        if(entry_founds+1 == ENTRY_PATTERN_LEN){
             found_entry = true;
             continue;
         }

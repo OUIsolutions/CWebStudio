@@ -2,18 +2,7 @@
 void private_cweb_load_file_and_include(CTextStack *code,CTextStack *src){
 
     CTextStack_self_trim(src);
-    CTextStack * filename = NULL;
-    bool full_path = cweb_starts_with(src->rendered_text,cweb_static_folder);
-
-    if(full_path){
-        filename = newCTextStack_string(src->rendered_text);
-    }
-    else{
-        filename = newCTextStack_string_format("%s/%s",cweb_static_folder,src->rendered_text);
-    }
-
-
-
+    CTextStack * filename =private_cweb_format_filename(src);
 
     bool new_content_is_binary;
     int content_size;
