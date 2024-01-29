@@ -3,8 +3,8 @@
 privateCwebRecursionList * newprivateCwebRecursionList(){
     privateCwebRecursionList *self = (privateCwebRecursionList*)malloc(sizeof(privateCwebRecursionList));
     *self = (privateCwebRecursionList){0};
-    self->elements = (privateCwebRecursionList**)malloc(0);
-
+    self->elements = (privateCwebRecursionElement **)malloc(0);
+    return self;
 }
 
 
@@ -24,7 +24,7 @@ privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const 
         }
     }
 
-    self->elements = (privateCwebRecursionList**) realloc(
+    self->elements = (privateCwebRecursionElement **) realloc(
             self->elements,
             (self->size +1) * sizeof(privateCwebRecursionList*)
      );
