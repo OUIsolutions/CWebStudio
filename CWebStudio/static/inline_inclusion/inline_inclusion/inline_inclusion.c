@@ -36,9 +36,11 @@ void private_cweb_generate_inline_inclusion(
 
     CTextStack *buffer_pattern = newCTextStack_string_empty();
     CTextStack *src = newCTextStack_string_empty();
+    const char *ENTRY_START = "inline-include";
+    int ENTRY_START_LEN = (int)strlen(ENTRY_START);
 
     const char *ENTRY_PATTERN = "inline-include='";
-    unsigned long ENTRY_PATTERN_LEN = strlen(ENTRY_PATTERN);
+    int  ENTRY_PATTERN_LEN = (int)strlen(ENTRY_PATTERN);
 
     int entry_founds = 0;
     bool found_entry = false;
@@ -97,9 +99,10 @@ void private_cweb_generate_inline_inclusion(
 
         }
 
-        if(current == ' '){
+        if(current == ' ' && entry_founds >= ENTRY_START_LEN) {
             continue;
         }
+
         if(entry_founds+1 == ENTRY_PATTERN_LEN){
             found_entry = true;
             continue;

@@ -28,6 +28,10 @@ CTextStack * private_cweb_change_smart_cache(CTextStack *content){
     CTextStack *src = newCTextStack_string_empty();
 
     unsigned long content_size = content->size;
+
+    const char *ENTRY_START = "smart-cache";
+    int ENTRY_START_LEN = (int)strlen(ENTRY_START);
+
     const char *ENTRY_PATTERN = "smart-cache='";
     unsigned long ENTRY_PATTERN_LEN = strlen(ENTRY_PATTERN);
 
@@ -71,7 +75,7 @@ CTextStack * private_cweb_change_smart_cache(CTextStack *content){
 
         }
 
-        if(current == ' '){
+        if(current == ' ' && entry_founds >= ENTRY_START_LEN) {
             continue;
         }
         if(entry_founds+1 == ENTRY_PATTERN_LEN){
