@@ -1,5 +1,5 @@
 
-char * cweb_smart_static_ref(CTextStack *src){
+char * private_cweb_smart_static_ref(CTextStack *src){
 
 
     CTextStack * filename = private_cweb_format_filename(src);
@@ -19,6 +19,13 @@ char * cweb_smart_static_ref(CTextStack *src){
             last_mofication
     );
     return CTextStack_self_transform_in_string_and_self_clear(src_ref);
+}
+
+char * cweb_smart_static_ref(const char *src){
+    CTextStack  *converted = newCTextStack_string(src);
+    char *result  = private_cweb_smart_static_ref(converted);
+    CTextStack_free(converted);
+    return result;
 }
 
 CTextStack * private_cweb_change_smart_cache(CTextStack *content){
@@ -61,7 +68,7 @@ CTextStack * private_cweb_change_smart_cache(CTextStack *content){
                 continue;
             }
 
-            char *create_content = cweb_smart_static_ref(src);
+            char *create_content = private_cweb_smart_static_ref(src);
             CTextStack_text(code,create_content);
             free(create_content);
 

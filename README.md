@@ -571,7 +571,7 @@ Its also possible to generate inline inclusion with:
 ~~~
 
 #### Smart Cache in Rendered Text
-Smart caching with rendered text can be done with **cweb_smart_static_ref**:
+Smart caching with rendered text can be done with **private_cweb_smart_static_ref**:
 <!--codeof:examples/smart_cache_inside_rendered_text.c-->
 ~~~c
 #include "CWebStudio.h"

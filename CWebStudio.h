@@ -4969,6 +4969,7 @@ const char *cweb_generate_content_type(const char *file_name);
 char *private_cweb_convert_url_encoded_text(const char *text);
 
 
+//bool private_cweb_is_string_from_point(const char *content, long content_size, const char *test_string, long test_string_size, long point);
 
 
 
@@ -5208,14 +5209,72 @@ void CwebHttpRequest_represent(struct CwebHttpRequest *self);
 
 
 
+char * private_cweb_smart_static_ref(CTextStack *src);
 
-char * cweb_smart_static_ref(const char *path);
+char * cweb_smart_static_ref(const char *src);
 
-char * private_cweb_change_smart_cache(const char *content);
+
+CTextStack * private_cweb_change_smart_cache(CTextStack *content);
+
+
+
+
+
+typedef struct {
+    char  *file;
+    char *included;
+
+}privateCwebRecursionElement;
+
+privateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file, const char *included);
+
+void PrivateCwebRecursionElement_free(privateCwebRecursionElement *self);
+
+
+
+typedef struct{
+
+    privateCwebRecursionElement **elements;
+    int size;
+
+}privateCwebRecursionList;
+
+
+privateCwebRecursionList * newprivateCwebRecursionList();
+
+
+privateCwebRecursionElement *
+privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const char *file,const char *included);
+
+void privateCwebRecursionList_free(privateCwebRecursionList *self);
+
+
+
+
+
+
+void private_cweb_load_file_and_include(
+        CTextStack *code,
+        CTextStack *src,
+        privateCwebRecursionList * recursion_listage
+);
+void private_cweb_generate_inline_inclusion(CTextStack *code, const char *content, long content_size,
+                                            privateCwebRecursionList *recursion_listage, const char *filename);
+
+
+
+
+
+
+CTextStack * private_cweb_format_filename(CTextStack *src);
+
 
 CwebHttpResponse * private_cweb_treat_five_icon();
 
+char * cweb_aply_macro_modifiers_in_content(const char *content,long content_size);
+
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache);
+
 
 
 
@@ -5695,7 +5754,25 @@ char *private_cweb_convert_url_encoded_text(const char *text){
     new_text[new_text_size] = '\0';
     return new_text;
 }
+/*
+bool private_cweb_is_string_from_point(const char *content, long content_size, const char *test_string, long test_string_size, long point){
 
+    long  end_point = point + test_string_size;
+
+    if(content_size < end_point){
+        return  false;
+    }
+
+    for(long i = 0; i < test_string_size; i++){
+        char current_char = test_string[i];
+        char test_char = content[i+point];
+        if(current_char != test_char){
+            return  false;
+        }
+    }
+    return true;
+}
+ */
 
 
 
@@ -6550,17 +6627,12 @@ struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *conten
 
 
 
-char * cweb_smart_static_ref(const char *path){
 
-    CTextStack * filename = NULL;
-    bool full_path = cweb_starts_with(path,cweb_static_folder);
+char * private_cweb_smart_static_ref(CTextStack *src){
 
-    if(full_path){
-        filename = newCTextStack_string(path);
-    }
-    else{
-        filename = newCTextStack_string_format("%s/%s",cweb_static_folder,path);
-    }
+
+    CTextStack * filename = private_cweb_format_filename(src);
+
 
     struct stat file_stat;
     long last_mofication = 0;
@@ -6578,22 +6650,33 @@ char * cweb_smart_static_ref(const char *path){
     return CTextStack_self_transform_in_string_and_self_clear(src_ref);
 }
 
-char * private_cweb_change_smart_cache(const char *content){
+char * cweb_smart_static_ref(const char *src){
+    CTextStack  *converted = newCTextStack_string(src);
+    char *result  = private_cweb_smart_static_ref(converted);
+    CTextStack_free(converted);
+    return result;
+}
 
-    struct CTextStack *code = newCTextStack_string_empty();
-    struct CTextStack *buffer_pattern = newCTextStack_string_empty();
-    struct CTextStack *src = newCTextStack_string_empty();
+CTextStack * private_cweb_change_smart_cache(CTextStack *content){
 
-    unsigned long content_size = strlen(content);
-    const char *entry_pattern = "smart-cache='";
-    unsigned long entry_pattern_len = strlen(entry_pattern);
+    CTextStack *code = newCTextStack_string_empty();
+    CTextStack *buffer_pattern = newCTextStack_string_empty();
+    CTextStack *src = newCTextStack_string_empty();
+
+    unsigned long content_size = content->size;
+
+    const char *ENTRY_START = "smart-cache";
+    int ENTRY_START_LEN = (int)strlen(ENTRY_START);
+
+    const char *ENTRY_PATTERN = "smart-cache='";
+    unsigned long ENTRY_PATTERN_LEN = strlen(ENTRY_PATTERN);
 
     int entry_founds = 0;
     bool found_entry = false;
 
     for(int i = 0; i < content_size; i++){
 
-        char current = content[i];
+        char current = content->rendered_text[i];
         CTextStack_format(buffer_pattern,"%c",current);
 
         if(found_entry){
@@ -6614,7 +6697,7 @@ char * private_cweb_change_smart_cache(const char *content){
                 continue;
             }
 
-            char *create_content = cweb_smart_static_ref(src->rendered_text);
+            char *create_content = private_cweb_smart_static_ref(src);
             CTextStack_text(code,create_content);
             free(create_content);
 
@@ -6628,12 +6711,15 @@ char * private_cweb_change_smart_cache(const char *content){
 
         }
 
-        if(entry_founds +1  == entry_pattern_len){
+        if(current == ' ' && entry_founds >= ENTRY_START_LEN) {
+            continue;
+        }
+        if(entry_founds+1 == ENTRY_PATTERN_LEN){
             found_entry = true;
             continue;
         }
 
-        if(current == entry_pattern[entry_founds]){
+        if(current == ENTRY_PATTERN[entry_founds]){
             entry_founds+=1;
             continue;
         }
@@ -6646,7 +6732,215 @@ char * private_cweb_change_smart_cache(const char *content){
     }
     CTextStack_free(buffer_pattern);
     CTextStack_free(src);
-    return CTextStack_self_transform_in_string_and_self_clear(code);
+    return code;
+}
+
+
+
+
+
+
+
+privateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file, const char *included){
+    privateCwebRecursionElement *self = (privateCwebRecursionElement*) malloc(sizeof (privateCwebRecursionElement));
+    self->file = strdup(file);
+    self->included = strdup(included);
+    return self;
+}
+
+void PrivateCwebRecursionElement_free(privateCwebRecursionElement *self){
+    free(self->file);
+    free(self->included);
+    free(self);
+}
+
+
+
+
+
+privateCwebRecursionList * newprivateCwebRecursionList(){
+    privateCwebRecursionList *self = (privateCwebRecursionList*)malloc(sizeof(privateCwebRecursionList));
+    *self = (privateCwebRecursionList){0};
+    self->elements = (privateCwebRecursionElement **)malloc(0);
+    return self;
+}
+
+
+privateCwebRecursionElement *
+privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const char *file,const char *included){
+    for(int i = 0; i < self->size;i++){
+
+        privateCwebRecursionElement *possible_colision = self->elements[i];
+        bool not_included = strcmp(file,possible_colision->included) != 0;
+
+        if(not_included){
+            continue;
+        }
+        bool including = strcmp(included,possible_colision->file) == 0;
+        if(including){
+            return possible_colision;
+        }
+    }
+
+    self->elements = (privateCwebRecursionElement **) realloc(
+            self->elements,
+            (self->size +1) * sizeof(privateCwebRecursionList*)
+     );
+    self->elements[self->size] = newPrivateCwebRecursionElement(file,included);
+    self->size+=1;
+    return NULL;
+}
+
+void privateCwebRecursionList_free(privateCwebRecursionList *self){
+    for(int i =0; i < self->size; i++){
+        PrivateCwebRecursionElement_free(self->elements[i]);
+    }
+    free(self->elements);
+    free(self);
+}
+
+
+
+
+
+
+void private_cweb_load_file_and_include(
+        CTextStack *code,
+        CTextStack *src,
+        privateCwebRecursionList * recursion_listage){
+
+
+
+    CTextStack_self_trim(src);
+    CTextStack * filename =private_cweb_format_filename(src);
+
+    bool new_content_is_binary;
+    int content_size;
+    unsigned char *new_content = cweb_load_any_content(filename->rendered_text, &content_size,&new_content_is_binary);
+
+    if(new_content && !new_content_is_binary){
+        private_cweb_generate_inline_inclusion(
+                code, (const char *) new_content,
+                content_size,
+                recursion_listage,
+               filename->rendered_text
+        );
+    }
+    if(new_content){
+        free(new_content);
+    }
+    CTextStack_free(filename);
+}
+
+void private_cweb_generate_inline_inclusion(
+        CTextStack *code,
+        const char *content,
+        long content_size,
+        privateCwebRecursionList *recursion_listage,
+        const char *filename) {
+
+    CTextStack *buffer_pattern = newCTextStack_string_empty();
+    CTextStack *src = newCTextStack_string_empty();
+    const char *ENTRY_START = "inline-include";
+    int ENTRY_START_LEN = (int)strlen(ENTRY_START);
+
+    const char *ENTRY_PATTERN = "inline-include='";
+    int  ENTRY_PATTERN_LEN = (int)strlen(ENTRY_PATTERN);
+
+    int entry_founds = 0;
+    bool found_entry = false;
+
+    for(int i = 0; i < content_size; i++){
+
+        char current = content[i];
+        CTextStack_format(buffer_pattern,"%c",current);
+
+        if(found_entry){
+            //printf("current :%c\n",current);
+            //means its cancel the operation
+            if( current == '\n' || current =='"'){
+                CTextStack_text(code,buffer_pattern->rendered_text);
+                CTextStack_restart(buffer_pattern);
+                CTextStack_restart(src);
+                found_entry = false;
+                entry_founds = 0;
+                continue;
+            }
+
+            //means its getts the src
+            if(current != '\''){
+                CTextStack_format(src,"%c",current);
+                continue;
+            }
+            privateCwebRecursionElement *colision = NULL;
+            if(filename){
+                colision =privateCwebRecursionList_add_if_not_colide(
+                        recursion_listage,
+                        filename,
+                        src->rendered_text
+                        );
+            }
+            if(!colision){
+                //printf("incluiu a %s\n",src->rendered_text);
+                private_cweb_load_file_and_include(code,src,recursion_listage);
+            }
+
+            if(colision){
+                printf(
+                        "recursive colision on file:%s with %s\n",
+                        src->rendered_text,
+                        colision->included
+
+                        );
+            }
+
+
+            CTextStack_restart(buffer_pattern);
+            CTextStack_restart(src);
+            found_entry = false;
+            entry_founds = 0;
+            continue;
+
+
+        }
+
+        if(current == ' ' && entry_founds >= ENTRY_START_LEN) {
+            continue;
+        }
+
+        if(entry_founds+1 == ENTRY_PATTERN_LEN){
+            found_entry = true;
+            continue;
+        }
+
+        if(current == ENTRY_PATTERN[entry_founds]){
+            entry_founds+=1;
+            continue;
+        }
+
+
+        //means didnt get the  pattern
+        CTextStack_text(code,buffer_pattern->rendered_text);
+        CTextStack_restart(buffer_pattern);
+        entry_founds = 0;
+
+    }
+    CTextStack_free(buffer_pattern);
+    CTextStack_free(src);
+}
+
+
+
+CTextStack * private_cweb_format_filename(CTextStack *src){
+    bool full_path = CTextStack_starts_with(src,cweb_static_folder);
+
+    if(full_path){
+        return  newCTextStack_string(src->rendered_text);
+    }
+    else{
+        return  newCTextStack_string_format("%s/%t",cweb_static_folder,src);
+    }
+
 }
 
 CwebHttpResponse * private_cweb_treat_five_icon(){
@@ -6680,6 +6974,16 @@ CwebHttpResponse * private_cweb_treat_five_icon(){
 
 
 }
+char * cweb_aply_macro_modifiers_in_content(const char *content,long content_size){
+    CTextStack *code = newCTextStack_string_empty();
+    privateCwebRecursionList *re_list = newprivateCwebRecursionList();
+    private_cweb_generate_inline_inclusion(code, content, content_size, re_list, NULL);
+    CTextStack  *result = private_cweb_change_smart_cache(code);
+    CTextStack_free(code);
+    privateCwebRecursionList_free(re_list);
+    return CTextStack_self_transform_in_string_and_self_clear(result);
+}
+
 
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){
 
@@ -6750,7 +7054,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
     }
 
     if(!is_binary){
-        char *new_content = private_cweb_change_smart_cache((char*)content);
+        char *new_content = cweb_aply_macro_modifiers_in_content((const char *)content,size);
         free(content);
         size = strlen(new_content);
         content = (unsigned char*)new_content;
@@ -6776,6 +7080,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
 
 }
+
 
 
 
