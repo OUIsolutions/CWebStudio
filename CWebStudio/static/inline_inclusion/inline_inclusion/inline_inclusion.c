@@ -1,5 +1,10 @@
 
-void private_cweb_load_file_and_include(CTextStack *code,CTextStack *src){
+void private_cweb_load_file_and_include(
+        CTextStack *code,
+        CTextStack *src,
+        privateCwebRecursionList * recursion_listage){
+
+
 
     CTextStack_self_trim(src);
     CTextStack * filename =private_cweb_format_filename(src);
@@ -9,7 +14,12 @@ void private_cweb_load_file_and_include(CTextStack *code,CTextStack *src){
     unsigned char *new_content = cweb_load_any_content(filename->rendered_text, &content_size,&new_content_is_binary);
 
     if(new_content && !new_content_is_binary){
-        private_cweb_generate_inline_inclusion(code,(const char*)new_content,content_size);
+        private_cweb_generate_inline_inclusion(
+                code, (const char *) new_content,
+                content_size,
+                recursion_listage,
+               filename->rendered_text
+        );
     }
     if(new_content){
         free(new_content);
@@ -17,7 +27,12 @@ void private_cweb_load_file_and_include(CTextStack *code,CTextStack *src){
     CTextStack_free(filename);
 }
 
-void private_cweb_generate_inline_inclusion(CTextStack *code, const char *content,long content_size){
+void private_cweb_generate_inline_inclusion(
+        CTextStack *code,
+        const char *content,
+        long content_size,
+        privateCwebRecursionList *recursion_listage,
+        const char *filename) {
 
     CTextStack *buffer_pattern = newCTextStack_string_empty();
     CTextStack *src = newCTextStack_string_empty();
@@ -50,8 +65,21 @@ void private_cweb_generate_inline_inclusion(CTextStack *code, const char *conten
                 CTextStack_format(src,"%c",current);
                 continue;
             }
+            bool colide = false;
+            if(filename){
+                colide =privateCwebRecursionList_add_if_not_colide(
+                        recursion_listage,
+                        filename,
+                        src->rendered_text
+                        );
+            }
+            if(!colide){
+                private_cweb_load_file_and_include(code,src,recursion_listage);
+            }
 
-            private_cweb_load_file_and_include(code,src);
+            if(colide){
+                cweb_print("colision on file\n",src->rendered_text);
+            }
 
 
             CTextStack_restart(buffer_pattern);

@@ -44,11 +44,14 @@ CwebHttpResponse * private_cweb_treat_five_icon(){
 }
 char * cweb_aply_macro_modifiers_in_content(const char *content,long content_size){
     CTextStack *code = newCTextStack_string_empty();
-    private_cweb_generate_inline_inclusion(code,content,content_size);
+    privateCwebRecursionList *re_list = newprivateCwebRecursionList();
+    private_cweb_generate_inline_inclusion(code, content, content_size, re_list, NULL);
     CTextStack  *result = private_cweb_change_smart_cache(code);
     CTextStack_free(code);
+    privateCwebRecursionList_free(re_list);
     return CTextStack_self_transform_in_string_and_self_clear(result);
 }
+
 
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){
 
