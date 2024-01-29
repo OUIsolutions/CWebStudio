@@ -8,17 +8,19 @@ privateCwebRecursionList * newprivateCwebRecursionList(){
 }
 
 
-bool privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const char *file,const char *included){
+privateCwebRecursionElement *
+privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const char *file,const char *included){
     for(int i = 0; i < self->size;i++){
 
         privateCwebRecursionElement *possible_colision = self->elements[i];
         bool not_included = strcmp(file,possible_colision->included) != 0;
+
         if(not_included){
             continue;
         }
-        bool including = strcmp(included,possible_colision->file);
+        bool including = strcmp(included,possible_colision->file) == 0;
         if(including){
-            return true;
+            return possible_colision;
         }
     }
 
@@ -28,7 +30,7 @@ bool privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,c
      );
     self->elements[self->size] = newPrivateCwebRecursionElement(file,included);
     self->size+=1;
-    return false;
+    return NULL;
 }
 
 void privateCwebRecursionList_free(privateCwebRecursionList *self){

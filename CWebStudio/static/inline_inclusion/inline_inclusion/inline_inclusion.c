@@ -65,20 +65,26 @@ void private_cweb_generate_inline_inclusion(
                 CTextStack_format(src,"%c",current);
                 continue;
             }
-            bool colide = false;
+            privateCwebRecursionElement *colision = NULL;
             if(filename){
-                colide =privateCwebRecursionList_add_if_not_colide(
+                colision =privateCwebRecursionList_add_if_not_colide(
                         recursion_listage,
                         filename,
                         src->rendered_text
                         );
             }
-            if(!colide){
+            if(!colision){
+                //printf("incluiu a %s\n",src->rendered_text);
                 private_cweb_load_file_and_include(code,src,recursion_listage);
             }
 
-            if(colide){
-                cweb_print("colision on file\n",src->rendered_text);
+            if(colision){
+                printf(
+                        "recursive colision on file:%s with %s\n",
+                        src->rendered_text,
+                        colision->included
+
+                        );
             }
 
 
