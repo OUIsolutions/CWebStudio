@@ -561,6 +561,14 @@ Dynamic caching may be used inside HTML by using smart_cache:
     <img src="smart-cache='file.png'">
 ~~~
 
+#### Inline inclusion
+Its also possible to generate inline inclusion with:
+~~~html
+    <div>
+        inline-include='static/teste3.html'
+    </div>
+
+~~~
 
 #### Smart Cache in Rendered Text
 Smart caching with rendered text can be done with **cweb_smart_static_ref**:
