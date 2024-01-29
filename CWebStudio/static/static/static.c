@@ -42,7 +42,7 @@ CwebHttpResponse * private_cweb_treat_five_icon(){
 
 
 }
-char * cweb_aply_macro_modifiers_in_content(const char *content,long content_size){
+char * private_cweb_aply_macro_modifiers_in_content(const char *content, long content_size){
     CTextStack *code = newCTextStack_string_empty();
     privateCwebRecursionList *re_list = newprivateCwebRecursionList();
     private_cweb_generate_inline_inclusion(code, content, content_size, re_list, NULL);
@@ -50,6 +50,10 @@ char * cweb_aply_macro_modifiers_in_content(const char *content,long content_siz
     CTextStack_free(code);
     privateCwebRecursionList_free(re_list);
     return CTextStack_self_transform_in_string_and_self_clear(result);
+}
+
+char * cweb_aply_macro_modifiers_in_content(const char *content){
+    private_cweb_aply_macro_modifiers_in_content(content, (long)strlen(content));
 }
 
 
@@ -122,7 +126,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
     }
 
     if(!is_binary){
-        char *new_content = cweb_aply_macro_modifiers_in_content((const char *)content,size);
+        char *new_content = private_cweb_aply_macro_modifiers_in_content((const char *) content, size);
         free(content);
         size = strlen(new_content);
         content = (unsigned char*)new_content;
