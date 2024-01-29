@@ -3,8 +3,8 @@ typedef struct {
     char  *file;
     char *included;
 
-}PrivateCwebRecursionElement;
+}privateCwebRecursionElement;
 
-PrivateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file,const char *included);
+privateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file, const char *included);
 
-void PrivateCwebRecursionElement_free(PrivateCwebRecursionElement *self);
+void PrivateCwebRecursionElement_free(privateCwebRecursionElement *self);
