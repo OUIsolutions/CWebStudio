@@ -5275,6 +5275,7 @@ char * private_cweb_aply_macro_modifiers_in_content(const char *content, long co
 
 char * cweb_aply_macro_modifiers_in_content(const char *content);
 
+char * cweb_aply_macro_modifiers_in_file(const char *filename);
 
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache);
 
@@ -6990,6 +6991,19 @@ char * private_cweb_aply_macro_modifiers_in_content(const char *content, long co
 char * cweb_aply_macro_modifiers_in_content(const char *content){
     private_cweb_aply_macro_modifiers_in_content(content, (long)strlen(content));
 }
+
+char * cweb_aply_macro_modifiers_in_file(const char *filename){
+    bool is_binary;
+    int size;
+    char *content = (char*)cweb_load_any_content(filename,&size,&is_binary);
+    char *result = NULL;
+    if(!is_binary){
+        result = private_cweb_aply_macro_modifiers_in_content(content,size);
+    }
+    free(content);
+    return result;
+}
+
 
 
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache){

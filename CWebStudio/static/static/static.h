@@ -10,5 +10,6 @@ char * private_cweb_aply_macro_modifiers_in_content(const char *content, long co
 
 char * cweb_aply_macro_modifiers_in_content(const char *content);
 
+char * cweb_aply_macro_modifiers_in_file(const char *filename);
 
 CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache);
