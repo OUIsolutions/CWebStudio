@@ -7000,7 +7000,7 @@ char * private_cweb_aply_macro_modifiers_in_content(const char *content, long co
 }
 
 char * cweb_aply_macro_modifiers_in_content(const char *content){
-    private_cweb_aply_macro_modifiers_in_content(content, (long)strlen(content));
+    return private_cweb_aply_macro_modifiers_in_content(content, (long)strlen(content));
 }
 
 char * cweb_aply_macro_modifiers_in_file(const char *filename){
