@@ -5228,6 +5228,8 @@ typedef struct {
 
 privateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file, const char *included);
 
+void PrivateCwebRecursionElement_represent(privateCwebRecursionElement *self);
+
 void PrivateCwebRecursionElement_free(privateCwebRecursionElement *self);
 
 
@@ -5245,6 +5247,8 @@ privateCwebRecursionList * newprivateCwebRecursionList();
 
 privateCwebRecursionElement *
 privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const char *file,const char *included);
+
+void privateCwebRecursionList_represent(privateCwebRecursionList *self);
 
 void privateCwebRecursionList_free(privateCwebRecursionList *self);
 
@@ -6751,6 +6755,9 @@ privateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file, c
     self->included = strdup(included);
     return self;
 }
+void PrivateCwebRecursionElement_represent(privateCwebRecursionElement *self){
+    printf("file: (%s) | included: (%s)\n",self->file,self->included);
+}
 
 void PrivateCwebRecursionElement_free(privateCwebRecursionElement *self){
     free(self->file);
@@ -6794,7 +6801,11 @@ privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const 
     self->size+=1;
     return NULL;
 }
-
+void privateCwebRecursionList_represent(privateCwebRecursionList *self){
+       for(int i =0; i < self->size; i++){
+        PrivateCwebRecursionElement_represent(self->elements[i]);
+    }
+}
 void privateCwebRecursionList_free(privateCwebRecursionList *self){
     for(int i =0; i < self->size; i++){
         PrivateCwebRecursionElement_free(self->elements[i]);
@@ -6827,7 +6838,7 @@ void private_cweb_load_file_and_include(
                 code, (const char *) new_content,
                 content_size,
                 recursion_listage,
-               filename->rendered_text
+                src->rendered_text
         );
     }
     if(new_content){

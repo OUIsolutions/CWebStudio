@@ -32,7 +32,11 @@ privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const 
     self->size+=1;
     return NULL;
 }
-
+void privateCwebRecursionList_represent(privateCwebRecursionList *self){
+       for(int i =0; i < self->size; i++){
+        PrivateCwebRecursionElement_represent(self->elements[i]);
+    }
+}
 void privateCwebRecursionList_free(privateCwebRecursionList *self){
     for(int i =0; i < self->size; i++){
         PrivateCwebRecursionElement_free(self->elements[i]);

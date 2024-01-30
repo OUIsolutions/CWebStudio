@@ -18,7 +18,7 @@ void private_cweb_load_file_and_include(
                 code, (const char *) new_content,
                 content_size,
                 recursion_listage,
-               filename->rendered_text
+                src->rendered_text
         );
     }
     if(new_content){
