@@ -84,7 +84,10 @@ const char *cweb_generate_content_type(const char *file_name){
         if(strcmp(extension, "html") == 0){
            return "text/html";
         }
-       
+        if(strcmp(extension,"pdf") == 0){
+            return "application/pdf";
+        }
+        
         else if(strcmp(extension, "css") == 0){
             return "text/css";
         }
