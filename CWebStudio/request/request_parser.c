@@ -229,7 +229,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
 
 
-    unsigned char raw_entries[20000] ={0};
+      char raw_entries[20000] ={0};
 
     int i = 0;
     while (true) {
@@ -240,6 +240,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
 
         ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
         //ssize_t res = read(self->socket, &raw_entries[i],1);
+        printf("v:%d|char:%c\n",raw_entries[i],raw_entries[i]);
 
         if (res <= 0) {
             return READ_ERROR;
