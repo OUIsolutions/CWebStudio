@@ -6198,7 +6198,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
 
 
-    unsigned char raw_entries[20000] ={0};
+        char raw_entries[20000] ={0};
 
     int i = 0;
     while (true) {
@@ -6209,6 +6209,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
 
         ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
         //ssize_t res = read(self->socket, &raw_entries[i],1);
+        //printf("v:%d|char:%c\n",raw_entries[i],raw_entries[i]);
 
         if (res <= 0) {
             return READ_ERROR;
@@ -6230,6 +6231,8 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         return READ_ERROR;
         
     }
+    const int UTF_DECREMENTER = 64;
+    const int SIGIN = -61;
     char last_string[10000]= {0};
     struct CwebStringArray *lines = newCwebStringArray();
     int line_index = 0;
@@ -6248,9 +6251,21 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             l++;
             continue;
         }
-        
-        last_string[line_index] = raw_entries[l];
-        line_index++;
+        if(raw_entries[l] < 0){
+
+            //making utf 8 conversion
+            last_string[line_index] = SIGIN;
+            last_string[line_index+1] = raw_entries[l] - UTF_DECREMENTER;
+            line_index+=2;
+
+            continue;
+        }
+
+        if(raw_entries[l]>0){
+            last_string[line_index] = raw_entries[l];
+            line_index++;
+        }
+
     }
 
     if(lines->size == 0){

@@ -284,9 +284,9 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         }
         if(raw_entries[l] < 0){
 
+            //making utf 8 conversion
             last_string[line_index] = SIGIN;
             last_string[line_index+1] = raw_entries[l] - UTF_DECREMENTER;
-            printf("%d %d\n",last_string[line_index],last_string[line_index+1]);
             line_index+=2;
 
             continue;
