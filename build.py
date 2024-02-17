@@ -15,4 +15,3 @@ def modifier(text:str):
     return text.replace('../CWebStudio.h','CWebStudio.h')
 ct.include_code_in_markdown('README.md',True,modifier)
 
-zip_folder('CWebStudio')
