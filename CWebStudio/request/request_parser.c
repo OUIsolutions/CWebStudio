@@ -182,12 +182,12 @@ int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, str
         for(int j = 0; j<line_size;j++){       
 
             if(key_found == false && j >= 1000){
-                return MAX_HEADER_SIZE;
+                return MAX_HEADER_SIZE_CODE;
             }     
 
             
             if(key_found == true && j > 10000){
-                return MAX_HEADER_SIZE;
+                return MAX_HEADER_SIZE_CODE;
             }
             
 
@@ -224,18 +224,31 @@ int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, str
     return 0;
 
 }
+bool privateCwebHttpRequest_is_correct_encoded(const char *bytes_sec,int size){
+
+    for(int i = 1; i < size; i++){
+        char current_char = bytes_sec[i];
+        char last_char = bytes_sec[i-1];
+
+        if(current_char < 0 && current_char != CWEB_C_NON_ASSCI_SIGIN  && last_char != CWEB_C_NON_ASSCI_SIGIN ){
+            return  false;
+        }
+    }
+    return  true;
+}
+
 
 int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
 
 
-        char raw_entries[20000] ={0};
+    char raw_entries[MAX_HEADER_LEN] ={0};
 
     int i = 0;
     while (true) {
 
-        if (i >= 20000) {
-            return MAX_HEADER_SIZE;
+        if (i >= MAX_HEADER_LEN) {
+            return MAX_HEADER_SIZE_CODE;
         }
 
         ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
@@ -258,21 +271,21 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         i++;
     
     }
-    if(i <= 4){    
-        return READ_ERROR;
-        
-    }
-    const int UTF_DECREMENTER = 64;
-    const int SIGIN = -61;
-    char last_string[10000]= {0};
+    if(i <= 4){return READ_ERROR;}
+
+
+    bool its_utf_formated = privateCwebHttpRequest_is_correct_encoded(raw_entries,i);
+
+
+    char last_string[MAX_LINE_LEN]= {0};
     struct CwebStringArray *lines = newCwebStringArray();
     int line_index = 0;
 
     for(int l =0 ; l < i-1;l++){
 
-        if(line_index >= 10000){
+        if(line_index >= MAX_LINE_LEN){
             CwebStringArray_free(lines);
-            return MAX_HEADER_SIZE;
+            return MAX_HEADER_SIZE_CODE;
         }
 
         if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){
@@ -282,20 +295,18 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             l++;
             continue;
         }
-        if(raw_entries[l] < 0){
 
-            //making utf 8 conversion
-            last_string[line_index] = SIGIN;
-            last_string[line_index+1] = raw_entries[l] - UTF_DECREMENTER;
-            line_index+=2;
-
-            continue;
+        if(!its_utf_formated && l > 0){
+            if(raw_entries[l] < 0){
+                last_string[line_index] = CWEB_C_NON_ASSCI_SIGIN;
+                last_string[line_index+1] = raw_entries[l] - CWEB_UTF_DECREMENTER;
+                line_index+=2;
+                continue;
+            }
         }
 
-        if(raw_entries[l]>0){
-            last_string[line_index] = raw_entries[l];
-            line_index++;
-        }
+        last_string[line_index] = raw_entries[l];
+        line_index++;
 
     }
 

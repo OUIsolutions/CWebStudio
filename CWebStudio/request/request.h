@@ -1,10 +1,14 @@
 
 #define INVALID_HTTP -1
-#define MAX_HEADER_SIZE -2
+#define MAX_HEADER_SIZE_CODE -2
+#define MAX_HEADER_LEN 20000
+#define MAX_LINE_LEN MAX_HEADER_LEN /2
 #define READ_ERROR -3
 #define MAX_CONTENT_SIZE -4
 #define UNDEFINED_CONTENT -5
 #define INVALID_JSON -6
+#define CWEB_UTF_DECREMENTER  64
+#define CWEB_C_NON_ASSCI_SIGIN -61
 
 typedef struct CwebHttpRequest{
 
@@ -54,6 +58,10 @@ void CwebHttpRequest_add_param(CwebHttpRequest *self, const char *key, const cha
 void CwebHttpRequest_set_method(CwebHttpRequest *self, const char *method);
 
 void CwebHttpRequest_set_content_string(CwebHttpRequest *self, const char *content);
+
+
+bool privateCwebHttpRequest_is_correct_encoded(const char *bytes_sec,int size);
+
 
 int  CwebHttpRequest_parse_http_request(CwebHttpRequest *self);
 

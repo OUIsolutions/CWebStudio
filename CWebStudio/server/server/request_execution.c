@@ -23,7 +23,7 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
         CwebHttpRequest_free(request);
         return;
     }
-    if(result == MAX_HEADER_SIZE){
+    if(result == MAX_HEADER_SIZE_CODE){
         cweb_print("Max Header Size\n");
         CwebHttpRequest_free(request);
         return;
