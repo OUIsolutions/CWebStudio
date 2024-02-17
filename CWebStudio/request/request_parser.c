@@ -280,9 +280,11 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
     }
     if(i <= 4){return READ_ERROR;}
 
+#ifndef CWEB_NOT_MANIPULATE_UTF
 
     bool its_utf_formated = privateCwebHttpRequest_is_correct_encoded(raw_entries,i);
 
+#endif
 
     char last_string[MAX_LINE_LEN]= {0};
     struct CwebStringArray *lines = newCwebStringArray();
@@ -290,7 +292,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
 
     for(int l =0 ; l < i-1;l++){
 
-        if(line_index >= MAX_LINE_LEN){
+        if(line_index >= MAX_LINE_LEN - 10){
             CwebStringArray_free(lines);
             return MAX_HEADER_SIZE_CODE;
         }
