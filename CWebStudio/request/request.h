@@ -20,6 +20,7 @@ typedef struct CwebHttpRequest{
     int content_error;
     CwebDict *params;
     CwebDict *headers;
+    int bytes_recived;
     int content_length;
     unsigned char *content;
     cJSON *json;
