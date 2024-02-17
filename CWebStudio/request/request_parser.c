@@ -252,7 +252,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         }
 
         if(bytes_recived <= i){
-            ssize_t res = recv(self->socket, &raw_entries[i], MAX_HEADER_LEN, MSG_DONTWAIT);
+            ssize_t res = recv(self->socket, &raw_entries[i], MAX_HEADER_LEN - bytes_recived, MSG_DONTWAIT);
 
             if(res <= 0){
                 res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
