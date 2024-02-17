@@ -243,7 +243,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
 
 
     char raw_entries[MAX_HEADER_LEN] ={0};
-
+    long bytes_recived = 0;
     int i = 0;
     while (true) {
 
@@ -251,13 +251,20 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             return MAX_HEADER_SIZE_CODE;
         }
 
-        ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
-        //ssize_t res = read(self->socket, &raw_entries[i],1);
-        //printf("v:%d|char:%c\n",raw_entries[i],raw_entries[i]);
+        if(bytes_recived <= i){
+            ssize_t res = recv(self->socket, &raw_entries[i], MAX_HEADER_LEN, MSG_DONTWAIT);
 
-        if (res <= 0) {
-            return READ_ERROR;
+            if(res <= 0){
+                res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
+            }
+
+            if (res <= 0) {
+                return READ_ERROR;
+            }
+            bytes_recived+=res;
         }
+
+
         //line break is \r\n\r\n
         if (i >= 3 &&
             raw_entries[i - 3] == '\r' &&
