@@ -295,15 +295,17 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             l++;
             continue;
         }
+        #ifndef CWEB_NOT_MANIPULATE_UTF
 
-        if(!its_utf_formated && l > 0){
-            if(raw_entries[l] < 0){
-                last_string[line_index] = CWEB_C_NON_ASSCI_SIGIN;
-                last_string[line_index+1] = raw_entries[l] - CWEB_UTF_DECREMENTER;
-                line_index+=2;
-                continue;
-            }
-        }
+                if(!its_utf_formated && l > 0){
+                    if(raw_entries[l] < 0){
+                        last_string[line_index] = CWEB_C_NON_ASSCI_SIGIN;
+                        last_string[line_index+1] = raw_entries[l] - CWEB_UTF_DECREMENTER;
+                        line_index+=2;
+                        continue;
+                    }
+                }
+        #endif
 
         last_string[line_index] = raw_entries[l];
         line_index++;
