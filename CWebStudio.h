@@ -1187,12 +1187,12 @@ void private_cweb_handle_child_termination(int signal);
 
 CwebServer newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
 
-void CwebServer_start(CwebServer *self);
+int CwebServer_start(CwebServer *self);
 
 
-void private_CWebServer_run_server_in_single_process(CwebServer *self);
+int private_CWebServer_run_server_in_single_process(CwebServer *self);
 
-void private_CWebServer_run_server_in_multiprocess(CwebServer *self);
+int private_CWebServer_run_server_in_multiprocess(CwebServer *self);
 
 
 void private_CWebServer_execute_request(
@@ -1367,7 +1367,7 @@ CwebHttpResponseModule newCwebHttpResponseModule();
 
 typedef struct CwebServerModule{
     CwebServer (*newServer)(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
-    void (*start)(struct  CwebServer *self);
+    int (*start)(struct  CwebServer *self);
 }CwebServerModule;
 
 CwebServerModule newCwebServerModule();
@@ -7267,16 +7267,16 @@ struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(
 }
 
 
-void CwebServer_start(CwebServer *self){
+int CwebServer_start(CwebServer *self){
     cweb_static_folder = self->static_folder;
 
     if (self->single_process){
-        private_CWebServer_run_server_in_single_process(self);
+       return  private_CWebServer_run_server_in_single_process(self);
     }
 
-    if(!self->single_process){
-        private_CWebServer_run_server_in_multiprocess(self);
-    }
+      return  private_CWebServer_run_server_in_multiprocess(self);
+
+
 }
 
 
@@ -7311,7 +7311,7 @@ void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket
     
 }
 
-void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
+int  private_CWebServer_run_server_in_multiprocess(CwebServer *self){
     int port_socket;
 
     // Creating socket file descriptor
@@ -7332,7 +7332,7 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0){
         perror("Faluire to bind socket");
-        return;
+        return 1;
     }
     
 
@@ -7445,6 +7445,7 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
         
   
     }
+    return 0;
 }
 
 
@@ -7577,7 +7578,7 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
 
 
 
-void private_CWebServer_run_server_in_single_process(CwebServer *self) {
+int private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
     int port_socket;
 
@@ -7600,7 +7601,7 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
         printf("Faluire to bind socket to port %d\n", self->port);
-        return;
+        return 1;
       
     }
 
@@ -7682,7 +7683,7 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
         
     }
-
+    return 0;
 }
 
 

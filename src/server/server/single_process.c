@@ -1,6 +1,6 @@
 
 
-void private_CWebServer_run_server_in_single_process(CwebServer *self) {
+int private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
     int port_socket;
 
@@ -23,7 +23,7 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
         printf("Faluire to bind socket to port %d\n", self->port);
-        return;
+        return 1;
       
     }
 
@@ -105,6 +105,6 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
         
     }
-
+    return 0;
 }
 

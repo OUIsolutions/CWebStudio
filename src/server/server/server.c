@@ -19,15 +19,15 @@ struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(
 }
 
 
-void CwebServer_start(CwebServer *self){
+int CwebServer_start(CwebServer *self){
     cweb_static_folder = self->static_folder;
 
     if (self->single_process){
-        private_CWebServer_run_server_in_single_process(self);
+       return  private_CWebServer_run_server_in_single_process(self);
     }
 
-    if(!self->single_process){
-        private_CWebServer_run_server_in_multiprocess(self);
-    }
+      return  private_CWebServer_run_server_in_multiprocess(self);
+
+
 }
 

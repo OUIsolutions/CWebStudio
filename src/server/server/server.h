@@ -26,12 +26,12 @@
 
 CwebServer newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
 
-void CwebServer_start(CwebServer *self);
+int CwebServer_start(CwebServer *self);
 
 
-void private_CWebServer_run_server_in_single_process(CwebServer *self);
+int private_CWebServer_run_server_in_single_process(CwebServer *self);
 
-void private_CWebServer_run_server_in_multiprocess(CwebServer *self);
+int private_CWebServer_run_server_in_multiprocess(CwebServer *self);
 
 
 void private_CWebServer_execute_request(

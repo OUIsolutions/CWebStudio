@@ -28,7 +28,7 @@ void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket
     
 }
 
-void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
+int  private_CWebServer_run_server_in_multiprocess(CwebServer *self){
     int port_socket;
 
     // Creating socket file descriptor
@@ -49,7 +49,7 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
     // Vinculando o socket à porta especificada
     if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0){
         perror("Faluire to bind socket");
-        return;
+        return 1;
     }
     
 
@@ -162,4 +162,5 @@ void private_CWebServer_run_server_in_multiprocess(CwebServer *self){
         
   
     }
+    return 0;
 }
