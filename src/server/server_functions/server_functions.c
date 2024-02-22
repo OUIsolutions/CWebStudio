@@ -85,7 +85,9 @@ void cweb_kill_single_process_server( ){
 void cweb_set_static_folder(const char *folder){
     cweb_static_folder = folder;
 }
-
+const char * cweb_get_static_folder(){
+    return cweb_static_folder;
+}
 
 long cweb_get_total_requests(){
     return cweb_total_requests;
