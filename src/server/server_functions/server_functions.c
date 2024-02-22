@@ -78,3 +78,15 @@ void private_cweb_send_error_mensage( CwebHttpResponse *response, int socket){
     CwebHttpResponse_free(response);
 
 }
+void cweb_kill_single_process_server( ){
+    private_cweb_end_server = true;
+}
+
+void cweb_set_static_folder(const char *folder){
+    cweb_static_folder = folder;
+}
+
+
+long cweb_get_total_requests(){
+    return cweb_total_requests;
+}

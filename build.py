@@ -5,7 +5,7 @@ from Build.copile_all_exemples import copile_all_exemples
 from Build.full_folder_zip import zip_folder
 
 from os import remove
-STARTER  = f'CWebStudio/CwebStudioMain.h'
+STARTER  = f'src/one.c'
 ct.generate_amalgamated_code(STARTER,'CWebStudio.h')
 
 copile_all_exemples('examples')

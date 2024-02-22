@@ -28,8 +28,9 @@ SOFTWARE.
 #ifndef __CWEBSTUDIO_H
 #define __CWEBSTUDIO_H
 
-#include "dependencies.h"
+
 #include "declaration.h"
+#include "globals.h"
 #include "definition.h"
 
 #endif

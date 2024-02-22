@@ -41,7 +41,7 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
     while (1)
     {
 
-        if(cweb_end_server){
+        if(private_cweb_end_server){
                     cweb_print("Break in request %lld\n", cweb_actual_request)
                     break;
         }

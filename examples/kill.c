@@ -5,7 +5,7 @@ CwebNamespace cweb;
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     if(strcmp(request->route,"/kill") == 0){
-        cweb_end_server = true;
+            cweb_kill_single_process_server();
     }
     return cweb.response.send_text("Working", 200);
 

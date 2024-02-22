@@ -1,4 +1,13 @@
 
+#ifndef CTEXTENGINE_H
+#define CTEXTENGINE_H
+#include "dependencies/CTextEngine/definition.h"
+#endif
+
+#ifndef cJSON__h
+#define cJSON__h
+#include "dependencies/cJson/cJSON.c"
+#endif
 #include "strings/strings.c"
 #include "extras/extras.c"
 #include "request/request.c"

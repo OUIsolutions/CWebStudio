@@ -29,6 +29,8 @@ SOFTWARE.
 #define __CWEBSTUDIO_H
 
 
+
+
 #include <sys/wait.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -41,33 +43,7 @@ SOFTWARE.
 
 #include <arpa/inet.h>
 #include <unistd.h>
-
-/*
-MIT License
-
-Copyright (c) 2023 OUI
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
 #ifndef CTEXTENGINE_H
-#define CTEXTENGINE_H
-
 
 
 #include <string.h>
@@ -482,6 +458,943 @@ typedef struct CTextNamespace{
 CTextNamespace newCTextNamespace();
 
 
+#endif
+#ifndef cJSON__h
+
+/*
+  Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+*/
+
+#ifndef cJSON__h
+#define cJSON__h
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#if !defined(__WINDOWS__) && (defined(WIN32) || defined(WIN64) || defined(_MSC_VER) || defined(_WIN32))
+#define __WINDOWS__
+#endif
+
+#ifdef __WINDOWS__
+
+/* When compiling for windows, we specify a specific calling convention to avoid issues where we are being called from a project with a different default calling convention.  For windows you have 3 define options:
+
+CJSON_HIDE_SYMBOLS - Define this in the case where you don't want to ever dllexport symbols
+CJSON_EXPORT_SYMBOLS - Define this on library build when you want to dllexport symbols (default)
+CJSON_IMPORT_SYMBOLS - Define this if you want to dllimport symbol
+
+For *nix builds that support visibility attribute, you can define similar behavior by
+
+setting default visibility to hidden by adding
+-fvisibility=hidden (for gcc)
+or
+-xldscope=hidden (for sun cc)
+to CFLAGS
+
+then using the CJSON_API_VISIBILITY flag to "export" the same symbols the way CJSON_EXPORT_SYMBOLS does
+
+*/
+
+#define CJSON_CDECL __cdecl
+#define CJSON_STDCALL __stdcall
+
+/* export symbols by default, this is necessary for copy pasting the C and header file */
+#if !defined(CJSON_HIDE_SYMBOLS) && !defined(CJSON_IMPORT_SYMBOLS) && !defined(CJSON_EXPORT_SYMBOLS)
+#define CJSON_EXPORT_SYMBOLS
+#endif
+
+#if defined(CJSON_HIDE_SYMBOLS)
+#define CJSON_PUBLIC(type)   type CJSON_STDCALL
+#elif defined(CJSON_EXPORT_SYMBOLS)
+#define CJSON_PUBLIC(type)   __declspec(dllexport) type CJSON_STDCALL
+#elif defined(CJSON_IMPORT_SYMBOLS)
+#define CJSON_PUBLIC(type)   __declspec(dllimport) type CJSON_STDCALL
+#endif
+#else /* !__WINDOWS__ */
+#define CJSON_CDECL
+#define CJSON_STDCALL
+
+#if (defined(__GNUC__) || defined(__SUNPRO_CC) || defined (__SUNPRO_C)) && defined(CJSON_API_VISIBILITY)
+#define CJSON_PUBLIC(type)   __attribute__((visibility("default"))) type
+#else
+#define CJSON_PUBLIC(type) type
+#endif
+#endif
+
+/* project version */
+#define CJSON_VERSION_MAJOR 1
+#define CJSON_VERSION_MINOR 7
+#define CJSON_VERSION_PATCH 15
+
+#include <stddef.h>
+
+/* cJSON Types: */
+#define cJSON_Invalid (0)
+#define cJSON_False  (1 << 0)
+#define cJSON_True   (1 << 1)
+#define cJSON_NULL   (1 << 2)
+#define cJSON_Number (1 << 3)
+#define cJSON_String (1 << 4)
+#define cJSON_Array  (1 << 5)
+#define cJSON_Object (1 << 6)
+#define cJSON_Raw    (1 << 7) /* raw json */
+
+#define cJSON_IsReference 256
+#define cJSON_StringIsConst 512
+
+/* The cJSON structure: */
+typedef struct cJSON
+{
+    /* next/prev allow you to walk array/object chains. Alternatively, use GetArraySize/GetArrayItem/GetObjectItem */
+    struct cJSON *next;
+    struct cJSON *prev;
+    /* An array or object item will have a child pointer pointing to a chain of the items in the array/object. */
+    struct cJSON *child;
+
+    /* The type of the item, as above. */
+    int type;
+
+    /* The item's string, if type==cJSON_String  and type == cJSON_Raw */
+    char *valuestring;
+    /* writing to valueint is DEPRECATED, use cJSON_SetNumberValue instead */
+    int valueint;
+    /* The item's number, if type==cJSON_Number */
+    double valuedouble;
+
+    /* The item's name string, if this item is the child of, or is in the list of subitems of an object. */
+    char *string;
+} cJSON;
+
+typedef struct cJSON_Hooks
+{
+      /* malloc/free are CDECL on Windows regardless of the default calling convention of the compiler, so ensure the hooks allow passing those functions directly. */
+      void *(CJSON_CDECL *malloc_fn)(size_t sz);
+      void (CJSON_CDECL *free_fn)(void *ptr);
+} cJSON_Hooks;
+
+typedef int cJSON_bool;
+
+/* Limits how deeply nested arrays/objects can be before cJSON rejects to parse them.
+ * This is to prevent stack overflows. */
+#ifndef CJSON_NESTING_LIMIT
+#define CJSON_NESTING_LIMIT 1000
+#endif
+
+/* returns the version of cJSON as a string */
+CJSON_PUBLIC(const char*) cJSON_Version(void);
+
+/* Supply malloc, realloc and free functions to cJSON */
+CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks);
+
+/* Memory Management: the caller is always responsible to free the results from all variants of cJSON_Parse (with cJSON_Delete) and cJSON_Print (with stdlib free, cJSON_Hooks.free_fn, or cJSON_free as appropriate). The exception is cJSON_PrintPreallocated, where the caller has full responsibility of the buffer. */
+/* Supply a block of JSON, and this returns a cJSON object you can interrogate. */
+CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value);
+CJSON_PUBLIC(cJSON *) cJSON_ParseWithLength(const char *value, size_t buffer_length);
+/* ParseWithOpts allows you to require (and check) that the JSON is null terminated, and to retrieve the pointer to the final byte parsed. */
+/* If you supply a ptr in return_parse_end and parsing fails, then return_parse_end will contain a pointer to the error so will match cJSON_GetErrorPtr(). */
+CJSON_PUBLIC(cJSON *) cJSON_ParseWithOpts(const char *value, const char **return_parse_end, cJSON_bool require_null_terminated);
+CJSON_PUBLIC(cJSON *) cJSON_ParseWithLengthOpts(const char *value, size_t buffer_length, const char **return_parse_end, cJSON_bool require_null_terminated);
+
+/* Render a cJSON entity to text for transfer/storage. */
+CJSON_PUBLIC(char *) cJSON_Print(const cJSON *item);
+/* Render a cJSON entity to text for transfer/storage without any formatting. */
+CJSON_PUBLIC(char *) cJSON_PrintUnformatted(const cJSON *item);
+/* Render a cJSON entity to text using a buffered strategy. prebuffer is a guess at the final size. guessing well reduces reallocation. fmt=0 gives unformatted, =1 gives formatted */
+CJSON_PUBLIC(char *) cJSON_PrintBuffered(const cJSON *item, int prebuffer, cJSON_bool fmt);
+/* Render a cJSON entity to text using a buffer already allocated in memory with given length. Returns 1 on success and 0 on failure. */
+/* NOTE: cJSON is not always 100% accurate in estimating how much memory it will use, so to be safe allocate 5 bytes more than you actually need */
+CJSON_PUBLIC(cJSON_bool) cJSON_PrintPreallocated(cJSON *item, char *buffer, const int length, const cJSON_bool format);
+/* Delete a cJSON entity and all subentities. */
+CJSON_PUBLIC(void) cJSON_Delete(cJSON *item);
+
+/* Returns the number of items in an array (or object). */
+CJSON_PUBLIC(int) cJSON_GetArraySize(const cJSON *array);
+/* Retrieve item number "index" from array "array". Returns NULL if unsuccessful. */
+CJSON_PUBLIC(cJSON *) cJSON_GetArrayItem(const cJSON *array, int index);
+/* Get item "string" from object. Case insensitive. */
+CJSON_PUBLIC(cJSON *) cJSON_GetObjectItem(const cJSON * const object, const char * const string);
+CJSON_PUBLIC(cJSON *) cJSON_GetObjectItemCaseSensitive(const cJSON * const object, const char * const string);
+CJSON_PUBLIC(cJSON_bool) cJSON_HasObjectItem(const cJSON *object, const char *string);
+/* For analysing failed parses. This returns a pointer to the parse error. You'll probably need to look a few chars back to make sense of it. Defined when cJSON_Parse() returns 0. 0 when cJSON_Parse() succeeds. */
+CJSON_PUBLIC(const char *) cJSON_GetErrorPtr(void);
+
+/* Check item type and return its value */
+CJSON_PUBLIC(char *) cJSON_GetStringValue(const cJSON * const item);
+CJSON_PUBLIC(double) cJSON_GetNumberValue(const cJSON * const item);
+
+/* These functions check the type of an item */
+CJSON_PUBLIC(cJSON_bool) cJSON_IsInvalid(const cJSON * const item);
+CJSON_PUBLIC(cJSON_bool) cJSON_IsFalse(const cJSON * const item);
+CJSON_PUBLIC(cJSON_bool) cJSON_IsTrue(const cJSON * const item);
+CJSON_PUBLIC(cJSON_bool) cJSON_IsBool(const cJSON * const item);
+CJSON_PUBLIC(cJSON_bool) cJSON_IsNull(const cJSON * const item);
+CJSON_PUBLIC(cJSON_bool) cJSON_IsNumber(const cJSON * const item);
+CJSON_PUBLIC(cJSON_bool) cJSON_IsString(const cJSON * const item);
+CJSON_PUBLIC(cJSON_bool) cJSON_IsArray(const cJSON * const item);
+CJSON_PUBLIC(cJSON_bool) cJSON_IsObject(const cJSON * const item);
+CJSON_PUBLIC(cJSON_bool) cJSON_IsRaw(const cJSON * const item);
+
+/* These calls create a cJSON item of the appropriate type. */
+CJSON_PUBLIC(cJSON *) cJSON_CreateNull(void);
+CJSON_PUBLIC(cJSON *) cJSON_CreateTrue(void);
+CJSON_PUBLIC(cJSON *) cJSON_CreateFalse(void);
+CJSON_PUBLIC(cJSON *) cJSON_CreateBool(cJSON_bool boolean);
+CJSON_PUBLIC(cJSON *) cJSON_CreateNumber(double num);
+CJSON_PUBLIC(cJSON *) cJSON_CreateString(const char *string);
+/* raw json */
+CJSON_PUBLIC(cJSON *) cJSON_CreateRaw(const char *raw);
+CJSON_PUBLIC(cJSON *) cJSON_CreateArray(void);
+CJSON_PUBLIC(cJSON *) cJSON_CreateObject(void);
+
+/* Create a string where valuestring references a string so
+ * it will not be freed by cJSON_Delete */
+CJSON_PUBLIC(cJSON *) cJSON_CreateStringReference(const char *string);
+/* Create an object/array that only references it's elements so
+ * they will not be freed by cJSON_Delete */
+CJSON_PUBLIC(cJSON *) cJSON_CreateObjectReference(const cJSON *child);
+CJSON_PUBLIC(cJSON *) cJSON_CreateArrayReference(const cJSON *child);
+
+/* These utilities create an Array of count items.
+ * The parameter count cannot be greater than the number of elements in the number array, otherwise array access will be out of bounds.*/
+CJSON_PUBLIC(cJSON *) cJSON_CreateIntArray(const int *numbers, int count);
+CJSON_PUBLIC(cJSON *) cJSON_CreateFloatArray(const float *numbers, int count);
+CJSON_PUBLIC(cJSON *) cJSON_CreateDoubleArray(const double *numbers, int count);
+CJSON_PUBLIC(cJSON *) cJSON_CreateStringArray(const char *const *strings, int count);
+
+/* Append item to the specified array/object. */
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToArray(cJSON *array, cJSON *item);
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObject(cJSON *object, const char *string, cJSON *item);
+/* Use this when string is definitely const (i.e. a literal, or as good as), and will definitely survive the cJSON object.
+ * WARNING: When this function was used, make sure to always check that (item->type & cJSON_StringIsConst) is zero before
+ * writing to `item->string` */
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObjectCS(cJSON *object, const char *string, cJSON *item);
+/* Append reference to item to the specified array/object. Use this when you want to add an existing cJSON to a new cJSON, but don't want to corrupt your existing cJSON. */
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToArray(cJSON *array, cJSON *item);
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToObject(cJSON *object, const char *string, cJSON *item);
+
+/* Remove/Detach items from Arrays/Objects. */
+CJSON_PUBLIC(cJSON *) cJSON_DetachItemViaPointer(cJSON *parent, cJSON * const item);
+CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromArray(cJSON *array, int which);
+CJSON_PUBLIC(void) cJSON_DeleteItemFromArray(cJSON *array, int which);
+CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObject(cJSON *object, const char *string);
+CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObjectCaseSensitive(cJSON *object, const char *string);
+CJSON_PUBLIC(void) cJSON_DeleteItemFromObject(cJSON *object, const char *string);
+CJSON_PUBLIC(void) cJSON_DeleteItemFromObjectCaseSensitive(cJSON *object, const char *string);
+
+/* Update array items. */
+CJSON_PUBLIC(cJSON_bool) cJSON_InsertItemInArray(cJSON *array, int which, cJSON *newitem); /* Shifts pre-existing items to the right. */
+CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemViaPointer(cJSON * const parent, cJSON * const item, cJSON * replacement);
+CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInArray(cJSON *array, int which, cJSON *newitem);
+CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObject(cJSON *object,const char *string,cJSON *newitem);
+CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObjectCaseSensitive(cJSON *object,const char *string,cJSON *newitem);
+
+/* Duplicate a cJSON item */
+CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse);
+/* Duplicate will create a new, identical cJSON item to the one you pass, in new memory that will
+ * need to be released. With recurse!=0, it will duplicate any children connected to the item.
+ * The item->next and ->prev pointers are always zero on return from Duplicate. */
+/* Recursively compare two cJSON items for equality. If either a or b is NULL or invalid, they will be considered unequal.
+ * case_sensitive determines if object keys are treated case sensitive (1) or case insensitive (0) */
+CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * const b, const cJSON_bool case_sensitive);
+
+/* Minify a strings, remove blank characters(such as ' ', '\t', '\r', '\n') from strings.
+ * The input pointer json cannot point to a read-only address area, such as a string constant, 
+ * but should point to a readable and writable address area. */
+CJSON_PUBLIC(void) cJSON_Minify(char *json);
+
+/* Helper functions for creating and adding items to an object at the same time.
+ * They return the added item or NULL on failure. */
+CJSON_PUBLIC(cJSON*) cJSON_AddNullToObject(cJSON * const object, const char * const name);
+CJSON_PUBLIC(cJSON*) cJSON_AddTrueToObject(cJSON * const object, const char * const name);
+CJSON_PUBLIC(cJSON*) cJSON_AddFalseToObject(cJSON * const object, const char * const name);
+CJSON_PUBLIC(cJSON*) cJSON_AddBoolToObject(cJSON * const object, const char * const name, const cJSON_bool boolean);
+CJSON_PUBLIC(cJSON*) cJSON_AddNumberToObject(cJSON * const object, const char * const name, const double number);
+CJSON_PUBLIC(cJSON*) cJSON_AddStringToObject(cJSON * const object, const char * const name, const char * const string);
+CJSON_PUBLIC(cJSON*) cJSON_AddRawToObject(cJSON * const object, const char * const name, const char * const raw);
+CJSON_PUBLIC(cJSON*) cJSON_AddObjectToObject(cJSON * const object, const char * const name);
+CJSON_PUBLIC(cJSON*) cJSON_AddArrayToObject(cJSON * const object, const char * const name);
+
+/* When assigning an integer value, it needs to be propagated to valuedouble too. */
+#define cJSON_SetIntValue(object, number) ((object) ? (object)->valueint = (object)->valuedouble = (number) : (number))
+/* helper for the cJSON_SetNumberValue macro */
+CJSON_PUBLIC(double) cJSON_SetNumberHelper(cJSON *object, double number);
+#define cJSON_SetNumberValue(object, number) ((object != NULL) ? cJSON_SetNumberHelper(object, (double)number) : (number))
+/* Change the valuestring of a cJSON_String object, only takes effect when type of object is cJSON_String */
+CJSON_PUBLIC(char*) cJSON_SetValuestring(cJSON *object, const char *valuestring);
+
+/* If the object is not a boolean type this does nothing and returns cJSON_Invalid else it returns the new type*/
+#define cJSON_SetBoolValue(object, boolValue) ( \
+    (object != NULL && ((object)->type & (cJSON_False|cJSON_True))) ? \
+    (object)->type=((object)->type &(~(cJSON_False|cJSON_True)))|((boolValue)?cJSON_True:cJSON_False) : \
+    cJSON_Invalid\
+)
+
+/* Macro for iterating over an array or object */
+#define cJSON_ArrayForEach(element, array) for(element = (array != NULL) ? (array)->child : NULL; element != NULL; element = element->next)
+
+/* malloc/free objects using the malloc/free functions that have been set with cJSON_InitHooks */
+CJSON_PUBLIC(void *) cJSON_malloc(size_t size);
+CJSON_PUBLIC(void) cJSON_free(void *object);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+#undef cJSON__h
+
+#endif
+
+
+typedef struct CwebStringArray {
+  int size;         
+
+  char **strings;       
+
+}CwebStringArray; // End the structure with a semicolon
+
+struct CwebStringArray * newCwebStringArray();
+
+int  CwebStringArray_find(struct CwebStringArray *self, const char *string);
+void CwebStringArray_add(struct CwebStringArray *self, const char *string);
+void CwebStringArray_merge(struct CwebStringArray *self, struct CwebStringArray *other);
+void CwebStringArray_represent(struct CwebStringArray *self);
+void CwebStringArray_free(struct CwebStringArray *self);
+void CwebStringArray_set(struct CwebStringArray *self, int index, const char *value);
+
+
+
+
+
+
+char *cweb_parse_string_to_lower(const char *old_string);
+
+char *cweb_parse_string_to_upper(const char *old_string);
+
+char *cweb_normalize_string(const char *old_string,const char *invalid_chars);
+
+bool cweb_starts_with(const char *string, const char *prefix);
+
+char *cweb_replace_string_once(const char *target, const char *old_element, const char *new_element);
+
+char* cweb_replace_string(const char *target, const char *old_element, const char *new_element);
+
+
+
+
+unsigned char *cweb_load_any_content(const char * path,int *size,bool *is_binary);
+
+char *cweb_load_string_file_content(const char * path);
+
+unsigned char *cweb_load_binary_content(const char * path,int *size);
+
+
+const char *cweb_generate_content_type(const char *file_name);
+
+char *private_cweb_convert_url_encoded_text(const char *text);
+
+
+//bool private_cweb_is_string_from_point(const char *content, long content_size, const char *test_string, long test_string_size, long point);
+
+
+
+
+#ifdef CWEB_DEBUG
+#define cweb_print(...) printf(__VA_ARGS__);
+#else 
+#define cweb_print(...);
+#endif
+
+#define CWEB_END_ROUTE()\
+if(strcmp(request->route,"/end" ) ==0){ \
+        cweb_end_server = true;\
+}
+
+
+
+
+
+
+
+
+
+typedef struct CwebKeyVal{
+    char *key;
+    char *value;
+
+}CwebKeyVal;
+
+struct CwebKeyVal* newCwebKeyVal(const char *key, const  char *value);
+void CwebKeyVal_represent(struct CwebKeyVal *self);
+void CwebKeyVal_free(struct CwebKeyVal *self);
+
+
+
+
+typedef struct CwebDict {
+  int size;
+  CwebKeyVal **keys_vals;
+
+}CwebDict;
+
+
+
+CwebDict *newCwebDict();
+void CwebDict_set(CwebDict *self, const  char *key, const char *value);
+char *CwebDict_get(CwebDict *self, const char *key);
+
+char *CwebDict_get_by_normalized_key(
+  CwebDict *self,
+  const char *key,
+  const char *chars_to_remove
+);
+
+void CwebDict_represent(CwebDict *dict);
+void CwebDict_free(CwebDict *self);
+
+
+
+
+
+
+typedef struct CwebHttpResponse{
+    int status_code;
+    struct CwebDict *headers;
+    int content_length;
+    bool exist_content;
+    unsigned char *content;
+
+}CwebHttpResponse;
+
+
+CwebHttpResponse *newCwebHttpResponse();
+
+
+char *CwebHttpResponse_generate_response(CwebHttpResponse*self);
+
+
+
+void CwebHttpResponse_set_content(
+        CwebHttpResponse *self,
+    unsigned char *content,
+    int content_length
+);
+
+
+void CwebHttpResponse_add_header(
+     CwebHttpResponse *self,
+    const char *key, 
+    const char *value
+);
+
+void CwebHttpResponse_free(struct CwebHttpResponse *self);
+
+
+
+
+
+#define CWEB_AUTO_SET_CONTENT NULL 
+#define CWEB_OK  200
+#define CWEB_NOT_FOUND 404
+#define CWEB_BAD_REQUEST 400
+#define CWEB_FORBIDDEN 403
+#define CWEB_INTERNAL_SERVER_ERROR 500
+
+
+ CwebHttpResponse * cweb_send_any(
+    const char *content_type,
+    size_t content_length,
+    unsigned char *content,
+    int status_code
+);
+
+CwebHttpResponse * cweb_send_text(
+    const char *content,
+    int status_code
+);
+
+CwebHttpResponse * cweb_send_json_string(
+        const char *content,
+        int status_code
+);
+
+CwebHttpResponse * cweb_send_json_string_cleaning_memory(
+        char *content,
+        int status_code
+);
+
+CwebHttpResponse * cweb_send_cJSON(
+        cJSON *content,
+        int status_code
+);
+
+
+CwebHttpResponse * cweb_send_cJSON_cleaning_memory(
+        cJSON *content,
+        int status_code
+);
+
+
+CwebHttpResponse * cweb_send_text_cleaning_memory(
+    char *content,
+    int status_code
+);
+
+CwebHttpResponse* cweb_send_rendered_CTextStack_cleaning_memory(struct CTextStack *stack,int status_code);
+
+CwebHttpResponse* cweb_send_var_html(const char *content,int status_code);
+
+CwebHttpResponse* cweb_send_var_html_cleaning_memory(
+    char *content,
+    int status_code
+);
+
+CwebHttpResponse * cweb_send_file(
+    const char *file_path,
+    const char *content_type,
+    int status_code
+);
+
+
+
+
+#define INVALID_HTTP -1
+#define MAX_HEADER_SIZE_CODE -2
+#define MAX_HEADER_LEN 20000
+#define MAX_LINE_LEN MAX_HEADER_LEN /2
+#define READ_ERROR -3
+#define MAX_CONTENT_SIZE -4
+#define UNDEFINED_CONTENT -5
+#define INVALID_JSON -6
+#define CWEB_UTF_DECREMENTER  64
+#define CWEB_C_NON_ASSCI_SIGIN -61
+
+typedef struct CwebHttpRequest{
+
+    char *url;
+    int socket;
+    char *route;
+    char *method;
+    char *client_ip;
+    int content_error;
+    CwebDict *params;
+    CwebDict *headers;
+    int content_length;
+    unsigned char *content;
+    cJSON *json;
+
+}CwebHttpRequest;
+//algorithm functions
+ CwebHttpRequest *newCwebHttpRequest(int socket);
+
+unsigned char * CwebHttpRequest_read_content(CwebHttpRequest *self, long max_content_size);
+
+cJSON * CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
+
+char * CwebHttpRequest_get_header(CwebHttpRequest *self, const char *key);
+
+char * CwebHttpRequest_get_header_by_normalized_key(
+        struct CwebHttpRequest *self,
+        const char *key,
+        const char *chars_to_remove
+);
+char * CwebHttpRequest_get_param(CwebHttpRequest *self, const char *key);
+
+char * CwebHttpRequest_get_param_by_sanitized_key(
+    CwebHttpRequest *self,
+    const char *key,
+    const char *chars_to_remove
+);
+
+void CwebHttpRequest_set_url(CwebHttpRequest *self, const char *url);
+
+void CwebHttpRequest_set_route(CwebHttpRequest *self, const char *route);
+
+void CwebHttpRequest_add_header(CwebHttpRequest *self, const char *key, const char *value);
+
+void CwebHttpRequest_add_param(CwebHttpRequest *self, const char *key, const char *value);
+
+void CwebHttpRequest_set_method(CwebHttpRequest *self, const char *method);
+
+void CwebHttpRequest_set_content_string(CwebHttpRequest *self, const char *content);
+
+
+bool privateCwebHttpRequest_is_correct_encoded(const char *bytes_sec,int size);
+
+
+int  CwebHttpRequest_parse_http_request(CwebHttpRequest *self);
+
+void private_CwebHttpRequest_interpret_query_params(CwebHttpRequest *self, const char *query_params);
+
+int private_CwebHttpRequest_interpret_first_line(CwebHttpRequest *self, char *first_line);
+
+
+int private_CwebHttpRequest_interpret_headders(
+    CwebHttpRequest *self,
+    CwebStringArray *line_headers
+);
+
+void CwebHttpRequest_free(CwebHttpRequest *self);
+
+
+void CwebHttpRequest_represent(struct CwebHttpRequest *self);
+
+
+
+
+char * private_cweb_smart_static_ref(CTextStack *src);
+
+char * cweb_smart_static_ref(const char *src);
+
+
+CTextStack * private_cweb_change_smart_cache(CTextStack *content);
+
+
+
+
+
+typedef struct {
+    char  *file;
+    char *included;
+
+}privateCwebRecursionElement;
+
+privateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file, const char *included);
+
+void PrivateCwebRecursionElement_represent(privateCwebRecursionElement *self);
+
+void PrivateCwebRecursionElement_free(privateCwebRecursionElement *self);
+
+
+
+typedef struct{
+
+    privateCwebRecursionElement **elements;
+    int size;
+
+}privateCwebRecursionList;
+
+
+privateCwebRecursionList * newprivateCwebRecursionList();
+
+
+privateCwebRecursionElement *
+privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const char *file,const char *included);
+
+void privateCwebRecursionList_represent(privateCwebRecursionList *self);
+
+void privateCwebRecursionList_free(privateCwebRecursionList *self);
+
+
+
+
+
+
+void private_cweb_load_file_and_include(
+        CTextStack *code,
+        CTextStack *src,
+        privateCwebRecursionList * recursion_listage
+);
+void private_cweb_generate_inline_inclusion(CTextStack *code, const char *content, long content_size,
+                                            privateCwebRecursionList *recursion_listage, const char *filename);
+
+
+
+
+
+
+CTextStack * private_cweb_format_filename(CTextStack *src);
+
+
+CwebHttpResponse * private_cweb_treat_five_icon();
+
+char * private_cweb_aply_macro_modifiers_in_content(const char *content, long content_size);
+
+char * cweb_aply_macro_modifiers_in_content(const char *content);
+
+char * cweb_aply_macro_modifiers_in_file(const char *filename);
+
+CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache);
+
+
+
+
+
+
+void  private_cweb_generate_cors_response(struct CwebHttpResponse *response);
+
+
+
+
+
+void private_cweb_send_error_mensage( CwebHttpResponse *response, int socket);
+
+void cweb_kill_single_process_server( );
+
+void cweb_set_static_folder(const char *folder);
+
+long cweb_get_total_requests();
+void private_cweb_treat_response(bool use_static,int new_socket);
+
+
+void private_cweb_handle_child_termination(int signal);
+
+
+
+
+#define CWEB_DANGEROUS_SINGLE_PROCESS true
+#define CWEB_NO_STATIC false;
+
+ typedef struct CwebServer{
+    int port;
+    int function_timeout;
+    double client_timeout;
+    int max_queue;
+    bool single_process;
+    long max_requests;
+    bool allow_cors;
+    bool use_static;
+    const char *static_folder;
+    bool use_cache;
+
+    //methods
+    CwebHttpResponse *(*request_handler)(CwebHttpRequest *request);
+
+}CwebServer;
+
+
+
+
+CwebServer newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
+
+void CwebServer_start(CwebServer *self);
+
+
+void private_CWebServer_run_server_in_single_process(CwebServer *self);
+
+void private_CWebServer_run_server_in_multiprocess(CwebServer *self);
+
+
+void private_CWebServer_execute_request(
+        CwebServer *self,
+        int socket,
+        const char *client_ip
+);
+
+
+
+
+void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket, const char *client_ip);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef struct CwebStringArrayModule{
+    CwebStringArray *(*newStringArray)();
+    void (*set)( CwebStringArray *self,int index,const char *value);
+    void (*add)( CwebStringArray *self,const char *string);
+    void (*merge)(CwebStringArray *self, CwebStringArray *other);
+    void (*represent)(CwebStringArray *self);
+    int (*find)(CwebStringArray *self,const char *string);
+
+    void (*free)(CwebStringArray *self);
+}CwebStringArrayModule;
+
+CwebStringArrayModule newCwebStringArrayModule();
+
+
+typedef struct CwebKeyValModule{
+    void (*represent)(CwebKeyVal *key_val);
+    void (*free)(CwebKeyVal *key_val);
+}CwebKeyValModule;
+
+CwebKeyValModule newCwebKeyValModule();
+
+
+typedef struct CwebDictModule{
+
+
+    CwebDict *(*newDict)();
+    void  (*set)(CwebDict *dict,const char *key,const char *value);
+    char* (*get)(CwebDict *dict,const char *key);
+    char* (*get_by_normalized_key)(CwebDict *dict,const char *key,const char *chars_to_remove);
+    void  (*free)(CwebDict *dict);
+    void  (*represent)(CwebDict *dict);
+
+    CwebKeyValModule keyval;
+
+}CwebDictModule;
+
+CwebDictModule newCwebDictModule();
+
+
+
+typedef struct CwebHttpRequestModule{
+    CwebHttpRequest *(*newCwebHttpRequest)(int socket);
+    unsigned char*(*read_content)(struct CwebHttpRequest *self,long max_content_size);
+    cJSON * (*read_cJSON)(CwebHttpRequest *self, long max_content_size);
+
+    void (*set_url)(struct CwebHttpRequest *self,const char *url);
+    void (*set_route)(struct CwebHttpRequest *self,const char *route);
+    void (*set_method)(struct CwebHttpRequest *self,const char *method);
+
+    void (*add_header)(struct CwebHttpRequest *self,const char *key,const char *value);
+    void (*add_param)(struct CwebHttpRequest *self,const char *key,const char *value);
+    void (*set_content_string)(struct CwebHttpRequest *self,const char *content);
+
+
+    char *(*get_header)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_header_by_normalized_key)(
+            struct CwebHttpRequest *self,
+            const char *key,
+            const char *chars_to_remove
+    );
+
+    char *(*get_param)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_param_by_sanitized_key)(struct CwebHttpRequest *self,const char *key,
+                                        const char *chars_to_remove);
+
+
+    int (*parse_http_request)(struct CwebHttpRequest *self);
+
+    void (*free)(struct CwebHttpRequest *request);
+    void (*represent)(struct CwebHttpRequest *request);
+}CwebHttpRequestModule;
+
+CwebHttpRequestModule newCwebRequestModule();
+
+
+
+typedef struct CwebHttpResponseModule{
+
+    CwebHttpResponse  * (*newHttpResponse)();
+
+    CwebHttpResponse * (*send_any)(
+            const char *content_type,
+            size_t content_length,
+            unsigned char *content,
+            int status_code
+    );
+    CwebHttpResponse * (*send_json_string)(
+            const char *content,
+            int status_code
+    );
+    CwebHttpResponse * (*send_json_string_cleaning_memory)(
+            char *content,
+            int status_code
+    );
+    CwebHttpResponse * (*send_cJSON)(
+            cJSON *content,
+            int status_code
+    );
+
+
+    CwebHttpResponse * (*send_cJSON_cleaning_memory)(
+            cJSON *content,
+            int status_code
+    );
+
+
+    CwebHttpResponse * (*send_text)(
+            const char *content,
+            int status_code
+    );
+
+    CwebHttpResponse * (*send_text_cleaning_memory)(
+            char *content,
+            int status_code
+    );
+
+    CwebHttpResponse* (*send_rendered_CTextStack_cleaning_memory)(struct CTextStack *stack,int status_code);
+
+    CwebHttpResponse* (*send_var_html)(const char *content,int status_code);
+
+    CwebHttpResponse* (*send_var_html_cleaning_memory)(
+            char *content,
+            int status_code
+    );
+
+    CwebHttpResponse * (*send_file)(
+            const char *file_path,
+            const char *content_type,
+            int status_code
+    );
+
+
+
+    void (*set_content)(CwebHttpResponse *response, unsigned char *content, int content_length);
+    void (*add_header)(CwebHttpResponse *response,const char *key,const  char *value);
+    char *(*generate_response)(CwebHttpResponse *response);
+    void (*free)(CwebHttpResponse *response);
+
+}CwebHttpResponseModule;
+
+CwebHttpResponseModule newCwebHttpResponseModule();
+
+
+typedef struct CwebServerModule{
+    CwebServer (*newServer)(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
+    void (*start)(struct  CwebServer *self);
+}CwebServerModule;
+
+CwebServerModule newCwebServerModule();
+
+
+typedef struct CwebNamespace{
+    CwebDictModule dict;
+    CwebHttpRequestModule request;
+    CwebHttpResponseModule response;
+    CwebServerModule server;
+    CwebStringArrayModule  string_array;
+}CwebNamespace;
+
+CwebNamespace newCwebNamespace();
+
+
+
+static long long  cweb_actual_request = 0;
+static long cweb_total_requests = 0;
+static bool private_cweb_end_server = false;
+
+static const char* cweb_static_folder;
+
+
+
+#ifndef CTEXTENGINE_H
+#define CTEXTENGINE_H
 
 
 
@@ -1492,310 +2405,10 @@ CTextNamespace newCTextNamespace(){
 }
 
 
-
-#endif // CTEXTENGINE_H
-#ifndef cJSON__h
-
-/*
-  Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
-*/
+#endif
 
 #ifndef cJSON__h
 #define cJSON__h
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-#if !defined(__WINDOWS__) && (defined(WIN32) || defined(WIN64) || defined(_MSC_VER) || defined(_WIN32))
-#define __WINDOWS__
-#endif
-
-#ifdef __WINDOWS__
-
-/* When compiling for windows, we specify a specific calling convention to avoid issues where we are being called from a project with a different default calling convention.  For windows you have 3 define options:
-
-CJSON_HIDE_SYMBOLS - Define this in the case where you don't want to ever dllexport symbols
-CJSON_EXPORT_SYMBOLS - Define this on library build when you want to dllexport symbols (default)
-CJSON_IMPORT_SYMBOLS - Define this if you want to dllimport symbol
-
-For *nix builds that support visibility attribute, you can define similar behavior by
-
-setting default visibility to hidden by adding
--fvisibility=hidden (for gcc)
-or
--xldscope=hidden (for sun cc)
-to CFLAGS
-
-then using the CJSON_API_VISIBILITY flag to "export" the same symbols the way CJSON_EXPORT_SYMBOLS does
-
-*/
-
-#define CJSON_CDECL __cdecl
-#define CJSON_STDCALL __stdcall
-
-/* export symbols by default, this is necessary for copy pasting the C and header file */
-#if !defined(CJSON_HIDE_SYMBOLS) && !defined(CJSON_IMPORT_SYMBOLS) && !defined(CJSON_EXPORT_SYMBOLS)
-#define CJSON_EXPORT_SYMBOLS
-#endif
-
-#if defined(CJSON_HIDE_SYMBOLS)
-#define CJSON_PUBLIC(type)   type CJSON_STDCALL
-#elif defined(CJSON_EXPORT_SYMBOLS)
-#define CJSON_PUBLIC(type)   __declspec(dllexport) type CJSON_STDCALL
-#elif defined(CJSON_IMPORT_SYMBOLS)
-#define CJSON_PUBLIC(type)   __declspec(dllimport) type CJSON_STDCALL
-#endif
-#else /* !__WINDOWS__ */
-#define CJSON_CDECL
-#define CJSON_STDCALL
-
-#if (defined(__GNUC__) || defined(__SUNPRO_CC) || defined (__SUNPRO_C)) && defined(CJSON_API_VISIBILITY)
-#define CJSON_PUBLIC(type)   __attribute__((visibility("default"))) type
-#else
-#define CJSON_PUBLIC(type) type
-#endif
-#endif
-
-/* project version */
-#define CJSON_VERSION_MAJOR 1
-#define CJSON_VERSION_MINOR 7
-#define CJSON_VERSION_PATCH 15
-
-#include <stddef.h>
-
-/* cJSON Types: */
-#define cJSON_Invalid (0)
-#define cJSON_False  (1 << 0)
-#define cJSON_True   (1 << 1)
-#define cJSON_NULL   (1 << 2)
-#define cJSON_Number (1 << 3)
-#define cJSON_String (1 << 4)
-#define cJSON_Array  (1 << 5)
-#define cJSON_Object (1 << 6)
-#define cJSON_Raw    (1 << 7) /* raw json */
-
-#define cJSON_IsReference 256
-#define cJSON_StringIsConst 512
-
-/* The cJSON structure: */
-typedef struct cJSON
-{
-    /* next/prev allow you to walk array/object chains. Alternatively, use GetArraySize/GetArrayItem/GetObjectItem */
-    struct cJSON *next;
-    struct cJSON *prev;
-    /* An array or object item will have a child pointer pointing to a chain of the items in the array/object. */
-    struct cJSON *child;
-
-    /* The type of the item, as above. */
-    int type;
-
-    /* The item's string, if type==cJSON_String  and type == cJSON_Raw */
-    char *valuestring;
-    /* writing to valueint is DEPRECATED, use cJSON_SetNumberValue instead */
-    int valueint;
-    /* The item's number, if type==cJSON_Number */
-    double valuedouble;
-
-    /* The item's name string, if this item is the child of, or is in the list of subitems of an object. */
-    char *string;
-} cJSON;
-
-typedef struct cJSON_Hooks
-{
-      /* malloc/free are CDECL on Windows regardless of the default calling convention of the compiler, so ensure the hooks allow passing those functions directly. */
-      void *(CJSON_CDECL *malloc_fn)(size_t sz);
-      void (CJSON_CDECL *free_fn)(void *ptr);
-} cJSON_Hooks;
-
-typedef int cJSON_bool;
-
-/* Limits how deeply nested arrays/objects can be before cJSON rejects to parse them.
- * This is to prevent stack overflows. */
-#ifndef CJSON_NESTING_LIMIT
-#define CJSON_NESTING_LIMIT 1000
-#endif
-
-/* returns the version of cJSON as a string */
-CJSON_PUBLIC(const char*) cJSON_Version(void);
-
-/* Supply malloc, realloc and free functions to cJSON */
-CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks);
-
-/* Memory Management: the caller is always responsible to free the results from all variants of cJSON_Parse (with cJSON_Delete) and cJSON_Print (with stdlib free, cJSON_Hooks.free_fn, or cJSON_free as appropriate). The exception is cJSON_PrintPreallocated, where the caller has full responsibility of the buffer. */
-/* Supply a block of JSON, and this returns a cJSON object you can interrogate. */
-CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value);
-CJSON_PUBLIC(cJSON *) cJSON_ParseWithLength(const char *value, size_t buffer_length);
-/* ParseWithOpts allows you to require (and check) that the JSON is null terminated, and to retrieve the pointer to the final byte parsed. */
-/* If you supply a ptr in return_parse_end and parsing fails, then return_parse_end will contain a pointer to the error so will match cJSON_GetErrorPtr(). */
-CJSON_PUBLIC(cJSON *) cJSON_ParseWithOpts(const char *value, const char **return_parse_end, cJSON_bool require_null_terminated);
-CJSON_PUBLIC(cJSON *) cJSON_ParseWithLengthOpts(const char *value, size_t buffer_length, const char **return_parse_end, cJSON_bool require_null_terminated);
-
-/* Render a cJSON entity to text for transfer/storage. */
-CJSON_PUBLIC(char *) cJSON_Print(const cJSON *item);
-/* Render a cJSON entity to text for transfer/storage without any formatting. */
-CJSON_PUBLIC(char *) cJSON_PrintUnformatted(const cJSON *item);
-/* Render a cJSON entity to text using a buffered strategy. prebuffer is a guess at the final size. guessing well reduces reallocation. fmt=0 gives unformatted, =1 gives formatted */
-CJSON_PUBLIC(char *) cJSON_PrintBuffered(const cJSON *item, int prebuffer, cJSON_bool fmt);
-/* Render a cJSON entity to text using a buffer already allocated in memory with given length. Returns 1 on success and 0 on failure. */
-/* NOTE: cJSON is not always 100% accurate in estimating how much memory it will use, so to be safe allocate 5 bytes more than you actually need */
-CJSON_PUBLIC(cJSON_bool) cJSON_PrintPreallocated(cJSON *item, char *buffer, const int length, const cJSON_bool format);
-/* Delete a cJSON entity and all subentities. */
-CJSON_PUBLIC(void) cJSON_Delete(cJSON *item);
-
-/* Returns the number of items in an array (or object). */
-CJSON_PUBLIC(int) cJSON_GetArraySize(const cJSON *array);
-/* Retrieve item number "index" from array "array". Returns NULL if unsuccessful. */
-CJSON_PUBLIC(cJSON *) cJSON_GetArrayItem(const cJSON *array, int index);
-/* Get item "string" from object. Case insensitive. */
-CJSON_PUBLIC(cJSON *) cJSON_GetObjectItem(const cJSON * const object, const char * const string);
-CJSON_PUBLIC(cJSON *) cJSON_GetObjectItemCaseSensitive(const cJSON * const object, const char * const string);
-CJSON_PUBLIC(cJSON_bool) cJSON_HasObjectItem(const cJSON *object, const char *string);
-/* For analysing failed parses. This returns a pointer to the parse error. You'll probably need to look a few chars back to make sense of it. Defined when cJSON_Parse() returns 0. 0 when cJSON_Parse() succeeds. */
-CJSON_PUBLIC(const char *) cJSON_GetErrorPtr(void);
-
-/* Check item type and return its value */
-CJSON_PUBLIC(char *) cJSON_GetStringValue(const cJSON * const item);
-CJSON_PUBLIC(double) cJSON_GetNumberValue(const cJSON * const item);
-
-/* These functions check the type of an item */
-CJSON_PUBLIC(cJSON_bool) cJSON_IsInvalid(const cJSON * const item);
-CJSON_PUBLIC(cJSON_bool) cJSON_IsFalse(const cJSON * const item);
-CJSON_PUBLIC(cJSON_bool) cJSON_IsTrue(const cJSON * const item);
-CJSON_PUBLIC(cJSON_bool) cJSON_IsBool(const cJSON * const item);
-CJSON_PUBLIC(cJSON_bool) cJSON_IsNull(const cJSON * const item);
-CJSON_PUBLIC(cJSON_bool) cJSON_IsNumber(const cJSON * const item);
-CJSON_PUBLIC(cJSON_bool) cJSON_IsString(const cJSON * const item);
-CJSON_PUBLIC(cJSON_bool) cJSON_IsArray(const cJSON * const item);
-CJSON_PUBLIC(cJSON_bool) cJSON_IsObject(const cJSON * const item);
-CJSON_PUBLIC(cJSON_bool) cJSON_IsRaw(const cJSON * const item);
-
-/* These calls create a cJSON item of the appropriate type. */
-CJSON_PUBLIC(cJSON *) cJSON_CreateNull(void);
-CJSON_PUBLIC(cJSON *) cJSON_CreateTrue(void);
-CJSON_PUBLIC(cJSON *) cJSON_CreateFalse(void);
-CJSON_PUBLIC(cJSON *) cJSON_CreateBool(cJSON_bool boolean);
-CJSON_PUBLIC(cJSON *) cJSON_CreateNumber(double num);
-CJSON_PUBLIC(cJSON *) cJSON_CreateString(const char *string);
-/* raw json */
-CJSON_PUBLIC(cJSON *) cJSON_CreateRaw(const char *raw);
-CJSON_PUBLIC(cJSON *) cJSON_CreateArray(void);
-CJSON_PUBLIC(cJSON *) cJSON_CreateObject(void);
-
-/* Create a string where valuestring references a string so
- * it will not be freed by cJSON_Delete */
-CJSON_PUBLIC(cJSON *) cJSON_CreateStringReference(const char *string);
-/* Create an object/array that only references it's elements so
- * they will not be freed by cJSON_Delete */
-CJSON_PUBLIC(cJSON *) cJSON_CreateObjectReference(const cJSON *child);
-CJSON_PUBLIC(cJSON *) cJSON_CreateArrayReference(const cJSON *child);
-
-/* These utilities create an Array of count items.
- * The parameter count cannot be greater than the number of elements in the number array, otherwise array access will be out of bounds.*/
-CJSON_PUBLIC(cJSON *) cJSON_CreateIntArray(const int *numbers, int count);
-CJSON_PUBLIC(cJSON *) cJSON_CreateFloatArray(const float *numbers, int count);
-CJSON_PUBLIC(cJSON *) cJSON_CreateDoubleArray(const double *numbers, int count);
-CJSON_PUBLIC(cJSON *) cJSON_CreateStringArray(const char *const *strings, int count);
-
-/* Append item to the specified array/object. */
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToArray(cJSON *array, cJSON *item);
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObject(cJSON *object, const char *string, cJSON *item);
-/* Use this when string is definitely const (i.e. a literal, or as good as), and will definitely survive the cJSON object.
- * WARNING: When this function was used, make sure to always check that (item->type & cJSON_StringIsConst) is zero before
- * writing to `item->string` */
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObjectCS(cJSON *object, const char *string, cJSON *item);
-/* Append reference to item to the specified array/object. Use this when you want to add an existing cJSON to a new cJSON, but don't want to corrupt your existing cJSON. */
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToArray(cJSON *array, cJSON *item);
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToObject(cJSON *object, const char *string, cJSON *item);
-
-/* Remove/Detach items from Arrays/Objects. */
-CJSON_PUBLIC(cJSON *) cJSON_DetachItemViaPointer(cJSON *parent, cJSON * const item);
-CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromArray(cJSON *array, int which);
-CJSON_PUBLIC(void) cJSON_DeleteItemFromArray(cJSON *array, int which);
-CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObject(cJSON *object, const char *string);
-CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObjectCaseSensitive(cJSON *object, const char *string);
-CJSON_PUBLIC(void) cJSON_DeleteItemFromObject(cJSON *object, const char *string);
-CJSON_PUBLIC(void) cJSON_DeleteItemFromObjectCaseSensitive(cJSON *object, const char *string);
-
-/* Update array items. */
-CJSON_PUBLIC(cJSON_bool) cJSON_InsertItemInArray(cJSON *array, int which, cJSON *newitem); /* Shifts pre-existing items to the right. */
-CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemViaPointer(cJSON * const parent, cJSON * const item, cJSON * replacement);
-CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInArray(cJSON *array, int which, cJSON *newitem);
-CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObject(cJSON *object,const char *string,cJSON *newitem);
-CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObjectCaseSensitive(cJSON *object,const char *string,cJSON *newitem);
-
-/* Duplicate a cJSON item */
-CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse);
-/* Duplicate will create a new, identical cJSON item to the one you pass, in new memory that will
- * need to be released. With recurse!=0, it will duplicate any children connected to the item.
- * The item->next and ->prev pointers are always zero on return from Duplicate. */
-/* Recursively compare two cJSON items for equality. If either a or b is NULL or invalid, they will be considered unequal.
- * case_sensitive determines if object keys are treated case sensitive (1) or case insensitive (0) */
-CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * const b, const cJSON_bool case_sensitive);
-
-/* Minify a strings, remove blank characters(such as ' ', '\t', '\r', '\n') from strings.
- * The input pointer json cannot point to a read-only address area, such as a string constant, 
- * but should point to a readable and writable address area. */
-CJSON_PUBLIC(void) cJSON_Minify(char *json);
-
-/* Helper functions for creating and adding items to an object at the same time.
- * They return the added item or NULL on failure. */
-CJSON_PUBLIC(cJSON*) cJSON_AddNullToObject(cJSON * const object, const char * const name);
-CJSON_PUBLIC(cJSON*) cJSON_AddTrueToObject(cJSON * const object, const char * const name);
-CJSON_PUBLIC(cJSON*) cJSON_AddFalseToObject(cJSON * const object, const char * const name);
-CJSON_PUBLIC(cJSON*) cJSON_AddBoolToObject(cJSON * const object, const char * const name, const cJSON_bool boolean);
-CJSON_PUBLIC(cJSON*) cJSON_AddNumberToObject(cJSON * const object, const char * const name, const double number);
-CJSON_PUBLIC(cJSON*) cJSON_AddStringToObject(cJSON * const object, const char * const name, const char * const string);
-CJSON_PUBLIC(cJSON*) cJSON_AddRawToObject(cJSON * const object, const char * const name, const char * const raw);
-CJSON_PUBLIC(cJSON*) cJSON_AddObjectToObject(cJSON * const object, const char * const name);
-CJSON_PUBLIC(cJSON*) cJSON_AddArrayToObject(cJSON * const object, const char * const name);
-
-/* When assigning an integer value, it needs to be propagated to valuedouble too. */
-#define cJSON_SetIntValue(object, number) ((object) ? (object)->valueint = (object)->valuedouble = (number) : (number))
-/* helper for the cJSON_SetNumberValue macro */
-CJSON_PUBLIC(double) cJSON_SetNumberHelper(cJSON *object, double number);
-#define cJSON_SetNumberValue(object, number) ((object != NULL) ? cJSON_SetNumberHelper(object, (double)number) : (number))
-/* Change the valuestring of a cJSON_String object, only takes effect when type of object is cJSON_String */
-CJSON_PUBLIC(char*) cJSON_SetValuestring(cJSON *object, const char *valuestring);
-
-/* If the object is not a boolean type this does nothing and returns cJSON_Invalid else it returns the new type*/
-#define cJSON_SetBoolValue(object, boolValue) ( \
-    (object != NULL && ((object)->type & (cJSON_False|cJSON_True))) ? \
-    (object)->type=((object)->type &(~(cJSON_False|cJSON_True)))|((boolValue)?cJSON_True:cJSON_False) : \
-    cJSON_Invalid\
-)
-
-/* Macro for iterating over an array or object */
-#define cJSON_ArrayForEach(element, array) for(element = (array != NULL) ? (array)->child : NULL; element != NULL; element = element->next)
-
-/* malloc/free objects using the malloc/free functions that have been set with cJSON_InitHooks */
-CJSON_PUBLIC(void *) cJSON_malloc(size_t size);
-CJSON_PUBLIC(void) cJSON_free(void *object);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
 
 /*
   Copyright (c) 2009-2017 Dave Gamble and cJSON contributors
@@ -4919,632 +5532,6 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 
 
 
-
-
-typedef struct CwebStringArray {
-  int size;         
-
-  char **strings;       
-
-}CwebStringArray; // End the structure with a semicolon
-
-struct CwebStringArray * newCwebStringArray();
-
-int  CwebStringArray_find(struct CwebStringArray *self, const char *string);
-void CwebStringArray_add(struct CwebStringArray *self, const char *string);
-void CwebStringArray_merge(struct CwebStringArray *self, struct CwebStringArray *other);
-void CwebStringArray_represent(struct CwebStringArray *self);
-void CwebStringArray_free(struct CwebStringArray *self);
-void CwebStringArray_set(struct CwebStringArray *self, int index, const char *value);
-
-
-
-
-
-
-char *cweb_parse_string_to_lower(const char *old_string);
-
-char *cweb_parse_string_to_upper(const char *old_string);
-
-char *cweb_normalize_string(const char *old_string,const char *invalid_chars);
-
-bool cweb_starts_with(const char *string, const char *prefix);
-
-char *cweb_replace_string_once(const char *target, const char *old_element, const char *new_element);
-
-char* cweb_replace_string(const char *target, const char *old_element, const char *new_element);
-
-
-
-
-unsigned char *cweb_load_any_content(const char * path,int *size,bool *is_binary);
-
-char *cweb_load_string_file_content(const char * path);
-
-unsigned char *cweb_load_binary_content(const char * path,int *size);
-
-
-const char *cweb_generate_content_type(const char *file_name);
-
-char *private_cweb_convert_url_encoded_text(const char *text);
-
-
-//bool private_cweb_is_string_from_point(const char *content, long content_size, const char *test_string, long test_string_size, long point);
-
-
-
-
-#ifdef CWEB_DEBUG
-#define cweb_print(...) printf(__VA_ARGS__);
-#else 
-#define cweb_print(...);
-#endif
-
-#define CWEB_END_ROUTE()\
-if(strcmp(request->route,"/end" ) ==0){ \
-        cweb_end_server = true;\
-}
-
-
-
-
-
-
-
-
-
-typedef struct CwebKeyVal{
-    char *key;
-    char *value;
-
-}CwebKeyVal;
-
-struct CwebKeyVal* newCwebKeyVal(const char *key, const  char *value);
-void CwebKeyVal_represent(struct CwebKeyVal *self);
-void CwebKeyVal_free(struct CwebKeyVal *self);
-
-
-
-
-typedef struct CwebDict {
-  int size;
-  CwebKeyVal **keys_vals;
-
-}CwebDict;
-
-
-
-CwebDict *newCwebDict();
-void CwebDict_set(CwebDict *self, const  char *key, const char *value);
-char *CwebDict_get(CwebDict *self, const char *key);
-
-char *CwebDict_get_by_normalized_key(
-  CwebDict *self,
-  const char *key,
-  const char *chars_to_remove
-);
-
-void CwebDict_represent(CwebDict *dict);
-void CwebDict_free(CwebDict *self);
-
-
-
-
-
-
-typedef struct CwebHttpResponse{
-    int status_code;
-    struct CwebDict *headers;
-    int content_length;
-    bool exist_content;
-    unsigned char *content;
-
-}CwebHttpResponse;
-
-
-CwebHttpResponse *newCwebHttpResponse();
-
-
-char *CwebHttpResponse_generate_response(CwebHttpResponse*self);
-
-
-
-void CwebHttpResponse_set_content(
-        CwebHttpResponse *self,
-    unsigned char *content,
-    int content_length
-);
-
-
-void CwebHttpResponse_add_header(
-     CwebHttpResponse *self,
-    const char *key, 
-    const char *value
-);
-
-void CwebHttpResponse_free(struct CwebHttpResponse *self);
-
-
-
-
-
-#define CWEB_AUTO_SET_CONTENT NULL 
-#define CWEB_OK  200
-#define CWEB_NOT_FOUND 404
-#define CWEB_BAD_REQUEST 400
-#define CWEB_FORBIDDEN 403
-#define CWEB_INTERNAL_SERVER_ERROR 500
-
-
- CwebHttpResponse * cweb_send_any(
-    const char *content_type,
-    size_t content_length,
-    unsigned char *content,
-    int status_code
-);
-
-CwebHttpResponse * cweb_send_text(
-    const char *content,
-    int status_code
-);
-
-CwebHttpResponse * cweb_send_json_string(
-        const char *content,
-        int status_code
-);
-
-CwebHttpResponse * cweb_send_json_string_cleaning_memory(
-        char *content,
-        int status_code
-);
-
-CwebHttpResponse * cweb_send_cJSON(
-        cJSON *content,
-        int status_code
-);
-
-
-CwebHttpResponse * cweb_send_cJSON_cleaning_memory(
-        cJSON *content,
-        int status_code
-);
-
-
-CwebHttpResponse * cweb_send_text_cleaning_memory(
-    char *content,
-    int status_code
-);
-
-CwebHttpResponse* cweb_send_rendered_CTextStack_cleaning_memory(struct CTextStack *stack,int status_code);
-
-CwebHttpResponse* cweb_send_var_html(const char *content,int status_code);
-
-CwebHttpResponse* cweb_send_var_html_cleaning_memory(
-    char *content,
-    int status_code
-);
-
-CwebHttpResponse * cweb_send_file(
-    const char *file_path,
-    const char *content_type,
-    int status_code
-);
-
-
-
-
-#define INVALID_HTTP -1
-#define MAX_HEADER_SIZE_CODE -2
-#define MAX_HEADER_LEN 20000
-#define MAX_LINE_LEN MAX_HEADER_LEN /2
-#define READ_ERROR -3
-#define MAX_CONTENT_SIZE -4
-#define UNDEFINED_CONTENT -5
-#define INVALID_JSON -6
-#define CWEB_UTF_DECREMENTER  64
-#define CWEB_C_NON_ASSCI_SIGIN -61
-
-typedef struct CwebHttpRequest{
-
-    char *url;
-    int socket;
-    char *route;
-    char *method;
-    char *client_ip;
-    int content_error;
-    CwebDict *params;
-    CwebDict *headers;
-    int content_length;
-    unsigned char *content;
-    cJSON *json;
-
-}CwebHttpRequest;
-//algorithm functions
- CwebHttpRequest *newCwebHttpRequest(int socket);
-
-unsigned char * CwebHttpRequest_read_content(CwebHttpRequest *self, long max_content_size);
-
-cJSON * CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
-
-char * CwebHttpRequest_get_header(CwebHttpRequest *self, const char *key);
-
-char * CwebHttpRequest_get_header_by_normalized_key(
-        struct CwebHttpRequest *self,
-        const char *key,
-        const char *chars_to_remove
-);
-char * CwebHttpRequest_get_param(CwebHttpRequest *self, const char *key);
-
-char * CwebHttpRequest_get_param_by_sanitized_key(
-    CwebHttpRequest *self,
-    const char *key,
-    const char *chars_to_remove
-);
-
-void CwebHttpRequest_set_url(CwebHttpRequest *self, const char *url);
-
-void CwebHttpRequest_set_route(CwebHttpRequest *self, const char *route);
-
-void CwebHttpRequest_add_header(CwebHttpRequest *self, const char *key, const char *value);
-
-void CwebHttpRequest_add_param(CwebHttpRequest *self, const char *key, const char *value);
-
-void CwebHttpRequest_set_method(CwebHttpRequest *self, const char *method);
-
-void CwebHttpRequest_set_content_string(CwebHttpRequest *self, const char *content);
-
-
-bool privateCwebHttpRequest_is_correct_encoded(const char *bytes_sec,int size);
-
-
-int  CwebHttpRequest_parse_http_request(CwebHttpRequest *self);
-
-void private_CwebHttpRequest_interpret_query_params(CwebHttpRequest *self, const char *query_params);
-
-int private_CwebHttpRequest_interpret_first_line(CwebHttpRequest *self, char *first_line);
-
-
-int private_CwebHttpRequest_interpret_headders(
-    CwebHttpRequest *self,
-    CwebStringArray *line_headers
-);
-
-void CwebHttpRequest_free(CwebHttpRequest *self);
-
-
-void CwebHttpRequest_represent(struct CwebHttpRequest *self);
-
-
-
-
-char * private_cweb_smart_static_ref(CTextStack *src);
-
-char * cweb_smart_static_ref(const char *src);
-
-
-CTextStack * private_cweb_change_smart_cache(CTextStack *content);
-
-
-
-
-
-typedef struct {
-    char  *file;
-    char *included;
-
-}privateCwebRecursionElement;
-
-privateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file, const char *included);
-
-void PrivateCwebRecursionElement_represent(privateCwebRecursionElement *self);
-
-void PrivateCwebRecursionElement_free(privateCwebRecursionElement *self);
-
-
-
-typedef struct{
-
-    privateCwebRecursionElement **elements;
-    int size;
-
-}privateCwebRecursionList;
-
-
-privateCwebRecursionList * newprivateCwebRecursionList();
-
-
-privateCwebRecursionElement *
-privateCwebRecursionList_add_if_not_colide(privateCwebRecursionList *self,const char *file,const char *included);
-
-void privateCwebRecursionList_represent(privateCwebRecursionList *self);
-
-void privateCwebRecursionList_free(privateCwebRecursionList *self);
-
-
-
-
-
-
-void private_cweb_load_file_and_include(
-        CTextStack *code,
-        CTextStack *src,
-        privateCwebRecursionList * recursion_listage
-);
-void private_cweb_generate_inline_inclusion(CTextStack *code, const char *content, long content_size,
-                                            privateCwebRecursionList *recursion_listage, const char *filename);
-
-
-
-
-
-
-CTextStack * private_cweb_format_filename(CTextStack *src);
-
-
-CwebHttpResponse * private_cweb_treat_five_icon();
-
-char * private_cweb_aply_macro_modifiers_in_content(const char *content, long content_size);
-
-char * cweb_aply_macro_modifiers_in_content(const char *content);
-
-char * cweb_aply_macro_modifiers_in_file(const char *filename);
-
-CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest *request,bool use_cache);
-
-
-
-
-
-
-void  private_cweb_generate_cors_response(struct CwebHttpResponse *response);
-
-
-
-
-
-void private_cweb_send_error_mensage( CwebHttpResponse *response, int socket);
-
-
-void private_cweb_treat_response(bool use_static,int new_socket);
-
-
-void private_cweb_handle_child_termination(int signal);
-
-
-
-static long long  cweb_actual_request = 0;
-static long cweb_total_requests = 0;
-static bool cweb_end_server = false;
-
-static const char* cweb_static_folder;
-
-#define CWEB_DANGEROUS_SINGLE_PROCESS true
-#define CWEB_NO_STATIC false;
-
- typedef struct CwebServer{
-    int port;
-    int function_timeout;
-    double client_timeout;
-    int max_queue;
-    bool single_process;
-    long max_requests;
-    bool allow_cors;
-    bool use_static;
-    const char *static_folder;
-    bool use_cache;
-
-    //methods
-    CwebHttpResponse *(*request_handler)(CwebHttpRequest *request);
-
-}CwebServer;
-
-
-
-
-CwebServer newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
-
-void CwebServer_start(CwebServer *self);
-
-
-void private_CWebServer_run_server_in_single_process(CwebServer *self);
-
-void private_CWebServer_run_server_in_multiprocess(CwebServer *self);
-
-
-void private_CWebServer_execute_request(
-        CwebServer *self,
-        int socket,
-        const char *client_ip
-);
-
-
-
-
-void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket, const char *client_ip);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-typedef struct CwebStringArrayModule{
-    CwebStringArray *(*newStringArray)();
-    void (*set)( CwebStringArray *self,int index,const char *value);
-    void (*add)( CwebStringArray *self,const char *string);
-    void (*merge)(CwebStringArray *self, CwebStringArray *other);
-    void (*represent)(CwebStringArray *self);
-    int (*find)(CwebStringArray *self,const char *string);
-
-    void (*free)(CwebStringArray *self);
-}CwebStringArrayModule;
-
-CwebStringArrayModule newCwebStringArrayModule();
-
-
-typedef struct CwebKeyValModule{
-    void (*represent)(CwebKeyVal *key_val);
-    void (*free)(CwebKeyVal *key_val);
-}CwebKeyValModule;
-
-CwebKeyValModule newCwebKeyValModule();
-
-
-typedef struct CwebDictModule{
-
-
-    CwebDict *(*newDict)();
-    void  (*set)(CwebDict *dict,const char *key,const char *value);
-    char* (*get)(CwebDict *dict,const char *key);
-    char* (*get_by_normalized_key)(CwebDict *dict,const char *key,const char *chars_to_remove);
-    void  (*free)(CwebDict *dict);
-    void  (*represent)(CwebDict *dict);
-
-    CwebKeyValModule keyval;
-
-}CwebDictModule;
-
-CwebDictModule newCwebDictModule();
-
-
-
-typedef struct CwebHttpRequestModule{
-    CwebHttpRequest *(*newCwebHttpRequest)(int socket);
-    unsigned char*(*read_content)(struct CwebHttpRequest *self,long max_content_size);
-    cJSON * (*read_cJSON)(CwebHttpRequest *self, long max_content_size);
-
-    void (*set_url)(struct CwebHttpRequest *self,const char *url);
-    void (*set_route)(struct CwebHttpRequest *self,const char *route);
-    void (*set_method)(struct CwebHttpRequest *self,const char *method);
-
-    void (*add_header)(struct CwebHttpRequest *self,const char *key,const char *value);
-    void (*add_param)(struct CwebHttpRequest *self,const char *key,const char *value);
-    void (*set_content_string)(struct CwebHttpRequest *self,const char *content);
-
-
-    char *(*get_header)(struct CwebHttpRequest *self,const char *key);
-    char *(*get_header_by_normalized_key)(
-            struct CwebHttpRequest *self,
-            const char *key,
-            const char *chars_to_remove
-    );
-
-    char *(*get_param)(struct CwebHttpRequest *self,const char *key);
-    char *(*get_param_by_sanitized_key)(struct CwebHttpRequest *self,const char *key,
-                                        const char *chars_to_remove);
-
-
-    int (*parse_http_request)(struct CwebHttpRequest *self);
-
-    void (*free)(struct CwebHttpRequest *request);
-    void (*represent)(struct CwebHttpRequest *request);
-}CwebHttpRequestModule;
-
-CwebHttpRequestModule newCwebRequestModule();
-
-
-
-typedef struct CwebHttpResponseModule{
-
-    CwebHttpResponse  * (*newHttpResponse)();
-
-    CwebHttpResponse * (*send_any)(
-            const char *content_type,
-            size_t content_length,
-            unsigned char *content,
-            int status_code
-    );
-    CwebHttpResponse * (*send_json_string)(
-            const char *content,
-            int status_code
-    );
-    CwebHttpResponse * (*send_json_string_cleaning_memory)(
-            char *content,
-            int status_code
-    );
-    CwebHttpResponse * (*send_cJSON)(
-            cJSON *content,
-            int status_code
-    );
-
-
-    CwebHttpResponse * (*send_cJSON_cleaning_memory)(
-            cJSON *content,
-            int status_code
-    );
-
-
-    CwebHttpResponse * (*send_text)(
-            const char *content,
-            int status_code
-    );
-
-    CwebHttpResponse * (*send_text_cleaning_memory)(
-            char *content,
-            int status_code
-    );
-
-    CwebHttpResponse* (*send_rendered_CTextStack_cleaning_memory)(struct CTextStack *stack,int status_code);
-
-    CwebHttpResponse* (*send_var_html)(const char *content,int status_code);
-
-    CwebHttpResponse* (*send_var_html_cleaning_memory)(
-            char *content,
-            int status_code
-    );
-
-    CwebHttpResponse * (*send_file)(
-            const char *file_path,
-            const char *content_type,
-            int status_code
-    );
-
-
-
-    void (*set_content)(CwebHttpResponse *response, unsigned char *content, int content_length);
-    void (*add_header)(CwebHttpResponse *response,const char *key,const  char *value);
-    char *(*generate_response)(CwebHttpResponse *response);
-    void (*free)(CwebHttpResponse *response);
-
-}CwebHttpResponseModule;
-
-CwebHttpResponseModule newCwebHttpResponseModule();
-
-
-typedef struct CwebServerModule{
-    CwebServer (*newServer)(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request));
-    void (*start)(struct  CwebServer *self);
-}CwebServerModule;
-
-CwebServerModule newCwebServerModule();
-
-
-typedef struct CwebNamespace{
-    CwebDictModule dict;
-    CwebHttpRequestModule request;
-    CwebHttpResponseModule response;
-    CwebServerModule server;
-    CwebStringArrayModule  string_array;
-}CwebNamespace;
-
-CwebNamespace newCwebNamespace();
-
-
-
-
-
-
-
 char *cweb_parse_string_to_lower(const char *old_string){
 
     int string_size = strlen(old_string);
@@ -7246,7 +7233,18 @@ void private_cweb_send_error_mensage( CwebHttpResponse *response, int socket){
     CwebHttpResponse_free(response);
 
 }
+void cweb_kill_single_process_server( ){
+    private_cweb_end_server = true;
+}
 
+void cweb_set_static_folder(const char *folder){
+    cweb_static_folder = folder;
+}
+
+
+long cweb_get_total_requests(){
+    return cweb_total_requests;
+}
 
 
 
@@ -7620,7 +7618,7 @@ void private_CWebServer_run_server_in_single_process(CwebServer *self) {
     while (1)
     {
 
-        if(cweb_end_server){
+        if(private_cweb_end_server){
                     cweb_print("Break in request %lld\n", cweb_actual_request)
                     break;
         }
