@@ -28,6 +28,8 @@ struct CTextStack *newCTextStack_string_format(const char *format, ...){
     va_list  argptr;
     va_start(argptr, format);
     private_ctext_generate_formated_text(self,format,argptr);
+     va_end(argptr);
+
     return self;
 }
 

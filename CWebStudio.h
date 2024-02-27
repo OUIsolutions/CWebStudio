@@ -1786,6 +1786,8 @@ struct CTextStack *newCTextStack_string_format(const char *format, ...){
     va_list  argptr;
     va_start(argptr, format);
     private_ctext_generate_formated_text(self,format,argptr);
+     va_end(argptr);
+
     return self;
 }
 
@@ -1925,6 +1927,8 @@ void CTextStack_format(struct CTextStack *self, const char *format, ...){
     va_list  argptr;
     va_start(argptr, format);
     private_ctext_generate_formated_text(self,format,argptr);
+    va_end(argptr);
+
 }
 
 void CTextStack_segment_format(struct CTextStack *self, const char *format, ...){
@@ -1932,6 +1936,8 @@ void CTextStack_segment_format(struct CTextStack *self, const char *format, ...)
     va_list  argptr;
     va_start(argptr, format);
     private_ctext_generate_formated_text(self,format,argptr);
+    va_end(argptr);
+
 }
 
 
@@ -1959,6 +1965,8 @@ void CTextStack_$open(struct CTextStack *self, const char *tag, const char *form
         va_list  argptr;
         va_start(argptr, format);
         private_ctext_generate_formated_text(self,format,argptr);
+        va_end(argptr);
+
     }
     CTextStack_format(self, "%c",'>');
 
@@ -1980,6 +1988,8 @@ void CTextStack_only$open(struct CTextStack *self, const char *tag, const char *
         va_list  argptr;
         va_start(argptr, format);
         private_ctext_generate_formated_text(self,format,argptr);
+        va_end(argptr);
+
     }
     CTextStack_format(self, "%c",'>');
 
@@ -1999,6 +2009,7 @@ void CTextStack_auto$close(struct CTextStack *self, const char *tag, const char 
         va_list  argptr;
         va_start(argptr, format);
         private_ctext_generate_formated_text(self,format,argptr);
+        va_end(argptr);
     }
     CTextStack_text(self,"/>");
 
