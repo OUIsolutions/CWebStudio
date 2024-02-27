@@ -68,6 +68,10 @@ unsigned char *cweb_load_binary_content(const char * path,int *size){
 const char *cweb_generate_content_type(const char *file_name){
         int file_name_size = strlen(file_name);
 
+        if(file_name_size < 2){
+            return  "text/plain";
+        }    
+        
         //iterate in negative
         char *extension;
           for(int i = file_name_size -2; i >= 0;  i--){
@@ -79,6 +83,9 @@ const char *cweb_generate_content_type(const char *file_name){
             if(file_name[i] =='.'){
                 break;
             }        
+        }
+        if(!extension){
+            return  "text/plain";
         }
                
         if(strcmp(extension, "html") == 0){
