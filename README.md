@@ -32,8 +32,9 @@ int main(int argc, char *argv[]){
 The Source Code its available here:
 [Source](https://github.com/OUIsolutions/CWebStudio)
 ## Full Folder 
-You can also download the entire **src** folder to your project and run with the
-**#include "src/one.h"** header:
+You can also download the entire **CwebStudio** folder to your project and run with the
+
+**#include "src/one.c"** header:
 
 ~~~c
 #include "src/one.h"
