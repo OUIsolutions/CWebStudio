@@ -32,11 +32,11 @@ int main(int argc, char *argv[]){
 The Source Code its available here:
 [Source](https://github.com/OUIsolutions/CWebStudio)
 ## Full Folder 
-You can also download the entire **CWebStudio** folder to your project and run with the
-**#include "CWebStudio/CwebStudioMain.h"** header:
+You can also download the entire **src** folder to your project and run with the
+**#include "src/one.h"** header:
 
 ~~~c
-#include "CWebStudio/CwebStudioMain.h"
+#include "src/one.h"
 CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
