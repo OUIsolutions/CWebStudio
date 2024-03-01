@@ -37,7 +37,7 @@ You can also download the entire **CwebStudio** folder to your project and run w
 **#include "src/one.c"** header:
 
 ~~~c
-#include "src/one.h"
+#include "src/one.c"
 CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
