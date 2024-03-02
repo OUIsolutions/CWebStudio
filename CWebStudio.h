@@ -5725,6 +5725,19 @@ const char *cweb_generate_content_type(const char *file_name){
         if(strcmp(extension, "html") == 0){
            return "text/html";
         }
+        if(strcmp(extension,"mp4") == 0){
+            return "video/mp4";
+        }
+        if(strcmp(extension,"WebM") == 0){
+            return "video/webm";
+        }
+        if(strcmp(extension,"Ogg") == 0){
+            return  "video/ogg";
+        }
+        if(strcmp(extension,"mp3") == 0){
+            return  "audio/mpeg";
+        }
+        
         if(strcmp(extension,"pdf") == 0){
             return "application/pdf";
         }
