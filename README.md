@@ -89,7 +89,40 @@ int main(int argc, char *argv[]){
     return 0;
 }
 ~~~
-## Iterating Query Parameters
+
+
+## Getting Query param 
+
+for getting query params its super easy, just use the **cweb.request.get_param** function 
+<!--codeof:examples/getting_parrams.c-->
+~~~c
+#include "CWebStudio.h"
+
+CwebNamespace cweb;
+
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
+
+    char *name = cweb.request.get_param(request,"name");
+    if(name){
+        printf("%s\n",name);
+    }
+    else{
+        printf("name not provided\n");
+    }
+    return cweb.response.send_text("Hello World", 200);
+
+}
+
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
+    return 0;
+}
+~~~
+
+
+## Iterating over Query Parameters
 
 To iterate through parameters, the object **CwebDict** may be used like this:
 <!--codeof:examples/iterating_over_query_paramns.c-->
@@ -151,8 +184,37 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
+## Getting Headders
+for retriving headers use the **cweb.request.get_header** function
 
-## Iterating Headers
+<!--codeof:examples/getting_headers.c-->
+~~~c
+#include "CWebStudio.h"
+
+CwebNamespace cweb;
+
+CwebHttpResponse *main_sever(CwebHttpRequest *request ){
+
+    char *name = cweb.request.get_header(request,"name");
+    if(name){
+        printf("%s\n",name);
+    }
+    else{
+        printf("name not provided\n");
+    }
+    return cweb.response.send_text("Hello World", 200);
+
+}
+
+int main(int argc, char *argv[]){
+    cweb = newCwebNamespace();
+    struct CwebServer server = newCwebSever(5000, main_sever);
+    cweb.server.start(&server);
+    return 0;
+}
+~~~
+
+## Iterating over Headers
 
 Similar to iterating through URL parameters, iterating through headers is equally as simple:
 <!--codeof:examples/iterating_over_headers.c-->
