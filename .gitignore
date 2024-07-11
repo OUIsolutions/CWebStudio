@@ -2,6 +2,7 @@
 *.d
 out_folder
 CWebStudio_test.h
+*.pyc
 # Object files
 *.o
 *.ko

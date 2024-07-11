@@ -5639,7 +5639,6 @@ char* cweb_replace_string(const char *target, const char *old_element, const cha
 unsigned char *cweb_load_any_content(const char * path,int *size,bool *is_binary){
     FILE *file = fopen(path,"rb");
     if(file == NULL){
-        free(file);
         return NULL;
     }
     fseek(file,0,SEEK_END);
