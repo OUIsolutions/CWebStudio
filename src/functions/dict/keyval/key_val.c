@@ -1,4 +1,5 @@
 
+#include "../uniq.definitions_requirements.h"
 
 struct CwebKeyVal* newCwebKeyVal(const char *key, const  char *value){
     struct CwebKeyVal *self = (struct CwebKeyVal*)malloc(sizeof(struct CwebKeyVal));

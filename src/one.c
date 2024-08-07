@@ -29,8 +29,6 @@ SOFTWARE.
 #define __CWEBSTUDIO_H
 
 
-#include "declaration.h"
-#include "globals.h"
-#include "definition.h"
+#include "definition.c"
 
 #endif
