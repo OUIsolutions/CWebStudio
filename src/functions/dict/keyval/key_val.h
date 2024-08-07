@@ -1,5 +1,6 @@
+#include "../uniq.declaration_requirements.h"
 
 
-struct CwebKeyVal* newCwebKeyVal(const char *key, const  char *value);
-void CwebKeyVal_represent(struct CwebKeyVal *self);
-void CwebKeyVal_free(struct CwebKeyVal *self);
+ CwebKeyVal* newCwebKeyVal(const char *key, const  char *value);
+void CwebKeyVal_represent( CwebKeyVal *self);
+void CwebKeyVal_free( CwebKeyVal *self);

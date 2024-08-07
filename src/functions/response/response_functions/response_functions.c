@@ -1,4 +1,5 @@
 
+#include "../uniq.definitions_requirements.h"
 
 
 struct CwebHttpResponse* cweb_send_any(const char *content_type,size_t content_length,unsigned char *content,int status_code){
@@ -94,7 +95,7 @@ struct CwebHttpResponse* cweb_send_var_html_cleaning_memory(char *content,int st
 
 
 struct CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,int status_code){
-    
+
     int size = 0;
     unsigned char *content;
     content = cweb_load_binary_content(file_path, &size);

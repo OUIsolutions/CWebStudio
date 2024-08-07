@@ -1,8 +1,6 @@
-
-
 #ifdef CWEB_DEBUG
 #define cweb_print(...) printf(__VA_ARGS__);
-#else 
+#else
 #define cweb_print(...);
 #endif
 
@@ -10,6 +8,3 @@
 if(strcmp(request->route,"/end" ) ==0){ \
         cweb_end_server = true;\
 }
-
-
-

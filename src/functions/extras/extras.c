@@ -1,4 +1,5 @@
 
+#include "../uniq.definitions_requirements.h"
 
 
 
@@ -69,24 +70,24 @@ const char *cweb_generate_content_type(const char *file_name){
 
         if(file_name_size < 2){
             return  "text/plain";
-        }    
-        
+        }
+
         //iterate in negative
         char *extension;
           for(int i = file_name_size -2; i >= 0;  i--){
 
            //makes extension to point to i
-            
+
             extension = (char*)&file_name[i+1];
             //if found a dot, break
             if(file_name[i] =='.'){
                 break;
-            }        
+            }
         }
         if(!extension){
             return  "text/plain";
         }
-               
+
         if(strcmp(extension, "html") == 0){
            return "text/html";
         }
@@ -106,11 +107,11 @@ const char *cweb_generate_content_type(const char *file_name){
         if(strcmp(extension,"pdf") == 0){
             return "application/pdf";
         }
-        
+
         else if(strcmp(extension, "css") == 0){
             return "text/css";
         }
-       
+
         else if(strcmp(extension, "js") == 0){
             return  "text/javascript";
         }
@@ -130,7 +131,7 @@ const char *cweb_generate_content_type(const char *file_name){
         else{
             return  "text/plain";
         }
-     
+
 }
 
 
@@ -139,7 +140,7 @@ char *private_cweb_convert_url_encoded_text(const char *text){
     int text_size = strlen(text);
     char *new_text = (char*)malloc(text_size + 1);
     int new_text_size = 0;
-    
+
     for(int i = 0; i < text_size; i++){
         if(text[i] == '%'){
             char hex[3];

@@ -2,7 +2,7 @@
 
 #include "strings/strings.c"
 #include "extras/extras.c"
-#include "request/request.c"
+#include "request/definitions.c"
 #include "request/request_parser.c"
 #include "string_array/string_array.c"
 #include "dict/definition.h"

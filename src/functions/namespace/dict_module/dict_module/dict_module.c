@@ -1,3 +1,4 @@
+#include "../uniq.definitions_requirements.h"
 
 CwebDictModule newCwebDictModule(){
     CwebDictModule self = {0};

@@ -1,4 +1,4 @@
-
+#include "../uniq.declaration_requirements.h"
 
 CwebDict *newCwebDict();
 void CwebDict_set(CwebDict *self, const  char *key, const char *value);

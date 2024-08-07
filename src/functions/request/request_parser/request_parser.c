@@ -1,5 +1,5 @@
 
-
+#include "../uniq.definitions_requirements.h"
 
 
 void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self, const char *query_params){
@@ -12,7 +12,7 @@ void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self
     bool key_found = false;
 
     for(int i =0; i<paramns_size; i++){
-        
+
 
 
         if(query_params[i] == '='&& key_found == false){
@@ -33,11 +33,11 @@ void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self
             memset(value, 0, 5000);
             continue;
         }
-        
+
         if(key_found){
             value[strlen(value)] = query_params[i];
         }
-        
+
         else{
             key[strlen(key)] = query_params[i];
         }
@@ -49,7 +49,7 @@ void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self
         CwebDict_set(self->params, sanitized_key, sanitized_value);
         free(sanitized_key);
         free(sanitized_value);
-        
+
     }
 
 }
@@ -108,7 +108,7 @@ int private_CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, c
     //getting the method
 
     for (int i = 0; i < line_len; i++){
-        
+
         if(i >= CWEB_METHOD_MAX_SIZE){
             return INVALID_HTTP;
         }
@@ -122,27 +122,27 @@ int private_CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, c
         method[i] = current_char;
 
     }
-    
+
     if(!method_end){
         return INVALID_HTTP;
     }
-    
+
     CwebHttpRequest_set_method(self,method);
 
-    
+
     //getting the url
     int url_start_position = 0;
     bool url_found = false;
-    
+
     for (int i = method_end; i < line_len; i++){
 
-        
+
         if((i - url_start_position) >= CWEB_URL_MAX_SIZE){
             return INVALID_HTTP;
         }
-        
+
         char current_char = first_line[i];
-        
+
         if(current_char == ' ' && url_found == true){
             break;
         }
@@ -156,21 +156,21 @@ int private_CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, c
         if(url_found){
             url[i - url_start_position] = current_char;
         }
-         
+
     }
-    
+
     if(!url_found){
         return INVALID_HTTP;
     }
     CwebHttpRequest_set_url(self,url);
-    
+
     return 0;
 
 }
 
 
 int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, struct CwebStringArray *line_headers){
-    
+
     for(int i = 1;i< line_headers->size;i++){
         char *current_line = line_headers->strings[i];
         int line_size = strlen(current_line);
@@ -179,26 +179,26 @@ int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, str
         bool key_found = false;
         int value_start_point = 0;
 
-        for(int j = 0; j<line_size;j++){       
+        for(int j = 0; j<line_size;j++){
 
             if(key_found == false && j >= 1000){
                 return MAX_HEADER_SIZE_CODE;
-            }     
+            }
 
-            
+
             if(key_found == true && j > 10000){
                 return MAX_HEADER_SIZE_CODE;
             }
-            
 
-            
+
+
             if(current_line[j] == ':' && key_found == false){
 
                 key_found = true;
                 j+=1;
                 value_start_point = j;
                 continue;
-            
+
             }
 
 
@@ -265,11 +265,11 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             raw_entries[i - 1] == '\r' &&
                 raw_entries[i] == '\n'
            ){
-            
+
             break;
         }
         i++;
-    
+
     }
     if(i <= 4){return READ_ERROR;}
 
@@ -316,7 +316,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         CwebStringArray_free(lines);
         return READ_ERROR;
     }
-    
+
 
 
     int line_error = private_CwebHttpRequest_interpret_first_line(self, lines->strings[0]);
@@ -329,8 +329,8 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
 
     int headers_error = private_CwebHttpRequest_interpret_headders(self, lines);
     CwebStringArray_free(lines);
-    
-    
+
+
     if(headers_error){
         return headers_error;
     }

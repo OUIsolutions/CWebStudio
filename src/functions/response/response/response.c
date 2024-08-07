@@ -1,4 +1,4 @@
-
+#include "../uniq.definitions_requirements.h"
 
 struct CwebHttpResponse *newCwebHttpResponse(){
     struct CwebHttpResponse *self = (struct CwebHttpResponse *)malloc(
@@ -10,12 +10,12 @@ struct CwebHttpResponse *newCwebHttpResponse(){
     self->exist_content = false;
     self->content = NULL;
     //self->add_header(self, "connection", "close");
-    
+
     return self;
 }
 
 char *CwebHttpResponse_generate_response(struct CwebHttpResponse*self){
-   
+
     char *response_string = (char*)malloc(20000);
     sprintf(response_string, "HTTP/1.1 %d OK\r\n", self->status_code);
     struct CwebDict *headers = self->headers;
@@ -35,7 +35,7 @@ char *CwebHttpResponse_generate_response(struct CwebHttpResponse*self){
         strcat(response_string, "\r\n");
     }
     strcat(response_string, "\r\n");
-        
+
     return response_string;
 }
 

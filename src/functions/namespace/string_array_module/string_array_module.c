@@ -1,4 +1,5 @@
 
+#include "../uniq.definitions_requirements.h"
 
 CwebStringArrayModule newCwebStringArrayModule(){
     CwebStringArrayModule self ={0};

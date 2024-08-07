@@ -1,4 +1,4 @@
-
+#include "../uniq.definitions_requirements.h"
 
 
 
@@ -19,7 +19,7 @@ unsigned char * CwebHttpRequest_read_content(struct CwebHttpRequest *self, long 
         return self->content;
     }
 
-   
+
     if (self->content_length == 0) {
         cweb_print("no content lenght provided\n");
         self->content_error = UNDEFINED_CONTENT;
@@ -40,7 +40,7 @@ unsigned char * CwebHttpRequest_read_content(struct CwebHttpRequest *self, long 
     setsockopt(self->socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
     self->content = (unsigned char*) malloc(self->content_length + 2);
-    
+
     int total_bytes_received = 0;
     int bytes_remaining = self->content_length;
 
@@ -133,7 +133,7 @@ void CwebHttpRequest_set_content_string(struct CwebHttpRequest *self, const char
 
 
 void CwebHttpRequest_represent(struct CwebHttpRequest *self){
-    
+
     printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
     printf("method: %s\n", self->method);
