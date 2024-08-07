@@ -1,8 +1,8 @@
 #include "../uniq.definitions_requirements.h"
 
-struct CwebHttpResponse *newCwebHttpResponse(){
-    struct CwebHttpResponse *self = (struct CwebHttpResponse *)malloc(
-        sizeof(struct CwebHttpResponse)
+CwebHttpResponse *newCwebHttpResponse(){
+     CwebHttpResponse *self = ( CwebHttpResponse *)malloc(
+        sizeof(CwebHttpResponse)
     );
     self->status_code = 200;
     self->headers = newCwebDict();
@@ -18,13 +18,13 @@ char *CwebHttpResponse_generate_response(struct CwebHttpResponse*self){
 
     char *response_string = (char*)malloc(20000);
     sprintf(response_string, "HTTP/1.1 %d OK\r\n", self->status_code);
-    struct CwebDict *headers = self->headers;
+    CwebDict *headers = self->headers;
     char content_length_str[1000] = {0};
     sprintf(content_length_str, "Content-Length: %d\r\n",self->content_length);
     strcat(response_string, content_length_str);
 
     for(int i = 0; i < headers->size; i++){
-        struct CwebKeyVal *key_val = headers->keys_vals[i];
+        CwebKeyVal *key_val = headers->keys_vals[i];
         char *key = key_val->key;
         char *value = key_val->value;
         char header[1000] = {0};

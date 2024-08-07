@@ -6,7 +6,7 @@
 void private_CWebServer_execute_request(CwebServer *self,int socket,const char *client_ip){
 
     cweb_print("Parsing Request\n");
-    struct CwebHttpRequest *request = newCwebHttpRequest(socket);
+    CwebHttpRequest *request = newCwebHttpRequest(socket);
     request->client_ip = strdup(client_ip);
 
 
