@@ -9,4 +9,4 @@ CACHE_POINT        = "cache"
 OUTPUT_SINGLE_FILE = "CWebStudio.h"
 LIB_FOLDER         = "src"
 EXAMPLES_FOLDER    = "exemples"
-TESTS_FILES =
+TESTS_FILES        = "tests"

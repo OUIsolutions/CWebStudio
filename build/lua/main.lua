@@ -10,7 +10,8 @@ local function main()
     local amalgamation_result = amalgamation_cache.perform()
     dtw.write_file(OUTPUT_SINGLE_FILE, amalgamation_result)
 
-
+    Execute_all_tests()
+    Create_examples()
     local readme = Create_readme()
     if readme then
         dtw.write_file("README.md", readme)
