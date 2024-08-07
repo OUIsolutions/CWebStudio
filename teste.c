@@ -1,4 +1,4 @@
-#include "CWebStudio.h"
+#include "src/one.c"
 CwebNamespace cweb;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){

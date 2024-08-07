@@ -7,5 +7,6 @@
 #include "dict/definition.h"
 #include "response/definition.h"
 #include "static/definition.h"
+#include "server/definitions.c"
 #include "cors/cors.c"
 #include "namespace/definition.h"

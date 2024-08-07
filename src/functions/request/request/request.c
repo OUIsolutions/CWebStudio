@@ -2,8 +2,8 @@
 
 
 
-struct CwebHttpRequest *newCwebHttpRequest(int socket){
-    struct CwebHttpRequest *self = (struct CwebHttpRequest*)malloc(sizeof(struct CwebHttpRequest));
+ CwebHttpRequest *newCwebHttpRequest(int socket){
+     CwebHttpRequest *self = ( CwebHttpRequest*)malloc(sizeof( CwebHttpRequest));
     *self = (CwebHttpRequest){0};
     self->socket = socket;
     self->params = newCwebDict();
@@ -13,7 +13,7 @@ struct CwebHttpRequest *newCwebHttpRequest(int socket){
 
 
 
-unsigned char * CwebHttpRequest_read_content(struct CwebHttpRequest *self, long max_content_size) {
+unsigned char * CwebHttpRequest_read_content( CwebHttpRequest *self, long max_content_size) {
 
     if (self->content != NULL) {
         return self->content;
@@ -88,42 +88,42 @@ cJSON * CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size)
 
 
 
-char * CwebHttpRequest_get_header(struct CwebHttpRequest *self, const char *key){
+char * CwebHttpRequest_get_header( CwebHttpRequest *self, const char *key){
     return CwebDict_get(self->headers,key);
 }
 
-char * CwebHttpRequest_get_param_by_sanitized_key(struct CwebHttpRequest *self, const char *key, const char *chars_to_remove){
+char * CwebHttpRequest_get_param_by_sanitized_key( CwebHttpRequest *self, const char *key, const char *chars_to_remove){
     return CwebDict_get_by_normalized_key(self->params,key,chars_to_remove);
 }
 
-char * CwebHttpRequest_get_param(struct CwebHttpRequest *self, const char *key){
+char * CwebHttpRequest_get_param( CwebHttpRequest *self, const char *key){
     return CwebDict_get(self->params,key);
 }
-char * CwebHttpRequest_get_header_by_normalized_key(struct CwebHttpRequest *self, const char *key, const char *chars_to_remove){
+char * CwebHttpRequest_get_header_by_normalized_key( CwebHttpRequest *self, const char *key, const char *chars_to_remove){
     return CwebDict_get_by_normalized_key(self->headers,key,chars_to_remove);
 }
 
 
 
-void CwebHttpRequest_set_route(struct CwebHttpRequest *self, const char *route){
+void CwebHttpRequest_set_route( CwebHttpRequest *self, const char *route){
     self->route = (char*) malloc(strlen(route) +2);
     strcpy(self->route,route);
 }
 
-void CwebHttpRequest_add_header(struct CwebHttpRequest *self, const char *key, const char *value){
+void CwebHttpRequest_add_header( CwebHttpRequest *self, const char *key, const char *value){
     CwebDict_set(self->headers,key,value);
 }
-void CwebHttpRequest_add_param(struct CwebHttpRequest *self, const char *key, const char *value){
+void CwebHttpRequest_add_param( CwebHttpRequest *self, const char *key, const char *value){
     CwebDict_set(self->params,key,value);
 }
 
-void CwebHttpRequest_set_method(struct CwebHttpRequest *self, const char *method){
+void CwebHttpRequest_set_method( CwebHttpRequest *self, const char *method){
     self->method = (char*) malloc(strlen(method)+2);
     strcpy(self->method,method);
 }
 
 
-void CwebHttpRequest_set_content_string(struct CwebHttpRequest *self, const char *content){
+void CwebHttpRequest_set_content_string( CwebHttpRequest *self, const char *content){
     self->content_length = strlen(content);
     self->content = (unsigned char*) malloc(strlen(content) +2);
     for(int i =0;i<strlen(content);i++){
@@ -132,7 +132,7 @@ void CwebHttpRequest_set_content_string(struct CwebHttpRequest *self, const char
 }
 
 
-void CwebHttpRequest_represent(struct CwebHttpRequest *self){
+void CwebHttpRequest_represent( CwebHttpRequest *self){
 
     printf("url: %s\n", self->url);
     printf("route: %s\n", self->route);
@@ -149,7 +149,7 @@ void CwebHttpRequest_represent(struct CwebHttpRequest *self){
 }
 
 
-void CwebHttpRequest_free(struct CwebHttpRequest *self){
+void CwebHttpRequest_free( CwebHttpRequest *self){
 
 
 
