@@ -1,4 +1,5 @@
 
+#include "../uniq.definitions_requirements.h"
 
 
 privateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file, const char *included){
@@ -16,4 +17,3 @@ void PrivateCwebRecursionElement_free(privateCwebRecursionElement *self){
     free(self->included);
     free(self);
 }
-

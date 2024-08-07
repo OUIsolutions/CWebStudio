@@ -1,3 +1,5 @@
+#include "../uniq.declaration_requirements.h"
+
 char * private_cweb_smart_static_ref(CTextStack *src);
 
 char * cweb_smart_static_ref(const char *src);

@@ -1,9 +1,5 @@
+#include "../uniq.declaration_requirements.h"
 
-typedef struct {
-    char  *file;
-    char *included;
-
-}privateCwebRecursionElement;
 
 privateCwebRecursionElement * newPrivateCwebRecursionElement(const char *file, const char *included);
 
