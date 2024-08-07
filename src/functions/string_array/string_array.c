@@ -1,3 +1,4 @@
+#include "../uniq.definitions_requirements.h"
 
 struct CwebStringArray * newCwebStringArray(){
     struct CwebStringArray *self = (struct CwebStringArray*)malloc(sizeof(struct CwebStringArray));

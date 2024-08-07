@@ -1,5 +1,5 @@
 
-
+#include "../uniq.definitions_requirements.h"
 
 void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket, const char *client_ip){
 
@@ -7,7 +7,7 @@ void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket
     pid_t pid = fork();
     if (pid == 0){
         // means that the process is the child
-      
+
         alarm(self->function_timeout);
         private_CWebServer_execute_request(self,new_socket, client_ip);
         cweb_print("Request executed\n")
@@ -23,9 +23,9 @@ void private_cweb_execute_request_in_safty_mode(CwebServer  *self,int new_socket
     else{
         //means its the current process
         private_cweb_treat_response(self->use_static,new_socket);
-    
+
     }
-    
+
 }
 
 int  private_CWebServer_run_server_in_multiprocess(CwebServer *self){
@@ -36,7 +36,7 @@ int  private_CWebServer_run_server_in_multiprocess(CwebServer *self){
         perror("Faluire to create socket");
         exit(EXIT_FAILURE);
     }
-    
+
     struct sockaddr_in address;
     int addrlen = sizeof(address);
 
@@ -51,7 +51,7 @@ int  private_CWebServer_run_server_in_multiprocess(CwebServer *self){
         perror("Faluire to bind socket");
         return 1;
     }
-    
+
 
 
     // Waiting for connections
@@ -60,7 +60,7 @@ int  private_CWebServer_run_server_in_multiprocess(CwebServer *self){
         perror("Faluire to listen connections");
         exit(EXIT_FAILURE);
     }
-    
+
 
     // Main loop
     printf("Sever is running on port:%d\n", self->port);
@@ -90,7 +90,7 @@ int  private_CWebServer_run_server_in_multiprocess(CwebServer *self){
         // Accepting a new connection in every socket
         int client_socket = accept(
             port_socket,
-            (struct sockaddr *)&address, 
+            (struct sockaddr *)&address,
             (socklen_t *)&addrlen
         );
 
@@ -109,7 +109,7 @@ int  private_CWebServer_run_server_in_multiprocess(CwebServer *self){
 
         pid_t pid = fork();
         if (pid == 0){
-            
+
             // creates an new socket and parse the request to the new socket
             int new_socket = dup(client_socket);
 
@@ -159,8 +159,8 @@ int  private_CWebServer_run_server_in_multiprocess(CwebServer *self){
             signal(SIGCHLD, private_cweb_handle_child_termination);
             continue;
         }
-        
-  
+
+
     }
     return 0;
 }

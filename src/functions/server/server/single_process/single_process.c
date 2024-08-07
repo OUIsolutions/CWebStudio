@@ -1,5 +1,5 @@
 
-
+#include "../uniq.definitions_requirements.h"
 int private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
     int port_socket;
@@ -9,7 +9,7 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
         perror("Faluire to create socket");
         exit(EXIT_FAILURE);
     }
-    
+
     struct sockaddr_in address;
     int addrlen = sizeof(address);
 
@@ -24,7 +24,7 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
     {
         printf("Faluire to bind socket to port %d\n", self->port);
         return 1;
-      
+
     }
 
     // Waiting for connections
@@ -48,7 +48,7 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
         cweb_actual_request++;
 
-        //clear every trash 
+        //clear every trash
 
         // Accepting a new connection in every socket
         int client_socket = accept(
@@ -70,7 +70,7 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
             perror("Faluire to accept connection");
             exit(EXIT_FAILURE);
         }
-        
+
         struct timeval timer1;
         timer1.tv_sec =  0;
         timer1.tv_usec =  0100000;
@@ -86,8 +86,8 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
             close(client_socket);  // Fechar o socket do cliente
             continue;
         }
-        
-        
+
+
         struct timeval timer2;
         long seconds =  (long)self->client_timeout;
         timer2.tv_sec =  seconds ;  // tempo em segundos
@@ -103,8 +103,7 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
         cweb_print("Closed Conection with socket %d\n", client_socket)
 
-        
+
     }
     return 0;
 }
-

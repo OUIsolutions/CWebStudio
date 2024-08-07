@@ -1,6 +1,6 @@
+#include "../uniq.definitions_requirements.h"
 
-
-struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
+ CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
     struct CwebServer self = {0};
     self.port = port;
     self.function_timeout = 30;
@@ -12,7 +12,7 @@ struct CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(
     self.static_folder = "static";
     self.use_static = true;
     self.use_cache = true;
-    
+
     self.request_handler = request_handler;
 
     return self;
@@ -30,4 +30,3 @@ int CwebServer_start(CwebServer *self){
 
 
 }
-

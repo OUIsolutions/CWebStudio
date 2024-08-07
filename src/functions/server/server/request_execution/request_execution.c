@@ -1,5 +1,5 @@
 
-
+#include "../uniq.definitions_requirements.h"
 
 
 
@@ -11,7 +11,7 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
 
 
     int result = CwebHttpRequest_parse_http_request(request);
-    
+
     if(result == INVALID_HTTP){
         cweb_print("Invalid HTTP Request\n");
         CwebHttpRequest_free(request);
@@ -89,8 +89,8 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
     cweb_print("Response created\n");
 
 
-    
-    
+
+
 
     send(socket, response_str, strlen(response_str), MSG_NOSIGNAL);
 
@@ -104,7 +104,7 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
         while (sent < response->content_length)
         {
             size_t chunk_size = response->content_length - sent;
-          
+
             ssize_t res = send(socket, response->content + sent, chunk_size, MSG_NOSIGNAL);
             if (res < 0)
             {
@@ -114,12 +114,9 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
         }
     }
 
-    
+
     free(response_str);
     CwebHttpResponse_free(response);
     CwebHttpRequest_free(request);
     cweb_print("Cleared memory\n");
 }
-
-
-

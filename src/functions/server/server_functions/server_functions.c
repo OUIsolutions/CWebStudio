@@ -1,3 +1,4 @@
+#include "../uniq.definitions_requirements.h"
 
 void private_cweb_treat_response(bool use_static,int new_socket){
     cweb_print("New request %lld\n", cweb_actual_request)
