@@ -11,14 +11,7 @@
 
 #include <arpa/inet.h>
 #include <unistd.h>
-#ifndef CTEXTENGINE_H
-#include "dependencies/CTextEngine/declaration.h"
-#endif
-#ifndef cJSON__h
-#include "dependencies/cJson/cJSON.h"
-#undef cJSON__h
 
-#endif
 #include "string_array/string_array.h"
 #include "strings/strings.h"
 #include "extras/extras.h"

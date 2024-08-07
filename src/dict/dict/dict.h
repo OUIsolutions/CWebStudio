@@ -1,13 +1,5 @@
 
 
-typedef struct CwebDict {
-  int size;
-  CwebKeyVal **keys_vals;
-
-}CwebDict;
-
-
-
 CwebDict *newCwebDict();
 void CwebDict_set(CwebDict *self, const  char *key, const char *value);
 char *CwebDict_get(CwebDict *self, const char *key);

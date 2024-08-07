@@ -10,21 +10,6 @@
 #define CWEB_UTF_DECREMENTER  64
 #define CWEB_C_NON_ASSCI_SIGIN -61
 
-typedef struct CwebHttpRequest{
-
-    char *url;
-    int socket;
-    char *route;
-    char *method;
-    char *client_ip;
-    int content_error;
-    CwebDict *params;
-    CwebDict *headers;
-    int content_length;
-    unsigned char *content;
-    cJSON *json;
-
-}CwebHttpRequest;
 //algorithm functions
  CwebHttpRequest *newCwebHttpRequest(int socket);
 
@@ -70,10 +55,7 @@ void private_CwebHttpRequest_interpret_query_params(CwebHttpRequest *self, const
 int private_CwebHttpRequest_interpret_first_line(CwebHttpRequest *self, char *first_line);
 
 
-int private_CwebHttpRequest_interpret_headders(
-    CwebHttpRequest *self,
-    CwebStringArray *line_headers
-);
+int private_CwebHttpRequest_interpret_headders(CwebHttpRequest *self, CwebStringArray *line_headers);
 
 void CwebHttpRequest_free(CwebHttpRequest *self);
 
