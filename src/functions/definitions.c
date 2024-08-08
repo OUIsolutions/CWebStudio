@@ -10,3 +10,4 @@
 #include "server/definitions.c"
 #include "cors/cors.c"
 #include "namespace/definition.h"
+#include "hydratation/definition.c"

@@ -4,3 +4,4 @@
 #include "response_module/response_module.h"
 #include "server_module/server_module.h"
 #include "namespace/namespace.h"
+#include "hydratation_module/namespace.h"
