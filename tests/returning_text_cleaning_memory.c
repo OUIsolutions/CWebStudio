@@ -4,7 +4,7 @@ CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-    char *teste = malloc(100);
+    char *teste = (char*)malloc(100);
     strcpy(teste, "Hello World");
     return cweb.response.send_text_cleaning_memory(teste,200);
 }

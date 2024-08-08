@@ -3,8 +3,8 @@
 out_folder
 CWebStudio_test.h
 *.pyc
-!build.exe
-!build.out
+
+lua_debug.ua
 # Object files
 *.o
 *.ko
@@ -59,3 +59,5 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+!build.exe
+!build.out

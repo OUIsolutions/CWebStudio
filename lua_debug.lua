@@ -2,47 +2,43 @@
 
 
 ---@param state_machine AMalgamationStateMachine
- function Verify_if_is_start_string_char(state_machine)
-	if state_machine.inside_string == true then
-		return
-	end
+function Verify_if_is_start_string_char(state_machine)
+    if state_machine.inside_string == true then
+        return
+    end
     if state_machine.inside_coment then
-    	return
+        return
     end
-    local last_char = clib.get_char(state_machine.content,state_machine.index-1)
+    local last_char = clib.get_char(state_machine.content, state_machine.index - 1)
     if last_char == "'" then
-    	return
+        return
     end
 
-    local current_char = clib.get_char(state_machine.content,state_machine.index)
-    if current_char == '"'  then
-    	state_machine.inside_string  = true
-    	state_machine.index = state_machine.index + 1
+    local current_char = clib.get_char(state_machine.content, state_machine.index)
+    if current_char == '"' then
+        state_machine.inside_string = true
+        state_machine.index         = state_machine.index + 1
     end
-
 end
 
 ---@param state_machine AMalgamationStateMachine
- function Verify_if_is_end_string_char(state_machine)
-
+function Verify_if_is_end_string_char(state_machine)
     if state_machine.inside_string == false then
-    	return
+        return
     end
     if state_machine.inside_coment then
-    	return
+        return
     end
-    local last_last_char = clib.get_char(state_machine.content,state_machine.index-2)
-    local last_char = clib.get_char(state_machine.content,state_machine.index-1)
-    local current_char = clib.get_char(state_machine.content,state_machine.index)
-    local scape = last_char == '\\' and last_last_char ~="\\"
-    if current_char == '"' and scape == false  then
-    	state_machine.inside_string = false
-    	state_machine.is_end_string = true
+    local last_last_char = clib.get_char(state_machine.content, state_machine.index - 2)
+    local last_char = clib.get_char(state_machine.content, state_machine.index - 1)
+    local current_char = clib.get_char(state_machine.content, state_machine.index)
+    local scape = last_char == '\\' and last_last_char ~= "\\"
+    if current_char == '"' and scape == false then
+        state_machine.inside_string = false
+        state_machine.is_end_string = true
         state_machine.index = state_machine.index + 1
-
     end
 end
-
 
 -- path:lua/amalgamation/amalgamation.lua
 
@@ -65,45 +61,44 @@ end
 ---@param start_point string
 ---@param already_included_list  StringArray | nil
 ---@return string
-  function Generate_amalgamation_recursive(start_point,already_included_list)
-
+function Generate_amalgamation_recursive(start_point, already_included_list)
     if already_included_list == nil then
-    	already_included_list = Created_already_included()
+        already_included_list = Created_already_included()
     end
 
-    if not dtw.isfile(start_point)  then
-    	clib.print(ANSI_RED.."file "..start_point.." not found\n")
-    	clib.exit(1)
+    if not dtw.isfile(start_point) then
+        clib.print(ANSI_RED .. "file " .. start_point .. " not found\n")
+        clib.exit(1)
     end
 
     local start_point_sha = dtw.generate_sha_from_file(start_point)
     if already_included_list.is_included(start_point_sha) then
-    	clib.print(ANSI_YELLOW.."file "..start_point.." already included\n ")
-    	return ""
+        clib.print(ANSI_YELLOW .. "file " .. start_point .. " already included\n ")
+        return ""
     end
 
     already_included_list.append(start_point_sha)
     ---@type AMalgamationStateMachine
     local content = dtw.load_file(start_point)
-    local state_machine ={
-         content = content,
-         size = clib.get_str_size(content),
-         inside_string = false,
-         waiting_include = false,
-         string_buffer = "",
-         final_text = "//path: "..start_point.."\n",
-         is_start_string=false,
-         index=0,
-         is_end_string = false,
-         buffer="",
-         inside_coment = false,
-         inside_multiline_coment=false,
-         insde_single_coment=false,
-         start_path = start_point,
-         already_include =already_included_list
+    local state_machine = {
+        content = content,
+        size = clib.get_str_size(content),
+        inside_string = false,
+        waiting_include = false,
+        string_buffer = "",
+        final_text = "//path: " .. start_point .. "\n",
+        is_start_string = false,
+        index = 0,
+        is_end_string = false,
+        buffer = "",
+        inside_coment = false,
+        inside_multiline_coment = false,
+        insde_single_coment = false,
+        start_path = start_point,
+        already_include = already_included_list
     }
 
-    for i=1,state_machine.size do
+    for i = 1, state_machine.size do
         state_machine.index = state_machine.index + 1
         Verify_if_is_start_string_char(state_machine)
         Verify_if_is_end_string_char(state_machine)
@@ -117,104 +112,93 @@ end
         Anulate_inclusion(state_machine)
         Make_recursive_call(state_machine)
         Include_char_to_final(state_machine)
-
     end
 
-   clib.print(ANSI_GREEN.."amalgamated: "..start_point.."\n")
-   return state_machine.final_text
+    clib.print(ANSI_GREEN .. "amalgamated: " .. start_point .. "\n")
+    return state_machine.final_text
 end
 
 -- path:lua/amalgamation/coments/multiline_coments.lua
 
 
 ---@param state_machine AMalgamationStateMachine
- function Multiline_coment_start(state_machine)
-
+function Multiline_coment_start(state_machine)
     if state_machine.inside_string then
-    	return
+        return
     end
     if state_machine.inside_coment then
-    	return
+        return
     end
 
 
-    if Point_starts_with(state_machine,"/*") then
-    	state_machine.index = state_machine.index + clib.get_str_size("/*")
-    	state_machine.inside_coment = true
-    	state_machine.inside_multiline_coment = true
+    if Point_starts_with(state_machine, "/*") then
+        state_machine.index = state_machine.index + clib.get_str_size("/*")
+        state_machine.inside_coment = true
+        state_machine.inside_multiline_coment = true
     end
-
 end
+
 ---@param state_machine AMalgamationStateMachine
- function Multiline_coment_end(state_machine)
-
-
+function Multiline_coment_end(state_machine)
     if not state_machine.inside_multiline_coment then
-    	return
+        return
     end
 
-    if Point_starts_with(state_machine,"*/") then
-    	state_machine.index = state_machine.index + clib.get_str_size("/*")
-    	state_machine.inside_coment = false
-    	state_machine.inside_multiline_coment = false
+    if Point_starts_with(state_machine, "*/") then
+        state_machine.index = state_machine.index + clib.get_str_size("/*")
+        state_machine.inside_coment = false
+        state_machine.inside_multiline_coment = false
     end
-
 end
-
 
 -- path:lua/amalgamation/coments/single_line_coments.lua
 
 
 ---@param state_machine AMalgamationStateMachine
- function Single_line_coment_start(state_machine)
-
+function Single_line_coment_start(state_machine)
     if state_machine.inside_string then
-    	return
+        return
     end
     if state_machine.inside_coment then
-    	return
+        return
     end
 
 
 
-    if Point_starts_with(state_machine,"\n//") then
-    	state_machine.index = state_machine.index + clib.get_str_size("\n//")
-    	state_machine.inside_coment = true
-    	state_machine.insde_single_coment = true
+    if Point_starts_with(state_machine, "\n//") then
+        state_machine.index = state_machine.index + clib.get_str_size("\n//")
+        state_machine.inside_coment = true
+        state_machine.insde_single_coment = true
     end
-
 end
+
 ---@param state_machine AMalgamationStateMachine
- function Single_line_coment_end(state_machine)
-
-
+function Single_line_coment_end(state_machine)
     if not state_machine.insde_single_coment then
-    	return
+        return
     end
 
-    if clib.get_char(state_machine.content,state_machine.index) == '\n' then
-    	state_machine.index = state_machine.index +1
-    	state_machine.inside_coment = false
-    	state_machine.insde_single_coment = false
+    if clib.get_char(state_machine.content, state_machine.index) == '\n' then
+        state_machine.index = state_machine.index + 1
+        state_machine.inside_coment = false
+        state_machine.insde_single_coment = false
     end
-
 end
-
 
 -- path:lua/amalgamation/run_if_starts_with.lua
 
 ---@param state_machine AMalgamationStateMachine
 ---@param str string
-function Point_starts_with(state_machine,str)
+function Point_starts_with(state_machine, str)
     local element_size = clib.get_str_size(str)
     if state_machine.index + element_size >= state_machine.size then
-    	return false
+        return false
     end
     local buffer = ""
-    for i=state_machine.index,state_machine.index + element_size -1 do
-        buffer = buffer..clib.get_char(state_machine.content,i)
+    for i = state_machine.index, state_machine.index + element_size - 1 do
+        buffer = buffer .. clib.get_char(state_machine.content, i)
     end
- --   clib.print(buffer.."\n")
+    --   clib.print(buffer.."\n")
     if buffer == str then
         return true
     end
@@ -351,50 +335,46 @@ clib = clib
 ---@param resource_path DtwResource
 ---@param callback fun():string
 ---@return CacheCallback
-local function new_cache_element(function_name,resource_path,callback)
-
+local function new_cache_element(function_name, resource_path, callback)
     local self = {
-        resource_path  = resource_path,
-        callback = callback,
-        hasher = dtw.newHasher()
+        resource_path = resource_path,
+        callback      = callback,
+        hasher        = dtw.newHasher()
     }
     self.hasher.digest(function_name)
 
-    self.add_dependencie = function (element)
-    	   self.hasher.digest(element)
-    	   return self
+    self.add_dependencie = function(element)
+        self.hasher.digest(element)
+        return self
     end
 
-    self.perform = function ()
+    self.perform = function()
         local sha = self.hasher.get_value()
         local sha_resource = resource_path.sub_resource(sha)
         local possible_element = sha_resource.get_string()
         if possible_element then
-        	return possible_element
+            return possible_element
         end
         local result = self.callback()
         if result == nil then
-        	result = ""
+            result = ""
         end
         sha_resource.set_value(result)
         sha_resource.commit()
         return result
     end
     return self;
-
 end
 
 ---@param path string
 ---@return Cache
 function NewCache(path)
-
-
     local self = {
         resource_path = dtw.newResource(path)
     }
 
-    self.new_element =function (function_name,callback)
-        return new_cache_element(function_name,self.resource_path,callback)
+    self.new_element = function(function_name, callback)
+        return new_cache_element(function_name, self.resource_path, callback)
     end
     return self;
 end
@@ -420,36 +400,36 @@ end
 ---@field is_included fun(element:string):boolean
 
 ---@return StringArray
-function  Created_already_included()
-	local self  = {
-	    size = 0,
-	    elements = {}
-	}
+function Created_already_included()
+    local self       = {
+        size = 0,
+        elements = {}
+    }
 
-	self.append = function (element)
-	    self.size = self.size +1
+    self.append      = function(element)
+        self.size = self.size + 1
         self.elements[self.size] = element
-	end
+    end
 
-	self.is_included = function (element)
-		for i=1,self.size do
-			if self.elements[i] == element then
-				return true
-			end
-		end
-		return false
-	end
-	return self
-
+    self.is_included = function(element)
+        for i = 1, self.size do
+            if self.elements[i] == element then
+                return true
+            end
+        end
+        return false
+    end
+    return self
 end
+
 -- path:lua/colors.lua
-ANSI_RED = "\x1b[31m"
-ANSI_GREEN = "\x1b[32m"
-ANSI_YELLOW = "\x1b[33m"
-ANSI_BLUE = "\x1b[34m"
-ANSI_MAGENTA= "\x1b[35m"
-ANSI_CYAN= "\x1b[36m"
-ANSI_RESET ="\x1b[0m"
+ANSI_RED           = "\x1b[31m"
+ANSI_GREEN         = "\x1b[32m"
+ANSI_YELLOW        = "\x1b[33m"
+ANSI_BLUE          = "\x1b[34m"
+ANSI_MAGENTA       = "\x1b[35m"
+ANSI_CYAN          = "\x1b[36m"
+ANSI_RESET         = "\x1b[0m"
 -- path:lua/config.lua
 START_POINT        = "src/one.c"
 DECLARATION_POINT  = "src/declaration.h"
@@ -458,7 +438,7 @@ LINUX_COMPILER     = "gcc"
 WINDOWS_COMPILER   = "x86_64-w64-mingw32-gcc"
 RELEASE_FOLDER     = "release"
 
-CACHE_POINT        = ".cache"
+CACHE_POINT        = "cache"
 OUTPUT_SINGLE_FILE = "CWebStudio.h"
 LIB_FOLDER         = "src"
 EXAMPLES_FOLDER    = "exemples"
@@ -480,25 +460,25 @@ end
 ---@param folder string
 ---@return string
 function Generate_sha_from_folder_not_considering_empty_folders(folder)
-	local hasher = dtw.newHasher()
-	local files,files_size = dtw.list_files_recursively(folder)
-	for i=1,files_size do
-	    local current_file = files[i]
-	    local file_path = dtw.concat_path(folder,current_file)
-	    local content = dtw.load_file(file_path)
-		hasher.digest(current_file)
-		hasher.digest(content)
-	end
-	local dirs,dirs_size = dtw.list_dirs_recursively(folder)
-	for i=1,dirs_size do
-	    local current_dir = dirs[i]
-	    local dir_path = dtw.concat_path(folder,current_dir)
-		local ignore,size= dtw.list_files_recursively(dir_path,false)
-		if size > 0 then
-			hasher.digest(current_dir)
-		end
-	end
-	return hasher.get_value()
+    local hasher = dtw.newHasher()
+    local files, files_size = dtw.list_files_recursively(folder)
+    for i = 1, files_size do
+        local current_file = files[i]
+        local file_path = dtw.concat_path(folder, current_file)
+        local content = dtw.load_file(file_path)
+        hasher.digest(current_file)
+        hasher.digest(content)
+    end
+    local dirs, dirs_size = dtw.list_dirs_recursively(folder)
+    for i = 1, dirs_size do
+        local current_dir = dirs[i]
+        local dir_path = dtw.concat_path(folder, current_dir)
+        local ignore, size = dtw.list_files_recursively(dir_path, false)
+        if size > 0 then
+            hasher.digest(current_dir)
+        end
+    end
+    return hasher.get_value()
 end
 
 -- path:lua/lua_do_the_world_type.lua
@@ -681,20 +661,19 @@ dtw = dtw
 
 ---@param content string
 ---@param index number
-local function is_codeof_at_point(content,index)
+local function is_codeof_at_point(content, index)
     local codeof_size = clib.get_str_size(CODEOF_TEXT)
     local content_size = clib.get_str_size(content)
     if index + codeof_size >= content_size then
-    	return false
+        return false
     end
 
     local buffer = ""
-    for i=index,index + codeof_size -1 do
-    	buffer = buffer..clib.get_char(content,i)
+    for i = index, index + codeof_size - 1 do
+        buffer = buffer .. clib.get_char(content, i)
     end
 
     return buffer == CODEOF_TEXT
-
 end
 
 
@@ -702,8 +681,8 @@ end
 function Create_readme()
     local content = dtw.load_file("build/INTERNAL.md")
     if content == nil then
-    	clib.print("intenal readme not found\n")
-    	clib.exit(1)
+        clib.print("intenal readme not found\n")
+        clib.exit(1)
         return
     end
 
@@ -715,44 +694,42 @@ function Create_readme()
     local final_text = ""
     local path = ""
     while i < size do
-
-        if is_codeof_at_point(content,i) then
+        if is_codeof_at_point(content, i) then
             colecting = true
-            i = i + codeof_size+1
+            i = i + codeof_size + 1
         end
-        local is_end_char = clib.get_char(content,i) == "\n"
+        local is_end_char = clib.get_char(content, i) == "\n"
 
-        if colecting and not  is_end_char   then
-            path = path..clib.get_char(content,i)
+        if colecting and not is_end_char then
+            path = path .. clib.get_char(content, i)
         end
 
-        if colecting ==false then
-        	final_text = final_text..clib.get_char(content,i)
+        if colecting == false then
+            final_text = final_text .. clib.get_char(content, i)
         end
 
         if colecting and is_end_char then
             path = clib.trim(path)
-        	local file_content = dtw.load_file(path)
-        	if file_content == nil then
-
-        		clib.print(ANSI_RED.."file ("..path..") not found\n")
-        		clib.exit(1)
-        	end
+            local file_content = dtw.load_file(path)
+            if file_content == nil then
+                clib.print(ANSI_RED .. "file (" .. path .. ") not found\n")
+                clib.exit(1)
+            end
 
             local extension = dtw.newPath(path).get_extension()
-            final_text = final_text.."\n~~~"..extension.."\n"..file_content.."\n~~~\n"
+            final_text = final_text .. "\n~~~" .. extension .. "\n" .. file_content .. "\n~~~\n"
             colecting = false
-            path =""
+            path = ""
         end
 
 
 
 
-    	i = i + 1
+        i = i + 1
     end
     return final_text
-
 end
+
 -- path:lua/test.lua
 ---@param file string
 ---@param compiler string
@@ -794,4 +771,3 @@ local function main()
 end
 
 main()
-
