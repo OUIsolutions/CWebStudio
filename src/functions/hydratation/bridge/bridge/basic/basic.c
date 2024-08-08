@@ -90,7 +90,7 @@ void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {
     }
 
     if(self->response) {
-        cJSON_free(self->response);
+        cJSON_Delete(self->response);
     }
     CwebStringArray_free(self->callbacks);
     CwebStringArray_free(self->garbage);
