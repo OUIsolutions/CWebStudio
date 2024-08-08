@@ -43,8 +43,8 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
 
 
     if(!response){
+        //lambda que o usuario passa
         response = self->request_handler(request);
-
     }
 
     if(response && self->allow_cors){
@@ -58,7 +58,7 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
 
         if(self->use_static){
             char formated_404_path[1000]={0};
-            sprintf(formated_404_path,"%s/404.html",cweb_static_folder);
+            sprintf(formated_404_path,"%s/404.html", cweb_static_folder);
             char *formated_html = cweb_load_string_file_content(formated_404_path);
 
             if(formated_html != NULL){
@@ -93,9 +93,6 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
 
 
     send(socket, response_str, strlen(response_str), MSG_NOSIGNAL);
-
-
-
 
     // Enviando conteúdo byte a byte
     if (response->exist_content)

@@ -1,4 +1,5 @@
 #include "../uniq.definitions_requirements.h"
+#include <cstdio>
 
 
 
@@ -171,6 +172,10 @@ void CwebHttpRequest_free( CwebHttpRequest *self){
 
     if(self->method){
         free(self->method);
+    }
+
+    if(self->hydratation){
+        private_CWebHyDration_free((CWebHyDration *)self->hydratation);
     }
 
     CwebDict_free(self->params);

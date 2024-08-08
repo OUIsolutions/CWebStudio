@@ -1,11 +1,12 @@
 
 #include "../uniq.definitions_requirements.h"
 
-CWebHyDration * newCWebHyDration(CwebHttpRequest *request) {
+CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     CWebHyDration *self = (CWebHyDration*)malloc(sizeof(CWebHyDration));
     *self = (CWebHyDration){0};
     self->all_bridges = private_new_privateCWebHyDrationBridgeArray();
     self->request =  request;
+    request->hydratation = (void *)self;
     return self;
 }
 
@@ -33,7 +34,7 @@ char *CWebHyDration_create_script(CWebHyDration *self) {
 
 }
 
-void CWebHyDration_free(CWebHyDration *self) {
+void private_CWebHyDration_free(CWebHyDration *self) {
     if(self->script_text) {
         CTextStack_free(self->script_text);
     }

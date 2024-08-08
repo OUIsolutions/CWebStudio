@@ -1,7 +1,6 @@
 
-
 #include "src/one.c"
-#include <time.h>
+
 CwebNamespace cweb;
 CTextStackModule stack;
 CWebHydrationNamespace hy;
@@ -9,7 +8,7 @@ CWebHydrationNamespace hy;
 CwebHttpResponse *main_sever(CwebHttpRequest *request) {
 
 
-    if(strcmp(request->route, "/termina") ==0){
+    if(strcmp(request->route, "/termina") == 0){
         cweb_kill_single_process_server();
         return cweb_send_text("app terminado",200);
     }
@@ -25,7 +24,6 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
 
         if(hy.error(set_num)) {
             CwebHttpResponse *response = hy.generate_error_response(set_num);
-            hy.free(hydration);
             return response;
         }
 
@@ -37,7 +35,6 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
         hy.replace_element_by_id_with_ctext_stack_cleaning_memory(set_num,"num",text);
 
         CwebHttpResponse *response = hy.generate_response(set_num);
-        hy.free(hydration);
         return response;
     }
 
@@ -60,7 +57,6 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
 
 
     }
-    hy.free(hydration);
     return  cweb.response.send_rendered_CTextStack_cleaning_memory(text,200);
 }
 

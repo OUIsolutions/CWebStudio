@@ -11,7 +11,6 @@ typedef struct CWebHydrationNamespace{
     //base
     CWebHyDrationBridge *(*create_bridge)(CWebHyDration *self,const char *route,char *name);
     char *(*create_script)(CWebHyDration *self);
-    void (*free)(CWebHyDration *self);
     //bridge
     //basic
     bool(*is_the_route)(CWebHyDrationBridge *self);

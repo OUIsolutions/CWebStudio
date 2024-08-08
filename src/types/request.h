@@ -17,6 +17,7 @@ typedef struct CwebHttpRequest{
     int content_length;
     unsigned char *content;
     cJSON *json;
+    void *hydratation;
 
 }CwebHttpRequest;
 

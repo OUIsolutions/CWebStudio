@@ -7,4 +7,4 @@ CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char
 
 char *CWebHyDration_create_script(CWebHyDration *self);
 
-void CWebHyDration_free(CWebHyDration *self);
+void private_CWebHyDration_free(CWebHyDration *self);
