@@ -13,6 +13,7 @@
 ---@field out_extension fun():string
 ---@field replace fun(content:string,target:string,value_to_replace:string):string
 ---@field trim fun(content:string):string
+---@field convert_to_hexa fun(content:string):string
 
 ---@type Clib
 clib = clib

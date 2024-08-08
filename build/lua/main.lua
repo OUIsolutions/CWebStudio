@@ -1,4 +1,6 @@
 local function main()
+    create_globals()
+
     local src_sha = Generate_sha_from_folder_not_considering_empty_folders(LIB_FOLDER)
     local cache = NewCache(CACHE_POINT)
     local amalgamation_cache = cache.new_element("amalgamation", function()

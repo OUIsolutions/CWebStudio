@@ -1,11 +1,12 @@
 
 #include "CWebStudio.h"
+#include <stdio.h>
+#include <time.h>
 
 CwebNamespace cweb;
 CTextStackModule stack;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request) {
-
 
     if(strcmp(request->route, "/termina") == 0){
         cweb_kill_single_process_server();
@@ -66,8 +67,7 @@ int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
     stack = newCTextStackModule();
 
-    CwebServer server = newCwebSever(3005, main_sever);
-    server.single_process  =true;
+    CwebServer server = newCwebSever(3004, main_sever);
     cweb.server.start(&server);
     return 0;
 

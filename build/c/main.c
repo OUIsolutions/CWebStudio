@@ -1,11 +1,7 @@
-
 #include "definition.c"
 
-
 void add_callbacks(LuaCEmbed *main_obj){
-
-
-    LuaCEmbedTable * clib = lua.globals.new_table(main_obj,"clib");
+    LuaCEmbedTable *clib = lua.globals.new_table(main_obj,"clib");
     lua.tables.set_method(clib,"get_char",lua_get_char);
     lua.tables.set_method(clib,"getargv",get_argv);
     lua.tables.set_method(clib,"exit",generate_exit);
@@ -16,9 +12,8 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"indexof",lua_index_of);
     lua.tables.set_method(clib,"replace",lua_replace_string);
     lua.tables.set_method(clib,"trim",lua_trim);
-
+    lua.tables.set_method(clib, "convert_to_hexa", convert_string_to_hexa);
 }
-
 
 int main(int argc,char *argv[]){
     argv_size = argc;

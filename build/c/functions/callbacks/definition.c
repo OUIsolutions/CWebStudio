@@ -2,3 +2,4 @@
 #include "argv/argv.c"
 #include "algo/algo.c"
 #include "io/io.c"
+#include "convert_string_to_hexa/convert.c"

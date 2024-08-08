@@ -35,7 +35,7 @@ void private_cweb_treat_response(bool use_static,int new_socket){
         }
 
         if(send_text_menssage){
-            CwebHttpResponse  *response = cweb_send_text( private_cweb_500,500);
+            CwebHttpResponse  *response = cweb_send_var_html( private_cweb_500,500);
             private_cweb_send_error_mensage(response,new_socket);
         }
 
