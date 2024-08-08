@@ -6,7 +6,7 @@ CWebHydrationNamespace newCWebHydrationNamespace() {
     //hidratation
     self.create_bridge = CWebHyDration_create_bridge;
     self.create_script = CWebHyDration_create_script;
-    self.newHyDration = private_newCWebHyDration;
+    self.newHyDration = newCWebHyDration;
     //bridge
     //basic
     self.is_the_route = CWebHyDrationBridge_is_the_route;

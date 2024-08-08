@@ -22,7 +22,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
         long num = hy.read_long(set_num,"num");
         long value = hy.read_long(set_num,"args0");
 
-        if(hy.error(set_num)) {
+        if(hy.error(set_num)){
             CwebHttpResponse *response = hy.generate_error_response(set_num);
             return response;
         }
