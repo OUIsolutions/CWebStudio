@@ -1,1 +1,87 @@
-paginna não encontrada
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erro</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .error-container {
+            text-align: center;
+            max-width: 90%;
+            padding: 20px;
+            border-radius: 10px;
+            background: #3a3f47;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .error-code {
+            font-size: 100px;
+            font-weight: bold;
+            margin: 0;
+            color: #ff6b6b;
+        }
+
+        .error-message {
+            font-size: 24px;
+            margin: 10px 0;
+            color: #d3d3d3;
+        }
+
+        .error-description {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #a9a9a9;
+        }
+
+        .error-link {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 18px;
+            color: #282c34;
+            background-color: #ff6b6b;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .error-link:hover {
+            background-color: #ff4c4c;
+        }
+
+        @media (max-width: 600px) {
+            .error-code {
+                font-size: 60px;
+            }
+            .error-message {
+                font-size: 20px;
+            }
+            .error-description {
+                font-size: 16px;
+            }
+            .error-link {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">Page not-found</p>
+        <p class="error-description">Sorry, this page not found.</p>
+        <a href="/" class="error-link">back</a>
+    </div>
+</body>
+</html>
