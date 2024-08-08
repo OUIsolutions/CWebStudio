@@ -1,5 +1,6 @@
 
 
+#include "conf.h"
 #include "definition.c"
 
 int main(){
@@ -11,12 +12,18 @@ int main(){
         return error;
     }
 
-    CTextStack *final_compilation = stack.newStack_string_format("gcc c/main.c -o %s",FINAL_OUPTUT);
-    error = system(final_compilation->rendered_text);
-    stack.free(final_compilation);
+    CTextStack *final_compilation_linux = stack.newStack_string_format(
+        "gcc c/main.c -o %s",FINAL_OUPTUT_LINUX
+
+    );
+    error = system(final_compilation_linux->rendered_text);
+    stack.free(final_compilation_linux);
+
     if(error){
         return error;
     }
+
+
     #ifdef  RUN_AFTER
 
     CTextStack *run_command = stack.newStack_string_format("./%s",FINAL_OUPTUT);
