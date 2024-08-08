@@ -8,7 +8,7 @@ local function main()
         return Generate_amalgamation_recursive(START_POINT)
     end).add_dependencie(src_sha)
     local amalgamation_result = Generate_amalgamation_recursive(START_POINT)
-    dtw.write_file(END_TEST_POINT, amalgamation_result)
+    dtw.write_file(OUTPUT_SINGLE_FILE, amalgamation_result)
 
     Execute_all_tests()
     Create_examples()
