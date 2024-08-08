@@ -12,7 +12,7 @@ lua_debug.ua
 *.elf
 teste.py
 a.png
-main.c
+
 requisicao
 aaa.jpg
 # Linker output
