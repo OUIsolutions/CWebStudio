@@ -3,11 +3,12 @@
 
 
 void add_callbacks(LuaCEmbed *main_obj){
-    lua.add_callback(main_obj,"getargv",get_argv);
-    lua.add_callback(main_obj,"exit",generate_exit);
+
 
     LuaCEmbedTable * clib = lua.globals.new_table(main_obj,"clib");
     lua.tables.set_method(clib,"get_char",lua_get_char);
+    lua.tables.set_method(clib,"getargv",get_argv);
+    lua.tables.set_method(clib,"exit",generate_exit);
     lua.tables.set_method(clib,"print",custom_print);
     lua.tables.set_method(clib,"get_str_size",lua_get_str_size);
     lua.tables.set_method(clib,"system_with_status",system_function_with_status);

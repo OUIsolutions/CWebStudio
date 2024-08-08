@@ -1,7 +1,7 @@
 
 #include "../unique.definition_requirements.h"
 
-LuaCEmbedResponse *get_argv(LuaCEmbed *args) {
+LuaCEmbedResponse *get_argv(LuaCEmbedTable *self,LuaCEmbed *args) {
     long element = lua.args.get_long(args,0);
 
     if(lua.has_errors(args)){

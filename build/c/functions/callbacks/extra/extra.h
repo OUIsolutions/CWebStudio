@@ -2,4 +2,4 @@
 
 #include "../unique.declaration_requirements.h"
 
-LuaCEmbedResponse * generate_exit(LuaCEmbed *args);
+LuaCEmbedResponse * generate_exit(LuaCEmbedTable *self,LuaCEmbed *args);
