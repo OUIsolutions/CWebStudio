@@ -6,6 +6,8 @@ CwebNamespace newCwebNamespace(){
     self.request = newCwebRequestModule();
     self.response = newCwebHttpResponseModule();
     self.server = newCwebServerModule();
-    self.string_array =newCwebStringArrayModule();
+    self.string_array = newCwebStringArrayModule();
+    self.hydration = newCWebHydrationNamespace();
     return self;
 }
+
