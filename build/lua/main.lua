@@ -3,12 +3,12 @@ local function main()
     local cache = NewCache(CACHE_POINT)
 
 
-    local amalgamation_cache = cache.new_element(
-        "amalgamation", function()
-            return Generate_amalgamation_recursive(START_POINT)
-        end).add_dependencie(src_sha)
-    local amalgamation_result = amalgamation_cache.perform()
-    dtw.write_file(OUTPUT_SINGLE_FILE, amalgamation_result)
+
+    local amalgamation_cache = cache.new_element("amalgamation", function()
+        return Generate_amalgamation_recursive(START_POINT)
+    end).add_dependencie(src_sha)
+    local amalgamation_result = Generate_amalgamation_recursive(START_POINT)
+    dtw.write_file(END_TEST_POINT, amalgamation_result)
 
     Execute_all_tests()
     Create_examples()

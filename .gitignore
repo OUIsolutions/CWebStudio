@@ -3,6 +3,8 @@
 out_folder
 CWebStudio_test.h
 *.pyc
+!build.exe
+!build.out
 # Object files
 *.o
 *.ko

@@ -5,7 +5,7 @@ LINUX_COMPILER     = "gcc"
 WINDOWS_COMPILER   = "x86_64-w64-mingw32-gcc"
 RELEASE_FOLDER     = "release"
 
-CACHE_POINT        = "cache"
+CACHE_POINT        = ".cache"
 OUTPUT_SINGLE_FILE = "CWebStudio.h"
 LIB_FOLDER         = "src"
 EXAMPLES_FOLDER    = "exemples"
