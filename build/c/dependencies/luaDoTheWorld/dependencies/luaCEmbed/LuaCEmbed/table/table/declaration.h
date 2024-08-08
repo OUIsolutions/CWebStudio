@@ -1,8 +1,0 @@
-#include "table.h"
-#include "basic/basic.h"
-#include "getters/declaration.h"
-#include "setters/declaration.h"
-#include "errors/errors.h"
-#include "sub_tables/declaration.h"
-#include "append/append.h"
-#include "destroy/destroy.h"
