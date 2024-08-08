@@ -1,10 +1,18 @@
 
+
 #include "src/one.c"
+#include <time.h>
 CwebNamespace cweb;
 CTextStackModule stack;
 CWebHydrationNamespace hy;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request) {
+
+
+    if(strcmp(request->route, "/termina") ==0){
+        cweb_kill_single_process_server();
+        return cweb_send_text("app terminado",200);
+    }
 
     CWebHyDration *hydration = hy.newHyDration(request);
     CWebHyDrationBridge *set_num = hy.create_bridge(hydration,"/set_num",NULL);
@@ -14,6 +22,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
 
         long num = hy.read_long(set_num,"num");
         long value = hy.read_long(set_num,"args0");
+
         if(hy.error(set_num)) {
             CwebHttpResponse *response = hy.generate_error_response(set_num);
             hy.free(hydration);
@@ -26,7 +35,9 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
         }
 
         hy.replace_element_by_id_with_ctext_stack_cleaning_memory(set_num,"num",text);
+
         CwebHttpResponse *response = hy.generate_response(set_num);
+        hy.free(hydration);
         return response;
     }
 
@@ -55,10 +66,16 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
 
 
 int main(int argc, char *argv[]){
+
+
     cweb = newCwebNamespace();
     stack = newCTextStackModule();
     hy = newCWebHydrationNamespace();
-    struct CwebServer server = newCwebSever(5000, main_sever);
+
+
+
+     CwebServer server = newCwebSever(3005, main_sever);
+    server.single_process  =true;
     cweb.server.start(&server);
     return 0;
 
