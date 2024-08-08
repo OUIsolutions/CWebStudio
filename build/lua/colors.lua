@@ -1,0 +1,7 @@
+ANSI_RED = "\x1b[31m"
+ANSI_GREEN = "\x1b[32m"
+ANSI_YELLOW = "\x1b[33m"
+ANSI_BLUE = "\x1b[34m"
+ANSI_MAGENTA= "\x1b[35m"
+ANSI_CYAN= "\x1b[36m"
+ANSI_RESET ="\x1b[0m"
