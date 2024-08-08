@@ -4,6 +4,8 @@ function Create_examples()
         local current = files[i]
         local name = dtw.newPath(current).get_name()
         local new_path = dtw.concat_path(EXAMPLES_FOLDER, name);
-        dtw.copy_any_overwriting(current, new_path)
+        local content = dtw.load_file(current)
+        local new_content = clib.replace(content, "../", "")
+        dtw.write_file(new_path, new_content)
     end
 end

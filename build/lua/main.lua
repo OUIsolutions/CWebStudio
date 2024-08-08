@@ -7,7 +7,9 @@ local function main()
     dtw.write_file(OUTPUT_SINGLE_FILE, amalgamation_cache.perform())
 
     Execute_all_tests()
+
     Create_examples()
+
     local readme = Create_readme()
     if readme then
         dtw.write_file("README.md", readme)

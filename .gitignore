@@ -3,7 +3,7 @@
 out_folder
 CWebStudio_test.h
 *.pyc
-
+.cache
 lua_debug.ua
 # Object files
 *.o
