@@ -20,7 +20,6 @@ aaa.jpg
 *.map
 *.exp
 trash
-bin
 # Precompiled Headers
 *.gch
 *.pch
