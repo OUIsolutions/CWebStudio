@@ -24,6 +24,7 @@ LuaCEmbedResponse * transaction_commit(LuaCEmbedTable *self,LuaCEmbed *args) {
 LuaCEmbedResponse * transaction_delete(LuaCEmbedTable *self,LuaCEmbed *args) {
     DtwTransaction *t = (DtwTransaction*)LuaCembedTable_get_long_prop(self,TRANSACTION_POINTER);
     bool ref = LuaCembedTable_get_bool_prop(self,IS_A_REF);
+
     if(!ref){
         DtwTransaction_free(t);
     }
@@ -41,11 +42,13 @@ void  private_transaction_add_base_methods(LuaCEmbedTable *self,DtwTransaction *
     LuaCEmbedTable_set_method(self,COMMIT_METHOD,transaction_commit);
     LuaCEmbedTable_set_method(self,DUMP_TO_JSON_FILE_METHOD,transaction_dumps_to_json_file);
     LuaCEmbedTable_set_method(self,DUMP_TO_JSON_STRING,transaction_dumps_to_json_string);
+    LuaCEmbedTable_set_method(self,LIST_METHOD,transaction_list);
     LuaCEmbedTable_set_method(self,EACH_METHOD,transaction_foreach);
     LuaCEmbedTable_set_method(self,MAP_METHOD,transaction_map);
     LuaCEmbedTable_set_method(self,COUNT_METHOD,transaction_count);
     LuaCEmbedTable_set_method(self,INDEX_METHOD,transaction_index);
     LuaCEmbedTable_set_method(self,FIND_METHOD,transaction_find);
+    LuaCEmbedTable_set_method(self,FILTER_METHOD,transaction_filter);
     LuaCEmbedTable_set_method(self,DELETE_METHOD,transaction_delete);
 
 }
@@ -55,7 +58,7 @@ LuaCEmbedResponse * transaction_new_transaction(LuaCEmbed *args){
     LuaCEmbedTable * self = LuaCembed_new_anonymous_table(args);
     LuaCEmbedTable_set_bool_prop(self,IS_A_REF,false);
     DtwTransaction *transaction = newDtwTransaction();
-    LuaCEmbedTable_set_long_prop(self,TRANSACTION_POINTER,(long long)transaction);
+    LuaCEmbedTable_set_long_prop(self,TRANSACTION_POINTER,(long)transaction);
     if(LuaCEmbed_has_errors(self->main_object)){
         printf("error %s\n", LuaCEmbed_get_error_message(self->main_object));
     }

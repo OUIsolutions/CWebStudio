@@ -8,6 +8,6 @@ typedef struct{
     LuaCEmbedResponse  *error;
 }Writeble;
 
-Writeble  create_writeble(LuaCEmbed *args,int index);
+Writeble  *create_writeble(LuaCEmbed *args,int index);
 
 void Writeble_free(Writeble *self);

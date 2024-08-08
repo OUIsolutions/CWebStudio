@@ -1,4 +1,4 @@
 
-#include "dependencies/LuaCEmbed.h"
-#include "dependencies/doTheWorld.h"
-#include "dependencies/UniversalGarbage.h"
+#include "dependencies/luaCEmbed/one.c"
+#include "dependencies/doTheWorld/one.c"
+#include "dependencies/UniversalGarbage/one.h"

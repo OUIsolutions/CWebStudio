@@ -6,3 +6,5 @@
 #define GET_TREE_PART_BY_PATH "get_tree_part_by_path"
 
 
+#define TREE_PART_CONTENT_EXIST_IN_HARDWARE "content_exist_in_hardware"
+#define TREE_PART_CONTENT_EXIST "content_exist"

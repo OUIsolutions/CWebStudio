@@ -2,6 +2,11 @@
 
 LuaCEmbedResponse * tree_part_get_value(LuaCEmbedTable *self,LuaCEmbed *args);
 
+LuaCEmbedResponse * tree_part_exist_in_hardware(LuaCEmbedTable *self,LuaCEmbed *args);
+
+LuaCEmbedResponse * tree_part_exis(LuaCEmbedTable *self,LuaCEmbed *args);
+
+
 LuaCEmbedResponse * tree_part_to_string(LuaCEmbedTable *self,LuaCEmbed *args);
 
 LuaCEmbedResponse *tree_part_is_blob(LuaCEmbedTable *self, LuaCEmbed *args);

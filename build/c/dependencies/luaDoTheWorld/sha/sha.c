@@ -8,11 +8,8 @@ LuaCEmbedResponse  * generate_sha_from_file(LuaCEmbed *args){
     }
 
     char *sha = dtw_generate_sha_from_file(source);
-    if(!sha){
-        char *formmated  = private_LuaCembed_format(FILE_NOT_FOUND,source);
-        LuaCEmbedResponse  *response = LuaCEmbed_send_error(formmated);
-        free(formmated);
-        return response;
+    if(sha == NULL){
+        return NULL;
     }
     LuaCEmbedResponse *response = LuaCEmbed_send_str(sha);
     free(sha);
@@ -28,12 +25,10 @@ LuaCEmbedResponse  * generate_sha_from_folder_by_content(LuaCEmbed *args){
     DtwHash *hash = newDtwHash();
     bool result = DtwHash_digest_folder_by_content(hash,source);
     if(!result){
-        char *content = private_LuaCembed_format(FILE_NOT_FOUND,source);
-        LuaCEmbedResponse*response = LuaCEmbed_send_error(content);
-        free(content);
         DtwHash_free(hash);
-        return response;
+        return NULL;
     }
+
     LuaCEmbedResponse *response = LuaCEmbed_send_str(hash->hash);
     DtwHash_free(hash);
     return response;
@@ -61,14 +56,16 @@ LuaCEmbedResponse  * generate_sha_from_folder_by_last_modification(LuaCEmbed *ar
 }
 
 LuaCEmbedResponse  * generate_sha(LuaCEmbed *args){
-    Writeble write_obj = create_writeble(args,0);
-    if(write_obj.error){
-        return write_obj.error;
+    Writeble  *write_obj = create_writeble(args,0);
+    if(write_obj->error){
+        LuaCEmbedResponse *response =  write_obj->error;
+        Writeble_free(write_obj);
+        return  response;
     }
-    char  *sha = dtw_generate_sha_from_any(write_obj.content,write_obj.size);
-    Writeble_free(&write_obj);
+    char  *sha = dtw_generate_sha_from_any(write_obj->content,write_obj->size);
     LuaCEmbedResponse *response = LuaCEmbed_send_str(sha);
     free(sha);
+    Writeble_free(write_obj);
     return response;
 }
 

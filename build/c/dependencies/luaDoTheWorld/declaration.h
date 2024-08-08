@@ -1,3 +1,4 @@
+#include "macros/all.h"
 #include "constants/all.h"
 #include "writeble/writble.h"
 #include "io/io.h"
@@ -11,3 +12,7 @@
 #include "tree/declaration.h"
 #include "path/path.h"
 #include "extra/extra.h"
+#include "randonizer/randonizer.h"
+#include "fork_process/fork_process.h"
+#include "locker/locker.h"
+#include "entity_modification/entity_modification.h"

@@ -2,6 +2,8 @@
 
 LuaCEmbedResponse * hasher_digest_file(LuaCEmbedTable *self,LuaCEmbed *args);
 
+LuaCEmbedResponse * hasher_digest_path(LuaCEmbedTable *self,LuaCEmbed *args);
+
 LuaCEmbedResponse * hasher_digest_folder_by_content(LuaCEmbedTable *self, LuaCEmbed *args);
 
 LuaCEmbedResponse * hasher_digest_folder_by_last_modification(LuaCEmbedTable *self, LuaCEmbed *args);

@@ -11,3 +11,7 @@
 #include "tree_methods.h"
 #include "tree_props.h"
 #include "tree_part_methods.h"
+#include "randonizer_methods.h"
+#include "fork_process.h"
+#include "locker.h"
+#include "database_schema.h"
