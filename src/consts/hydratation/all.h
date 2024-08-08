@@ -2,4 +2,3 @@
 #include "callbacks.h"
 #include "app.h"
 #include "errors.h"
-#include "js_content.h"

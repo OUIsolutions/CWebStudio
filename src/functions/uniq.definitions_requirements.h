@@ -1,2 +1,2 @@
 #include "../declaration.h"
-#include "../globals.c"
+#include "../globals/all.c"
