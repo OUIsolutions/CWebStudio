@@ -1,10 +1,7 @@
 
 #include "../uniq.definitions_requirements.h"
 
-CWebHyDrationBridge *private_newCWebHyDrationBridge(
-    const char *name,
-    const char *route,
-    CwebHttpRequest *request) {
+CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name, const char *route, CwebHttpRequest *request) {
     CWebHyDrationBridge *self = (CWebHyDrationBridge*)malloc(sizeof(CWebHyDrationBridge));
     *self = (CWebHyDrationBridge){0};
     if(name) {

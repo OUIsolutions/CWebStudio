@@ -9,11 +9,8 @@ privateCWebHyDrationBridgeArray * private_new_privateCWebHyDrationBridgeArray() 
 }
 
 void privateCWebHyDrationBridgeArray_append(privateCWebHyDrationBridgeArray *self,CWebHyDrationBridge *element) {
-    self->elments = (CWebHyDrationBridge**)realloc(
-        self->elments,
-        (self->size +1 )* sizeof(CWebHyDrationBridge*)
-        );
-    self->elments[self->size] =element;
+    self->elments = (CWebHyDrationBridge**)realloc(self->elments, (self->size +1 )* sizeof(CWebHyDrationBridge*));
+    self->elments[self->size] = element;
     self->size+=1;
 }
 

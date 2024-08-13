@@ -60,3 +60,5 @@ Mkfile.old
 dkms.conf
 !build.exe
 !build.out
+.idea
+.vscode
