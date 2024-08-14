@@ -1,15 +1,12 @@
 
 #include "../uniq.definitions_requirements.h"
 
-CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name,void (*callback)(CWebHyDrationBridge *),CwebHttpRequest *request) {
+CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name,void (*callback)(CWebHyDrationBridge *)) {
 
     CWebHyDrationBridge *self = (CWebHyDrationBridge*)malloc(sizeof(CWebHyDrationBridge));
     *self = (CWebHyDrationBridge){0};
     self->name = strdup(name);
-    self->request = request;
-	self->callbacks = newCwebStringArray();
-    self->garbage = newCwebStringArray();
-    self->max_body_size = CWEB_HYDRATION_DEFAULT_BODY_SIZE;
+    self->callback = callback;
     return  self;
 }
 
@@ -78,7 +75,6 @@ void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {
     if(self->error_key) {
         free(self->error_key);
     }
-
     if(self->response) {
         cJSON_Delete(self->response);
     }
