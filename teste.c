@@ -1,14 +1,26 @@
 #include "CWebStudio.h"
+
 CwebNamespace cweb;
 
-struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-    const char *html = "<html><body><h1>Hello World</h1></body></html>";
-    return cweb.response.send_any("text/html",strlen(html),(unsigned char*)html,200);
+
+
+typedef struct {
+    char *nome;
+    int idade;
+} Usuario;
+
+
+Usuario teste(){
+    Usuario usuario = {0};
+    usuario.nome = "mateus ";
+    usuario.nome ="aaaa";
+    usuario.idade = 27;
+    return usuario;
 }
 
+
+
 int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
-    CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
-    return 0;
+    char *resposta = teste().nome;
+    printf("%s\n",resposta);
 }

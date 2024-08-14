@@ -1,5 +1,7 @@
 
 #include "../uniq.definitions_requirements.h"
+#include <cstring>
+#include <time.h>
 
 
 CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
@@ -7,6 +9,7 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     *self = (CWebHyDration){0};
     self->all_bridges = private_new_privateCWebHyDrationBridgeArray();
     self->request =  request;
+    self->max_content_size = CWEB_HYDRATION_DEFAULT_BODY_SIZE;
     request->hydratation = (void *)self;
     return self;
 }
@@ -23,11 +26,18 @@ bool CWebHyDration_is_the_trigger(CWebHyDration *self){
     }
 }
 
+CwebHttpResponse *
+
 CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
     if(!CWebHyDration_is_the_trigger(self)){
         return NULL;
     }
+    cJSON *body = CWebHttpRequest_read_cJSON(self->request, self->max_content_size);
 
+
+    if(!cJSON_IsArray(body)){
+
+    }
 
 }
 

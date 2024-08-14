@@ -11,6 +11,7 @@ typedef struct CWebHyDration {
     char *error_msg;
     int error_code;
     CTextStack *script_text;
+    long max_content_size;
     privateCWebHyDrationBridgeArray *all_bridges;
 
 }CWebHyDration;
