@@ -3,8 +3,9 @@
 
 CWebHyDration * newCWebHyDration(CwebHttpRequest *request);
 
-
 CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *));
+
+void privateCWebHydration_raise_error(CWebHyDration *self,CWebHyDrationBridge *bridge, int error_code, const char *format,...);
 
 bool CWebHyDration_is_the_trigger(CWebHyDration *self);
 

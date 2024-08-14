@@ -1,5 +1,6 @@
 
 #include "../uniq.definitions_requirements.h"
+#include <cstddef>
 #include <cstring>
 #include <time.h>
 
@@ -26,7 +27,17 @@ bool CWebHyDration_is_the_trigger(CWebHyDration *self){
     }
 }
 
-CwebHttpResponse *
+void privateCWebHydration_raise_error(CWebHyDration *self,CWebHyDrationBridge *bridge, int error_code, const char *format,...){
+    va_list  args;
+    va_start(args,format);
+    self->error_msg = private_CWebHydration_format_vaarg(format,args);
+    va_end(args);
+    self->error_code = error_code;
+    if(bridge){
+        self->error_bridge_name = bridge->name;
+    }
+}
+
 
 CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
     if(!CWebHyDration_is_the_trigger(self)){
@@ -34,9 +45,24 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
     }
     cJSON *body = CWebHttpRequest_read_cJSON(self->request, self->max_content_size);
 
+    if(body ==NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED,
+            CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG
+        );
+        return NULL;
+    }
 
     if(!cJSON_IsArray(body)){
-
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_NOT_BODY_IS_NOT_ARRAY,
+            CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG
+        );
+        return NULL;
     }
 
 }
