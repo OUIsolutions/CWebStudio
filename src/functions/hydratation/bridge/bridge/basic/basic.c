@@ -1,12 +1,13 @@
 
 #include "../uniq.definitions_requirements.h"
 
-CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name,void (*callback)(CWebHyDrationBridge *)) {
+CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name,void (*callback)(CWebHyDrationBridge *),CWebHyDration *hydration) {
 
     CWebHyDrationBridge *self = (CWebHyDrationBridge*)malloc(sizeof(CWebHyDrationBridge));
     *self = (CWebHyDrationBridge){0};
     self->name = strdup(name);
     self->callback = callback;
+    self->hydration = (void*)hydration;
     return  self;
 }
 

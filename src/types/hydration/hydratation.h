@@ -7,6 +7,9 @@
 
 typedef struct CWebHyDration {
     CwebHttpRequest *request;
+   const  char *error_bridge_name;
+    char *error_msg;
+    int error_code;
     CTextStack *script_text;
     privateCWebHyDrationBridgeArray *all_bridges;
 

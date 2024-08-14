@@ -1,6 +1,7 @@
 
 #include "../uniq.definitions_requirements.h"
 
+
 CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     CWebHyDration *self = (CWebHyDration*)malloc(sizeof(CWebHyDration));
     *self = (CWebHyDration){0};
@@ -11,9 +12,23 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
 }
 
 CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *)){
-    CWebHyDrationBridge *created = private_newCWebHyDrationBridge(name,callback);
+    CWebHyDrationBridge *created = private_newCWebHyDrationBridge(name,callback,self);
     privateCWebHyDrationBridgeArray_append(self->all_bridges,created);
     return created;
+}
+
+bool CWebHyDration_is_the_trigger(CWebHyDration *self){
+    if(strcmp(self->request->route,CWEB_HYDRATION_CALBACK_HANDLER_ROUTE) == 0){
+        return true;
+    }
+}
+
+CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
+    if(!CWebHyDration_is_the_trigger(self)){
+        return NULL;
+    }
+
+
 }
 
 char *CWebHyDration_create_script(CWebHyDration *self) {
@@ -30,6 +45,7 @@ char *CWebHyDration_create_script(CWebHyDration *self) {
         CTextStack *created_code =private_CWebHyDrationBridge_create_script(current);
         CTextStack_format(self->script_text,"%tc",created_code);
     }
+
     return self->script_text->rendered_text;
 
 }
@@ -38,6 +54,10 @@ void private_CWebHyDration_free(CWebHyDration *self) {
     if(self->script_text) {
         CTextStack_free(self->script_text);
     }
+    if(self->error_msg){
+        free(self->error_msg);
+    }
+
     privateCWebHyDrationBridgeArray_free(self->all_bridges);
     free(self);
 }
