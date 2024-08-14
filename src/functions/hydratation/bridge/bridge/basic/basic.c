@@ -1,13 +1,11 @@
 
 #include "../uniq.definitions_requirements.h"
 
-CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name, const char *route, CwebHttpRequest *request) {
+CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name,void (*callback)(CWebHyDrationBridge *),CwebHttpRequest *request) {
+
     CWebHyDrationBridge *self = (CWebHyDrationBridge*)malloc(sizeof(CWebHyDrationBridge));
     *self = (CWebHyDrationBridge){0};
-    if(name) {
-        self->name = strdup(name);
-    }
-    self->route = strdup(route);
+    self->name = strdup(name);
     self->request = request;
 	self->callbacks = newCwebStringArray();
     self->garbage = newCwebStringArray();
@@ -15,9 +13,6 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name, const char
     return  self;
 }
 
-bool   CWebHyDrationBridge_is_the_route(CWebHyDrationBridge *self) {
-    return strcmp(self->route,self->request->route) == 0;
-}
 
 CTextStack *private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self) {
     CTextStack *function = newCTextStack_string_empty();
@@ -74,10 +69,8 @@ char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,char *func_args,...) {
 
 }
 void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {
-    free(self->route);
-    if(self->name) {
-        free(self->name);
-    }
+
+    free(self->name);
 
     if(self->error) {
         free(self->error);

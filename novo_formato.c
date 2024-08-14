@@ -1,16 +1,15 @@
 
-#include "CWebStudio.h"
+#include "src/one.c"
 
 
 CwebNamespace cweb;
 CTextStackModule stack;
 
 
-void  gatilho_set_num(CWebHyDrationBridge *ponte,void *args){
+void  gatilho_set_num(CWebHyDrationBridge *ponte){
     long num = cweb.hydration.body.read_long(ponte,"num");
     long value = cweb.hydration.args.read_long(ponte,0);
     CWebHydrationHandleErrors(ponte);
-
     CTextStack * text = newCTextStack(CTEXT_LINE_BREAKER,CTEXT_SEPARATOR);
     CText$Scope(text,CTEXT_H3,"id='num'"){
         stack.format(text,"%d",num + value);
@@ -22,12 +21,15 @@ void  gatilho_set_num(CWebHyDrationBridge *ponte,void *args){
 CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydration,CWebHyDrationBridge *set_num){
     CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER,CTEXT_SEPARATOR);
     CTextScope(text,CTEXT_BODY){
+
         CTextScope(text,CTEXT_SCRIPT) {
            stack.format(text,cweb.hydration.create_script(hydration));
         }
+
         CText$Scope(text,CTEXT_H3,"id='num'"){
             stack.text(text,"0");
         }
+
         CText$Scope(text,CTEXT_BUTTON,"onclick='%s'",
                 cweb.hydration.call(set_num,"1")
         ){
@@ -48,9 +50,10 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
     }
 
     CWebHyDration *hydration = cweb.hydration.newHyDration(request);
-    CWebHyDrationBridge *ponte_set_num = cweb.hydration.create_bridge(hydration,gatilho_set_num);
+    CWebHyDrationBridge *ponte_set_num = cweb.hydration.create_bridge(hydration,gatilho_set_num,"set num ");
     cweb.hydration.request_number_text_content_by_id(ponte_set_num, "num");
     CWebHydrationHandleTriggers(hydration);
+
 
     return pagina_principal(request,hydration,ponte_set_num);
 

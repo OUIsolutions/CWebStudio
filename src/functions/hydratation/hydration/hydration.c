@@ -10,7 +10,11 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     return self;
 }
 
-CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char *route,char *name) {
+CWebHyDrationBridge * CWebHyDration_create_bridge(
+    CWebHyDration *self,
+    void (*callback)(CWebHyDrationBridge *),
+    const char *name) {
+
     CWebHyDrationBridge *created = private_newCWebHyDrationBridge(name,route,self->request);
     privateCWebHyDrationBridgeArray_append(self->all_bridges,created);
     return created;

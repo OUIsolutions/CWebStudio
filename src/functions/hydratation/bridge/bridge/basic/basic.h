@@ -1,7 +1,8 @@
 
 #include "../uniq.declaration_requirements.h"
 
-CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name, const char *route, CwebHttpRequest *request);
+
+CWebHyDrationBridge *private_newCWebHyDrationBridge(const char *name,void (*callback)(CWebHyDrationBridge *), CwebHttpRequest *request);
 
 bool CWebHyDrationBridge_is_the_route(CWebHyDrationBridge *self);
 
