@@ -1,7 +1,8 @@
 let private_cweb_bridges = {};
 
 async function private_cweb_send_to_server(name, args, content) {
-  let body = [name, args, content];
+  let body = { name: name, args: args, content: content };
+  console.log(body);
   let props = {
     method: "POST",
     body: JSON.stringify(body),
@@ -12,7 +13,9 @@ async function private_cweb_send_to_server(name, args, content) {
   actions.forEach(function (item) {
     try {
       let response_action = private_cweb_response_handlers[item.name];
-      throw "response " + item.name + "its not a action";
+      if (!response_action) {
+        throw Error("response " + item.name + "its not a action");
+      }
 
       response_action(item.data);
     } catch (error) {

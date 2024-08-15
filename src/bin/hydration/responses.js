@@ -17,7 +17,7 @@ let private_cweb_response_handlers = {
   },
 
   destroy_by_id: function (data) {
-    let element = document.getElementById(args.id);
+    let element = document.getElementById(data.id);
     if (element) {
       element.remove();
     }

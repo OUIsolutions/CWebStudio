@@ -34,10 +34,10 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
         CText$Scope(
             text,CTEXT_BUTTON,"%s",cweb.hydration.call(set_num,"onclick","-1")
         ){
-             stack.text(text,"increment");
+             stack.text(text,"decrement");
         }
-        CText$Scope(text,CTEXT_BUTTON,"%s",cweb.hydration.call(set_num,"onclick","-1")){
-            stack.text(text,"decrement");
+        CText$Scope(text,CTEXT_BUTTON,"%s",cweb.hydration.call(set_num,"onclick","1")){
+            stack.text(text,"increment");
         }
     }
     //CwebStringArray_add;
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
     stack = newCTextStackModule();
 
-    CwebServer server = newCwebSever(3002, main_sever);
+    CwebServer server = newCwebSever(3000, main_sever);
     server.single_process = true;
     cweb.server.start(&server);
     return 0;

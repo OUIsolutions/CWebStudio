@@ -58,7 +58,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED,
             CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG
         );
-        return private_CWebHydration_formmat_response(self);
+        return private_CWebHydration_formmat_error_response(self);
     }
 
     if(!cJSON_IsObject(body)){
@@ -68,7 +68,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT,
             CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT_MSG
         );
-        return private_CWebHydration_formmat_response(self);
+        return private_CWebHydration_formmat_error_response(self);
     }
 
     cJSON *name = cJSON_GetObjectItem(body, CWEB_HYDRATON_JSON_NAME);
@@ -81,18 +81,18 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_HYDRATION_NAME_NOT_PROVIDED,
             CWEB_HYDRATION_NAME_NOT_PROVIDED_MSG
         );
-        return private_CWebHydration_formmat_response(self);
+        return private_CWebHydration_formmat_error_response(self);
     }
 
 
-    if(cJSON_IsString(name)){
+    if(!cJSON_IsString(name)){
             privateCWebHydration_raise_error(
                 self,
                 NULL,
-                CWEB_HYDRATION_NAME_NOT_PROVIDED,
-                CWEB_HYDRATION_NAME_NOT_PROVIDED_MSG
+                CWEB_HYDRATION_NAME_NOT_STRING,
+                CWEB_HYDRATION_NAME_NOT_STRING_MSG
             );
-            return private_CWebHydration_formmat_response(self);
+            return private_CWebHydration_formmat_error_response(self);
     }
 
     cJSON *args = cJSON_GetObjectItem(body, CWEB_HYDRATON_JSON_ARGS);
@@ -103,7 +103,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_HYDRATION_ARGS_NOT_PROVIDED,
             CWEB_HYDRATION_ARGS_NOT_PROVIDED_MSG
         );
-        return private_CWebHydration_formmat_response(self);
+        return private_CWebHydration_formmat_error_response(self);
     }
 
     if(!cJSON_IsArray(args)){
@@ -113,7 +113,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_HYDRATION_ARGS_NOT_ARRAY,
             CWEB_HYDRATION_ARGS_NOT_ARRAY_MSG
         );
-        return private_CWebHydration_formmat_response(self);
+        return private_CWebHydration_formmat_error_response(self);
     }
 
     cJSON *content = cJSON_GetObjectItem(body, CWEB_HYDRATON_JSON_CONTENT);
@@ -125,7 +125,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_HYDRATION_CONTENT_NOT_PROVIDED,
             CWEB_HYDRATION_CONTENT_NOT_PROVIDED_MSG
         );
-        return private_CWebHydration_formmat_response(self);
+        return private_CWebHydration_formmat_error_response(self);
     }
     if(!cJSON_IsObject(content)){
         privateCWebHydration_raise_error(
@@ -134,7 +134,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_HYDRATION_CONTENT_NOT_OBJECT,
             CWEB_HYDRATION_CONTENT_NOT_OBJECT_MSG
         );
-        return private_CWebHydration_formmat_response(self);
+        return private_CWebHydration_formmat_error_response(self);
     }
     char *name_str = cJSON_GetStringValue(name);
     CWebHyDrationBridge *target_bridge = NULL;
@@ -153,7 +153,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_BRIDGE_NOT_FOUND_MSG,
             name_str
         );
-        return private_CWebHydration_formmat_response(self);
+        return private_CWebHydration_formmat_error_response(self);
     }
 
     target_bridge->args =args;
@@ -165,7 +165,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
     return final_response;
 
 }
-CwebHttpResponse *private_CWebHydration_formmat_response(CWebHyDration *self){
+CwebHttpResponse *private_CWebHydration_formmat_error_response(CWebHyDration *self){
     cJSON * response = cJSON_CreateObject();
     cJSON_AddStringToObject(response, CWEB_HYDRATION_JSON_ERROR_MENSSAGE,self->error_msg);
     cJSON_AddNumberToObject(response, CWEB_HYDRATION_JSON_ERROR_CODE_KEY,self->error_code);
