@@ -7,14 +7,15 @@ CTextStackModule stack;
 
 
 void  gatilho_set_num(CWebHyDrationBridge *ponte){
-    long num = cweb.hydration.body.read_long(ponte,"num");
+    long num = cweb.hydration.content.read_long(ponte,"num");
     long value = cweb.hydration.args.read_long(ponte,0);
     CWebHydrationHandleErrors(ponte);
     CTextStack * text = newCTextStack(CTEXT_LINE_BREAKER,CTEXT_SEPARATOR);
     CText$Scope(text,CTEXT_H3,"id='num'"){
         stack.format(text,"%d",num + value);
     }
-    cweb.hydration.replace_element_by_id_with_ctext_stack_cleaning_memory(ponte,"num",text);
+    cweb.hydration.response.replace_element_by_id(ponte,"num",text->rendered_text);
+    stack.free(text);
 }
 
 
@@ -49,15 +50,11 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
         return cweb_send_text("app terminado",200);
     }
 
-    CWebHyDration *hydration = cweb.hydration.newHyDration(request);
-    CWebHyDrationBridge *ponte_set_num = cweb.hydration.create_bridge(
-        hydration,gatilho_set_num,
-        "set num ");
+    CWebHyDration *hydration = cweb.hydration.newCWebHyDration(request);
+    CWebHyDrationBridge *ponte_set_num = cweb.hydration.create_bridge(hydration, "set num ",gatilho_set_num);
     //precisa desse id
-    cweb.hydration.request_number_text_content_by_id(ponte_set_num, "num");
+    cweb.hydration.requirements.add_required_text_number_by_id(ponte_set_num, "num");
     CWebHydrationHandleTriggers(hydration);
-
-
     return pagina_principal(request,hydration,ponte_set_num);
 
 }

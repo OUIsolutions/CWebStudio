@@ -47,7 +47,13 @@ CTextStack *private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self)
     CTextStack_format(function,"};\n");
     return function;
 }
-
+bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self){
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    if(hydration->error_code == 0){
+        return false;
+    }
+    return true;
+}
 char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,char *func_args,...) {
 
     CTextStack *callback= newCTextStack_string_empty();

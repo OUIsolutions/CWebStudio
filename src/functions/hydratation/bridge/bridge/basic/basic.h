@@ -9,6 +9,7 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
     CWebHyDration *hydration
 );
 
+bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self);
 
 char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,char *func_args,...);
 

@@ -7,3 +7,4 @@
 #include "response.h"
 #include "server.h"
 #include "string.h"
+#include "namespace.h"
