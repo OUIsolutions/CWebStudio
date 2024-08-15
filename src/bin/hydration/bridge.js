@@ -8,7 +8,17 @@ async function private_cweb_send_to_server(name, args, content) {
   };
   const ROUTE = "/private_cweb_hydration_main_callback_handler";
   let result = await fetch(ROUTE, props);
-  console.log(result);
+  let actions = await result.json();
+  actions.forEach(function (item) {
+    try {
+      let response_action = private_cweb_response_handlers[item.name];
+      throw "response " + item.name + "its not a action";
+
+      response_action(item.data);
+    } catch (error) {
+      console.log(error);
+    }
+  });
 }
 
 function private_cweb_handle_required_data(callback, args, content) {

@@ -1,6 +1,6 @@
 let private_cweb_response_handlers = {
   alert: function (data) {
-    alert(data["message"]);
+    alert(data["msg"]);
   },
 
   execute_script: function (data) {
@@ -15,6 +15,7 @@ let private_cweb_response_handlers = {
     element.insertAdjacentHTML("afterend", data.html);
     element.remove();
   },
+
   destroy_by_id: function (data) {
     let element = document.getElementById(args.id);
     if (element) {

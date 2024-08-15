@@ -1,5 +1,5 @@
 
-#include "../uniq.definitions_requirements.h"
+#include "../uniq.declaration_requirements.h"
 
 void CWebHyDrationBridge_add_required_function(CWebHyDrationBridge *self,const char *function,...);
 

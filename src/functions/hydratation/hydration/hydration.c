@@ -15,6 +15,7 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     *self = (CWebHyDration){0};
     self->all_bridges = private_new_privateCWebHyDrationBridgeArray();
     self->request =  request;
+    self->response = cJSON_CreateArray();
     self->max_content_size = CWEB_HYDRATION_DEFAULT_BODY_SIZE;
     request->hydratation = (void *)self;
     return self;
