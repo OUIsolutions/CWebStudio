@@ -131,7 +131,7 @@ char*  CWebHyDrationBridge_read_str_content(CWebHyDrationBridge *self,const char
             free(key_formmated);
             return NULL;
     }
-    if(!cJSON_IsBool(item)){
+    if(!cJSON_IsString(item)){
         privateCWebHydration_raise_error(
             hydration,
             self,

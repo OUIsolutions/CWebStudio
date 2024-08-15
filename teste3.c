@@ -14,6 +14,7 @@ void  ponte_imprime_texto(CWebHyDrationBridge *ponte){
     stack.format(text, "Você digitou valor: %s", valor);
   }
   cweb.hydration.response.replace_element_by_id(ponte, "response", text->rendered_text);
+  cweb.hydration.response.alert(ponte, "Msg");
 
   stack.free(text);
 }
@@ -22,7 +23,8 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
     CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
     CTextScope(text,CTEXT_BODY){
 
-        CText$Scope(text, "button", "id='valor' %s", cweb.hydration.call(imprime_texto, "onclick", NULL));
+        CText$Scope(text, "script", "src='/hydration_script'");
+        CText$Scope(text, "input", "id='valor' %s", cweb.hydration.call(imprime_texto, "onfocusout", NULL));
         CText$Scope(text,  "h3", "id='response'");
     }
     //CwebStringArray_add;
@@ -57,7 +59,7 @@ int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
     stack = newCTextStackModule();
 
-    CwebServer server = newCwebSever(3001, main_sever);
+    CwebServer server = newCwebSever(3002, main_sever);
     server.single_process = true;
     cweb.server.start(&server);
     return 0;
