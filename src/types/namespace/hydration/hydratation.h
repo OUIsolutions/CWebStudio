@@ -11,7 +11,7 @@
 typedef struct CWebHydrationNamespace{
 
     bool (*has_errors)(CWebHyDrationBridge *self);
-    char *(*call)(CWebHyDrationBridge *self,const char *func_args,...);
+    char *(*call)(CWebHyDrationBridge *self,const char *trigger,const char *func_args,...);
 
     CWebHyDration * (*newCWebHyDration)(CwebHttpRequest *request);
     CWebHyDrationBridge * (*create_bridge)(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *));

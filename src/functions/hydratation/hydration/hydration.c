@@ -35,7 +35,7 @@ bool CWebHyDration_is_the_trigger(CWebHyDration *self){
 void privateCWebHydration_raise_error(CWebHyDration *self,CWebHyDrationBridge *bridge, int error_code, const char *format,...){
     va_list  args;
     va_start(args,format);
-    self->error_msg = private_CWebHydration_format_vaarg(format,args);
+    self->error_msg = private_CWeb_format_vaarg(format,args);
     va_end(args);
     self->error_code = error_code;
     if(bridge){
@@ -179,14 +179,14 @@ char *CWebHyDration_create_script(CWebHyDration *self) {
     }
 
     self->script_text = newCTextStack_string_empty();
+
     CTextStack_format(self->script_text,"%s", private_cweb_hydration_js_content);
 
     for(int i =0; i < self->all_bridges->size;i++) {
         CWebHyDrationBridge *current = self->all_bridges->elments[i];
-        CTextStack *created_code =private_CWebHyDrationBridge_create_script(current);
+        CTextStack* created_code =private_CWebHyDrationBridge_create_script(current);
         CTextStack_format(self->script_text,"%tc",created_code);
     }
-
     return self->script_text->rendered_text;
 
 }

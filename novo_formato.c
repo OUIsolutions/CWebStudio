@@ -2,8 +2,6 @@
 #include "src/dependencies/declaration.h"
 #include "src/functions/declarations.h"
 #include "src/one.c"
-#include "src/types/string_array.h"
-#include <string.h>
 
 
 CwebNamespace cweb;
@@ -33,12 +31,12 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
         }
         CText$Scope(text, CTEXT_SCRIPT,"src='hydration_script'");
 
-        CText$Scope(text,CTEXT_BUTTON,"onclick='%s'",
-                cweb.hydration.call(set_num,"1")
+        CText$Scope(
+            text,CTEXT_BUTTON,"%s",cweb.hydration.call(set_num,"onclick","-1")
         ){
              stack.text(text,"increment");
         }
-        CText$Scope(text,CTEXT_BUTTON,"onclick='%s'",cweb.hydration.call(set_num,"-1")){
+        CText$Scope(text,CTEXT_BUTTON,"%s",cweb.hydration.call(set_num,"onclick","-1")){
             stack.text(text,"decrement");
         }
     }
@@ -73,7 +71,7 @@ int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
     stack = newCTextStackModule();
 
-    CwebServer server = newCwebSever(3001, main_sever);
+    CwebServer server = newCwebSever(3002, main_sever);
     server.single_process = true;
     cweb.server.start(&server);
     return 0;

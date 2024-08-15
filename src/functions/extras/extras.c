@@ -178,3 +178,32 @@ bool private_cweb_is_string_from_point(const char *content, long content_size, c
     return true;
 }
  */
+
+ char * private_CWeb_format_vaarg(const char *expresion, va_list args){
+
+     va_list args_copy;
+     va_copy(args_copy, args);
+     long required_size = vsnprintf(NULL, 0,expresion,args_copy);
+     va_end(args_copy);
+     char *buffer = (char*)malloc(sizeof(char) * required_size + 2);
+     vsnprintf(buffer,sizeof (char) * required_size+1,expresion,args);
+     return buffer;
+ }
+ char * private_CWebHydration_format(const char *expresion, ...){
+     va_list  args;
+     va_start(args,expresion);
+     char *result = private_CWeb_format_vaarg(expresion,args);
+     va_end(args);
+     return  result;
+ }
+
+ char *private_cweb_convert_to_hexa(const char *data){
+     CTextStack *hexa_format = newCTextStack_string_empty();
+     int content_size = strlen(data);
+     for(int i = 0; i < content_size; i++){
+         char buffer[10] = {0};
+         sprintf(buffer,"\\x%x",data[i]);
+         CTextStack_format(hexa_format,"%s",buffer);
+     };
+     return CTextStack_self_transform_in_string_and_self_clear(hexa_format);
+ }

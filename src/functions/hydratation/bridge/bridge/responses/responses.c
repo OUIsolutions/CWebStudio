@@ -14,7 +14,7 @@ void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,..
     cJSON *obj = cJSON_CreateObject();
     va_list  args;
     va_start(args,menssage);
-    char *msg_format = private_CWebHydration_format_vaarg(menssage,args);
+    char *msg_format = private_CWeb_format_vaarg(menssage,args);
     va_end(args);
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_MSG, msg_format);
     free(msg_format);
@@ -26,7 +26,7 @@ void CWebHyDrationBridge_execute_script(CWebHyDrationBridge *self,const char *co
     cJSON *obj = cJSON_CreateObject();
     va_list  args;
     va_start(args,code);
-    char *code_format = private_CWebHydration_format_vaarg(code,args);
+    char *code_format = private_CWeb_format_vaarg(code,args);
     va_end(args);
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_CODE, code_format);
     free(code_format);
@@ -37,7 +37,7 @@ void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,const c
     cJSON *obj = cJSON_CreateObject();
     va_list  args;
     va_start(args,code);
-    char *html_format = private_CWebHydration_format_vaarg(code,args);
+    char *html_format = private_CWeb_format_vaarg(code,args);
     va_end(args);
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_HTML, html_format);

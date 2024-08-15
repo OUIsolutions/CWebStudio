@@ -7,7 +7,7 @@ double CWebHyDrationBridge_read_double_content(CWebHyDrationBridge *self,const c
 
     va_list  args;
     va_start(args,key);
-    char *key_formmated = private_CWebHydration_format_vaarg(key,args);
+    char *key_formmated = private_CWeb_format_vaarg(key,args);
     va_end(args);
 
     cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
@@ -44,7 +44,7 @@ long  CWebHyDrationBridge_read_long_content(CWebHyDrationBridge *self,const char
 
     va_list  args;
     va_start(args,key);
-    char *key_formmated = private_CWebHydration_format_vaarg(key,args);
+    char *key_formmated = private_CWeb_format_vaarg(key,args);
     va_end(args);
 
     cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
@@ -79,7 +79,7 @@ bool  CWebHyDrationBridge_read_bool_content(CWebHyDrationBridge *self,const char
 
     va_list  args;
     va_start(args,key);
-    char *key_formmated = private_CWebHydration_format_vaarg(key,args);
+    char *key_formmated = private_CWeb_format_vaarg(key,args);
     va_end(args);
 
     cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
@@ -115,7 +115,7 @@ char*  CWebHyDrationBridge_read_str_content(CWebHyDrationBridge *self,const char
 
     va_list  args;
     va_start(args,key);
-    char *key_formmated = private_CWebHydration_format_vaarg(key,args);
+    char *key_formmated = private_CWeb_format_vaarg(key,args);
     va_end(args);
 
     cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
