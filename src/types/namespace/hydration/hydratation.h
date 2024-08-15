@@ -16,7 +16,7 @@ typedef struct CWebHydrationNamespace{
     bool (*the_trigger)(CWebHyDration *self);
     CwebHttpResponse *(*generate_response)(CWebHyDration *self);
     char *(*create_script)(CWebHyDration *self);
-    CWebHydrationRequirementsNamespace requrements;
+    CWebHydrationRequirementsNamespace requirements;
     CWebHydrationResponseNamespace response;
     CWebHydrationArgsNamespace args;
     CWebHydrationContentNamespace content;
