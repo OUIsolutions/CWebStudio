@@ -1,6 +1,8 @@
 [
-    {"file":"a.txt","included":"b.txt"},
-    {"file":"a.txt","included":"c.txt"},
-    {"file":"c.txt","included":"a.txt"},
-
+  {
+    "name": "alert",
+    "data": {
+      "message": "aaaa"
+    }
+  }
 ]
