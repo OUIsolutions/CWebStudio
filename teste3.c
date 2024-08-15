@@ -6,7 +6,7 @@ CTextStackModule stack;
 
 void  ponte_imprime_texto(CWebHyDrationBridge *ponte){
   const char *valor = cweb.hydration.content.read_str(ponte, "valor");
-  
+
   CWebHydrationHandleErrors(ponte);
   CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
