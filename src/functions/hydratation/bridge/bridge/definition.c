@@ -1,6 +1,7 @@
 #include "basic/basic.c"
-#include "entries/entries.c"
+#include "requirements/requirements.c"
 #include "args/args.c"
+#include "content/content.c"
 #include "response/response.c"
 #include "read/read.c"
 #include "error/error.c"
