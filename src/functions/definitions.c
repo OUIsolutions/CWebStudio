@@ -9,5 +9,5 @@
 #include "static/definition.h"
 #include "server/definitions.c"
 #include "cors/cors.c"
-#include "namespace/definition.h"
+#include "namespace/definition.c"
 #include "hydratation/definition.c"

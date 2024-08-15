@@ -1,7 +1,8 @@
 #include "../uniq.declaration_requirements.h"
 
 
-void privateCWebHyDrationBridge_add_response(const char *name,cJSON *data);
+void privateCWebHyDrationBridge_add_response(
+    CWebHyDrationBridge *self,const char *name,cJSON *data);
 
 void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,...);
 

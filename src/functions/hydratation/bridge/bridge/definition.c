@@ -2,6 +2,4 @@
 #include "requirements/requirements.c"
 #include "args/args.c"
 #include "content/content.c"
-#include "response/response.c"
-#include "read/read.c"
-#include "error/error.c"
+#include "responses/responses.c"
