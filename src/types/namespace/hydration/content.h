@@ -6,7 +6,7 @@
 #define PRIVATE_CWEB_HYDRATATION_RESPONSE_NAMESPACE_TYPES
 
 
-typedef struct CWebHydrationResponseNamespace {
+typedef struct CWebHydrationContentNamespace {
 
     double (*read_double)(CWebHyDrationBridge *self,const char *key,...);
     long  (*read_long)(CWebHyDrationBridge *self,const char *key,...);

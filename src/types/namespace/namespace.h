@@ -3,7 +3,7 @@
 #include "response.h"
 #include "server.h"
 #include "string.h"
-#include "hydratation.h"
+#include "hydration/all.h"
 
 #ifndef PRIVATE_CWEB_HTTP_NAMESPACE_NAMESPACE_TYPES
 #define PRIVATE_CWEB_HTTP_NAMESPACE_NAMESPACE_TYPES

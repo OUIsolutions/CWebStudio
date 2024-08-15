@@ -3,8 +3,7 @@
 #include "requirements.h"
 #include "content.h"
 #include "args.h"
-#include "response.h"
-#include "../response.h"
+#include "response_namespace.h"
 
 #ifndef PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
 #define PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES

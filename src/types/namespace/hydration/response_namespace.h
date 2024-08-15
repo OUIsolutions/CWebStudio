@@ -7,8 +7,6 @@
 
 
 typedef struct CWebHydrationResponseNamespace {
-
-
     void (*alert)(CWebHyDrationBridge *self,const char *menssage,...);
 
     void (*execute_script)(CWebHyDrationBridge *self,const char *code,...);
@@ -18,4 +16,5 @@ typedef struct CWebHydrationResponseNamespace {
     void (*destroy_by_id)(CWebHyDrationBridge *self,const char * id);
 
 }CWebHydrationResponseNamespace;
+
 #endif
