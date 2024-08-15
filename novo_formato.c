@@ -1,12 +1,9 @@
 
-#include "src/dependencies/declaration.h"
-#include "src/functions/declarations.h"
 #include "src/one.c"
-
+#include <stdio.h>
 
 CwebNamespace cweb;
 CTextStackModule stack;
-
 
 void  gatilho_set_num(CWebHyDrationBridge *ponte){
     long num = cweb.hydration.content.read_long(ponte,"num");
@@ -20,7 +17,6 @@ void  gatilho_set_num(CWebHyDrationBridge *ponte){
     cweb.hydration.response.replace_element_by_id(ponte,"num",text->rendered_text);
     stack.free(text);
 }
-
 
 CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydration,CWebHyDrationBridge *set_num){
     CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER,CTEXT_SEPARATOR);
@@ -41,6 +37,9 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
             stack.text(text,"increment");
         }
     }
+
+    printf("\n\n%s\n\n", cweb.hydration.C)
+
     //CwebStringArray_add;
     return  cweb.response.send_rendered_CTextStack_cleaning_memory(text,200);
 }

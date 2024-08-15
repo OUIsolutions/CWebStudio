@@ -2,7 +2,6 @@ let private_cweb_bridges = {};
 
 async function private_cweb_send_to_server(name, args, content) {
   let body = { name: name, args: args, content: content };
-  console.log(body);
   let props = {
     method: "POST",
     body: JSON.stringify(body),
