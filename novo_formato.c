@@ -50,7 +50,10 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
     }
 
     CWebHyDration *hydration = cweb.hydration.newHyDration(request);
-    CWebHyDrationBridge *ponte_set_num = cweb.hydration.create_bridge(hydration,gatilho_set_num,"set num ");
+    CWebHyDrationBridge *ponte_set_num = cweb.hydration.create_bridge(
+        hydration,gatilho_set_num,
+        "set num ");
+    //precisa desse id
     cweb.hydration.request_number_text_content_by_id(ponte_set_num, "num");
     CWebHydrationHandleTriggers(hydration);
 
