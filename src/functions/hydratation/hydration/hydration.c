@@ -6,6 +6,11 @@
 
 
 CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
+
+    if(request->hydratation){
+        return (CWebHyDration*)request->hydratation;
+    }
+
     CWebHyDration *self = (CWebHyDration*)malloc(sizeof(CWebHyDration));
     *self = (CWebHyDration){0};
     self->all_bridges = private_new_privateCWebHyDrationBridgeArray();
