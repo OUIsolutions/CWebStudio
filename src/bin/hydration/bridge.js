@@ -1,3 +1,5 @@
+let private_cweb_bridges = {};
+
 async function private_cweb_send_to_server(name, args, content) {
   let body = [name, args, content];
   let props = {
