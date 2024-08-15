@@ -2,8 +2,8 @@
 #define CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG "json body not provided"
 
 
-#define CWEB_HYDRATION_NOT_BODY_IS_NOT_ARRAY 2
-#define CWEB_HYDRATION_NOT_BODY_IS_NOT_ARRAY_MSG  "json body not noto object"
+#define CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT 2
+#define CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT_MSG  "json body not not object"
 
 #define CWEB_HYDRATION_KEY_NOT_PROVIDED 3
 #define CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG  "json key %s not provided"
@@ -17,6 +17,30 @@
 #define CWEB_HYDRATION_INDEX_WRONG_TYPE 6
 #define CWEB_HYDRATION_INDEX_WRONG_TYPE_MSG  "json index %d is not of type %s"
 
+
+#define CWEB_HYDRATION_NAME_NOT_PROVIDED 7
+#define CWEB_HYDRATION_NAME_NOT_PROVIDED_MSG  "name not provided"
+
+#define CWEB_HYDRATION_NAME_NOT_STRING 8
+#define CWEB_HYDRATION_NAME_NOT_STRING_MSG  "name its not string"
+
+
+#define CWEB_HYDRATION_ARGS_NOT_PROVIDED 9
+#define CWEB_HYDRATION_ARGS_NOT_PROVIDED_MSG  "args not provided"
+
+#define CWEB_HYDRATION_ARGS_NOT_ARRAY 10
+#define CWEB_HYDRATION_ARGS_NOT_ARRAY_MSG  "args its not arra"
+
+
+
+#define CWEB_HYDRATION_CONTENT_NOT_PROVIDED 11
+#define CWEB_HYDRATION_CONTENT_NOT_PROVIDED_MSG  "content not provided"
+
+#define CWEB_HYDRATION_CONTENT_NOT_OBJECT 12
+#define CWEB_HYDRATION_CONTENT_NOT_OBJECT_MSG  "content not object"
+
+#define CWEB_BRIDGE_NOT_FOUND 13
+#define CWEB_BRIDGE_NOT_FOUND_MSG  "bridge of name %s not found"
 
 
 #define CWEB_HYDRATION_STRING "string"

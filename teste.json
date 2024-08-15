@@ -1,8 +1,7 @@
 [
   {
-    "name": "alert",
-    "data": {
-      "message": "aaaa"
-    }
+    "name": "set num",
+    "content": {},
+    "args": []
   }
 ]

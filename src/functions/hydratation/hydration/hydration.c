@@ -51,6 +51,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
     }
     cJSON *body = CWebHttpRequest_read_cJSON(self->request, self->max_content_size);
 
+
     if(body ==NULL){
         privateCWebHydration_raise_error(
             self,
@@ -61,16 +62,109 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
         return private_CWebHydration_formmat_response(self);
     }
 
-    if(!cJSON_IsArray(body)){
+    if(!cJSON_IsObject(body)){
         privateCWebHydration_raise_error(
             self,
             NULL,
-            CWEB_HYDRATION_NOT_BODY_IS_NOT_ARRAY,
-            CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG
+            CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT,
+            CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT_MSG
         );
         return private_CWebHydration_formmat_response(self);
     }
-    return NULL;
+
+    cJSON *name = cJSON_GetObjectItem(body, CWEB_HYDRATON_JSON_NAME);
+
+
+    if(name == NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_NAME_NOT_PROVIDED,
+            CWEB_HYDRATION_NAME_NOT_PROVIDED_MSG
+        );
+        return private_CWebHydration_formmat_response(self);
+    }
+
+
+    if(cJSON_IsString(name)){
+            privateCWebHydration_raise_error(
+                self,
+                NULL,
+                CWEB_HYDRATION_NAME_NOT_PROVIDED,
+                CWEB_HYDRATION_NAME_NOT_PROVIDED_MSG
+            );
+            return private_CWebHydration_formmat_response(self);
+    }
+
+    cJSON *args = cJSON_GetObjectItem(body, CWEB_HYDRATON_JSON_ARGS);
+    if(args == NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_ARGS_NOT_PROVIDED,
+            CWEB_HYDRATION_ARGS_NOT_PROVIDED_MSG
+        );
+        return private_CWebHydration_formmat_response(self);
+    }
+
+    if(!cJSON_IsArray(args)){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_ARGS_NOT_ARRAY,
+            CWEB_HYDRATION_ARGS_NOT_ARRAY_MSG
+        );
+        return private_CWebHydration_formmat_response(self);
+    }
+
+    cJSON *content = cJSON_GetObjectItem(body, CWEB_HYDRATON_JSON_CONTENT);
+
+    if(content == NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_CONTENT_NOT_PROVIDED,
+            CWEB_HYDRATION_CONTENT_NOT_PROVIDED_MSG
+        );
+        return private_CWebHydration_formmat_response(self);
+    }
+    if(!cJSON_IsObject(content)){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_CONTENT_NOT_OBJECT,
+            CWEB_HYDRATION_CONTENT_NOT_OBJECT_MSG
+        );
+        return private_CWebHydration_formmat_response(self);
+    }
+    char *name_str = cJSON_GetStringValue(name);
+    CWebHyDrationBridge *target_bridge = NULL;
+    for(int i = 0; i < self->all_bridges->size;i++){
+        CWebHyDrationBridge *current = self->all_bridges->elments[i];
+        if(strcmp(current->name,name_str)==0){
+                target_bridge = current;
+                break;
+        }
+    }
+    if(target_bridge == NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_BRIDGE_NOT_FOUND,
+            CWEB_BRIDGE_NOT_FOUND_MSG,
+            name_str
+        );
+        return private_CWebHydration_formmat_response(self);
+    }
+
+    target_bridge->args =args;
+    target_bridge->content = content;
+    target_bridge->callback(target_bridge);
+
+    CwebHttpResponse *final_response = cweb_send_cJSON_cleaning_memory(self->response, 200);
+    self->response = NULL;
+
+    return final_response;
 
 }
 CwebHttpResponse *private_CWebHydration_formmat_response(CWebHyDration *self){
@@ -105,6 +199,9 @@ void private_CWebHyDration_free(CWebHyDration *self) {
     }
     if(self->error_msg){
         free(self->error_msg);
+    }
+    if(self->response){
+        cJSON_Delete(self->response);
     }
 
     privateCWebHyDrationBridgeArray_free(self->all_bridges);
