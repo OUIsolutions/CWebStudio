@@ -1,5 +1,7 @@
 
+#include "src/dependencies/declaration.h"
 #include "src/one.c"
+#include <string.h>
 
 
 CwebNamespace cweb;
@@ -23,13 +25,11 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
     CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER,CTEXT_SEPARATOR);
     CTextScope(text,CTEXT_BODY){
 
-        CTextScope(text,CTEXT_SCRIPT) {
-           stack.format(text,cweb.hydration.create_script(hydration));
-        }
 
         CText$Scope(text,CTEXT_H3,"id='num'"){
             stack.text(text,"0");
         }
+        CText$Scope(text, CTEXT_SCRIPT,"src='hydration_script'");
 
         CText$Scope(text,CTEXT_BUTTON,"onclick='%s'",
                 cweb.hydration.call(set_num,"1")
@@ -55,6 +55,11 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
     //precisa desse id
     cweb.hydration.requirements.add_required_text_number_by_id(ponte_set_num, "num");
     CWebHydrationHandleTriggers(hydration);
+
+    if(strcmp(request->route,"/hydration_script")){
+        return cweb.response.send_text(cweb.hydration.create_script(hydration),200);
+    }
+
     return pagina_principal(request,hydration,ponte_set_num);
 
 }
@@ -67,6 +72,7 @@ int main(int argc, char *argv[]){
     stack = newCTextStackModule();
 
     CwebServer server = newCwebSever(3000, main_sever);
+    server.single_process = true;
     cweb.server.start(&server);
     return 0;
 

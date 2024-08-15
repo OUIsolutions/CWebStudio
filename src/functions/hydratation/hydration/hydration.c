@@ -29,6 +29,7 @@ bool CWebHyDration_is_the_trigger(CWebHyDration *self){
     if(strcmp(self->request->route,CWEB_HYDRATION_CALBACK_HANDLER_ROUTE) == 0){
         return true;
     }
+    return false;
 }
 
 void privateCWebHydration_raise_error(CWebHyDration *self,CWebHyDrationBridge *bridge, int error_code, const char *format,...){

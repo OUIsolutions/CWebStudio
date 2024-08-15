@@ -53,7 +53,7 @@ bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self){
     }
     return true;
 }
-char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,char *func_args,...) {
+char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...) {
 
     CTextStack *callback= newCTextStack_string_empty();
 
