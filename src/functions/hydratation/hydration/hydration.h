@@ -7,6 +7,9 @@ CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char
 
 void privateCWebHydration_raise_error(CWebHyDration *self,CWebHyDrationBridge *bridge, int error_code, const char *format,...);
 
+CwebHttpResponse *private_CWebHydration_formmat_response(CWebHyDration *self);
+
+
 bool CWebHyDration_is_the_trigger(CWebHyDration *self);
 
 CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self);

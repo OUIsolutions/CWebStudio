@@ -1,0 +1,2 @@
+#define CWEB_HYDRATION_JSON_ERROR_CODE_KEY "error_code"
+#define CWEB_HYDRATION_JSON_ERROR_MENSSAGE "error_menssage"

@@ -52,7 +52,7 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED,
             CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG
         );
-        return NULL;
+        return private_CWebHydration_formmat_response(self);
     }
 
     if(!cJSON_IsArray(body)){
@@ -62,9 +62,16 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
             CWEB_HYDRATION_NOT_BODY_IS_NOT_ARRAY,
             CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG
         );
-        return NULL;
+        return private_CWebHydration_formmat_response(self);
     }
+    return NULL;
 
+}
+CwebHttpResponse *private_CWebHydration_formmat_response(CWebHyDration *self){
+    cJSON * response = cJSON_CreateObject();
+    cJSON_AddStringToObject(response, CWEB_HYDRATION_JSON_ERROR_MENSSAGE,self->error_msg);
+    cJSON_AddNumberToObject(response, CWEB_HYDRATION_JSON_ERROR_CODE_KEY,self->error_code);
+    return cweb_send_cJSON_cleaning_memory(response, 404);
 }
 
 char *CWebHyDration_create_script(CWebHyDration *self) {
