@@ -12,7 +12,7 @@ typedef struct CWebHydrationNamespace{
 
     CWebHyDration * (*newCWebHyDration)(CwebHttpRequest *request);
     CWebHyDrationBridge * (*create_bridge)(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *));
-    bool (*the_trigger)(CWebHyDration *self);
+    bool (*is_the_trigger)(CWebHyDration *self);
     CwebHttpResponse *(*generate_response)(CWebHyDration *self);
     char *(*create_script)(CWebHyDration *self);
     CWebHydrationRequirementsNamespace requirements;
