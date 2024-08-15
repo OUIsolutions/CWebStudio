@@ -163,7 +163,6 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
 
     CwebHttpResponse *final_response = cweb_send_cJSON_cleaning_memory(self->response, 200);
     self->response = NULL;
-
     return final_response;
 
 }

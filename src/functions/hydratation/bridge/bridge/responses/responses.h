@@ -7,7 +7,7 @@ void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,..
 
 void CWebHyDrationBridge_execute_script(
     CWebHyDrationBridge *self,const char *code,...
-    .);
+    );
 
 void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,
     const char *id,
