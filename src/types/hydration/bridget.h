@@ -7,11 +7,14 @@
 
 
 typedef struct  CWebHyDrationBridge {
-    const char *name;
+    char *name;
     void  *hydration;
     void  (*callback)(CWebHyDrationBridge *bridge);
     cJSON *args;
     cJSON *body;
+    CwebStringArray *entries_callbacks;
+    CwebStringArray *calls;
+
     void *extra_args;
 
 }CWebHyDrationBridge;

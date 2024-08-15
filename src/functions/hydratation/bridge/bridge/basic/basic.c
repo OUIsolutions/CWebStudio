@@ -1,5 +1,6 @@
 
 #include "../uniq.definitions_requirements.h"
+#include <cstdlib>
 
 CWebHyDrationBridge *private_newCWebHyDrationBridge(
     const char *name,
@@ -16,25 +17,30 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
 
 
 CTextStack *private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self) {
+
     CTextStack *function = newCTextStack_string_empty();
-    CTextStack_format(function,"\nasync function ");
-    if(self->name) {
-        CTextStack_format(function,"%s",self->name);
-    }
-    else {
-        CTextStack *formatted_name = newCTextStack_string(self->route);
-        CTextStack_self_replace(formatted_name,"/","");
-        CTextStack_format(function,"%tc(args)",formatted_name);
-    }
-    CTextStack_format(function,"{\n");
-    CTextStack_format(function,"\tlet body = {}\n");
-    CTextStack_format(function,"\t%s(body,args);\n",PRIVATE_CWEB_REPLACE_ARGS_IN_BODY);
 
-    for(int i= 0; i < self->callbacks->size;i++) {
-        CTextStack_format(function,"\t%s\n",self->callbacks->strings[i]);
+    CTextStack_format(
+        function,
+        "private_cweb_bridges['%s'] = async function (args){ \n",
+        self->name
+    );
+
+    CTextStack_format(function,"\tlet content = {}\n");
+
+    for(int i= 0; i < self->entries_callbacks->size;i++) {
+        CTextStack_format(
+            function,
+            "\tprivate_cweb_handle_required_data(%s, args, content);\n",
+            self->entries_callbacks->strings[i]
+        );
     }
 
-    CTextStack_format(function,"\tawait private_cweb_send_to_server('%s',body)\n",self->route);
+    CTextStack_format(
+        function,
+        "\tawait private_cweb_send_to_server('%s',args,content)\n",
+        self->name
+    );
     CTextStack_format(function,"};\n");
     return function;
 }
@@ -43,36 +49,31 @@ char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,char *func_args,...) {
 
     CTextStack *callback= newCTextStack_string_empty();
 
-    if(self->name) {
-        CTextStack_format(callback,"%s",self->name);
-    }
-    else {
-        CTextStack *formatted_name = newCTextStack_string(self->route);
-        CTextStack_self_replace(formatted_name,"/","");
-        CTextStack_format(callback,"%tc",formatted_name);
-    }
 
     if(func_args == NULL) {
-        CTextStack_format(callback,"([]);");
-        CwebStringArray_add(self->garbage,callback->rendered_text);
+        CTextStack_format(callback,"private_cweb_bridges['%s']([]);",self->name);
+        CwebStringArray_add(self->calls,callback->rendered_text);
         CTextStack_free(callback);
-        return self->garbage->strings[self->garbage->size-1];
+        return self->calls->strings[self->calls->size-1];
     }
 
     va_list  args;
     va_start(args,func_args);
     char *result = private_CWebHydration_format_vaarg(func_args,args);
     va_end(args);
-    CTextStack_format(callback,"([%sc]);",result);
-    CwebStringArray_add(self->garbage,callback->rendered_text);
+    CTextStack_format(
+        callback,
+        "private_cweb_bridges['%s']([%sc]);",
+        self->name,
+        result);
+    CwebStringArray_add(self->calls,callback->rendered_text);
     CTextStack_free(callback);
-    return self->garbage->strings[self->garbage->size-1];
+    return self->calls->strings[self->calls->size-1];
 
 }
 void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {
-
-
-
-    CwebStringArray_free(self->garbage);
+free(self->name);
+    CwebStringArray_free(self->entries_callbacks);
+    CwebStringArray_free(self->calls);
     free(self);
 }
