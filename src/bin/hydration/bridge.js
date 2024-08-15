@@ -12,9 +12,10 @@ async function private_cweb_send_to_server(name, args, content) {
 function private_cweb_handle_required_data(callback, args, content) {
   callback(args, content);
 }
-
+/*
 private_cweb_bridges["inc number"] = async function (args) {
   let content = {};
   private_cweb_handle_required_data(function (args, content) {}, args, content);
   await private_cweb_send_to_server("inc number", args, content);
 };
+*/
