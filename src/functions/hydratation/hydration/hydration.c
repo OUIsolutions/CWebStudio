@@ -159,7 +159,10 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
     target_bridge->args =args;
     target_bridge->content = content;
     target_bridge->callback(target_bridge);
+    if(self->error_code){
+        return private_CWebHydration_formmat_error_response(self);
 
+    }
     CwebHttpResponse *final_response = cweb_send_cJSON_cleaning_memory(self->response, 200);
     self->response = NULL;
     return final_response;

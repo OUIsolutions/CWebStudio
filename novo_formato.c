@@ -11,6 +11,7 @@ CTextStackModule stack;
 void  gatilho_set_num(CWebHyDrationBridge *ponte){
     long num = cweb.hydration.content.read_long(ponte,"num");
     long value = cweb.hydration.args.read_long(ponte,0);
+
     CWebHydrationHandleErrors(ponte);
     CTextStack * text = newCTextStack(CTEXT_LINE_BREAKER,CTEXT_SEPARATOR);
     CText$Scope(text,CTEXT_H3,"id='num'"){
@@ -71,7 +72,7 @@ int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
     stack = newCTextStackModule();
 
-    CwebServer server = newCwebSever(3000, main_sever);
+    CwebServer server = newCwebSever(3001, main_sever);
     server.single_process = true;
     cweb.server.start(&server);
     return 0;
