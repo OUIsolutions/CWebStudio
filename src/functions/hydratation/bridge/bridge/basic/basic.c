@@ -62,12 +62,10 @@ char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *trigger,con
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
 
     if(func_args == NULL) {
-
         CTextStack_format(callback,"%s = 'private_cweb_bridges[\"%s\"]([]);'",trigger,self->name);
         CwebStringArray_add(self->calls,callback->rendered_text);
         CTextStack_free(callback);
         return self->calls->strings[self->calls->size-1];
-
     }
 
     va_list  args;

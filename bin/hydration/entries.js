@@ -1,8 +1,20 @@
 let private_cweb_entrie_clojure_constructors = {
-  get_text_by_id: function (id) {
-    return function (args, content) {
-      content[id] = document.getElementById(id).textContent;
-    };
+
+  get_all_elements_by_tag_name: function (tag, name) {
+  },
+
+  get_all_elements_number_by_tag_name: function (tag, name) {
+  },
+
+  get_all_elements_input_by_tag_name: function (tag, name) {
+  },
+
+  get_all_elements_input_number_by_tag_name: function (tag, name) {
+  },
+
+
+  get_all_elements_text_with_corresponding_id: function (id) {
+    return this.
   },
 
   get_text_number_by_id: function (id) {
