@@ -1,38 +1,20 @@
 let private_cweb_entrie_clojure_constructors = {
 
-  get_all_elements_by_tag_name: function (tag, name) {
-  },
 
-  get_all_elements_number_by_tag_name: function (tag, name) {
-  },
-
-  get_all_elements_input_by_tag_name: function (tag, name) {
-  },
-
-  get_all_elements_input_number_by_tag_name: function (tag, name) {
-  },
-
-
-  get_all_elements_text_with_corresponding_id: function (id) {
-    return this.
-  },
-
-  get_text_number_by_id: function (id) {
+  get_all_elements_by_query_selector: function (query_selector, set_content_key) {
+  
     return function (args, content) {
-      let text = document.getElementById(id).textContent;
-      content[id] = parseFloat(text);
+      let elements = document.querySelectorAll(query_selector);
+      elements.forEach(function (element) {
+        console.log(element);
+      });
     };
+  
   },
 
-  get_input_by_id: function (id) {
-    return function (args, content) {
-      content[id] = document.getElementById(id).value;
-    };
-  },
 
-  get_input_number_by_id: function (id) {
-    return function (args, content) {
-      content[id] = parseFloat(document.getElementById(id).value);
-    };
-  },
+  get_all_elements_by_query_selector_converting_to_nummber: function (
+    tag,
+    name,
+  ) {},
 };

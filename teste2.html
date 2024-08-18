@@ -1,18 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>teste2</title>
-    <link href="css/style.css" rel="stylesheet">
-  </head>
-  <body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>teste2</title>
+    </head>
 
-    <h1>Hello Word</h1>
-    <h2 id="numero">teste</h2>
+    <body>
+        <div class="teste2">aaa</div>
+        <div class="teste2">b</div>
+        <div class="teste2">c</div>
+    </body>
 
-    <button id="acrecenta">menu</button>
-    <button id="id">console</button>
-  
-  </body>
+    <script>
+        let elements = document.querySelectorAll('[class="teste2"]');
+        // Itera sobre a coleção e faz algo com cada elemento
+        for (let i = 0; i < elements.length; i++) {
+            console.log(elements[i]);
+        }
+    </script>
 </html>
