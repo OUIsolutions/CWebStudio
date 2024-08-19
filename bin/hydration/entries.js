@@ -1,3 +1,24 @@
+
+
+function private_cweb_get_session_storage_item(props) {
+
+  if (!props.content[props.set_content_key]) {
+    props.content[props.search_name] = [];
+  }
+
+  let content_array = props.content[props.search_name];
+  let  finalvalue = sessionStorage.getItem(props.name);
+  if(!finalvalue){
+    return;
+  }
+  if(props.convert_to_number){
+    finalvalue = parseFloat(finalvalue)
+  }
+  if(finalvalue){
+    content_array.unshift(finalvalue)
+  }
+}
+
 function private_cweb_get_elements_and_set_to_content(props) {
   if (!props.content[props.set_content_key]) {
     props.content[props.search_name] = [];
