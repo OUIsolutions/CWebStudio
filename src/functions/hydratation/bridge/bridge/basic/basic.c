@@ -57,38 +57,6 @@ bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self){
     return true;
 }
 
-char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...){
-
-    CTextStack *callback= newCTextStack_string_empty();
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
-    if(func_args == NULL) {
-        CTextStack_format(
-            callback,
-            "private_cweb_bridges[`%s`]([]);",
-            self->name
-        );
-        CwebStringArray_add(self->calls,callback->rendered_text);
-        CTextStack_free(callback);
-        return self->calls->strings[self->calls->size-1];
-    }
-
-    va_list  args;
-    va_start(args,func_args);
-    char *result = private_CWeb_format_vaarg(func_args,args);
-    va_end(args);
-    CTextStack_format(
-        callback,
-       "private_cweb_bridges[`%s`]([%sc]);",
-        self->name,
-        result
-    );
-
-    CwebStringArray_add(self->calls,callback->rendered_text);
-    CTextStack_free(callback);
-    return self->calls->strings[self->calls->size-1];
-
-}
 
 
 void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {

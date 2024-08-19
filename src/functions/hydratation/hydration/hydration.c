@@ -14,6 +14,7 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     self->all_bridges = private_new_privateCWebHyDrationBridgeArray();
     self->request =  request;
     self->response = cJSON_CreateArray();
+    self->garbage = newCwebStringArray();
     self->max_content_size = CWEB_HYDRATION_DEFAULT_BODY_SIZE;
     request->hydratation = (void *)self;
     return self;
@@ -203,6 +204,9 @@ void private_CWebHyDration_free(CWebHyDration *self) {
     }
     if(self->response){
         cJSON_Delete(self->response);
+    }
+    if(self->garbage){
+        CwebStringArray_free(self->garbage);
     }
 
     privateCWebHyDrationBridgeArray_free(self->all_bridges);
