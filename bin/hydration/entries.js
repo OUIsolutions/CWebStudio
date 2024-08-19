@@ -1,9 +1,11 @@
+
+
 function private_cweb_get_elements_and_set_to_content(props) {
   if (!props.content[props.set_content_key]) {
-    props.content[props.set_content_key] = [];
+    props.content[props.key_name] = [];
   }
 
-  let content_array = props.content[props.set_content_key];
+  let content_array = props.content[props.key_name];
   let elements = document.querySelectorAll(props.query_selector);
   elements.forEach((element) => {
     let finalvalue = undefined;
