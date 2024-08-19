@@ -1,21 +1,32 @@
 
 
-function private_cweb_get_session_storage_item(props) {
 
+function private_cweb_try_to_convert_to_number_or_number(number){
+  let possible_conversion = parseFloat(number);
+  if(possible_conversion){
+    return  possible_conversion;
+  }
+  return number;
+}
+
+function private_cweb_get_session_storage_item(props) {
   if (!props.content[props.set_content_key]) {
     props.content[props.search_name] = [];
   }
 
   let content_array = props.content[props.search_name];
-  let  finalvalue = sessionStorage.getItem(props.name);
-  if(!finalvalue){
+  let finalvalue = sessionStorage.getItem(props.name);
+  if (!finalvalue) {
     return;
   }
-  if(props.convert_to_number){
-    finalvalue = parseFloat(finalvalue)
+
+  if (props.auto_convert) {
+   finalvalue =private_cweb_try_to_convert_to_number_or_number(finalvalue);
   }
-  if(finalvalue){
-    content_array.unshift(finalvalue)
+
+
+  if (finalvalue) {
+    content_array.unshift(finalvalue);
   }
 }
 
@@ -35,9 +46,11 @@ function private_cweb_get_elements_and_set_to_content(props) {
       finalvalue = element.textContent;
     }
 
-    if (props.convert_to_number) {
-      finalvalue = parseFloat(finalvalue);
+    if (props.auto_convert) {
+    finalvalue =private_cweb_try_to_convert_to_number_or_number(finalvalue);
     }
+  
+
     if (finalvalue) {
       content_array.unshift(finalvalue);
     }
