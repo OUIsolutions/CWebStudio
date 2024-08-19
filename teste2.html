@@ -9,7 +9,7 @@
     <body>
         <div class="teste">aaa</div>
         <input class="teste" type="checkbox" />
-        <textarea class="teste"></textarea>
+        <input class="teste"></textarea>
         <button id="verificar">verificar</button>
     </body>
     <script>
@@ -18,6 +18,7 @@
         let callback = function (args, content) {
             private_cweb_get_elements_and_set_to_content({
                 content: content,
+                search_name:"teste",
                 query_selector: `[class="teste"]`,
                 key_name: "teste",
                 auto_convert: true,
