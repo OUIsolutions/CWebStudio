@@ -22,6 +22,9 @@ int  CWebHyDrationBridge_get_content_key_size(CWebHyDrationBridge *self,const ch
     return cJSON_GetArraySize(itens);
 }
 
+
+
+
 cJSON * private_CWebHyDrationBridge_get_content_at_index(CWebHyDrationBridge *self,int index,const char *key){
 
     cJSON *itens = cJSON_GetObjectItem(self->content,key);
@@ -37,7 +40,7 @@ cJSON * private_CWebHyDrationBridge_get_content_at_index(CWebHyDrationBridge *se
     return item;
 }
 
-bool  CWebHyDrationBridge_content_exist_at_index(CWebHyDrationBridge *self,int index,const char *key,...){
+bool  CWebHyDrationBridge_content_exist(CWebHyDrationBridge *self,int index,const char *key,...){
     va_list  args;
     va_start(args,key);
     char *key_formmated = private_CWeb_format_vaarg(key,args);
@@ -52,7 +55,7 @@ bool  CWebHyDrationBridge_content_exist_at_index(CWebHyDrationBridge *self,int i
 
 
 
-bool  CWebHyDrationBridge_content_is_number_at_index(CWebHyDrationBridge *self,int index,const char *key,...){
+bool  CWebHyDrationBridge_content_is_number(CWebHyDrationBridge *self,int index,const char *key,...){
     va_list  args;
     va_start(args,key);
     char *key_formmated = private_CWeb_format_vaarg(key,args);
@@ -66,7 +69,7 @@ bool  CWebHyDrationBridge_content_is_number_at_index(CWebHyDrationBridge *self,i
 }
 
 
-bool  CWebHyDrationBridge_content_is_bool_at_index(CWebHyDrationBridge *self,int index,const char *key,...){
+bool  CWebHyDrationBridge_content_is_bool(CWebHyDrationBridge *self,int index,const char *key,...){
     va_list  args;
     va_start(args,key);
     char *key_formmated = private_CWeb_format_vaarg(key,args);
@@ -82,7 +85,7 @@ bool  CWebHyDrationBridge_content_is_bool_at_index(CWebHyDrationBridge *self,int
 
 
 
-bool  CWebHyDrationBridge_content_is_string_at_index(CWebHyDrationBridge *self,int index,const char *key,...){
+bool  CWebHyDrationBridge_content_is_string(CWebHyDrationBridge *self,int index,const char *key,...){
     va_list  args;
     va_start(args,key);
     char *key_formmated = private_CWeb_format_vaarg(key,args);
