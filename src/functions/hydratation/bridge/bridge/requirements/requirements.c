@@ -13,10 +13,10 @@ void CWebHyDrationBridge_add_function(CWebHyDrationBridge *self,const char *func
     CwebStringArray_add_getting_ownership(self->entries_callbacks, result);
 }
 
-void private_CWebHyDrationBridge_add_elements_by_query_selector(CWebHyDrationBridge *self,const char *search_name,const char *query_selector,bool convert_to_number){
-    const char *convert_to_number_str = "false";
-    if(convert_to_number){
-        convert_to_number = "true";
+void private_CWebHyDrationBridge_add_elements_by_query_selector(CWebHyDrationBridge *self,const char *search_name,const char *query_selector,bool auto_convert){
+    const char *auto_convert_str = "false";
+    if(auto_convert){
+        auto_convert_str = "true";
     }
     CWebHyDrationBridge_add_function(self,
         "function (args,content){\
@@ -24,12 +24,12 @@ void private_CWebHyDrationBridge_add_elements_by_query_selector(CWebHyDrationBri
             content:content,\
             query_selector:`%s`,\
             search_name:`%s`,\
-            convert_to_number:%s\
+            auto_convert:%s\
             })\
         }",
         search_name,
         query_selector,
-        convert_to_number
+        auto_convert_str
     );
 
 }
@@ -47,7 +47,7 @@ void CWebHyDrationBridge_add_elements_by_query_selector(CWebHyDrationBridge *sel
         self,
         search_name,
         formmated_query_selector,
-        false
+        true
     );
     free(formmated_query_selector);
 }
@@ -55,7 +55,7 @@ void CWebHyDrationBridge_add_elements_by_query_selector(CWebHyDrationBridge *sel
 
 
 
-void CWebHyDrationBridge_add_elements_by_query_selector_converting_to_number(CWebHyDrationBridge *self,const char *search_name,const char *query_selector,...){
+void CWebHyDrationBridge_add_elements_by_query_selector_not_auto_converting(CWebHyDrationBridge *self,const char *search_name,const char *query_selector,...){
 
     va_list  args;
     va_start(args,query_selector);
@@ -66,7 +66,7 @@ void CWebHyDrationBridge_add_elements_by_query_selector_converting_to_number(CWe
         self,
         search_name,
         formmated_query_selector,
-        true
+        false
     );
     free(formmated_query_selector);
 }

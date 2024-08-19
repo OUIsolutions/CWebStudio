@@ -1,12 +1,13 @@
 
 
 
-function private_cweb_try_to_convert_to_number_or_number(number){
-  let possible_conversion = parseFloat(number);
-  if(possible_conversion){
-    return  possible_conversion;
+function private_cweb_try_to_convert_to_number(possible_number){
+  let possible_conversion = parseFloat(possible_number);
+  if(isNaN(possible_conversion)){
+    return  possible_number;
   }
-  return number;
+
+  return possible_conversion;
 }
 
 function private_cweb_get_session_storage_item(props) {
@@ -21,7 +22,7 @@ function private_cweb_get_session_storage_item(props) {
   }
 
   if (props.auto_convert) {
-   finalvalue =private_cweb_try_to_convert_to_number_or_number(finalvalue);
+   finalvalue =private_cweb_try_to_convert_to_number(finalvalue);
   }
 
 
@@ -40,19 +41,22 @@ function private_cweb_get_elements_and_set_to_content(props) {
   elements.forEach((element) => {
     let finalvalue = undefined;
 
-    if (element.tagName === "INPUT" || element.tagName == "TEXTAREA") {
+    if(element.type === 'checkbox'){
+        finalvalue = element.checked;
+        props.auto_convert =false;
+    }
+
+    else if (element.tagName === "INPUT" || element.tagName == "TEXTAREA") {
       finalvalue = element.value;
-    } else {
+    } 
+    
+    else {
       finalvalue = element.textContent;
     }
-
     if (props.auto_convert) {
-    finalvalue =private_cweb_try_to_convert_to_number_or_number(finalvalue);
+        finalvalue =private_cweb_try_to_convert_to_number(finalvalue);
     }
-  
-
-    if (finalvalue) {
-      content_array.unshift(finalvalue);
-    }
+    content_array.push(finalvalue);
+    
   });
 }
