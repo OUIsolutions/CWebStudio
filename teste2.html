@@ -3,20 +3,32 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>teste2</title>
+        <script src="bin/hydration/entries.js"></script>
     </head>
 
     <body>
-        <div class="teste2">aaa</div>
-        <div class="teste2">b</div>
-        <div class="teste2">c</div>
+        <div class="teste">aaa</div>
+        <input class="teste"></div>
+        <textarea class="teste"></textarea>
+        <button id="verificar"">verificar</button>
     </body>
-
     <script>
-        let elements = document.querySelectorAll('[class="teste2"]');
-        // Itera sobre a coleção e faz algo com cada elemento
-        for (let i = 0; i < elements.length; i++) {
-            console.log(elements[i]);
-        }
+
+
+
+        let content = {};
+        let args = [];
+
+    let callback =function(args, content) {
+      private_cweb_get_elements_and_set_to_content({
+        content:content,
+        query_selector:"[class='teste']",
+        set_content_key:"teste",
+        convert_to_number:false
+      })
+    }
+    document.getElementById("verificar").addEventListener("click",()=>{callback(args,content)})
+
+    
     </script>
 </html>
