@@ -89,6 +89,8 @@ char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,.
     return self->calls->strings[self->calls->size-1];
 
 }
+
+
 void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {
 free(self->name);
     CwebStringArray_free(self->entries_callbacks);
