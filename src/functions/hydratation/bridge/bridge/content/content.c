@@ -66,6 +66,21 @@ bool  CWebHyDrationBridge_content_is_number_at_index(CWebHyDrationBridge *self,i
 }
 
 
+bool  CWebHyDrationBridge_content_is_bool_at_index(CWebHyDrationBridge *self,int index,const char *key,...){
+    va_list  args;
+    va_start(args,key);
+    char *key_formmated = private_CWeb_format_vaarg(key,args);
+    va_end(args);
+   cJSON *item = private_CWebHyDrationBridge_get_content_at_index(self,index, key_formmated);
+   free(key_formmated);
+   if(item == NULL){
+       return false;
+   }
+   return cJSON_IsBool(item);
+}
+
+
+
 
 bool  CWebHyDrationBridge_content_is_string_at_index(CWebHyDrationBridge *self,int index,const char *key,...){
     va_list  args;
@@ -171,7 +186,6 @@ long  CWebHyDrationBridge_get_long_content(CWebHyDrationBridge *self,int index,c
 }
 
 bool  CWebHyDrationBridge_get_bool_content(CWebHyDrationBridge *self,int index,const char *key,...){
-
     va_list  args;
     va_start(args,key);
     char *key_formmated = private_CWeb_format_vaarg(key,args);
