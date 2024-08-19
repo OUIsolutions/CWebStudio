@@ -9,7 +9,7 @@ void CWebHyDrationBridge_add_required_function(CWebHyDrationBridge *self,const c
     CwebStringArray_add_getting_ownership(self->entries_callbacks, result);
 }
 
-void private_CWebHyDrationBridge_add_required_elements_by_query_selector(CWebHyDrationBridge *self,const char *key_name,const char *query_selector,bool convert_to_number){
+void private_CWebHyDrationBridge_add_required_elements_by_query_selector(CWebHyDrationBridge *self,const char *search_name,const char *query_selector,bool convert_to_number){
     const char *convert_to_number_str = "false";
     if(convert_to_number){
         convert_to_number = "true";
@@ -19,11 +19,11 @@ void private_CWebHyDrationBridge_add_required_elements_by_query_selector(CWebHyD
             private_cweb_get_elements_and_set_to_content({\
             content:content,\
             query_selector:`%s`,\
-            key_name:`%s`,\
+            search_name:`%s`,\
             convert_to_number:%s\
             })\
         }",
-        key_name,
+        search_name,
         query_selector,
         convert_to_number
     );
@@ -32,7 +32,7 @@ void private_CWebHyDrationBridge_add_required_elements_by_query_selector(CWebHyD
 
 
 
-void CWebHyDrationBridge_add_required_elements_by_query_selector(CWebHyDrationBridge *self,const char *key_name,const char *query_selector,...){
+void CWebHyDrationBridge_add_required_elements_by_query_selector(CWebHyDrationBridge *self,const char *search_name,const char *query_selector,...){
 
     va_list  args;
     va_start(args,query_selector);
@@ -41,7 +41,7 @@ void CWebHyDrationBridge_add_required_elements_by_query_selector(CWebHyDrationBr
 
     private_CWebHyDrationBridge_add_required_elements_by_query_selector(
         self,
-        key_name,
+        search_name,
         formmated_query_selector,
         false
     );
@@ -51,7 +51,7 @@ void CWebHyDrationBridge_add_required_elements_by_query_selector(CWebHyDrationBr
 
 
 
-void CWebHyDrationBridge_add_required_elements_by_query_selector_converting_to_number(CWebHyDrationBridge *self,const char *key_name,const char *query_selector,...){
+void CWebHyDrationBridge_add_required_elements_by_query_selector_converting_to_number(CWebHyDrationBridge *self,const char *search_name,const char *query_selector,...){
 
     va_list  args;
     va_start(args,query_selector);
@@ -60,7 +60,7 @@ void CWebHyDrationBridge_add_required_elements_by_query_selector_converting_to_n
 
     private_CWebHyDrationBridge_add_required_elements_by_query_selector(
         self,
-        key_name,
+        search_name,
         formmated_query_selector,
         true
     );
@@ -70,31 +70,103 @@ void CWebHyDrationBridge_add_required_elements_by_query_selector_converting_to_n
 
 
 
-void CWebHyDrationBridge_add_required_elements_by_tag_name(CWebHyDrationBridge *self,const char *tag_name,const char*tag_value){
+void CWebHyDrationBridge_add_required_elements_by_attribute(CWebHyDrationBridge *self,const char *search_name,const char *attribute,const char*attribute_value,...){
+
+    va_list  args;
+    va_start(args,attribute_value);
+    char *formmated_attribute = private_CWeb_format_vaarg(attribute_value,args);
+    va_end(args);
 
     CWebHyDrationBridge_add_required_elements_by_query_selector(
         self,
-        tag_value,
+        search_name,
         "[%s='%s']",
-        tag_name,
-        tag_value
+        attribute,
+        attribute_value
     );
+    free(formmated_attribute);
+}
+
+void CWebHyDrationBridge_add_required_elements_by_attribute_converting_to_number(CWebHyDrationBridge *self,const char *search_name,const char *attribute,const char*attribute_value,...){
+
+    va_list  args;
+    va_start(args,attribute_value);
+    char *formmated_attribute = private_CWeb_format_vaarg(attribute_value,args);
+    va_end(args);
+
+    CWebHyDrationBridge_add_required_elements_by_query_selector_converting_to_number(
+        self,
+        search_name,
+        "[%s='%s']",
+        attribute,
+        attribute_value
+    );
+    free(formmated_attribute);
 }
 
 
-void CWebHyDrationBridge_add_required_elements_by_class_name(CWebHyDrationBridge *self,const char*class_value){
-    CWebHyDrationBridge_add_required_elements_by_tag_name(
+
+void CWebHyDrationBridge_add_required_elements_by_class_name(CWebHyDrationBridge *self,const char *search_name,const char*class_value,...){
+
+    va_list  args;
+    va_start(args,class_value);
+    char *formmatted_class = private_CWeb_format_vaarg(class_value,args);
+    va_end(args);
+
+    CWebHyDrationBridge_add_required_elements_by_query_selector(
         self,
-        "class",
-        class_value
+        search_name,
+        "[class='%s']",
+        formmatted_class
     );
+    free(formmatted_class);
+}
+
+void CWebHyDrationBridge_add_required_elements_by_class_name_converting_to_number(CWebHyDrationBridge *self,const char *search_name,const char*class_value,...){
+
+    va_list  args;
+    va_start(args,class_value);
+    char *formmatted_class = private_CWeb_format_vaarg(class_value,args);
+    va_end(args);
+
+    CWebHyDrationBridge_add_required_elements_by_query_selector_converting_to_number(
+        self,
+        search_name,
+        "[class='%s']",
+        formmatted_class
+    );
+    free(formmatted_class);
 }
 
 
-void CWebHyDrationBridge_add_required_elements_by_id(CWebHyDrationBridge *self,const char*id_values){
-    CWebHyDrationBridge_add_required_elements_by_tag_name(
+void CWebHyDrationBridge_add_required_elements_by_id(CWebHyDrationBridge *self,const char *search_name,const char*id_values,...){
+
+    va_list  args;
+    va_start(args,id_values);
+    char *formmated_id = private_CWeb_format_vaarg(id_values,args);
+    va_end(args);
+
+    CWebHyDrationBridge_add_required_elements_by_query_selector(
         self,
-        "id",
-        id_values
+        search_name,
+        "[id='%s']",
+        formmated_id
     );
+    free(formmated_id);
+}
+
+void CWebHyDrationBridge_add_required_elements_by_id_converting_to_number(CWebHyDrationBridge *self,const char *search_name,const char*id_values,...){
+
+    va_list  args;
+    va_start(args,id_values);
+    char *formmated_id = private_CWeb_format_vaarg(id_values,args);
+    va_end(args);
+
+    CWebHyDrationBridge_add_required_elements_by_query_selector_converting_to_number(
+        self,
+        search_name,
+        "[id='%s']",
+        formmated_id
+    );
+    free(formmated_id);
 }
