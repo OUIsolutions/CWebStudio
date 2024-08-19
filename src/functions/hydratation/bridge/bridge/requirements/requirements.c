@@ -91,14 +91,14 @@ void CWebHyDrationBridge_add_elements_by_attribute(CWebHyDrationBridge *self,con
     free(formmated_attribute);
 }
 
-void CWebHyDrationBridge_add_elements_by_attribute_converting_to_number(CWebHyDrationBridge *self,const char *search_name,const char *attribute,const char*attribute_value,...){
+void CWebHyDrationBridge_add_elements_by_attribute_not_auto_converting(CWebHyDrationBridge *self,const char *search_name,const char *attribute,const char*attribute_value,...){
 
     va_list  args;
     va_start(args,attribute_value);
     char *formmated_attribute = private_CWeb_format_vaarg(attribute_value,args);
     va_end(args);
 
-    CWebHyDrationBridge_add_elements_by_query_selector_converting_to_number(
+    CWebHyDrationBridge_add_elements_by_query_selector_not_auto_converting(
         self,
         search_name,
         "[%s='%s']",
@@ -126,14 +126,14 @@ void CWebHyDrationBridge_add_elements_by_class_name(CWebHyDrationBridge *self,co
     free(formmatted_class);
 }
 
-void CWebHyDrationBridge_add_elements_by_class_name_converting_to_number(CWebHyDrationBridge *self,const char *search_name,const char*class_value,...){
+void CWebHyDrationBridge_add_elements_by_class_name_not_auto_converting(CWebHyDrationBridge *self,const char *search_name,const char*class_value,...){
 
     va_list  args;
     va_start(args,class_value);
     char *formmatted_class = private_CWeb_format_vaarg(class_value,args);
     va_end(args);
 
-    CWebHyDrationBridge_add_elements_by_query_selector_converting_to_number(
+    CWebHyDrationBridge_add_elements_by_query_selector_not_auto_converting(
         self,
         search_name,
         "[class='%s']",
@@ -159,14 +159,14 @@ void CWebHyDrationBridge_add_elements_by_id(CWebHyDrationBridge *self,const char
     free(formmated_id);
 }
 
-void CWebHyDrationBridge_add_elements_by_id_converting_to_number(CWebHyDrationBridge *self,const char *search_name,const char*id_values,...){
+void CWebHyDrationBridge_add_elements_by_id_not_auto_converting(CWebHyDrationBridge *self,const char *search_name,const char*id_values,...){
 
     va_list  args;
     va_start(args,id_values);
     char *formmated_id = private_CWeb_format_vaarg(id_values,args);
     va_end(args);
 
-    CWebHyDrationBridge_add_elements_by_query_selector_converting_to_number(
+    CWebHyDrationBridge_add_elements_by_query_selector_not_auto_converting(
         self,
         search_name,
         "[id='%s']",
