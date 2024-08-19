@@ -32,12 +32,13 @@ function private_cweb_get_session_storage_item(props) {
 }
 
 function private_cweb_get_elements_and_set_to_content(props) {
-  if (!props.content[props.set_content_key]) {
+  if (!props.content[props.search_name]) {
     props.content[props.search_name] = [];
   }
 
   let content_array = props.content[props.search_name];
   let elements = document.querySelectorAll(props.query_selector);
+
   elements.forEach((element) => {
     let finalvalue = undefined;
     let auto_convert = props.auto_convert;
