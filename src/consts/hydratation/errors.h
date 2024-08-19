@@ -23,7 +23,7 @@
 #define CWEB_HYDRATION_CONTENT_NOT_PROVIDED_MSG  "body['content'] not provided"
 
 #define CWEB_HYDRATION_CONTENT_NOT_OBJECT 8
-#define CWEB_HYDRATION_CONTENT_NOT_OBJECT_MSG  "body['content'] not object"
+#define CWEB_HYDRATION_CONTENT_NOT_OBJECT_MSG  "body['content'] not a object"
 
 
 #define CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED 9

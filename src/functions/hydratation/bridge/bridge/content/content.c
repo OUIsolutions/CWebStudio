@@ -1,9 +1,94 @@
 
 #include "../uniq.definitions_requirements.h"
-#include <cstddef>
 
 
-cJSON *   private_CWebHyDrationBridge_get_cJSON_elements_list(CWebHyDrationBridge *self, long index, const char *key){
+int  CWebHyDrationBridge_get_content_key_size(CWebHyDrationBridge *self,const char *key,...){
+
+    va_list  args;
+    va_start(args,key);
+    char *key_formmated = private_CWeb_format_vaarg(key,args);
+    va_end(args);
+
+    cJSON *itens = cJSON_GetObjectItem(self->content,key_formmated);
+    free(key_formmated);
+    if(itens == NULL){
+        return  0;
+    }
+
+    if(!cJSON_IsArray(itens)){
+        return 0;
+    }
+
+    return cJSON_GetArraySize(itens);
+}
+
+cJSON * private_CWebHyDrationBridge_get_content_at_index(CWebHyDrationBridge *self,int index,const char *key){
+
+    cJSON *itens = cJSON_GetObjectItem(self->content,key);
+    if(itens == NULL){
+        return NULL;
+    }
+
+    if(!cJSON_IsArray(itens)){
+        return NULL;
+    }
+
+    cJSON *item = cJSON_GetArrayItem(itens,index);
+    return item;
+}
+
+bool  CWebHyDrationBridge_content_exist_at_index(CWebHyDrationBridge *self,int index,const char *key,...){
+    va_list  args;
+    va_start(args,key);
+    char *key_formmated = private_CWeb_format_vaarg(key,args);
+    va_end(args);
+   cJSON *item = private_CWebHyDrationBridge_get_content_at_index(self,index, key_formmated);
+   free(key_formmated);
+   if(item){
+       return true;
+   }
+   return false;
+}
+
+
+
+bool  CWebHyDrationBridge_content_is_number_at_index(CWebHyDrationBridge *self,int index,const char *key,...){
+    va_list  args;
+    va_start(args,key);
+    char *key_formmated = private_CWeb_format_vaarg(key,args);
+    va_end(args);
+   cJSON *item = private_CWebHyDrationBridge_get_content_at_index(self,index, key_formmated);
+   free(key_formmated);
+   if(item == NULL){
+       return false;
+   }
+   return cJSON_IsNumber(item);
+}
+
+
+
+bool  CWebHyDrationBridge_content_is_string_at_index(CWebHyDrationBridge *self,int index,const char *key,...){
+    va_list  args;
+    va_start(args,key);
+    char *key_formmated = private_CWeb_format_vaarg(key,args);
+    va_end(args);
+   cJSON *item = private_CWebHyDrationBridge_get_content_at_index(self,index, key_formmated);
+   free(key_formmated);
+   if(item == NULL){
+       return false;
+   }
+   return cJSON_IsString(item);
+}
+
+
+
+cJSON *   private_CWebHyDrationBridge_get_cJSON_element(
+    CWebHyDrationBridge *self,
+    int index,
+    const char *key,
+    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    const char *expected_type
+){
 
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
     cJSON *itens = cJSON_GetObjectItem(self->content,key);
@@ -12,7 +97,7 @@ cJSON *   private_CWebHyDrationBridge_get_cJSON_elements_list(CWebHyDrationBridg
             privateCWebHydration_raise_error(
                 hydration,
                 self,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED,
+                CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED,
                 CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG,
                 key);
             return NULL;
@@ -22,149 +107,93 @@ cJSON *   private_CWebHyDrationBridge_get_cJSON_elements_list(CWebHyDrationBridg
         privateCWebHydration_raise_error(
             hydration,
             self,
-            CWEB_HYDRATION_KEY_IS_NOT_ARRAY,
-            CWEB_HYDRATION_KEY_IS_NOT_ARRAY_MSG,
+            CWEB_HYDRATION_CONTENT_KEY_NOT_ARRAY,
+            CWEB_HYDRATION_CONTENT_KEY_NOT_ARRAY_MSG,
             key);
         return NULL;
     }
 
     cJSON *item  = cJSON_GetArrayItem(itens,index);
+    if(item == NULL){
+        privateCWebHydration_raise_error(
+            hydration,
+            self,
+            CWEB_HYDRATION_CONTENT_NOT_EXIST_AT_INDEX,
+            CWEB_HYDRATION_CONTENT_NOT_EXIST_AT_INDEX_MSG,
+            key,
+            index
+        );
+        return NULL;
+    }
 
+    if(!callback_verifier(item)){
+        privateCWebHydration_raise_error(
+            hydration,
+            self,
+            CWEB_HYDRATION_CONTENT_WRONG_TYPE,
+            CWEB_HYDRATION_CONTENT_WRONG_TYPE_MSG,
+            key,
+            index,
+            expected_type
+        );
+        return NULL;
+    }
 
-    return itens;
-
+    return item;
 }
-double CWebHyDrationBridge_read_double_content(CWebHyDrationBridge *self,long index, const char *key,...){
 
+double CWebHyDrationBridge_get_double_content(CWebHyDrationBridge *self,int  index, const char *key,...){
 
     va_list  args;
     va_start(args,key);
     char *key_formmated = private_CWeb_format_vaarg(key,args);
     va_end(args);
-    cJSON *itens = private_CWebHyDrationBridge_get_cJSON_elements_list(self,key_formmated);
+    cJSON *item = private_CWebHyDrationBridge_get_cJSON_element(self,index,key_formmated,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     free(key_formmated);
-    if(itens == NULL){
-        return -1;
-    }
-    if(!cJSON_IsNumber(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_KEY_WRONG_TYPE,
-            CWEB_HYDRATION_KEY_WRONG_TYPE_MSG,
-            key_formmated,
-            CWEB_HYDRATION_NUMBER
-        );
-        free(key_formmated);
+    if(item == NULL){
         return -1;
     }
     return cJSON_GetNumberValue(item);
 }
 
 
-long  CWebHyDrationBridge_read_long_content(CWebHyDrationBridge *self,const char *key,...){
-
+long  CWebHyDrationBridge_get_long_content(CWebHyDrationBridge *self,int index,const char *key,...){
     va_list  args;
     va_start(args,key);
     char *key_formmated = private_CWeb_format_vaarg(key,args);
     va_end(args);
-
-    cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
+    cJSON *item = private_CWebHyDrationBridge_get_cJSON_element(self,index,key_formmated,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    free(key_formmated);
     if(item == NULL){
-            privateCWebHydration_raise_error(
-                hydration,
-                self,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG,
-                key_formmated);
-            free(key_formmated);
-            return -1;
-    }
-    if(!cJSON_IsNumber(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_KEY_WRONG_TYPE,
-            CWEB_HYDRATION_KEY_WRONG_TYPE_MSG,
-            key_formmated,
-            CWEB_HYDRATION_NUMBER
-        );
-        free(key_formmated);
         return -1;
     }
-    free(key_formmated);
     return (long)cJSON_GetNumberValue(item);
 }
-bool  CWebHyDrationBridge_read_bool_content(CWebHyDrationBridge *self,const char *key,...){
+
+bool  CWebHyDrationBridge_get_bool_content(CWebHyDrationBridge *self,int index,const char *key,...){
 
     va_list  args;
     va_start(args,key);
     char *key_formmated = private_CWeb_format_vaarg(key,args);
     va_end(args);
-
-    cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
-    if(item == NULL){
-            privateCWebHydration_raise_error(
-                hydration,
-                self,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG,
-                key_formmated);
-            free(key_formmated);
-            return -1;
-    }
-    if(!cJSON_IsBool(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_KEY_WRONG_TYPE,
-            CWEB_HYDRATION_KEY_WRONG_TYPE_MSG,
-            key_formmated,
-            CWEB_HYDRATION_BOOL
-        );
-        free(key_formmated);
-        return -1;
-    }
+    cJSON *item = private_CWebHyDrationBridge_get_cJSON_element(self,index,key_formmated,cJSON_IsBool,CWEB_HYDRATION_NUMBER);
     free(key_formmated);
+    if(item == NULL){
+        return false;
+    }
     return (bool)item->valueint;
 }
 
-char*  CWebHyDrationBridge_read_str_content(CWebHyDrationBridge *self,const char *key,...){
 
+char*  CWebHyDrationBridge_get_str_content(CWebHyDrationBridge *self,int index, const char *key,...){
     va_list  args;
     va_start(args,key);
     char *key_formmated = private_CWeb_format_vaarg(key,args);
     va_end(args);
-
-    cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
+    cJSON *item = private_CWebHyDrationBridge_get_cJSON_element(self,index,key_formmated,cJSON_IsString,CWEB_HYDRATION_NUMBER);
+    free(key_formmated);
     if(item == NULL){
-            privateCWebHydration_raise_error(
-                hydration,
-                self,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG,
-                key_formmated);
-            free(key_formmated);
-            return NULL;
-    }
-    if(!cJSON_IsString(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_KEY_WRONG_TYPE,
-            CWEB_HYDRATION_KEY_WRONG_TYPE_MSG,
-            key_formmated,
-            CWEB_HYDRATION_STRING
-        );
-        free(key_formmated);
         return NULL;
     }
-    free(key_formmated);
-    return  cJSON_GetStringValue(item);
+    return cJSON_GetStringValue(item);
 }
