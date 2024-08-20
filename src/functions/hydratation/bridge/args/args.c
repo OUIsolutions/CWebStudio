@@ -2,12 +2,18 @@
 
 
 int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return 0;
+    }
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
     return cJSON_GetArraySize(hydration->args);
 }
 
 
 bool private_cweb_hydration_type_verifier(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)(const cJSON * const item)){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
     cJSON *item = cJSON_GetArrayItem(hydration->args, index);
     if(item == NULL){
@@ -17,13 +23,22 @@ bool private_cweb_hydration_type_verifier(CWebHyDrationBridge *self,int index,cJ
 }
 
 bool   CWebHyDrationBridge_is_arg_number(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
     return private_cweb_hydration_type_verifier(self,index,cJSON_IsNumber);
 }
 
 bool   CWebHyDrationBridge_is_arg_bool(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
     return private_cweb_hydration_type_verifier(self,index,cJSON_IsBool);
 }
 bool   CWebHyDrationBridge_is_arg_string(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
     return private_cweb_hydration_type_verifier(self,index,cJSON_IsString);
 }
 
@@ -34,7 +49,11 @@ cJSON *privateCWebHyDration_get_arg_index(
     cJSON_bool (*callback_verifier)(const cJSON * const item),
     const char *expected_type
 ){
-        CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
 
     cJSON *item = cJSON_GetArrayItem(hydration->args,index);
 
@@ -66,7 +85,9 @@ cJSON *privateCWebHyDration_get_arg_index(
 }
 
 double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return -1;
+    }
     cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
         return -1;
@@ -76,7 +97,9 @@ double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index){
 }
 
 long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return -1;
+    }
     cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
         return -1;
@@ -88,7 +111,9 @@ long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index){
 
 
 bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
     cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_BOOL);
         if(item == NULL){
             return -1;
@@ -98,7 +123,9 @@ bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index){
 }
 
 char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
     cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_STRING);
         if(item == NULL){
             return NULL;
@@ -107,5 +134,8 @@ char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index){
     return cJSON_GetStringValue(item);
 }
 cJSON * CWebHyDrationBridge_get_cJSON_arg(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
     return  privateCWebHyDration_get_arg_index(self,index,NULL,NULL);
 }

@@ -2,6 +2,10 @@
 #include "../uniq.definitions_requirements.h"
 
 void privateCWebHyDrationBridge_add_response(CWebHyDrationBridge *self,const char *name,cJSON *data){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+
     CWebHyDration *hydraation = (CWebHyDration*)self->hydration;
     cJSON *current_response = cJSON_CreateObject();
     cJSON_AddStringToObject(current_response,CWEB_HYDRATON_JSON_NAME,name);
@@ -10,8 +14,12 @@ void privateCWebHyDrationBridge_add_response(CWebHyDrationBridge *self,const cha
 }
 
 void CWebHyDrationBridge_set_session_storage_data(
+
     CWebHyDrationBridge *self,const char*key, const char *value,...){
-    cJSON *obj = cJSON_CreateObject();
+        if(CWebHyDrationBridge_has_errors(self)){
+            return ;
+        }
+        cJSON *obj = cJSON_CreateObject();
     va_list  args;
     va_start(args,value);
     char *value_formmat = private_CWeb_format_vaarg(value,args);
@@ -23,6 +31,9 @@ void CWebHyDrationBridge_set_session_storage_data(
 }
 
 void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
     cJSON *obj = cJSON_CreateObject();
     va_list  args;
     va_start(args,menssage);
@@ -35,6 +46,9 @@ void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,..
 }
 
 void CWebHyDrationBridge_execute_script(CWebHyDrationBridge *self,const char *code,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
     cJSON *obj = cJSON_CreateObject();
     va_list  args;
     va_start(args,code);
@@ -46,6 +60,9 @@ void CWebHyDrationBridge_execute_script(CWebHyDrationBridge *self,const char *co
 }
 
 void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,const char *id, const char *code,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
     cJSON *obj = cJSON_CreateObject();
     va_list  args;
     va_start(args,code);
@@ -58,6 +75,9 @@ void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,const c
 }
 
 void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
     cJSON *obj = cJSON_CreateObject();
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
     privateCWebHyDrationBridge_add_response(self,"destroy_by_id",obj);

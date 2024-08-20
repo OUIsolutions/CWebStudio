@@ -18,19 +18,31 @@ void privateCWebHyDrationSearchResult_free(CWebHyDrationSearchResult *self){
 }
 
 int  CWebHyDrationSearchResult_get_total_itens(CWebHyDrationSearchResult *self){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return -1;
+    }
+
     return cJSON_GetArraySize(self->search);
 }
 
 
 
 bool  CWebHyDrationSearchResult_search_item_exist(CWebHyDrationSearchResult *self,int index){
-   cJSON *item = cJSON_GetArrayItem(self->search, index);
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return false;
+    }
+
+    cJSON *item = cJSON_GetArrayItem(self->search, index);
    return item != NULL;
 }
 
 
 
 bool  CWebHyDrationSearchResult_is_search_item_number(CWebHyDrationSearchResult *self,int index){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return false;
+    }
+
     cJSON *item = cJSON_GetArrayItem(self->search, index);
     if(item == NULL){
         return false;
@@ -39,6 +51,10 @@ bool  CWebHyDrationSearchResult_is_search_item_number(CWebHyDrationSearchResult 
 }
 
 bool  CWebHyDrationSearchResult_is_search_item_bool(CWebHyDrationSearchResult *self,int index){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return false;
+    }
+
     cJSON *item = cJSON_GetArrayItem(self->search, index);
     if(item == NULL){
         return false;
@@ -50,6 +66,10 @@ bool  CWebHyDrationSearchResult_is_search_item_bool(CWebHyDrationSearchResult *s
 
 
 bool  CWebHyDrationSearchResult_is_search_item_string(CWebHyDrationSearchResult *self,int index){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return false;
+    }
+
     cJSON *item = cJSON_GetArrayItem(self->search, index);
     if(item == NULL){
         return false;
@@ -59,11 +79,15 @@ bool  CWebHyDrationSearchResult_is_search_item_string(CWebHyDrationSearchResult 
 
 
 cJSON * private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+
     CWebHyDrationSearchResult *self,
     int index,
     cJSON_bool (*callback_verifier)(const cJSON * const item),
     const char *expected_type
 ){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return NULL;
+    }
 
     cJSON *item  = cJSON_GetArrayItem(self->search,index);
     CWebHyDrationBridge *bridge = (CWebHyDrationBridge*)self->bridge;
@@ -97,6 +121,9 @@ cJSON * private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
 }
 
 double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int  index){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return -1;
+    }
 
     cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
@@ -106,6 +133,9 @@ double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int 
 }
 
 long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  index){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return -1;
+    }
 
     cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
         self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
@@ -115,7 +145,10 @@ long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  ind
     return (long)cJSON_GetNumberValue(item);
 }
 
-long CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  index){
+bool CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  index){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return -1;
+    }
 
     cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
         self,index,cJSON_IsBool,CWEB_HYDRATION_BOOL);
@@ -127,6 +160,9 @@ long CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  ind
 
 
 char*  CWebHyDrationSearchResult_get_string(CWebHyDrationSearchResult *self,int  index){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return NULL;
+    }
 
     cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
         self,index,cJSON_IsString,CWEB_HYDRATION_STRING);
@@ -137,6 +173,9 @@ char*  CWebHyDrationSearchResult_get_string(CWebHyDrationSearchResult *self,int 
 }
 
 cJSON *  CWebHyDrationSearchResult_get_cJSON(CWebHyDrationSearchResult *self,int  index){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return NULL;
+    }
 
     cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
         self,index,NULL,NULL

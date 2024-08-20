@@ -66,6 +66,9 @@ CTextStack*  private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self
     return function;
 }
 bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self){
+    if(self == NULL){
+        return  true;
+    }
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
     if(hydration->error_code == 0){
         return false;

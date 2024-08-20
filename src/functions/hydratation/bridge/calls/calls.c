@@ -5,6 +5,9 @@
 
 
 char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
 
     CTextStack *callback= newCTextStack_string_empty();
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
@@ -42,6 +45,9 @@ char *private_CWebHyDrationBridge_call_trigger(
     const char *trigger,
     const char *func_args
 ){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
 
 
     CTextStack *callback= newCTextStack_string_empty();
@@ -59,6 +65,9 @@ char *private_CWebHyDrationBridge_call_trigger(
 }
 
 char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_args,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
 
     if(func_args==NULL){
         return private_CWebHyDrationBridge_call_trigger(self,"onclick","");
@@ -76,6 +85,9 @@ char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_arg
 
 
 char *CWebHyDrationBridge_onfoccusout(CWebHyDrationBridge *self,const char *func_args,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
 
     if(func_args==NULL){
         return private_CWebHyDrationBridge_call_trigger(self,"onfocusout","");

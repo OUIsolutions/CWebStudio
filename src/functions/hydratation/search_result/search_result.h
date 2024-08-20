@@ -34,7 +34,7 @@ double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int 
 long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  index);
 
 
-long CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  index);
+bool CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  index);
 
 
 

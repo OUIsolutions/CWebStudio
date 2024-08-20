@@ -24,7 +24,7 @@ typedef struct CWebHydrationSearchResultNamespace {
     bool  (*is_search_item_string)(CWebHyDrationSearchResult *self,int index);
     double (*get_double)(CWebHyDrationSearchResult *self,int  index);
     long (*get_long)(CWebHyDrationSearchResult *self,int  index);
-    long (*get_bool)(CWebHyDrationSearchResult *self,int  index);
+    bool (*get_bool)(CWebHyDrationSearchResult *self,int  index);
     char*  (*get_string)(CWebHyDrationSearchResult *self,int  index);
     cJSON *  (*get_cJSON)(CWebHyDrationSearchResult *self,int  index);
 

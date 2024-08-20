@@ -1,9 +1,14 @@
 
 
 #include "../uniq.definitions_requirements.h"
+#include <stdbool.h>
+#include <time.h>
 
 
 int  CWebHyDrationBridge_get_total_avaialible_searchs(CWebHyDrationBridge *self){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return 0;
+    }
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
     return cJSON_GetArraySize(hydration->content);
 }
@@ -11,6 +16,9 @@ int  CWebHyDrationBridge_get_total_avaialible_searchs(CWebHyDrationBridge *self)
 
 CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_index(CWebHyDrationBridge *self,int index){
 
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
     cJSON *search =  cJSON_GetArrayItem(hydration->content, index);
     if(search == NULL){
@@ -30,7 +38,9 @@ CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_index(CWebHyDratio
 
 CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_name(CWebHyDrationBridge *self,const char *name,...){
 
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
     va_list  args;
     va_start(args,name);
     char *formmated_name = private_CWeb_format_vaarg(name,args);
@@ -57,7 +67,9 @@ CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_name(CWebHyDration
 }
 
 bool CWebHyDrationBridge_search_exist(CWebHyDrationBridge *self,const char *name,...){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
     va_list  args;
         va_start(args,name);
         char *formmated_name = private_CWeb_format_vaarg(name,args);
@@ -70,7 +82,9 @@ bool CWebHyDrationBridge_search_exist(CWebHyDrationBridge *self,const char *name
 }
 
 double CWebHyDrationBridge_get_double_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return -1;
+    }
     va_list  args;
     va_start(args,name);
     char *formmated_name = private_CWeb_format_vaarg(name,args);
@@ -84,7 +98,9 @@ double CWebHyDrationBridge_get_double_from_first_element_of_search(CWebHyDration
 }
 
 long CWebHyDrationBridge_get_long_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return -1;
+    }
     va_list  args;
     va_start(args,name);
     char *formmated_name = private_CWeb_format_vaarg(name,args);
@@ -99,7 +115,9 @@ long CWebHyDrationBridge_get_long_from_first_element_of_search(CWebHyDrationBrid
 
 
 bool CWebHyDrationBridge_get_bool_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
     va_list  args;
     va_start(args,name);
     char *formmated_name = private_CWeb_format_vaarg(name,args);
@@ -114,7 +132,9 @@ bool CWebHyDrationBridge_get_bool_from_first_element_of_search(CWebHyDrationBrid
 
 
 char* CWebHyDrationBridge_get_string_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
     va_list  args;
     va_start(args,name);
     char *formmated_name = private_CWeb_format_vaarg(name,args);
@@ -128,7 +148,9 @@ char* CWebHyDrationBridge_get_string_from_first_element_of_search(CWebHyDrationB
 }
 
 cJSON* CWebHyDrationBridge_get_cJSON_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
-
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
     va_list  args;
     va_start(args,name);
     char *formmated_name = private_CWeb_format_vaarg(name,args);
