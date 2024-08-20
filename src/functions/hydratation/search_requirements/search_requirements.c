@@ -6,6 +6,10 @@
 
 
 
+void private_CWebHyDrationSearchRequirements_free(CWebHyDrationSearchRequirements *self){
+        free(self->name);
+        free(self);
+}
 
 
 void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirements *self,const char *function,...){

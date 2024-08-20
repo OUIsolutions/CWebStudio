@@ -28,6 +28,8 @@ CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
     CWebHyDrationSearchRequirements *search = (CWebHyDrationSearchRequirements*)malloc(sizeof(CWebHyDrationSearchRequirements));
     search->bridge = self;
     search->name =formmated_name;
+    CWebHyDration *hydration = (CWebHyDration *)self->hydration;
+    UniversalGarbage_add(hydration->garbage,private_CWebHyDrationSearchRequirements_free,search);
     return search;
 }
 
@@ -76,6 +78,5 @@ bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self){
 void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {
 free(self->name);
     CwebStringArray_free(self->entries_callbacks);
-    CwebStringArray_free(self->calls);
     free(self);
 }

@@ -7,6 +7,7 @@
 
 
 
+void private_CWebHyDrationSearchRequirements_free(CWebHyDrationSearchRequirements *self);
 
 
 void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirements *self,const char *function,...);

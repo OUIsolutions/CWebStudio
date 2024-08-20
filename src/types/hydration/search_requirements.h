@@ -3,7 +3,7 @@
 #ifndef PRIVATE_CWEB_HYDRATION_SEARCH_REQUIREMENTS_TYPE
 #define PRIVATE_CWEB_HYDRATION_SEARCH_REQUIREMENTS_TYPE
 typedef  struct{
-    const char *name;
+    char *name;
     CWebHyDrationBridge *bridge;
 } CWebHyDrationSearchRequirements;
 #endif
