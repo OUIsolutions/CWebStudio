@@ -6,7 +6,8 @@
 
 typedef struct{
     CWebHyDrationBridge *bridge;
-    cJSON *elements;
+    cJSON *search;
+    const char *name;
 } CWebHyDrationSearchResult;
 
 #endif

@@ -138,6 +138,23 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
         );
         return private_CWebHydration_formmat_error_response(self);
     }
+
+    int size =cJSON_GetArraySize(content);
+    for(int i = 0; i < size;i++){
+        cJSON *current_search  = cJSON_GetArrayItem(content, i);
+        if(!cJSON_IsArray(current_search)){
+            privateCWebHydration_raise_error(
+                self,
+                NULL,
+                CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY,
+                CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY_MSG,
+                current_search->string
+            );
+            return private_CWebHydration_formmat_error_response(self);
+        }
+    }
+
+
     char *name_str = cJSON_GetStringValue(name);
     CWebHyDrationBridge *target_bridge = NULL;
     for(int i = 0; i < self->all_bridges->size;i++){
