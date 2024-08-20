@@ -1,7 +1,8 @@
 #include "../uniq.definitions_requirements.h"
 
-CWebHydrationResponseNamespace newCWebHydrationResponseNamespace(){
-    CWebHydrationResponseNamespace self ={0};
+CWebHydrationActionsNamespace newCWebHydrationActionsNamespace(){
+    CWebHydrationActionsNamespace self ={0};
+    self.set_session_storage_data = CWebHyDrationBridge_set_session_storage_data;
     self.alert = CWebHyDrationBridge_alert;
     self.execute_script = CWebHyDrationBridge_execute_script;
     self.replace_element_by_id = CWebHyDrationBridge_replace_element_by_id;

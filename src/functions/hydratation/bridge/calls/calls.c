@@ -15,10 +15,11 @@ char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,.
         va_end(args);
         CTextStack_format(
             callback,
-           "private_cweb_bridges[`%s`]([%sc]);",
+           "private_cweb_bridges[`%s`]([%s]);",
             self->name,
             formmated_func_args
         );
+        free(formmated_func_args);
     }
 
     if(func_args == NULL) {
@@ -29,14 +30,13 @@ char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,.
         );
     }
 
-    char *stack_str = CTextStack_self_transform_in_string_and_self_clear(callback);
-    CwebStringArray_add_getting_ownership(hydration->garbage,stack_str);
-    return stack_str;
+    UniversalGarbage_add(hydration->garbage,CTextStack_free, callback);
+    return callback->rendered_text;
 
 }
 
 
-char *private_CWebHyDrationBridge_call_trigger(CWebHyDrationBridge *self,const char *trigger,const char *func_args){
+char *CWebHyDrationBridge_call_trigger(CWebHyDrationBridge *self,const char *trigger,const char *func_args){
 
 
     CTextStack *callback= newCTextStack_string_empty();
@@ -48,12 +48,12 @@ char *private_CWebHyDrationBridge_call_trigger(CWebHyDrationBridge *self,const c
         self->name,
         func_args
     );
-    char *stack_str = CTextStack_self_transform_in_string_and_self_clear(callback);
-    CwebStringArray_add_getting_ownership(hydration->garbage,stack_str);
-    return stack_str;
+
+    UniversalGarbage_add(hydration->garbage,CTextStack_free, callback);
+    return callback->rendered_text;
 }
 
-char *private_CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_args,...){
+char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_args,...){
     va_list  args;
     va_start(args,func_args);
     char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
@@ -65,7 +65,7 @@ char *private_CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *
 }
 
 
-char *private_CWebHyDrationBridge_onfoccusout(CWebHyDrationBridge *self,const char *func_args,...){
+char *CWebHyDrationBridge_onfoccusout(CWebHyDrationBridge *self,const char *func_args,...){
     va_list  args;
     va_start(args,func_args);
     char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);

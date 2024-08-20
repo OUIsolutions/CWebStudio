@@ -31,7 +31,9 @@ bool   CWebHyDrationBridge_is_arg_string(CWebHyDrationBridge *self,int index){
 cJSON *privateCWebHyDration_get_arg_index(
     CWebHyDrationBridge *self,
     int index,
-    cJSON_bool (*callback_verifier)(const cJSON * const item),const char *expected_type){
+    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    const char *expected_type
+){
         CWebHyDration *hydration = (CWebHyDration*)self->hydration;
 
     cJSON *item = cJSON_GetArrayItem(hydration->args,index);
@@ -45,6 +47,10 @@ cJSON *privateCWebHyDration_get_arg_index(
             index);
         return NULL;
     }
+    if(!callback_verifier){
+        return  item;
+    }
+
     if(!callback_verifier(item)){
         privateCWebHydration_raise_error(
             hydration,
@@ -99,4 +105,7 @@ char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index){
         }
 
     return cJSON_GetStringValue(item);
+}
+cJSON * CWebHyDrationBridge_get_cJSON_arg(CWebHyDrationBridge *self,int index){
+    return  privateCWebHyDration_get_arg_index(self,index,NULL,NULL);
 }

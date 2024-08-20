@@ -21,3 +21,5 @@ long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index);
 bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index);
 
 char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index);
+
+cJSON * CWebHyDrationBridge_get_cJSON_arg(CWebHyDrationBridge *self,int index);
