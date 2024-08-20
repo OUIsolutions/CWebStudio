@@ -59,7 +59,7 @@ char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_arg
     char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
     va_end(args);
 
-    char *result = private_CWebHyDrationBridge_call_trigger(self,"onclick",func_args);
+    char *result = CWebHyDrationBridge_call_trigger(self,"onclick",formmated_func_args);
     free(formmated_func_args);
     return result;
 }
@@ -71,7 +71,7 @@ char *CWebHyDrationBridge_onfoccusout(CWebHyDrationBridge *self,const char *func
     char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
     va_end(args);
 
-    char *result = private_CWebHyDrationBridge_call_trigger(self,"onfocusout",func_args);
+    char *result = CWebHyDrationBridge_call_trigger(self,"onfocusout",formmated_func_args);
     free(formmated_func_args);
     return result;
 }

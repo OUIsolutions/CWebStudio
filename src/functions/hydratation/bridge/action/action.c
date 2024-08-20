@@ -14,7 +14,7 @@ void CWebHyDrationBridge_set_session_storage_data(
     cJSON *obj = cJSON_CreateObject();
     va_list  args;
     va_start(args,value);
-    char *value_formmat = private_CWeb_format_vaarg(value_formmat,args);
+    char *value_formmat = private_CWeb_format_vaarg(value,args);
     va_end(args);
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_KEY, key);
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_VALUE,value_formmat);

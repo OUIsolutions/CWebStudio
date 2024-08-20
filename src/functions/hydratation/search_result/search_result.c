@@ -9,6 +9,7 @@ CWebHyDrationSearchResult * private_newCWebHyDrationSearchResult(CWebHyDrationBr
     self->bridge = bridge;
     self->search = search;
     self->name = search->string;
+    return  self;
 }
 
 void privateCWebHyDrationSearchResult_free(CWebHyDrationSearchResult *self){

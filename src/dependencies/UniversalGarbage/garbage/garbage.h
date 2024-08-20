@@ -23,7 +23,7 @@ bool  rawUniversalGarbage_disconnect(UniversalGarbage *self, void **pointer);
 
 bool rawUniversalGarbage_reallocate(UniversalGarbage *self, void **pointer);
 
-bool  rawUniversalGarbage_add(UniversalGarbage *self,  void *release_callback, void **pointer);
+bool  rawUniversalGarbage_add(UniversalGarbage *self, void (*dealocator_callback)(void *element), void **pointer);
 
 void private_UniversalGarbage_free_all_sub_elements(UniversalGarbage *self);
 

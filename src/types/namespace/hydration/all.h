@@ -1,5 +1,5 @@
 #include "args.h"
 #include "search.h"
-#include "requirements.h"
-#include "response_namespace.h"
+#include "search_requirements.h"
+#include "search_result.h"
 #include "hydratation.h"

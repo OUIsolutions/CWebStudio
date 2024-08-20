@@ -25,7 +25,7 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
     CTextScope(text,CTEXT_BODY){
 
         CText$Scope(text, "script", "src='/hydration_script'");
-        CText$Scope(text, "input", "id='valor' %s", cweb.hydration.bridge.onfoccusout(imprime_texto,NULL);
+        CText$Scope(text, "input", "id='valor' %s", cweb.hydration.bridge.onfoccusout(imprime_texto,NULL));
         CText$Scope(text,  "h3", "id='response'");
     }
     //CwebStringArray_add;
@@ -40,7 +40,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
     }
 
     CWebHyDration *hydration = cweb.hydration.newCWebHyDration(request);
-    CWebHyDrationBridge *ponte_imprime = cweb.hydration.create_bridge(hydration, "set num ", ponte_imprime_texto);
+    CWebHyDrationBridge *ponte_imprime = cweb.hydration.bridge.create_bridge(hydration, "set num ", ponte_imprime_texto);
     //precisa desse id
 
     CWebHyDrationSearchRequirements *valor =  cweb.hydration.search_requirements.newSearchRequirements(

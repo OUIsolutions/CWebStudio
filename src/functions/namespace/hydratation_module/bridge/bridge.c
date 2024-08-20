@@ -8,7 +8,6 @@ CWebHydrationBridgeNamespace newCWebHydrationBridgetNamespace(){
     self.onfoccusout =CWebHyDrationBridge_onfoccusout;
     self.has_errors = CWebHyDrationBridge_has_errors;
     self.create_bridge = CWebHyDration_create_bridge;
-    CWebHyDration * (*newCWebHyDration)(CwebHttpRequest *request);
 
     return self;
 }

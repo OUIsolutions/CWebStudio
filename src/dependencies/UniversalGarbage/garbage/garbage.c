@@ -109,7 +109,7 @@ bool  rawUniversalGarbage_disconnect(UniversalGarbage *self, void **pointer){
 
 
 }
-bool  rawUniversalGarbage_add(UniversalGarbage *self, void *release_callback, void **pointer){
+bool  rawUniversalGarbage_add(UniversalGarbage *self, void (*dealocator_callback)(void *element), void **pointer){
 
     if(!pointer){
         return false;
@@ -127,15 +127,6 @@ bool  rawUniversalGarbage_add(UniversalGarbage *self, void *release_callback, vo
             self->elements,
             (self->elements_size + 1) * sizeof(privateUniversalGarbageElement*)
     );
-    void (*dealocator_callback)(void *element);
-#ifdef __cplusplus
-    dealocator_callback =reinterpret_cast<void(*)(void*)>(release_callback);
-#else
-    dealocator_callback = (void*)(void*)release_callback;
-
-#endif
-
-
 
     self->elements[self->elements_size] = private_newUniversalGarbageSimpleElement(dealocator_callback, pointer);
     self->elements_size+=1;
