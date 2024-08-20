@@ -55,6 +55,8 @@
 #define CWEB_BRIDGE_NOT_FOUND 15
 #define CWEB_BRIDGE_NOT_FOUND_MSG  "bridge of name %s not found"
 
+#define CWEB_SEARCH_NOT_EXIST 16
+#define CWEB_SEARCH_NOT_EXIST_MSG "search at index %d not exist"
 
 #define CWEB_HYDRATION_STRING "string"
 #define CWEB_HYDRATION_BOOL  "bool"

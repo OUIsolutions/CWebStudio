@@ -9,6 +9,18 @@ void privateCWebHyDrationBridge_add_response(CWebHyDrationBridge *self,const cha
     cJSON_AddItemToArray(hydraation->response,current_response);
 }
 
+void CWebHyDrationBridge_set_session_storage_data(
+    CWebHyDrationBridge *self,const char*key, const char *value,...){
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,value);
+    char *value_formmat = private_CWeb_format_vaarg(value_formmat,args);
+    va_end(args);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_KEY, key);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_VALUE,value_formmat);
+    free(value_formmat);
+    privateCWebHyDrationBridge_add_response(self,"set_session_storage",obj);
+}
 
 void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,...){
     cJSON *obj = cJSON_CreateObject();

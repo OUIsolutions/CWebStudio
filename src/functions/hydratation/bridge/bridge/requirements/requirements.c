@@ -175,6 +175,29 @@ void CWebHyDrationBridge_add_elements_by_id_not_auto_converting(CWebHyDrationBri
     free(formmated_id);
 }
 
+void CWebHyDrationBridge_add_session_storage_item_not_converting(CWebHyDrationBridge *self,const char *search_name,const char *name,...){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDrationBridge_add_function(self,
+        "function (args,content){\
+            private_cweb_get_session_storage_item({\
+            content:content,\
+            name:`%s`,\
+            search_name:`%s`,\
+            auto_convert:false\
+            })\
+        }",
+        formmated_name,
+        search_name
+    );
+    free(formmated_name);
+}
+
+
 void CWebHyDrationBridge_add_session_storage_item(CWebHyDrationBridge *self,const char *search_name,const char *name,...){
 
     va_list  args;
@@ -188,30 +211,7 @@ void CWebHyDrationBridge_add_session_storage_item(CWebHyDrationBridge *self,cons
             content:content,\
             name:`%s`,\
             search_name:`%s`,\
-            convert_to_number:false\
-            })\
-        }",
-        formmated_name,
-        search_name
-    );
-    free(formmated_name);
-}
-
-
-void CWebHyDrationBridge_add_session_storage_item_converting_to_number(CWebHyDrationBridge *self,const char *search_name,const char *name,...){
-
-    va_list  args;
-    va_start(args,name);
-    char *formmated_name = private_CWeb_format_vaarg(name,args);
-    va_end(args);
-
-    CWebHyDrationBridge_add_function(self,
-        "function (args,content){\
-            private_cweb_get_session_storage_item({\
-            content:content,\
-            name:`%s`,\
-            search_name:`%s`,\
-            convert_to_number:true\
+            auto_convert:true\
             })\
         }",
         formmated_name,

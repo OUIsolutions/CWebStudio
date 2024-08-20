@@ -7,6 +7,10 @@ let private_cweb_response_handlers = {
     eval(data["code"]);
   },
 
+  set_session_storage: function (data) {
+    sessionStorage.setItem(data["key"], data["value"]);
+  },
+
   replace_element_by_id: function (data) {
     let element = document.getElementById(data.id);
     if (!element) {

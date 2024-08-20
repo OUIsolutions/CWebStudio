@@ -10,6 +10,8 @@
 #define CWEB_HYDRATON_JSON_MSG "msg"
 #define CWEB_HYDRATON_JSON_CODE "code"
 #define CWEB_HYDRATON_JSON_ID "id"
+#define CWEB_HYDRATON_JSON_KEY "key"
+#define CWEB_HYDRATON_JSON_VALUE "value"
 
 #define CWEB_HYDRATON_JSON_ARGS "args"
 #define CWEB_HYDRATON_JSON_CONTENT "content"
