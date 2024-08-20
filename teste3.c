@@ -39,7 +39,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
         return cweb_send_text("app terminado",200);
     }
 
-    CWebHyDration *hydration = cweb.hydration.bridge.newCWebHyDration(request);
+    CWebHyDration *hydration = cweb.hydration.newCWebHyDration(request);
     CWebHyDrationBridge *ponte_imprime = cweb.hydration.create_bridge(hydration, "set num ", ponte_imprime_texto);
     //precisa desse id
 

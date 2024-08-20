@@ -5,7 +5,7 @@
 #define PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
 
 typedef struct CWebHydrationNamespace{
-
+    CWebHyDration *(*newCWebHyDration)(CwebHttpRequest *request);
     bool (*is_the_trigger)(CWebHyDration *self);
     char *(*create_script)(CWebHyDration *self);
     CWebHydrationBridgeNamespace bridge;
