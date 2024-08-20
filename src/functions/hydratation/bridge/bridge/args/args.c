@@ -64,7 +64,7 @@ double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index){
     return cJSON_GetNumberValue(item);
 }
 
-long  CWebHyDrationBridge_read_long_arg(CWebHyDrationBridge *self,int index){
+long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index){
 
     cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
