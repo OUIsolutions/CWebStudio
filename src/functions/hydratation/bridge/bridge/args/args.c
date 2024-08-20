@@ -1,5 +1,4 @@
 #include "../uniq.definitions_requirements.h"
-#include <cstddef>
 
 
 int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self,int index){
@@ -55,7 +54,7 @@ cJSON *privateCWebHyDration_get_arg_index(
     return item;
 }
 
-double  CWebHyDrationBridge_read_double_arg(CWebHyDrationBridge *self,int index){
+double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index){
 
     cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
@@ -77,7 +76,7 @@ long  CWebHyDrationBridge_read_long_arg(CWebHyDrationBridge *self,int index){
 
 
 
-bool  CWebHyDrationBridge_read_bool_arg(CWebHyDrationBridge *self,int index){
+bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index){
 
     cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_BOOL);
         if(item == NULL){
@@ -87,7 +86,7 @@ bool  CWebHyDrationBridge_read_bool_arg(CWebHyDrationBridge *self,int index){
     return (bool)item->valueint;
 }
 
-char* CWebHyDrationBridge_read_str_arg(CWebHyDrationBridge *self,int index){
+char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index){
 
     cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_STRING);
         if(item == NULL){
