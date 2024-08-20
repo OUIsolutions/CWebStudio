@@ -5,7 +5,7 @@ CwebNamespace cweb;
 CTextStackModule stack;
 
 void  ponte_imprime_texto(CWebHyDrationBridge *ponte){
-  const char *valor = cweb.hydration.content.read_str(ponte, "valor");
+  const char *valor = cweb.hydration.search_result.get_string_from_first_element_of_search(ponte, "valor");
 
   CWebHydrationHandleErrors(ponte);
   CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
@@ -13,8 +13,9 @@ void  ponte_imprime_texto(CWebHyDrationBridge *ponte){
   CText$Scope(text, "h3", "id='response'"){
     stack.format(text, "Você digitou valor: %s", valor);
   }
-  cweb.hydration.response.replace_element_by_id(ponte, "response", text->rendered_text);
-  cweb.hydration.response.alert(ponte, "Msg");
+
+  cweb.hydration.actions.replace_element_by_id(ponte, "response", text->rendered_text);
+  cweb.hydration.actions.alert(ponte, "Msg");
 
   stack.free(text);
 }
@@ -41,7 +42,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
     CWebHyDration *hydration = cweb.hydration.newCWebHyDration(request);
     CWebHyDrationBridge *ponte_imprime = cweb.hydration.create_bridge(hydration, "set num ", ponte_imprime_texto);
     //precisa desse id
-    cweb.hydration.requirements.add_required_input_by_id(ponte_imprime, "valor");
+    CWebHyDrationSearchRequirements *valor =  cweb.hydration.search_result.n
+    cweb.hydration.search_requirements.add_elements_by_id(ponte_imprime, "valor");
 
     CWebHydrationHandleTriggers(hydration);
 

@@ -15,6 +15,6 @@ typedef struct CWebHydrationResponseNamespace {
     void (*replace_element_by_id)(CWebHyDrationBridge *self,const char *id, const char *code,...);
     void (*destroy_by_id)(CWebHyDrationBridge *self,const char * id);
 
-}CWebHydrationResponseNamespace;
+}CWebHydrationActionsNamespace;
 
 #endif

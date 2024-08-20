@@ -14,7 +14,7 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
     self->name = strdup(name);
     self->callback = callback;
     self->hydration = (void*)hydration;
-    self->entries_callbacks =newCwebStringArray();
+    self->requirements_code =newCwebStringArray();
     return  self;
 }
 
@@ -77,6 +77,6 @@ bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self){
 
 void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {
 free(self->name);
-    CwebStringArray_free(self->entries_callbacks);
+    CwebStringArray_free(self->requirements_code);
     free(self);
 }
