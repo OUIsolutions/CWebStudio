@@ -1,12 +1,12 @@
 #include "../request.h"
-#include "bridget.h"
+#include "bridge.h"
 
-#ifdef  PRIVATE_CWEB_HYDRATION_SEARCH_RESULT_TYPE
+#ifndef  PRIVATE_CWEB_HYDRATION_SEARCH_RESULT_TYPE
 #define PRIVATE_CWEB_HYDRATION_SEARCH_RESULT_TYPE
 
 typedef struct{
-    CWebCWebHyDrationBridge *bridge;
+    CWebHyDrationBridge *bridge;
     cJSON *elements;
-} CWebCWebHyDrationSearchResult;
+} CWebHyDrationSearchResult;
 
 #endif

@@ -2,28 +2,12 @@
 #include "../uniq.definitions_requirements.h"
 
 
-int  CWebHyDrationBridge_get_total_avaialible_searchs(CWebHyDrationBridge *self){
-    return cJSON_GetArraySize(self->content);
+
+
+CWebHyDrationSearchResult * private_newCWebHyDrationSearchResult(){
+    CWebHyDrationSearchResult *self = (CWebHyDrationSearchResult*)malloc(sizeof(CWebHyDrationSearchResult));
+
 }
-
-const char * CWebHyDrationBridge_get_search_name_by_index(CWebHyDrationBridge *self,int index){
-
-    cJSON *item  =  cJSON_GetArrayItem(self->content, index);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
-    if(item == NULL){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_SEARCH_NOT_EXIST,
-            CWEB_SEARCH_NOT_EXIST_MSG,
-            index);
-        return NULL;
-    }
-    return item->string;
-}
-
-
 
 int  CWebHyDrationBridge_get_total_itens_of_search(CWebHyDrationBridge *self,const char *search_name,...){
 

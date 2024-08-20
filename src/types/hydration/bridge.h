@@ -10,8 +10,7 @@ typedef struct  CWebHyDrationBridge {
     char *name;
     void  *hydration;
     void  (*callback)(struct CWebHyDrationBridge *bridge);
-    cJSON *args;
-    cJSON *content;
+
     CwebStringArray *entries_callbacks;
 
     void *extra_args;

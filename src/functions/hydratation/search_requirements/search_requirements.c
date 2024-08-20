@@ -7,6 +7,7 @@
 
 
 
+
 void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirements *self,const char *function,...){
     va_list  args;
     va_start(args,function);

@@ -17,6 +17,7 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     self->garbage = newCwebStringArray();
     self->max_content_size = CWEB_HYDRATION_DEFAULT_BODY_SIZE;
     request->hydratation = (void *)self;
+
     return self;
 }
 
@@ -157,8 +158,8 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
         return private_CWebHydration_formmat_error_response(self);
     }
 
-    target_bridge->args =args;
-    target_bridge->content = content;
+    self->args =args;
+    self->content = content;
     target_bridge->callback(target_bridge);
     if(self->error_code){
         return private_CWebHydration_formmat_error_response(self);
