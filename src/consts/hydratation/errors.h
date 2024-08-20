@@ -27,7 +27,7 @@
 
 
 #define CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED 9
-#define CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG  "body['content']['%s'] not provided at content"
+#define CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED_MSG  "body['content']['%s'] not provided at content"
 
 #define CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY 10
 #define CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY_MSG "body['content']['%s']   is not of array"
