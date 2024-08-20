@@ -1,0 +1,84 @@
+
+
+
+#include "../uniq.declaration_requirements.h"
+
+
+
+
+
+
+
+void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirements *self,const char *function,...);
+
+
+void private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,bool auto_convert
+);
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,
+    ...
+);
+
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,const char *query_selector,...);
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute(
+    CWebHyDrationSearchRequirements *self,
+   const char *attribute,
+   const char*attribute_value,
+   ...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *attribute,
+    const char*attribute_value,
+    ...
+);
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,
+    ...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_id(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+);
+
+
+void CWebHyDrationSearchRequirements_add_session_storage_item_not_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+);
+
+
+void CWebHyDrationSearchRequirements_add_session_storage_item(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+);

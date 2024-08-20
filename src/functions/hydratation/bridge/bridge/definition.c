@@ -1,6 +1,0 @@
-#include "basic/basic.c"
-#include "requirements/requirements.c"
-#include "args/args.c"
-#include "search/search.c"
-#include "responses/responses.c"
-#include "calls/calls.c"

@@ -18,6 +18,21 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
     return  self;
 }
 
+CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
+    CWebHyDrationBridge *self, const char *name,...){
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements *search = (CWebHyDrationSearchRequirements*)malloc(sizeof(CWebHyDrationSearchRequirements));
+    search->bridge = self;
+    search->name =formmated_name;
+    return search;
+}
+
+
+
 
 CTextStack*  private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self) {
 

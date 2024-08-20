@@ -11,6 +11,8 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
 
 bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self);
 
+CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(CWebHyDrationBridge *self, const char *name,...);
+
 char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...);
 
 CTextStack* private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self);
