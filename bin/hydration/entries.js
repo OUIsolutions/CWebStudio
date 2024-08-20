@@ -1,67 +1,41 @@
-
-
-
-function private_cweb_try_to_convert_to_number(possible_number){
+function private_cweb_try_to_convert_to_number(possible_number) {
   let possible_conversion = parseFloat(possible_number);
-  if(isNaN(possible_conversion)){
-    return  possible_number;
+  if (isNaN(possible_conversion)) {
+    return possible_number;
   }
-  
+
   return possible_conversion;
 }
 
 function private_cweb_get_session_storage_item(props) {
-  if (!props.content[props.set_content_key]) {
-    props.content[props.search_name] = [];
-  }
-
-  let content_array = props.content[props.search_name];
   let finalvalue = sessionStorage.getItem(props.name);
   if (!finalvalue) {
-    return;
+    return [];
   }
-
   if (props.auto_convert) {
-   
-    
-   finalvalue =private_cweb_try_to_convert_to_number(finalvalue);
+    finalvalue = private_cweb_try_to_convert_to_number(finalvalue);
   }
-
-
-  if (finalvalue) {
-    content_array.unshift(finalvalue);
-  }
-
+  return [finalvalue];
 }
 
-function private_cweb_get_elements_and_set_to_content(props) {
-  if (!props.content[props.search_name]) {
-    props.content[props.search_name] = [];
-  }
-
-  let content_array = props.content[props.search_name];
+function private_cweb_get_elements(props) {
   let elements = document.querySelectorAll(props.query_selector);
-
-  elements.forEach((element) => {
+  return elements.map((element) => {
     let finalvalue = undefined;
-    let auto_convert = props.auto_convert;
-    if(element.type === 'checkbox'){
-        finalvalue = element.checked;
-        auto_convert=false;
+
+    if (element.type === "checkbox") {
+      return [element.checked];
     }
 
-    else if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+    if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
       finalvalue = element.value;
-    } 
-
-    else {
+    } else {
       finalvalue = element.textContent;
     }
-    
-    if (auto_convert) {
-        finalvalue =private_cweb_try_to_convert_to_number(finalvalue);
+
+    if (props.auto_convert) {
+      finalvalue = private_cweb_try_to_convert_to_number(finalvalue);
     }
-    content_array.push(finalvalue);
-    
+    return [finalvalue];
   });
 }
