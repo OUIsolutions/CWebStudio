@@ -40,8 +40,7 @@ void private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
     }
     CWebHyDrationSearchRequirements_add_function(self,
         "function (args){\
-            return private_cweb_get_elements_and_set_to_content({\
-            content:content,\
+            return private_cweb_get_elements({\
             query_selector:`%s`,\
             auto_convert:%s\
             })\

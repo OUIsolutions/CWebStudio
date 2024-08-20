@@ -1,5 +1,6 @@
 
 #include "../uniq.definitions_requirements.h"
+#include <time.h>
 
 
 
@@ -106,7 +107,8 @@ double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int 
 
 long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  index){
 
-    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+        self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
         return -1;
     }
@@ -115,7 +117,8 @@ long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  ind
 
 long CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  index){
 
-    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+        self,index,cJSON_IsBool,CWEB_HYDRATION_BOOL);
     if(item == NULL){
         return -1;
     }
@@ -125,7 +128,8 @@ long CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  ind
 
 char*  CWebHyDrationSearchResult_get_string(CWebHyDrationSearchResult *self,int  index){
 
-    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+        self,index,cJSON_IsString,CWEB_HYDRATION_STRING);
     if(item == NULL){
         return NULL;
     }
@@ -134,6 +138,9 @@ char*  CWebHyDrationSearchResult_get_string(CWebHyDrationSearchResult *self,int 
 
 cJSON *  CWebHyDrationSearchResult_get_cJSON(CWebHyDrationSearchResult *self,int  index){
 
-    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+        self,index,NULL,NULL
+
+    );
     return item;
 }

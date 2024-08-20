@@ -28,7 +28,7 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
         CText$Scope(text, "script", "src='/hydration_script'");
         //CWebHyDrationBridge_onfoccusout
 
-        CText$Scope(text, "input", "id='valor' %s", cweb.hydration.bridge.onfoccusout(imprime_texto,NULL));
+        CText$Scope(text, "input", " id='valor' %s", cweb.hydration.bridge.onfoccusout(imprime_texto,NULL));
         CText$Scope(text,  "h3", "id='response'");
     }
     //CwebStringArray_add;

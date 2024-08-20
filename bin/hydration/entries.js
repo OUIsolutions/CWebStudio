@@ -19,12 +19,12 @@ function private_cweb_get_session_storage_item(props) {
 }
 
 function private_cweb_get_elements(props) {
-  let elements = document.querySelectorAll(props.query_selector);
+  let elements = [...document.querySelectorAll(props.query_selector)];
   return elements.map((element) => {
     let finalvalue = undefined;
 
     if (element.type === "checkbox") {
-      return [element.checked];
+      return element.checked;
     }
 
     if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
@@ -36,6 +36,7 @@ function private_cweb_get_elements(props) {
     if (props.auto_convert) {
       finalvalue = private_cweb_try_to_convert_to_number(finalvalue);
     }
-    return [finalvalue];
+
+    return finalvalue;
   });
 }

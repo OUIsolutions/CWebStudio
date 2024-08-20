@@ -11,7 +11,7 @@ async function private_cweb_send_to_server(name, args, content) {
   let actions = await result.json();
   actions.forEach(function (item) {
     try {
-      let response_action = private_cweb_action_handlers[item.name];
+      let response_action = private_cweb_actions_handlers[item.name];
       if (!response_action) {
         throw Error("response " + item.name + "its not a action");
       }
@@ -36,5 +36,8 @@ function private_cweb_handle_required_data(callback, args, content, name) {
     result = [result];
   }
 
-  //content[name].concat(result);
+  if (!content[name]) {
+    content[name] = [];
+  }
+  content[name] = content[name].concat(result);
 }
