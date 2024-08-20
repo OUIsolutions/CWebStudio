@@ -39,11 +39,15 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
         return cweb_send_text("app terminado",200);
     }
 
-    CWebHyDration *hydration = cweb.hydration.newCWebHyDration(request);
+    CWebHyDration *hydration = cweb.hydration.bridge.newCWebHyDration(request);
     CWebHyDrationBridge *ponte_imprime = cweb.hydration.create_bridge(hydration, "set num ", ponte_imprime_texto);
     //precisa desse id
-    CWebHyDrationSearchRequirements *valor =  cweb.hydration.search_result.n
-    cweb.hydration.search_requirements.add_elements_by_id(ponte_imprime, "valor");
+
+    CWebHyDrationSearchRequirements *valor =  cweb.hydration.search_requirements.newSearchRequirements(
+        ponte_imprime,
+        "valor"
+    );
+    cweb.hydration.search_requirements.add_elements_by_id(valor, "valor");
 
     CWebHydrationHandleTriggers(hydration);
 

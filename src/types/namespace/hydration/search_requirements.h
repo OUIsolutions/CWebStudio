@@ -11,6 +11,7 @@ typedef struct CWebHydrationSearchRequirementsNamespace {
 
 
 
+    CWebHyDrationSearchRequirements * (*newSearchRequirements)(CWebHyDrationBridge *self, const char *name,...);
 
     void (*add_function)(CWebHyDrationSearchRequirements *self,const char *function,...);
     void (*add_elements_by_query_selector)(
