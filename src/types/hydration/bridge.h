@@ -11,7 +11,7 @@ typedef struct  CWebHyDrationBridge {
     void  *hydration;
     void  (*callback)(struct CWebHyDrationBridge *bridge);
 
-    CwebStringArray *entries_callbacks;
+    CwebStringArray *requirements_code;
 
     void *extra_args;
 

@@ -48,11 +48,11 @@ CTextStack*  private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self
 
     CTextStack_format(function,"\tlet content = {}\n");
 
-    for(int i= 0; i < self->entries_callbacks->size;i++) {
+    for(int i= 0; i < self->requirements_code->size;i++) {
         CTextStack_format(
             function,
-            "\tprivate_cweb_handle_required_data(%s, args, content);\n",
-            self->entries_callbacks->strings[i]
+            "%s\n",
+            self->requirements_code->strings[i]
         );
     }
 

@@ -15,9 +15,19 @@ void private_CWebHyDrationSearchRequirements_free(CWebHyDrationSearchRequirement
 void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirements *self,const char *function,...){
     va_list  args;
     va_start(args,function);
-    char *result = private_CWeb_format_vaarg(function,args);
+    char *func_value = private_CWeb_format_vaarg(function,args);
     va_end(args);
-    CwebStringArray_add_getting_ownership(self->bridge->entries_callbacks, result);
+
+
+    CTextStack *callback = newCTextStack_string_format(
+        "private_cweb_handle_required_data(%s,args,content,%s);",
+        func_value,
+        self->name
+    );
+
+    free(func_value);
+    char *callback_str = CTextStack_self_transform_in_string_and_self_clear(callback);
+    CwebStringArray_add_getting_ownership(self->bridge->requirements_code, callback_str);
 }
 
 void private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
@@ -29,15 +39,13 @@ void private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
         auto_convert_str = "true";
     }
     CWebHyDrationSearchRequirements_add_function(self,
-        "function (args,content){\
-            private_cweb_get_elements_and_set_to_content({\
+        "function (args){\
+            return private_cweb_get_elements_and_set_to_content({\
             content:content,\
             query_selector:`%s`,\
-            search_name:`%s`,\
             auto_convert:%s\
             })\
         }",
-        self->name,
         query_selector,
         auto_convert_str
     );

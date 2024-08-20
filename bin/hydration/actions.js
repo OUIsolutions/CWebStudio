@@ -1,4 +1,4 @@
-let private_cweb_response_handlers = {
+let private_cweb_actions_handlers = {
   alert: function (data) {
     alert(data["msg"]);
   },
