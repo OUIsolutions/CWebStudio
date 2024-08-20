@@ -13,5 +13,5 @@
 
 #ifndef  UNIVERSAL_GARBAGE_H
 #define UNIVERSAL_GARBAGE_H
-#include "UniversalGarbage/definition.h"
+#include "UniversalGarbage/definition.c"
 #endif

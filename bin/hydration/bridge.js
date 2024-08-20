@@ -36,8 +36,5 @@ function private_cweb_handle_required_data(callback, args, content, name) {
     result = [result];
   }
 
-  if (!content[name]) {
-    content[name] = [];
-  }
-  content[data].concat(result);
+  //content[name].concat(result);
 }

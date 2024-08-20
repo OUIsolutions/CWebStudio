@@ -7,5 +7,5 @@
 
 
 #include "macros.h"
-#include "garbage_element/garbage_element.h"
-#include "garbage/garbage.h"
+#include "types/all.h"
+#include "functions/declaration.h"

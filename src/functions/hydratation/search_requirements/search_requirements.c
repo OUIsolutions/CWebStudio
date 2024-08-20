@@ -20,7 +20,7 @@ void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirement
 
 
     CTextStack *callback = newCTextStack_string_format(
-        "private_cweb_handle_required_data(%s,args,content,%s);",
+        "private_cweb_handle_required_data(%s,args,content,'%s');",
         func_value,
         self->name
     );

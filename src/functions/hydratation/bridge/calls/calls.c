@@ -1,5 +1,6 @@
 
 #include "../uniq.definitions_requirements.h"
+#include <time.h>
 
 
 
@@ -36,7 +37,11 @@ char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,.
 }
 
 
-char *CWebHyDrationBridge_call_trigger(CWebHyDrationBridge *self,const char *trigger,const char *func_args){
+char *private_CWebHyDrationBridge_call_trigger(
+    CWebHyDrationBridge *self,
+    const char *trigger,
+    const char *func_args
+){
 
 
     CTextStack *callback= newCTextStack_string_empty();
@@ -45,33 +50,43 @@ char *CWebHyDrationBridge_call_trigger(CWebHyDrationBridge *self,const char *tri
     CTextStack_format(
         callback,
         "%s = 'private_cweb_bridges[`%s`]([%s])';",
+        trigger,
         self->name,
         func_args
     );
-
     UniversalGarbage_add(hydration->garbage,CTextStack_free, callback);
     return callback->rendered_text;
 }
 
 char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_args,...){
+
+    if(func_args==NULL){
+        return private_CWebHyDrationBridge_call_trigger(self,"onclick","");
+    }
+
     va_list  args;
     va_start(args,func_args);
     char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
     va_end(args);
 
-    char *result = CWebHyDrationBridge_call_trigger(self,"onclick",formmated_func_args);
+    char *result = private_CWebHyDrationBridge_call_trigger(self,"onclick",formmated_func_args);
     free(formmated_func_args);
     return result;
 }
 
 
 char *CWebHyDrationBridge_onfoccusout(CWebHyDrationBridge *self,const char *func_args,...){
+
+    if(func_args==NULL){
+        return private_CWebHyDrationBridge_call_trigger(self,"onfocusout","");
+    }
+
     va_list  args;
     va_start(args,func_args);
     char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
     va_end(args);
 
-    char *result = CWebHyDrationBridge_call_trigger(self,"onfocusout",formmated_func_args);
+    char *result = private_CWebHyDrationBridge_call_trigger(self,"onfocusout",formmated_func_args);
     free(formmated_func_args);
     return result;
 }

@@ -1,4 +1,5 @@
 
+#include "src/functions/declarations.h"
 #include "src/one.c"
 
 CwebNamespace cweb;
@@ -25,6 +26,8 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
     CTextScope(text,CTEXT_BODY){
 
         CText$Scope(text, "script", "src='/hydration_script'");
+        //CWebHyDrationBridge_onfoccusout
+
         CText$Scope(text, "input", "id='valor' %s", cweb.hydration.bridge.onfoccusout(imprime_texto,NULL));
         CText$Scope(text,  "h3", "id='response'");
     }
@@ -64,10 +67,12 @@ int main(int argc, char *argv[]){
 
     cweb = newCwebNamespace();
     stack = newCTextStackModule();
-
-    CwebServer server = newCwebSever(3002, main_sever);
-    server.single_process = true;
-    cweb.server.start(&server);
+    for(int i=3000;i < 4000;i++){
+        CwebServer server = newCwebSever(i, main_sever);
+        server.single_process = true;
+     cweb.server.start(&server);
+    }
     return 0;
+
 
 }

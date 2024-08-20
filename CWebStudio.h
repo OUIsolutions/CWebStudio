@@ -123,7 +123,7 @@ for(int snaunduwwqwetjsdvda = 0; snaunduwwqwetjsdvda < 1; ctext_close(s, t), ++s
 #define CTEXT_TRACK "track"
 #define CTEXT_EMBED "embed"
 #define CTEXT_PARAM "param"
-
+    
 
 
 
@@ -491,7 +491,7 @@ extern "C"
 #elif defined(CJSON_IMPORT_SYMBOLS)
 #define CJSON_PUBLIC(type)   __declspec(dllimport) type CJSON_STDCALL
 #endif
-#else
+#else 
 #define CJSON_CDECL
 #define CJSON_STDCALL
 
@@ -518,7 +518,7 @@ extern "C"
 #define cJSON_String (1 << 4)
 #define cJSON_Array  (1 << 5)
 #define cJSON_Object (1 << 6)
-#define cJSON_Raw    (1 << 7)
+#define cJSON_Raw    (1 << 7) 
 
 #define cJSON_IsReference 256
 #define cJSON_StringIsConst 512
@@ -526,29 +526,29 @@ extern "C"
 
 typedef struct cJSON
 {
-
+    
     struct cJSON *next;
     struct cJSON *prev;
-
+    
     struct cJSON *child;
 
-
+    
     int type;
 
-
+    
     char *valuestring;
-
+    
     int valueint;
-
+    
     double valuedouble;
 
-
+    
     char *string;
 } cJSON;
 
 typedef struct cJSON_Hooks
 {
-
+      
       void *(CJSON_CDECL *malloc_fn)(size_t sz);
       void (CJSON_CDECL *free_fn)(void *ptr);
 } cJSON_Hooks;
@@ -657,7 +657,7 @@ CJSON_PUBLIC(void) cJSON_DeleteItemFromObject(cJSON *object, const char *string)
 CJSON_PUBLIC(void) cJSON_DeleteItemFromObjectCaseSensitive(cJSON *object, const char *string);
 
 
-CJSON_PUBLIC(cJSON_bool) cJSON_InsertItemInArray(cJSON *array, int which, cJSON *newitem);
+CJSON_PUBLIC(cJSON_bool) cJSON_InsertItemInArray(cJSON *array, int which, cJSON *newitem); 
 CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemViaPointer(cJSON * const parent, cJSON * const item, cJSON * replacement);
 CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInArray(cJSON *array, int which, cJSON *newitem);
 CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObject(cJSON *object,const char *string,cJSON *newitem);
@@ -714,7 +714,152 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 #undef cJSON__h
 #endif
 
+
+#ifndef  UNIVERSAL_GARBAGE_H
+//path: src/dependencies/UniversalGarbage/declaration.h
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+
+
+//path: src/dependencies/UniversalGarbage/macros.h
+
+#define UniversalGarbage_create_empty_struct(name,element_type) \
+(element_type*)malloc(sizeof(element_type));    \
+*name = (element_type){0};
+
+
+#define UniversalGarbage_cast(value) ((void**)&value)
+
+
+#define UniversalGarbage_add(garbage,deallocator_callback,value) \
+    rawUniversalGarbage_add(garbage,(void(*)(void*))deallocator_callback,UniversalGarbage_cast(value))
+
+#define UniversalGarbage_add_simple(garbage,value) \
+     UniversalGarbage_add(garbage,free,value)
+
+
+#define UniversalGarbage_add_return(garbage,deallocator_callback,value) \
+        UniversalGarbage_add(garbage->return_values,deallocator_callback,value)
+
+
+#define UniversalGarbage_add_simple_return(garbage,value) \
+    UniversalGarbage_add_simple(garbage->return_values,value)
+
+
+
+#define  UniversalGarbage_remove(garbage,value) \
+    rawUniversalGarbage_remove(garbage,UniversalGarbage_cast(value));
+
+
+#define  UniversalGarbage_disconnect(garbage,value) \
+    rawUniversalGarbage_disconnect(garbage,UniversalGarbage_cast(value));
+
+
+
+
+#define UniversalGarbage_reallocate(garbage,value) \
+    rawUniversalGarbage_reallocate(garbage,UniversalGarbage_cast(value))
+
+
+#define UniversalGarbage_resset(garbage,value) \
+    rawUniversalGarbage_resset(garbage,UniversalGarbage_cast(value))
+
+
+//path: src/dependencies/UniversalGarbage/types/all.h
+//path: src/dependencies/UniversalGarbage/types/garbage.h
+//path: src/dependencies/UniversalGarbage/types/garbage_element.h
+
+#ifndef PRIVATE_UNIVERSGAL_GARBAGE_ELEMENT_TYPE
+#define PRIVATE_UNIVERSGAL_GARBAGE_ELEMENT_TYPE
+typedef struct privateUniversalGarbageElement{
+    void **pointer;
+    void (*deallocator_callback)(void *element);
+    void *pointed_value;
+}privateUniversalGarbageElement;
 #endif
+
+
+
+#ifndef  PRIVATE_UNIVERSAL_GARBAGE_TYPE
+#define PRIVATE_UNIVERSAL_GARBAGE_TYPE
+
+
+typedef  struct UniversalGarbage{
+
+    struct UniversalGarbage *return_values;
+    privateUniversalGarbageElement **elements;
+    int  elements_size;
+    bool is_the_root;
+
+}UniversalGarbage;
+#endif
+
+
+
+
+
+
+//path: src/dependencies/UniversalGarbage/functions/declaration.h
+
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/garbage_element.h
+
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/../unique.declaration_requirements.h
+
+
+
+
+
+
+void private_UniversalGarbageSimpleElement_free_pointed_value(privateUniversalGarbageElement *self);
+
+
+void private_UniversalGarbageSimpleElement_free(privateUniversalGarbageElement *self);
+
+privateUniversalGarbageElement * private_newUniversalGarbageSimpleElement(void (*dealocator_callback)(void *element), void **pointer);
+
+
+//path: src/dependencies/UniversalGarbage/functions/garbage/garbage.h
+
+
+
+
+
+UniversalGarbage * newUniversalGarbage();
+
+UniversalGarbage * private_new_MainUniversalGarbage();
+
+
+
+bool  rawUniversalGarbage_resset(UniversalGarbage *self, void **pointer);
+
+bool  rawUniversalGarbage_remove(UniversalGarbage *self, void **pointer);
+
+bool  rawUniversalGarbage_disconnect(UniversalGarbage *self, void **pointer);
+
+bool rawUniversalGarbage_reallocate(UniversalGarbage *self, void **pointer);
+
+bool  rawUniversalGarbage_add(UniversalGarbage *self,  void (*dealocator_callback)(void *element), void **pointer);
+
+void private_UniversalGarbage_free_all_sub_elements(UniversalGarbage *self);
+
+void UniversalGarbage_free_including_return(UniversalGarbage *self);
+
+void UniversalGarbage_free(UniversalGarbage *self);
+
+
+
+
+
+
+#endif
+
+
+#endif
+
 
 //path: src/consts/all.h
 #ifndef PRIVATE_CWEB_HTTP_CONSTS_CONSTS
@@ -766,47 +911,64 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 #define CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED 1
 #define CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG "json body not provided"
 
-
 #define CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT 2
 #define CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT_MSG  "json body not not object"
 
-#define CWEB_HYDRATION_KEY_NOT_PROVIDED 3
-#define CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG  "json key %s not provided"
 
-#define CWEB_HYDRATION_KEY_WRONG_TYPE 4
-#define CWEB_HYDRATION_KEY_WRONG_TYPE_MSG "json key is not of type %s"
+#define CWEB_HYDRATION_NAME_NOT_PROVIDED 3
+#define CWEB_HYDRATION_NAME_NOT_PROVIDED_MSG  "body['name'] not provided"
 
-#define CWEB_HYDRATION_INDEX_NOT_PROVIDED  5
-#define CWEB_HYDRATION_INDEX_NOT_PROVIDED_MSG  "json index %d not provided"
-
-#define CWEB_HYDRATION_INDEX_WRONG_TYPE 6
-#define CWEB_HYDRATION_INDEX_WRONG_TYPE_MSG  "json index %d is not of type %s"
+#define CWEB_HYDRATION_NAME_NOT_STRING 4
+#define CWEB_HYDRATION_NAME_NOT_STRING_MSG  "body['name'] its not string"
 
 
-#define CWEB_HYDRATION_NAME_NOT_PROVIDED 7
-#define CWEB_HYDRATION_NAME_NOT_PROVIDED_MSG  "name not provided"
+#define CWEB_HYDRATION_ARGS_NOT_PROVIDED 5
+#define CWEB_HYDRATION_ARGS_NOT_PROVIDED_MSG  "body['args'] not provided"
 
-#define CWEB_HYDRATION_NAME_NOT_STRING 8
-#define CWEB_HYDRATION_NAME_NOT_STRING_MSG  "name its not string"
-
-
-#define CWEB_HYDRATION_ARGS_NOT_PROVIDED 9
-#define CWEB_HYDRATION_ARGS_NOT_PROVIDED_MSG  "args not provided"
-
-#define CWEB_HYDRATION_ARGS_NOT_ARRAY 10
-#define CWEB_HYDRATION_ARGS_NOT_ARRAY_MSG  "args its not arra"
+#define CWEB_HYDRATION_ARGS_NOT_ARRAY 6
+#define CWEB_HYDRATION_ARGS_NOT_ARRAY_MSG  "body['args'] its not array"
 
 
+#define CWEB_HYDRATION_CONTENT_NOT_PROVIDED 7
+#define CWEB_HYDRATION_CONTENT_NOT_PROVIDED_MSG  "body['content'] not provided"
 
-#define CWEB_HYDRATION_CONTENT_NOT_PROVIDED 11
-#define CWEB_HYDRATION_CONTENT_NOT_PROVIDED_MSG  "content not provided"
+#define CWEB_HYDRATION_CONTENT_NOT_OBJECT 8
+#define CWEB_HYDRATION_CONTENT_NOT_OBJECT_MSG  "body['content'] not a object"
 
-#define CWEB_HYDRATION_CONTENT_NOT_OBJECT 12
-#define CWEB_HYDRATION_CONTENT_NOT_OBJECT_MSG  "content not object"
 
-#define CWEB_BRIDGE_NOT_FOUND 13
+#define CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED 9
+#define CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED_MSG  "body['content']['%s'] not provided at content"
+
+#define CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY 10
+#define CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY_MSG "body['content']['%s']   is not of array"
+
+
+
+#define CWEB_HYDRATION_CONTENT_SEARCH_NOT_EXIST 11
+#define CWEB_HYDRATION_CONTENT_SEARCH_NOT_EXIST_MSG "search at index %d  not exist"
+
+
+#define CWEB_HYDRATION_SEARCH_ITEM_NOT_EXIST 12
+#define CWEB_HYDRATION_SEARCH_ITEM_NOT_EXIST_MSG "body['content']['%s'][%d] not exist"
+
+
+#define CWEB_HYDRATION_SEARCH_ITEM_WRONG_TYPE 13
+#define CWEB_HYDRATION_SEARCH_ITEM_WRONG_TYPE_MSG "body['content']['%s'][%d] its not of type %s"
+
+
+#define CWEB_HYDRATION_INDEX_ARGS_NOT_PROVIDED  14
+#define CWEB_HYDRATION_INDEX_ARGS_NOT_PROVIDED_MSG  "body['args'][%d]  not provided"
+
+#define CWEB_HYDRATION_INDEX_ARGS_WRONG_TYPE 15
+#define CWEB_HYDRATION_INDEX_ARGS_WRONG_TYPE_MSG  "body['args'][%d] is not of type %s"
+
+
+
+#define CWEB_BRIDGE_NOT_FOUND 16
 #define CWEB_BRIDGE_NOT_FOUND_MSG  "bridge of name %s not found"
 
+#define CWEB_SEARCH_NOT_EXIST 17
+#define CWEB_SEARCH_NOT_EXIST_MSG "search at index %d not exist"
 
 #define CWEB_HYDRATION_STRING "string"
 #define CWEB_HYDRATION_BOOL  "bool"
@@ -826,6 +988,8 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 #define CWEB_HYDRATON_JSON_MSG "msg"
 #define CWEB_HYDRATON_JSON_CODE "code"
 #define CWEB_HYDRATON_JSON_ID "id"
+#define CWEB_HYDRATON_JSON_KEY "key"
+#define CWEB_HYDRATON_JSON_VALUE "value"
 
 #define CWEB_HYDRATON_JSON_ARGS "args"
 #define CWEB_HYDRATON_JSON_CONTENT "content"
@@ -911,7 +1075,7 @@ typedef struct CwebDictModule{
 
 //path: src/types/namespace/hydration/../../hydration/all.h
 
-//path: src/types/namespace/hydration/../../hydration/bridget.h
+//path: src/types/namespace/hydration/../../hydration/bridge.h
 
 //path: src/types/namespace/hydration/../../hydration/../string_array.h
 #ifndef PRIVATE_CWEB_HTTP_STRINGARRAY_TYPES
@@ -919,9 +1083,9 @@ typedef struct CwebDictModule{
 
 
 typedef struct CwebStringArray {
-  int size;
+  int size;         
 
-  char **strings;
+  char **strings;       
 
 }CwebStringArray; // End the structure with a semicolon
 
@@ -966,10 +1130,8 @@ typedef struct  CWebHyDrationBridge {
     char *name;
     void  *hydration;
     void  (*callback)(struct CWebHyDrationBridge *bridge);
-    cJSON *args;
-    cJSON *content;
-    CwebStringArray *entries_callbacks;
-    CwebStringArray *calls;
+
+    CwebStringArray *requirements_code;
 
     void *extra_args;
 
@@ -978,7 +1140,7 @@ typedef struct  CWebHyDrationBridge {
 #endif //PRIVATE_CWEB_HYDRATATION_BRIDGET_BRIDGET_TYPES
 
 
-//path: src/types/namespace/hydration/../../hydration/bridget_array.h
+//path: src/types/namespace/hydration/../../hydration/bridge_array.h
 
 
 
@@ -993,6 +1155,7 @@ typedef struct privateCWebHyDrationBridgeArray {
 }privateCWebHyDrationBridgeArray;
 
 #endif //PRIVATE_CWEB_HYDRATATION_BRIDGET_ARRAY_TYPES
+
 
 //path: src/types/namespace/hydration/../../hydration/hydratation.h
 
@@ -1009,14 +1172,49 @@ typedef struct CWebHyDration {
    const  char *error_bridge_name;
     char *error_msg;
     cJSON *response;
+    cJSON *args;
+    cJSON *content;
+
     int error_code;
     CTextStack *script_text;
     long max_content_size;
+    UniversalGarbage *garbage;
     privateCWebHyDrationBridgeArray *all_bridges;
 
 }CWebHyDration;
 
 #endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_TYPES
+
+
+//path: src/types/namespace/hydration/../../hydration/search_result.h
+
+
+
+
+
+#ifndef  PRIVATE_CWEB_HYDRATION_SEARCH_RESULT_TYPE
+#define PRIVATE_CWEB_HYDRATION_SEARCH_RESULT_TYPE
+
+typedef struct{
+    CWebHyDrationBridge *bridge;
+    cJSON *search;
+    const char *name;
+} CWebHyDrationSearchResult;
+
+#endif
+
+
+//path: src/types/namespace/hydration/../../hydration/search_requirements.h
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATION_SEARCH_REQUIREMENTS_TYPE
+#define PRIVATE_CWEB_HYDRATION_SEARCH_REQUIREMENTS_TYPE
+typedef  struct{
+    char *name;
+    CWebHyDrationBridge *bridge;
+} CWebHyDrationSearchRequirements;
+#endif
 
 
 
@@ -1117,38 +1315,22 @@ typedef struct CwebHttpResponseModule{
 
 typedef struct CWebHydrationArgsNamespace {
 
-    double  (*read_double)(CWebHyDrationBridge *self,int index);
-    long  (*read_long)(CWebHyDrationBridge *self,int index);
-    bool  (*read_bool)(CWebHyDrationBridge *self,int index);
-    char* (*read_str)(CWebHyDrationBridge *self,int index);
+
+    int   (*get_args_size)(CWebHyDrationBridge *self,int index);
+    bool   (*is_arg_number)(CWebHyDrationBridge *self,int index);
+    bool   (*is_arg_bool)(CWebHyDrationBridge *self,int index);
+    bool   (*is_arg_string)(CWebHyDrationBridge *self,int index);
+    double  (*get_double_arg)(CWebHyDrationBridge *self,int index);
+    long  (*get_long_arg)(CWebHyDrationBridge *self,int index);
+    bool  (*get_bool_arg)(CWebHyDrationBridge *self,int index);
+    char* (*get_str_arg)(CWebHyDrationBridge *self,int index);
+    cJSON * (*get_cJSON_arg)(CWebHyDrationBridge *self,int index);
 
 }CWebHydrationArgsNamespace;
 #endif
 
 
-//path: src/types/namespace/hydration/content.h
-
-
-
-
-
-
-#ifndef PRIVATE_CWEB_HYDRATATION_CONTENT_NAMESPACE_TYPES
-#define PRIVATE_CWEB_HYDRATATION_CONTENT_NAMESPACE_TYPES
-
-
-typedef struct CWebHydrationContentNamespace {
-
-    double (*read_double)(CWebHyDrationBridge *self,const char *key,...);
-    long  (*read_long)(CWebHyDrationBridge *self,const char *key,...);
-    bool  (*read_bool)(CWebHyDrationBridge *self,const char *key,...);
-    char*  (*read_str)(CWebHyDrationBridge *self,const char *key,...);
-
-}CWebHydrationContentNamespace;
-#endif
-
-
-//path: src/types/namespace/hydration/requirements.h
+//path: src/types/namespace/hydration/search_requirements.h
 
 
 
@@ -1159,21 +1341,128 @@ typedef struct CWebHydrationContentNamespace {
 #define PRIVATE_CWEB_HYDRATATION_REQUIREMENTS_NAMESPACE_TYPES
 
 
-typedef struct CWebHydrationRequirementsNamespace {
+typedef struct CWebHydrationSearchRequirementsNamespace {
 
 
-    void (*add_required_function)(CWebHyDrationBridge *self,const char *function,...);
-    void (*add_required_text_by_id)(CWebHyDrationBridge *self, const char * id);
-    void (*add_required_text_number_by_id)(CWebHyDrationBridge *self, const char * id);
-    void (*add_required_input_by_id)(CWebHyDrationBridge *self, const char * id);
-    void (*add_required_input_number_by_id)(CWebHyDrationBridge *self, const char * id);
 
 
-}CWebHydrationRequirementsNamespace;
+    CWebHyDrationSearchRequirements * (*newSearchRequirements)(CWebHyDrationBridge *self, const char *name,...);
+
+    void (*add_function)(CWebHyDrationSearchRequirements *self,const char *function,...);
+    void (*add_elements_by_query_selector)(
+        CWebHyDrationSearchRequirements *self,
+        const char *query_selector,
+        ...
+    );
+    void (*add_elements_by_query_selector_not_auto_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char *query_selector,
+        ...
+    );
+    void (*add_elements_by_attribute)(
+        CWebHyDrationSearchRequirements *self,
+       const char *attribute,
+       const char*attribute_value,
+       ...
+    );
+    void (*add_elements_by_attribute_not_auto_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char *attribute,
+        const char*attribute_value,
+        ...
+    );
+
+    void (*add_elements_by_class_name)(
+        CWebHyDrationSearchRequirements *self,
+        const char*class_value,
+        ...
+    );
+
+    void (*add_elements_by_class_name_not_auto_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char*class_value,...
+    );
+
+    void (*add_elements_by_id)(
+        CWebHyDrationSearchRequirements *self,
+        const char*id_values,
+        ...
+    );
+
+    void (*add_elements_by_id_not_auto_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char*id_values,
+        ...
+    );
+
+    void (*add_session_storage_item_not_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char *name,
+        ...
+    );
+
+
+    void (*add_session_storage_item)(
+        CWebHyDrationSearchRequirements *self,
+        const char *name,
+        ...
+    );
+
+
+}CWebHydrationSearchRequirementsNamespace;
 #endif
 
 
-//path: src/types/namespace/hydration/response_namespace.h
+//path: src/types/namespace/hydration/search_result.h
+
+
+
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATATION_SEARCH_RESULT_NAMESPACE_TYPE
+#define PRIVATE_CWEB_HYDRATATION_SEARCH_RESULT_NAMESPACE_TYPE
+
+
+typedef struct CWebHydrationSearchResultNamespace {
+
+    int  (*get_total_avaialible_searchs)(CWebHyDrationBridge *self);
+    CWebHyDrationSearchResult * (*get_search_by_index)(CWebHyDrationBridge *self,int index);
+    CWebHyDrationSearchResult * (*get_search_by_name)(CWebHyDrationBridge *self,const char *name,...);
+    bool (*search_exist)(CWebHyDrationBridge *self,const char *name,...);
+    double (*get_double_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    long (*get_long_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    bool (*get_bool_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    char* (*get_string_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    cJSON* (*get_cJSON_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    int  (*get_total_itens)(CWebHyDrationSearchResult *self);
+    bool  (*search_item_exist)(CWebHyDrationSearchResult *self,int index);
+    bool  (*is_search_item_number)(CWebHyDrationSearchResult *self,int index);
+    bool  (*is_search_item_bool)(CWebHyDrationSearchResult *self,int index);
+    bool  (*is_search_item_string)(CWebHyDrationSearchResult *self,int index);
+    double (*get_double)(CWebHyDrationSearchResult *self,int  index);
+    long (*get_long)(CWebHyDrationSearchResult *self,int  index);
+    long (*get_bool)(CWebHyDrationSearchResult *self,int  index);
+    char*  (*get_string)(CWebHyDrationSearchResult *self,int  index);
+    cJSON *  (*get_cJSON)(CWebHyDrationSearchResult *self,int  index);
+
+}CWebHydrationSearchResultNamespace;
+#endif
+
+
+//path: src/types/namespace/hydration/hydratation.h
+
+
+//path: src/types/namespace/hydration/bridge.h
+
+
+
+
+
+
+
+
+//path: src/types/namespace/hydration/actions.h
 
 
 
@@ -1185,26 +1474,34 @@ typedef struct CWebHydrationRequirementsNamespace {
 
 
 typedef struct CWebHydrationResponseNamespace {
+
+
+    void (*set_session_storage_data)(CWebHyDrationBridge *self,const char*key, const char *value,...);
     void (*alert)(CWebHyDrationBridge *self,const char *menssage,...);
     void (*execute_script)(CWebHyDrationBridge *self,const char *code,...);
-    void (*replace_element_by_id)(CWebHyDrationBridge *self,const char *id,const char *code,...);
+    void (*replace_element_by_id)(CWebHyDrationBridge *self,const char *id, const char *code,...);
     void (*destroy_by_id)(CWebHyDrationBridge *self,const char * id);
 
-}CWebHydrationResponseNamespace;
+}CWebHydrationActionsNamespace;
 
 #endif
 
 
-//path: src/types/namespace/hydration/hydratation.h
 
+#ifndef PRIVATE_CWEB_HYDRATATION_BRIDGE_NAMESPACE_TYPES
+#define PRIVATE_CWEB_HYDRATATION_BRIDGE_NAMESPACE_TYPES
 
+typedef struct CWebHydrationBridgeNamespace{
 
+    CWebHyDrationBridge * (*create_bridge)(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *));
+    char *(*call)(CWebHyDrationBridge *self,const char *func_args,...);
+    char *(*onclick)(CWebHyDrationBridge *self,const char *func_args,...);
+    char *(*onfoccusout)(CWebHyDrationBridge *self,const char *func_args,...);
+    bool (*has_errors)(CWebHyDrationBridge *self);
 
+}CWebHydrationBridgeNamespace;
 
-
-
-
-
+#endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
 
 
 
@@ -1212,20 +1509,13 @@ typedef struct CWebHydrationResponseNamespace {
 #define PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
 
 typedef struct CWebHydrationNamespace{
-
-    bool (*has_errors)(CWebHyDrationBridge *self);
-    char *(*call)(CWebHyDrationBridge *self,const char *trigger,const char *func_args,...);
-
-    CWebHyDration * (*newCWebHyDration)(CwebHttpRequest *request);
-    CWebHyDrationBridge * (*create_bridge)(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *));
+    CWebHyDration *(*newCWebHyDration)(CwebHttpRequest *request);
     bool (*is_the_trigger)(CWebHyDration *self);
-    CwebHttpResponse *(*generate_response)(CWebHyDration *self);
     char *(*create_script)(CWebHyDration *self);
-    CWebHydrationRequirementsNamespace requirements;
-    CWebHydrationResponseNamespace response;
-    CWebHydrationArgsNamespace args;
-    CWebHydrationContentNamespace content;
-
+    CWebHydrationBridgeNamespace bridge;
+    CWebHydrationActionsNamespace actions;
+    CWebHydrationSearchRequirementsNamespace search_requirements;
+    CWebHydrationSearchResultNamespace search_result;
 }CWebHydrationNamespace;
 
 #endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
@@ -1892,6 +2182,13 @@ CwebNamespace newCwebNamespace();
 
 
 //path: src/functions/namespace/hydratation_module/declaration.h
+//path: src/functions/namespace/hydratation_module/actions/actions.h
+
+
+
+CWebHydrationActionsNamespace newCWebHydrationActionsNamespace();
+
+
 //path: src/functions/namespace/hydratation_module/args/args.h
 
 
@@ -1900,26 +2197,26 @@ CwebNamespace newCwebNamespace();
 CWebHydrationArgsNamespace newCWebHydrationArgsNamespace();
 
 
-//path: src/functions/namespace/hydratation_module/content/content.h
+//path: src/functions/namespace/hydratation_module/bridge/bridge.h
+
+
+
+CWebHydrationBridgeNamespace newCWebHydrationBridgetNamespace();
+
+
+//path: src/functions/namespace/hydratation_module/search_requirements/search_requirements.h
+
+
+
+CWebHydrationSearchRequirementsNamespace newCWebHydrationSearchRequirementsNamespace();
+
+
+//path: src/functions/namespace/hydratation_module/search_result/search_result.h
 
 
 
 
-CWebHydrationContentNamespace newCWebHydrationContentNamespace();
-
-
-//path: src/functions/namespace/hydratation_module/requirements/requirements.h
-
-
-
-CWebHydrationRequirementsNamespace newCWebHydrationRequirementsNamespace();
-
-
-//path: src/functions/namespace/hydratation_module/response/response.h
-
-
-
-CWebHydrationResponseNamespace newCWebHydrationResponseNamespace();
+CWebHydrationSearchResultNamespace newCWebHydrationSearchResultNamespace();
 
 
 //path: src/functions/namespace/hydratation_module/hydration/hydration.h
@@ -1935,10 +2232,9 @@ CWebHydrationNamespace newCWebHydrationNamespace();
 
 //path: src/functions/hydratation/declaration.h
 //path: src/functions/hydratation/bridge/declaration.h
-//path: src/functions/hydratation/bridge/bridge/declaration.h
-//path: src/functions/hydratation/bridge/bridge/basic/basic.h
+//path: src/functions/hydratation/bridge/basic/basic.h
 
-//path: src/functions/hydratation/bridge/bridge/basic/../uniq.declaration_requirements.h
+//path: src/functions/hydratation/bridge/basic/../uniq.declaration_requirements.h
 
 
 
@@ -1954,88 +2250,109 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
 
 bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self);
 
-char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *trigger,const char *func_args,...);
+CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(CWebHyDrationBridge *self, const char *name,...);
+
+char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...);
 
 CTextStack* private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self);
 
 void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self);
 
 
-//path: src/functions/hydratation/bridge/bridge/requirements/requirements.h
+//path: src/functions/hydratation/bridge/args/args.h
 
 
 
 
-void CWebHyDrationBridge_add_required_function(CWebHyDrationBridge *self,const char *function,...);
+int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self,int index);
+
+bool private_cweb_hydration_type_verifier(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)(const cJSON * const item));
+
+bool   CWebHyDrationBridge_is_arg_number(CWebHyDrationBridge *self,int index);
+
+bool   CWebHyDrationBridge_is_arg_bool(CWebHyDrationBridge *self,int index);
 
 
-void CWebHyDrationBridge_add_required_by_id(CWebHyDrationBridge *self, const char * id);
+bool   CWebHyDrationBridge_is_arg_string(CWebHyDrationBridge *self,int index);
+
+cJSON *privateCWebHyDration_get_arg_index(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)(const cJSON * const item),const char *expected_type);
+
+double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index);
+
+long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index);
+
+bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index);
+
+char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index);
+
+cJSON * CWebHyDrationBridge_get_cJSON_arg(CWebHyDrationBridge *self,int index);
 
 
-void CWebHyDrationBridge_add_required_number_by_id(CWebHyDrationBridge *self, const char * id);
-
-
-void CWebHyDrationBridge_add_required_input_by_id(CWebHyDrationBridge *self, const char * id);
-
-void CWebHyDrationBridge_add_required_input_number_by_id(CWebHyDrationBridge *self, const char * id);
-
-
-//path: src/functions/hydratation/bridge/bridge/args/args.h
-
-
-
-
-double  CWebHyDrationBridge_read_double_arg(CWebHyDrationBridge *self,int index);
-
-long  CWebHyDrationBridge_read_long_arg(CWebHyDrationBridge *self,int index);
-
-
-
-
-bool  CWebHyDrationBridge_read_bool_arg(CWebHyDrationBridge *self,int index);
-
-char* CWebHyDrationBridge_read_str_arg(CWebHyDrationBridge *self,int index);
-
-
-//path: src/functions/hydratation/bridge/bridge/content/content.h
+//path: src/functions/hydratation/bridge/calls/calls.h
 
 
 
 
-double CWebHyDrationBridge_read_double_content(CWebHyDrationBridge *self,const char *key,...);
 
-long  CWebHyDrationBridge_read_long_content(CWebHyDrationBridge *self,const char *key,...);
+char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...);
 
-bool  CWebHyDrationBridge_read_bool_content(CWebHyDrationBridge *self,const char *key,...);
+char *private_CWebHyDrationBridge_call_trigger(
+    CWebHyDrationBridge *self,
+    const char *trigger,
+    const char *func_args
+);
 
-char*  CWebHyDrationBridge_read_str_content(CWebHyDrationBridge *self,const char *key,...);
+char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_args,...);
+
+char *CWebHyDrationBridge_onfoccusout(CWebHyDrationBridge *self,const char *func_args,...);
 
 
-//path: src/functions/hydratation/bridge/bridge/responses/responses.h
+//path: src/functions/hydratation/bridge/search_result/search_result.h
 
 
 
 
-void privateCWebHyDrationBridge_add_response(
-    CWebHyDrationBridge *self,const char *name,cJSON *data);
+int  CWebHyDrationBridge_get_total_avaialible_searchs(CWebHyDrationBridge *self);
+
+CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_index(CWebHyDrationBridge *self,int index);
+
+CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_name(CWebHyDrationBridge *self,const char *name,...);
+
+bool CWebHyDrationBridge_search_exist(CWebHyDrationBridge *self,const char *name,...);
+
+double CWebHyDrationBridge_get_double_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+long CWebHyDrationBridge_get_long_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+bool CWebHyDrationBridge_get_bool_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+char* CWebHyDrationBridge_get_string_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+cJSON* CWebHyDrationBridge_get_cJSON_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+
+//path: src/functions/hydratation/bridge/action/action.h
+
+
+
+
+
+void privateCWebHyDrationBridge_add_response(CWebHyDrationBridge *self,const char *name,cJSON *data);
+
+void CWebHyDrationBridge_set_session_storage_data(CWebHyDrationBridge *self,const char*key, const char *value,...);
 
 void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,...);
 
-void CWebHyDrationBridge_execute_script(
-    CWebHyDrationBridge *self,const char *code,...
-    );
+void CWebHyDrationBridge_execute_script(CWebHyDrationBridge *self,const char *code,...);
 
-void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,
-    const char *id,
-    const char *code,...
-);
+void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,const char *id, const char *code,...);
 
 void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id);
 
 
 
 
-//path: src/functions/hydratation/bridge/bridge_array/bridge_array.h
+//path: src/functions/hydratation/bridge_array/bridge_array.h
 
 
 
@@ -2046,6 +2363,142 @@ void privateCWebHyDrationBridgeArray_append(privateCWebHyDrationBridgeArray *sel
 
 void privateCWebHyDrationBridgeArray_free(privateCWebHyDrationBridgeArray *self);
 
+
+//path: src/functions/hydratation/search_requirements/search_requirements.h
+
+
+
+
+
+
+
+
+
+
+void private_CWebHyDrationSearchRequirements_free(CWebHyDrationSearchRequirements *self);
+
+
+void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirements *self,const char *function,...);
+
+
+void private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,bool auto_convert
+);
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,
+    ...
+);
+
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,const char *query_selector,...);
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute(
+    CWebHyDrationSearchRequirements *self,
+   const char *attribute,
+   const char*attribute_value,
+   ...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *attribute,
+    const char*attribute_value,
+    ...
+);
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,
+    ...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_id(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+);
+
+
+void CWebHyDrationSearchRequirements_add_session_storage_item_not_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+);
+
+
+void CWebHyDrationSearchRequirements_add_session_storage_item(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+);
+
+
+//path: src/functions/hydratation/search_result/search_result.h
+
+
+
+
+
+
+CWebHyDrationSearchResult * private_newCWebHyDrationSearchResult(CWebHyDrationBridge *bridge,cJSON *search);
+
+void privateCWebHyDrationSearchResult_free(CWebHyDrationSearchResult *self);
+
+
+int  CWebHyDrationSearchResult_get_total_itens(CWebHyDrationSearchResult *self);
+
+
+bool  CWebHyDrationSearchResult_search_item_exist(CWebHyDrationSearchResult *self,int index);
+
+
+bool  CWebHyDrationSearchResult_is_search_item_number(CWebHyDrationSearchResult *self,int index);
+
+bool  CWebHyDrationSearchResult_is_search_item_bool(CWebHyDrationSearchResult *self,int index);
+
+
+bool  CWebHyDrationSearchResult_is_search_item_string(CWebHyDrationSearchResult *self,int index);
+cJSON * private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+    CWebHyDrationSearchResult *self,
+    int index,
+    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    const char *expected_type
+);
+
+
+double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int  index);
+
+
+long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  index);
+
+
+long CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  index);
+
+
+
+char*  CWebHyDrationSearchResult_get_string(CWebHyDrationSearchResult *self,int  index);
+
+
+cJSON *  CWebHyDrationSearchResult_get_cJSON(CWebHyDrationSearchResult *self,int  index);
 
 
 //path: src/functions/hydratation/hydration/hydration.h
@@ -2097,7 +2550,7 @@ static const char* cweb_static_folder;
 
 
 //path: src/globals/hydration.c
-const char *private_cweb_hydration_js_content = "\x6c\x65\x74\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x62\x72\x69\x64\x67\x65\x73\x20\x3d\x20\x7b\x7d\x3b\xa\xa\x61\x73\x79\x6e\x63\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x73\x65\x6e\x64\x5f\x74\x6f\x5f\x73\x65\x72\x76\x65\x72\x28\x6e\x61\x6d\x65\x2c\x20\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x6c\x65\x74\x20\x62\x6f\x64\x79\x20\x3d\x20\x7b\x20\x6e\x61\x6d\x65\x3a\x20\x6e\x61\x6d\x65\x2c\x20\x61\x72\x67\x73\x3a\x20\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x3a\x20\x63\x6f\x6e\x74\x65\x6e\x74\x20\x7d\x3b\xa\x20\x20\x6c\x65\x74\x20\x70\x72\x6f\x70\x73\x20\x3d\x20\x7b\xa\x20\x20\x20\x20\x6d\x65\x74\x68\x6f\x64\x3a\x20\x22\x50\x4f\x53\x54\x22\x2c\xa\x20\x20\x20\x20\x62\x6f\x64\x79\x3a\x20\x4a\x53\x4f\x4e\x2e\x73\x74\x72\x69\x6e\x67\x69\x66\x79\x28\x62\x6f\x64\x79\x29\x2c\xa\x20\x20\x7d\x3b\xa\x20\x20\x63\x6f\x6e\x73\x74\x20\x52\x4f\x55\x54\x45\x20\x3d\x20\x22\x2f\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x68\x79\x64\x72\x61\x74\x69\x6f\x6e\x5f\x6d\x61\x69\x6e\x5f\x63\x61\x6c\x6c\x62\x61\x63\x6b\x5f\x68\x61\x6e\x64\x6c\x65\x72\x22\x3b\xa\x20\x20\x6c\x65\x74\x20\x72\x65\x73\x75\x6c\x74\x20\x3d\x20\x61\x77\x61\x69\x74\x20\x66\x65\x74\x63\x68\x28\x52\x4f\x55\x54\x45\x2c\x20\x70\x72\x6f\x70\x73\x29\x3b\xa\x20\x20\x6c\x65\x74\x20\x61\x63\x74\x69\x6f\x6e\x73\x20\x3d\x20\x61\x77\x61\x69\x74\x20\x72\x65\x73\x75\x6c\x74\x2e\x6a\x73\x6f\x6e\x28\x29\x3b\xa\x20\x20\x61\x63\x74\x69\x6f\x6e\x73\x2e\x66\x6f\x72\x45\x61\x63\x68\x28\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x69\x74\x65\x6d\x29\x20\x7b\xa\x20\x20\x20\x20\x74\x72\x79\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x6c\x65\x74\x20\x72\x65\x73\x70\x6f\x6e\x73\x65\x5f\x61\x63\x74\x69\x6f\x6e\x20\x3d\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x72\x65\x73\x70\x6f\x6e\x73\x65\x5f\x68\x61\x6e\x64\x6c\x65\x72\x73\x5b\x69\x74\x65\x6d\x2e\x6e\x61\x6d\x65\x5d\x3b\xa\x20\x20\x20\x20\x20\x20\x69\x66\x20\x28\x21\x72\x65\x73\x70\x6f\x6e\x73\x65\x5f\x61\x63\x74\x69\x6f\x6e\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x74\x68\x72\x6f\x77\x20\x45\x72\x72\x6f\x72\x28\x22\x72\x65\x73\x70\x6f\x6e\x73\x65\x20\x22\x20\x2b\x20\x69\x74\x65\x6d\x2e\x6e\x61\x6d\x65\x20\x2b\x20\x22\x69\x74\x73\x20\x6e\x6f\x74\x20\x61\x20\x61\x63\x74\x69\x6f\x6e\x22\x29\x3b\xa\x20\x20\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x20\x20\x72\x65\x73\x70\x6f\x6e\x73\x65\x5f\x61\x63\x74\x69\x6f\x6e\x28\x69\x74\x65\x6d\x2e\x64\x61\x74\x61\x29\x3b\xa\x20\x20\x20\x20\x7d\x20\x63\x61\x74\x63\x68\x20\x28\x65\x72\x72\x6f\x72\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x63\x6f\x6e\x73\x6f\x6c\x65\x2e\x6c\x6f\x67\x28\x65\x72\x72\x6f\x72\x29\x3b\xa\x20\x20\x20\x20\x7d\xa\x20\x20\x7d\x29\x3b\xa\x7d\xa\xa\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x68\x61\x6e\x64\x6c\x65\x5f\x72\x65\x71\x75\x69\x72\x65\x64\x5f\x64\x61\x74\x61\x28\x63\x61\x6c\x6c\x62\x61\x63\x6b\x2c\x20\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x63\x61\x6c\x6c\x62\x61\x63\x6b\x28\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x3b\xa\x7d\xa\x2f\x2a\xa\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x62\x72\x69\x64\x67\x65\x73\x5b\x22\x69\x6e\x63\x20\x6e\x75\x6d\x62\x65\x72\x22\x5d\x20\x3d\x20\x61\x73\x79\x6e\x63\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x61\x72\x67\x73\x29\x20\x7b\xa\x20\x20\x6c\x65\x74\x20\x63\x6f\x6e\x74\x65\x6e\x74\x20\x3d\x20\x7b\x7d\x3b\xa\x20\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x68\x61\x6e\x64\x6c\x65\x5f\x72\x65\x71\x75\x69\x72\x65\x64\x5f\x64\x61\x74\x61\x28\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x20\x7b\x7d\x2c\x20\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x3b\xa\x20\x20\x61\x77\x61\x69\x74\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x73\x65\x6e\x64\x5f\x74\x6f\x5f\x73\x65\x72\x76\x65\x72\x28\x22\x69\x6e\x63\x20\x6e\x75\x6d\x62\x65\x72\x22\x2c\x20\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x3b\xa\x7d\x3b\xa\x2a\x2f\xa\x6c\x65\x74\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x65\x6e\x74\x72\x69\x65\x5f\x63\x6c\x6f\x6a\x75\x72\x65\x5f\x63\x6f\x6e\x73\x74\x72\x75\x63\x74\x6f\x72\x73\x20\x3d\x20\x7b\xa\x20\x20\x67\x65\x74\x5f\x74\x65\x78\x74\x5f\x62\x79\x5f\x69\x64\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x69\x64\x29\x20\x7b\xa\x20\x20\x20\x20\x72\x65\x74\x75\x72\x6e\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x69\x64\x5d\x20\x3d\x20\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64\x28\x69\x64\x29\x2e\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74\x3b\xa\x20\x20\x20\x20\x7d\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x67\x65\x74\x5f\x74\x65\x78\x74\x5f\x6e\x75\x6d\x62\x65\x72\x5f\x62\x79\x5f\x69\x64\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x69\x64\x29\x20\x7b\xa\x20\x20\x20\x20\x72\x65\x74\x75\x72\x6e\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x6c\x65\x74\x20\x74\x65\x78\x74\x20\x3d\x20\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64\x28\x69\x64\x29\x2e\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74\x3b\xa\x20\x20\x20\x20\x20\x20\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x69\x64\x5d\x20\x3d\x20\x70\x61\x72\x73\x65\x46\x6c\x6f\x61\x74\x28\x74\x65\x78\x74\x29\x3b\xa\x20\x20\x20\x20\x7d\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x67\x65\x74\x5f\x69\x6e\x70\x75\x74\x5f\x62\x79\x5f\x69\x64\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x69\x64\x29\x20\x7b\xa\x20\x20\x20\x20\x72\x65\x74\x75\x72\x6e\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x69\x64\x5d\x20\x3d\x20\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64\x28\x69\x64\x29\x2e\x76\x61\x6c\x75\x65\x3b\xa\x20\x20\x20\x20\x7d\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x67\x65\x74\x5f\x69\x6e\x70\x75\x74\x5f\x6e\x75\x6d\x62\x65\x72\x5f\x62\x79\x5f\x69\x64\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x69\x64\x29\x20\x7b\xa\x20\x20\x20\x20\x72\x65\x74\x75\x72\x6e\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x69\x64\x5d\x20\x3d\x20\x70\x61\x72\x73\x65\x46\x6c\x6f\x61\x74\x28\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64\x28\x69\x64\x29\x2e\x76\x61\x6c\x75\x65\x29\x3b\xa\x20\x20\x20\x20\x7d\x3b\xa\x20\x20\x7d\x2c\xa\x7d\x3b\xa\x6c\x65\x74\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x72\x65\x73\x70\x6f\x6e\x73\x65\x5f\x68\x61\x6e\x64\x6c\x65\x72\x73\x20\x3d\x20\x7b\xa\x20\x20\x61\x6c\x65\x72\x74\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x64\x61\x74\x61\x29\x20\x7b\xa\x20\x20\x20\x20\x61\x6c\x65\x72\x74\x28\x64\x61\x74\x61\x5b\x22\x6d\x73\x67\x22\x5d\x29\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x65\x78\x65\x63\x75\x74\x65\x5f\x73\x63\x72\x69\x70\x74\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x64\x61\x74\x61\x29\x20\x7b\xa\x20\x20\x20\x20\x65\x76\x61\x6c\x28\x64\x61\x74\x61\x5b\x22\x63\x6f\x64\x65\x22\x5d\x29\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x72\x65\x70\x6c\x61\x63\x65\x5f\x65\x6c\x65\x6d\x65\x6e\x74\x5f\x62\x79\x5f\x69\x64\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x64\x61\x74\x61\x29\x20\x7b\xa\x20\x20\x20\x20\x6c\x65\x74\x20\x65\x6c\x65\x6d\x65\x6e\x74\x20\x3d\x20\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64\x28\x64\x61\x74\x61\x2e\x69\x64\x29\x3b\xa\x20\x20\x20\x20\x69\x66\x20\x28\x21\x65\x6c\x65\x6d\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x72\x65\x74\x75\x72\x6e\x3b\xa\x20\x20\x20\x20\x7d\xa\x20\x20\x20\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x69\x6e\x73\x65\x72\x74\x41\x64\x6a\x61\x63\x65\x6e\x74\x48\x54\x4d\x4c\x28\x22\x61\x66\x74\x65\x72\x65\x6e\x64\x22\x2c\x20\x64\x61\x74\x61\x2e\x68\x74\x6d\x6c\x29\x3b\xa\x20\x20\x20\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x72\x65\x6d\x6f\x76\x65\x28\x29\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x64\x65\x73\x74\x72\x6f\x79\x5f\x62\x79\x5f\x69\x64\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x64\x61\x74\x61\x29\x20\x7b\xa\x20\x20\x20\x20\x6c\x65\x74\x20\x65\x6c\x65\x6d\x65\x6e\x74\x20\x3d\x20\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64\x28\x64\x61\x74\x61\x2e\x69\x64\x29\x3b\xa\x20\x20\x20\x20\x69\x66\x20\x28\x65\x6c\x65\x6d\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x72\x65\x6d\x6f\x76\x65\x28\x29\x3b\xa\x20\x20\x20\x20\x7d\xa\x20\x20\x7d\x2c\xa\x7d\x3b\xa";
+const char *private_cweb_hydration_js_content = "\x6c\x65\x74\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x61\x63\x74\x69\x6f\x6e\x73\x5f\x68\x61\x6e\x64\x6c\x65\x72\x73\x20\x3d\x20\x7b\xa\x20\x20\x61\x6c\x65\x72\x74\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x64\x61\x74\x61\x29\x20\x7b\xa\x20\x20\x20\x20\x61\x6c\x65\x72\x74\x28\x64\x61\x74\x61\x5b\x22\x6d\x73\x67\x22\x5d\x29\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x65\x78\x65\x63\x75\x74\x65\x5f\x73\x63\x72\x69\x70\x74\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x64\x61\x74\x61\x29\x20\x7b\xa\x20\x20\x20\x20\x65\x76\x61\x6c\x28\x64\x61\x74\x61\x5b\x22\x63\x6f\x64\x65\x22\x5d\x29\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x73\x65\x74\x5f\x73\x65\x73\x73\x69\x6f\x6e\x5f\x73\x74\x6f\x72\x61\x67\x65\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x64\x61\x74\x61\x29\x20\x7b\xa\x20\x20\x20\x20\x73\x65\x73\x73\x69\x6f\x6e\x53\x74\x6f\x72\x61\x67\x65\x2e\x73\x65\x74\x49\x74\x65\x6d\x28\x64\x61\x74\x61\x5b\x22\x6b\x65\x79\x22\x5d\x2c\x20\x64\x61\x74\x61\x5b\x22\x76\x61\x6c\x75\x65\x22\x5d\x29\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x72\x65\x70\x6c\x61\x63\x65\x5f\x65\x6c\x65\x6d\x65\x6e\x74\x5f\x62\x79\x5f\x69\x64\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x64\x61\x74\x61\x29\x20\x7b\xa\x20\x20\x20\x20\x6c\x65\x74\x20\x65\x6c\x65\x6d\x65\x6e\x74\x20\x3d\x20\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64\x28\x64\x61\x74\x61\x2e\x69\x64\x29\x3b\xa\x20\x20\x20\x20\x69\x66\x20\x28\x21\x65\x6c\x65\x6d\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x72\x65\x74\x75\x72\x6e\x3b\xa\x20\x20\x20\x20\x7d\xa\x20\x20\x20\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x69\x6e\x73\x65\x72\x74\x41\x64\x6a\x61\x63\x65\x6e\x74\x48\x54\x4d\x4c\x28\x22\x61\x66\x74\x65\x72\x65\x6e\x64\x22\x2c\x20\x64\x61\x74\x61\x2e\x68\x74\x6d\x6c\x29\x3b\xa\x20\x20\x20\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x72\x65\x6d\x6f\x76\x65\x28\x29\x3b\xa\x20\x20\x7d\x2c\xa\xa\x20\x20\x64\x65\x73\x74\x72\x6f\x79\x5f\x62\x79\x5f\x69\x64\x3a\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x64\x61\x74\x61\x29\x20\x7b\xa\x20\x20\x20\x20\x6c\x65\x74\x20\x65\x6c\x65\x6d\x65\x6e\x74\x20\x3d\x20\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64\x28\x64\x61\x74\x61\x2e\x69\x64\x29\x3b\xa\x20\x20\x20\x20\x69\x66\x20\x28\x65\x6c\x65\x6d\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x72\x65\x6d\x6f\x76\x65\x28\x29\x3b\xa\x20\x20\x20\x20\x7d\xa\x20\x20\x7d\x2c\xa\x7d\x3b\xa\x6c\x65\x74\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x62\x72\x69\x64\x67\x65\x73\x20\x3d\x20\x7b\x7d\x3b\xa\xa\x61\x73\x79\x6e\x63\x20\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x73\x65\x6e\x64\x5f\x74\x6f\x5f\x73\x65\x72\x76\x65\x72\x28\x6e\x61\x6d\x65\x2c\x20\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x29\x20\x7b\xa\x20\x20\x6c\x65\x74\x20\x62\x6f\x64\x79\x20\x3d\x20\x7b\x20\x6e\x61\x6d\x65\x3a\x20\x6e\x61\x6d\x65\x2c\x20\x61\x72\x67\x73\x3a\x20\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x3a\x20\x63\x6f\x6e\x74\x65\x6e\x74\x20\x7d\x3b\xa\x20\x20\x6c\x65\x74\x20\x70\x72\x6f\x70\x73\x20\x3d\x20\x7b\xa\x20\x20\x20\x20\x6d\x65\x74\x68\x6f\x64\x3a\x20\x22\x50\x4f\x53\x54\x22\x2c\xa\x20\x20\x20\x20\x62\x6f\x64\x79\x3a\x20\x4a\x53\x4f\x4e\x2e\x73\x74\x72\x69\x6e\x67\x69\x66\x79\x28\x62\x6f\x64\x79\x29\x2c\xa\x20\x20\x7d\x3b\xa\x20\x20\x63\x6f\x6e\x73\x74\x20\x52\x4f\x55\x54\x45\x20\x3d\x20\x22\x2f\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x68\x79\x64\x72\x61\x74\x69\x6f\x6e\x5f\x6d\x61\x69\x6e\x5f\x63\x61\x6c\x6c\x62\x61\x63\x6b\x5f\x68\x61\x6e\x64\x6c\x65\x72\x22\x3b\xa\x20\x20\x6c\x65\x74\x20\x72\x65\x73\x75\x6c\x74\x20\x3d\x20\x61\x77\x61\x69\x74\x20\x66\x65\x74\x63\x68\x28\x52\x4f\x55\x54\x45\x2c\x20\x70\x72\x6f\x70\x73\x29\x3b\xa\x20\x20\x6c\x65\x74\x20\x61\x63\x74\x69\x6f\x6e\x73\x20\x3d\x20\x61\x77\x61\x69\x74\x20\x72\x65\x73\x75\x6c\x74\x2e\x6a\x73\x6f\x6e\x28\x29\x3b\xa\x20\x20\x61\x63\x74\x69\x6f\x6e\x73\x2e\x66\x6f\x72\x45\x61\x63\x68\x28\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x28\x69\x74\x65\x6d\x29\x20\x7b\xa\x20\x20\x20\x20\x74\x72\x79\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x6c\x65\x74\x20\x72\x65\x73\x70\x6f\x6e\x73\x65\x5f\x61\x63\x74\x69\x6f\x6e\x20\x3d\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x61\x63\x74\x69\x6f\x6e\x5f\x68\x61\x6e\x64\x6c\x65\x72\x73\x5b\x69\x74\x65\x6d\x2e\x6e\x61\x6d\x65\x5d\x3b\xa\x20\x20\x20\x20\x20\x20\x69\x66\x20\x28\x21\x72\x65\x73\x70\x6f\x6e\x73\x65\x5f\x61\x63\x74\x69\x6f\x6e\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x74\x68\x72\x6f\x77\x20\x45\x72\x72\x6f\x72\x28\x22\x72\x65\x73\x70\x6f\x6e\x73\x65\x20\x22\x20\x2b\x20\x69\x74\x65\x6d\x2e\x6e\x61\x6d\x65\x20\x2b\x20\x22\x69\x74\x73\x20\x6e\x6f\x74\x20\x61\x20\x61\x63\x74\x69\x6f\x6e\x22\x29\x3b\xa\x20\x20\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x20\x20\x72\x65\x73\x70\x6f\x6e\x73\x65\x5f\x61\x63\x74\x69\x6f\x6e\x28\x69\x74\x65\x6d\x2e\x64\x61\x74\x61\x29\x3b\xa\x20\x20\x20\x20\x7d\x20\x63\x61\x74\x63\x68\x20\x28\x65\x72\x72\x6f\x72\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x63\x6f\x6e\x73\x6f\x6c\x65\x2e\x6c\x6f\x67\x28\x65\x72\x72\x6f\x72\x29\x3b\xa\x20\x20\x20\x20\x7d\xa\x20\x20\x7d\x29\x3b\xa\x7d\xa\xa\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x68\x61\x6e\x64\x6c\x65\x5f\x72\x65\x71\x75\x69\x72\x65\x64\x5f\x64\x61\x74\x61\x28\x63\x61\x6c\x6c\x62\x61\x63\x6b\x2c\x20\x61\x72\x67\x73\x2c\x20\x63\x6f\x6e\x74\x65\x6e\x74\x2c\x20\x6e\x61\x6d\x65\x29\x20\x7b\xa\x20\x20\x6c\x65\x74\x20\x72\x65\x73\x75\x6c\x74\x20\x3d\x20\x75\x6e\x64\x65\x66\x69\x6e\x65\x64\x3b\xa\x20\x20\x74\x72\x79\x20\x7b\xa\x20\x20\x20\x20\x72\x65\x73\x75\x6c\x74\x20\x3d\x20\x63\x61\x6c\x6c\x62\x61\x63\x6b\x28\x61\x72\x67\x73\x29\x3b\xa\x20\x20\x7d\x20\x63\x61\x74\x63\x68\x20\x28\x65\x72\x72\x6f\x72\x29\x20\x7b\xa\x20\x20\x20\x20\x63\x6f\x6e\x73\x6f\x6c\x65\x2e\x6c\x6f\x67\x28\x65\x72\x72\x6f\x72\x29\x3b\xa\x20\x20\x20\x20\x72\x65\x74\x75\x72\x6e\x3b\xa\x20\x20\x7d\xa\xa\x20\x20\x69\x66\x20\x28\x21\x41\x72\x72\x61\x79\x2e\x69\x73\x41\x72\x72\x61\x79\x28\x72\x65\x73\x75\x6c\x74\x29\x29\x20\x7b\xa\x20\x20\x20\x20\x72\x65\x73\x75\x6c\x74\x20\x3d\x20\x5b\x72\x65\x73\x75\x6c\x74\x5d\x3b\xa\x20\x20\x7d\xa\xa\x20\x20\x69\x66\x20\x28\x21\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x6e\x61\x6d\x65\x5d\x29\x20\x7b\xa\x20\x20\x20\x20\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x6e\x61\x6d\x65\x5d\x20\x3d\x20\x5b\x5d\x3b\xa\x20\x20\x7d\xa\x20\x20\x2f\x2f\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x6e\x61\x6d\x65\x5d\x2e\x63\x6f\x6e\x63\x61\x74\x28\x72\x65\x73\x75\x6c\x74\x29\x3b\xa\x7d\xa\xa\xa\xa\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x74\x72\x79\x5f\x74\x6f\x5f\x63\x6f\x6e\x76\x65\x72\x74\x5f\x74\x6f\x5f\x6e\x75\x6d\x62\x65\x72\x28\x70\x6f\x73\x73\x69\x62\x6c\x65\x5f\x6e\x75\x6d\x62\x65\x72\x29\x7b\xa\x20\x20\x6c\x65\x74\x20\x70\x6f\x73\x73\x69\x62\x6c\x65\x5f\x63\x6f\x6e\x76\x65\x72\x73\x69\x6f\x6e\x20\x3d\x20\x70\x61\x72\x73\x65\x46\x6c\x6f\x61\x74\x28\x70\x6f\x73\x73\x69\x62\x6c\x65\x5f\x6e\x75\x6d\x62\x65\x72\x29\x3b\xa\x20\x20\x69\x66\x28\x69\x73\x4e\x61\x4e\x28\x70\x6f\x73\x73\x69\x62\x6c\x65\x5f\x63\x6f\x6e\x76\x65\x72\x73\x69\x6f\x6e\x29\x29\x7b\xa\x20\x20\x20\x20\x72\x65\x74\x75\x72\x6e\x20\x20\x70\x6f\x73\x73\x69\x62\x6c\x65\x5f\x6e\x75\x6d\x62\x65\x72\x3b\xa\x20\x20\x7d\xa\x20\x20\xa\x20\x20\x72\x65\x74\x75\x72\x6e\x20\x70\x6f\x73\x73\x69\x62\x6c\x65\x5f\x63\x6f\x6e\x76\x65\x72\x73\x69\x6f\x6e\x3b\xa\x7d\xa\xa\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x67\x65\x74\x5f\x73\x65\x73\x73\x69\x6f\x6e\x5f\x73\x74\x6f\x72\x61\x67\x65\x5f\x69\x74\x65\x6d\x28\x70\x72\x6f\x70\x73\x29\x20\x7b\xa\x20\x20\x69\x66\x20\x28\x21\x70\x72\x6f\x70\x73\x2e\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x70\x72\x6f\x70\x73\x2e\x73\x65\x74\x5f\x63\x6f\x6e\x74\x65\x6e\x74\x5f\x6b\x65\x79\x5d\x29\x20\x7b\xa\x20\x20\x20\x20\x70\x72\x6f\x70\x73\x2e\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x70\x72\x6f\x70\x73\x2e\x73\x65\x61\x72\x63\x68\x5f\x6e\x61\x6d\x65\x5d\x20\x3d\x20\x5b\x5d\x3b\xa\x20\x20\x7d\xa\xa\x20\x20\x6c\x65\x74\x20\x63\x6f\x6e\x74\x65\x6e\x74\x5f\x61\x72\x72\x61\x79\x20\x3d\x20\x70\x72\x6f\x70\x73\x2e\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x70\x72\x6f\x70\x73\x2e\x73\x65\x61\x72\x63\x68\x5f\x6e\x61\x6d\x65\x5d\x3b\xa\x20\x20\x6c\x65\x74\x20\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x20\x3d\x20\x73\x65\x73\x73\x69\x6f\x6e\x53\x74\x6f\x72\x61\x67\x65\x2e\x67\x65\x74\x49\x74\x65\x6d\x28\x70\x72\x6f\x70\x73\x2e\x6e\x61\x6d\x65\x29\x3b\xa\x20\x20\x69\x66\x20\x28\x21\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x29\x20\x7b\xa\x20\x20\x20\x20\x72\x65\x74\x75\x72\x6e\x3b\xa\x20\x20\x7d\xa\xa\x20\x20\x69\x66\x20\x28\x70\x72\x6f\x70\x73\x2e\x61\x75\x74\x6f\x5f\x63\x6f\x6e\x76\x65\x72\x74\x29\x20\x7b\xa\x20\x20\x20\xa\x20\x20\x20\x20\xa\x20\x20\x20\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x20\x3d\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x74\x72\x79\x5f\x74\x6f\x5f\x63\x6f\x6e\x76\x65\x72\x74\x5f\x74\x6f\x5f\x6e\x75\x6d\x62\x65\x72\x28\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x29\x3b\xa\x20\x20\x7d\xa\xa\xa\x20\x20\x69\x66\x20\x28\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x29\x20\x7b\xa\x20\x20\x20\x20\x63\x6f\x6e\x74\x65\x6e\x74\x5f\x61\x72\x72\x61\x79\x2e\x75\x6e\x73\x68\x69\x66\x74\x28\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x29\x3b\xa\x20\x20\x7d\xa\xa\x7d\xa\xa\x66\x75\x6e\x63\x74\x69\x6f\x6e\x20\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x67\x65\x74\x5f\x65\x6c\x65\x6d\x65\x6e\x74\x73\x5f\x61\x6e\x64\x5f\x73\x65\x74\x5f\x74\x6f\x5f\x63\x6f\x6e\x74\x65\x6e\x74\x28\x70\x72\x6f\x70\x73\x29\x20\x7b\xa\x20\x20\x69\x66\x20\x28\x21\x70\x72\x6f\x70\x73\x2e\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x70\x72\x6f\x70\x73\x2e\x73\x65\x61\x72\x63\x68\x5f\x6e\x61\x6d\x65\x5d\x29\x20\x7b\xa\x20\x20\x20\x20\x70\x72\x6f\x70\x73\x2e\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x70\x72\x6f\x70\x73\x2e\x73\x65\x61\x72\x63\x68\x5f\x6e\x61\x6d\x65\x5d\x20\x3d\x20\x5b\x5d\x3b\xa\x20\x20\x7d\xa\xa\x20\x20\x6c\x65\x74\x20\x63\x6f\x6e\x74\x65\x6e\x74\x5f\x61\x72\x72\x61\x79\x20\x3d\x20\x70\x72\x6f\x70\x73\x2e\x63\x6f\x6e\x74\x65\x6e\x74\x5b\x70\x72\x6f\x70\x73\x2e\x73\x65\x61\x72\x63\x68\x5f\x6e\x61\x6d\x65\x5d\x3b\xa\x20\x20\x6c\x65\x74\x20\x65\x6c\x65\x6d\x65\x6e\x74\x73\x20\x3d\x20\x64\x6f\x63\x75\x6d\x65\x6e\x74\x2e\x71\x75\x65\x72\x79\x53\x65\x6c\x65\x63\x74\x6f\x72\x41\x6c\x6c\x28\x70\x72\x6f\x70\x73\x2e\x71\x75\x65\x72\x79\x5f\x73\x65\x6c\x65\x63\x74\x6f\x72\x29\x3b\xa\xa\x20\x20\x65\x6c\x65\x6d\x65\x6e\x74\x73\x2e\x66\x6f\x72\x45\x61\x63\x68\x28\x28\x65\x6c\x65\x6d\x65\x6e\x74\x29\x20\x3d\x3e\x20\x7b\xa\x20\x20\x20\x20\x6c\x65\x74\x20\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x20\x3d\x20\x75\x6e\x64\x65\x66\x69\x6e\x65\x64\x3b\xa\x20\x20\x20\x20\x6c\x65\x74\x20\x61\x75\x74\x6f\x5f\x63\x6f\x6e\x76\x65\x72\x74\x20\x3d\x20\x70\x72\x6f\x70\x73\x2e\x61\x75\x74\x6f\x5f\x63\x6f\x6e\x76\x65\x72\x74\x3b\xa\x20\x20\x20\x20\x69\x66\x28\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x74\x79\x70\x65\x20\x3d\x3d\x3d\x20\x27\x63\x68\x65\x63\x6b\x62\x6f\x78\x27\x29\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x20\x3d\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x63\x68\x65\x63\x6b\x65\x64\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x61\x75\x74\x6f\x5f\x63\x6f\x6e\x76\x65\x72\x74\x3d\x66\x61\x6c\x73\x65\x3b\xa\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x65\x6c\x73\x65\x20\x69\x66\x20\x28\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x74\x61\x67\x4e\x61\x6d\x65\x20\x3d\x3d\x3d\x20\x22\x49\x4e\x50\x55\x54\x22\x20\x7c\x7c\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x74\x61\x67\x4e\x61\x6d\x65\x20\x3d\x3d\x3d\x20\x22\x54\x45\x58\x54\x41\x52\x45\x41\x22\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x20\x3d\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x76\x61\x6c\x75\x65\x3b\xa\x20\x20\x20\x20\x7d\x20\xa\xa\x20\x20\x20\x20\x65\x6c\x73\x65\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x20\x3d\x20\x65\x6c\x65\x6d\x65\x6e\x74\x2e\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74\x3b\xa\x20\x20\x20\x20\x7d\xa\x20\x20\x20\x20\xa\x20\x20\x20\x20\x69\x66\x20\x28\x61\x75\x74\x6f\x5f\x63\x6f\x6e\x76\x65\x72\x74\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x20\x3d\x70\x72\x69\x76\x61\x74\x65\x5f\x63\x77\x65\x62\x5f\x74\x72\x79\x5f\x74\x6f\x5f\x63\x6f\x6e\x76\x65\x72\x74\x5f\x74\x6f\x5f\x6e\x75\x6d\x62\x65\x72\x28\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x29\x3b\xa\x20\x20\x20\x20\x7d\xa\x20\x20\x20\x20\x63\x6f\x6e\x74\x65\x6e\x74\x5f\x61\x72\x72\x61\x79\x2e\x70\x75\x73\x68\x28\x66\x69\x6e\x61\x6c\x76\x61\x6c\x75\x65\x29\x3b\xa\x20\x20\x20\x20\xa\x20\x20\x7d\x29\x3b\xa\x7d\xa";
 
 //path: src/globals/html.c
 const char *private_cweb_404 = "\x3c\x21\x44\x4f\x43\x54\x59\x50\x45\x20\x68\x74\x6d\x6c\x3e\xa\x3c\x68\x74\x6d\x6c\x20\x6c\x61\x6e\x67\x3d\x22\x70\x74\x2d\x42\x52\x22\x3e\xa\x3c\x68\x65\x61\x64\x3e\xa\x20\x20\x20\x20\x3c\x6d\x65\x74\x61\x20\x63\x68\x61\x72\x73\x65\x74\x3d\x22\x55\x54\x46\x2d\x38\x22\x3e\xa\x20\x20\x20\x20\x3c\x6d\x65\x74\x61\x20\x6e\x61\x6d\x65\x3d\x22\x76\x69\x65\x77\x70\x6f\x72\x74\x22\x20\x63\x6f\x6e\x74\x65\x6e\x74\x3d\x22\x77\x69\x64\x74\x68\x3d\x64\x65\x76\x69\x63\x65\x2d\x77\x69\x64\x74\x68\x2c\x20\x69\x6e\x69\x74\x69\x61\x6c\x2d\x73\x63\x61\x6c\x65\x3d\x31\x2e\x30\x22\x3e\xa\x20\x20\x20\x20\x3c\x74\x69\x74\x6c\x65\x3e\x45\x72\x72\x6f\x3c\x2f\x74\x69\x74\x6c\x65\x3e\xa\x20\x20\x20\x20\x3c\x73\x74\x79\x6c\x65\x3e\xa\x20\x20\x20\x20\x20\x20\x20\x20\x62\x6f\x64\x79\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x6d\x61\x72\x67\x69\x6e\x3a\x20\x30\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x70\x61\x64\x64\x69\x6e\x67\x3a\x20\x30\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x64\x69\x73\x70\x6c\x61\x79\x3a\x20\x66\x6c\x65\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x6a\x75\x73\x74\x69\x66\x79\x2d\x63\x6f\x6e\x74\x65\x6e\x74\x3a\x20\x63\x65\x6e\x74\x65\x72\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x61\x6c\x69\x67\x6e\x2d\x69\x74\x65\x6d\x73\x3a\x20\x63\x65\x6e\x74\x65\x72\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x68\x65\x69\x67\x68\x74\x3a\x20\x31\x30\x30\x76\x68\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64\x2d\x63\x6f\x6c\x6f\x72\x3a\x20\x23\x32\x38\x32\x63\x33\x34\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x63\x6f\x6c\x6f\x72\x3a\x20\x23\x66\x66\x66\x66\x66\x66\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x66\x61\x6d\x69\x6c\x79\x3a\x20\x27\x41\x72\x69\x61\x6c\x27\x2c\x20\x73\x61\x6e\x73\x2d\x73\x65\x72\x69\x66\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x63\x6f\x6e\x74\x61\x69\x6e\x65\x72\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x74\x65\x78\x74\x2d\x61\x6c\x69\x67\x6e\x3a\x20\x63\x65\x6e\x74\x65\x72\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x6d\x61\x78\x2d\x77\x69\x64\x74\x68\x3a\x20\x39\x30\x25\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x70\x61\x64\x64\x69\x6e\x67\x3a\x20\x32\x30\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x62\x6f\x72\x64\x65\x72\x2d\x72\x61\x64\x69\x75\x73\x3a\x20\x31\x30\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64\x3a\x20\x23\x33\x61\x33\x66\x34\x37\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x62\x6f\x78\x2d\x73\x68\x61\x64\x6f\x77\x3a\x20\x30\x20\x34\x70\x78\x20\x38\x70\x78\x20\x72\x67\x62\x61\x28\x30\x2c\x20\x30\x2c\x20\x30\x2c\x20\x30\x2e\x33\x29\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x63\x6f\x64\x65\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a\x20\x31\x30\x30\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x77\x65\x69\x67\x68\x74\x3a\x20\x62\x6f\x6c\x64\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x6d\x61\x72\x67\x69\x6e\x3a\x20\x30\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x63\x6f\x6c\x6f\x72\x3a\x20\x23\x66\x66\x36\x62\x36\x62\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x6d\x65\x73\x73\x61\x67\x65\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a\x20\x32\x34\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x6d\x61\x72\x67\x69\x6e\x3a\x20\x31\x30\x70\x78\x20\x30\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x63\x6f\x6c\x6f\x72\x3a\x20\x23\x64\x33\x64\x33\x64\x33\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6f\x6e\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a\x20\x31\x38\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x6d\x61\x72\x67\x69\x6e\x2d\x62\x6f\x74\x74\x6f\x6d\x3a\x20\x33\x30\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x63\x6f\x6c\x6f\x72\x3a\x20\x23\x61\x39\x61\x39\x61\x39\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x6c\x69\x6e\x6b\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x64\x69\x73\x70\x6c\x61\x79\x3a\x20\x69\x6e\x6c\x69\x6e\x65\x2d\x62\x6c\x6f\x63\x6b\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x70\x61\x64\x64\x69\x6e\x67\x3a\x20\x31\x32\x70\x78\x20\x32\x34\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a\x20\x31\x38\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x63\x6f\x6c\x6f\x72\x3a\x20\x23\x32\x38\x32\x63\x33\x34\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64\x2d\x63\x6f\x6c\x6f\x72\x3a\x20\x23\x66\x66\x36\x62\x36\x62\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x62\x6f\x72\x64\x65\x72\x2d\x72\x61\x64\x69\x75\x73\x3a\x20\x35\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x74\x65\x78\x74\x2d\x64\x65\x63\x6f\x72\x61\x74\x69\x6f\x6e\x3a\x20\x6e\x6f\x6e\x65\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x74\x72\x61\x6e\x73\x69\x74\x69\x6f\x6e\x3a\x20\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64\x2d\x63\x6f\x6c\x6f\x72\x20\x30\x2e\x33\x73\x20\x65\x61\x73\x65\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x6c\x69\x6e\x6b\x3a\x68\x6f\x76\x65\x72\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x62\x61\x63\x6b\x67\x72\x6f\x75\x6e\x64\x2d\x63\x6f\x6c\x6f\x72\x3a\x20\x23\x66\x66\x34\x63\x34\x63\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\xa\x20\x20\x20\x20\x20\x20\x20\x20\x40\x6d\x65\x64\x69\x61\x20\x28\x6d\x61\x78\x2d\x77\x69\x64\x74\x68\x3a\x20\x36\x30\x30\x70\x78\x29\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x63\x6f\x64\x65\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a\x20\x36\x30\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x6d\x65\x73\x73\x61\x67\x65\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a\x20\x32\x30\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6f\x6e\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a\x20\x31\x36\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2e\x65\x72\x72\x6f\x72\x2d\x6c\x69\x6e\x6b\x20\x7b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x66\x6f\x6e\x74\x2d\x73\x69\x7a\x65\x3a\x20\x31\x36\x70\x78\x3b\xa\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\x20\x20\x20\x20\x20\x20\x20\x20\x7d\xa\x20\x20\x20\x20\x3c\x2f\x73\x74\x79\x6c\x65\x3e\xa\x3c\x2f\x68\x65\x61\x64\x3e\xa\x3c\x62\x6f\x64\x79\x3e\xa\x20\x20\x20\x20\x3c\x64\x69\x76\x20\x63\x6c\x61\x73\x73\x3d\x22\x65\x72\x72\x6f\x72\x2d\x63\x6f\x6e\x74\x61\x69\x6e\x65\x72\x22\x3e\xa\x20\x20\x20\x20\x20\x20\x20\x20\x3c\x68\x31\x20\x63\x6c\x61\x73\x73\x3d\x22\x65\x72\x72\x6f\x72\x2d\x63\x6f\x64\x65\x22\x3e\x34\x30\x34\x3c\x2f\x68\x31\x3e\xa\x20\x20\x20\x20\x20\x20\x20\x20\x3c\x70\x20\x63\x6c\x61\x73\x73\x3d\x22\x65\x72\x72\x6f\x72\x2d\x6d\x65\x73\x73\x61\x67\x65\x22\x3e\x50\x61\x67\x65\x20\x6e\x6f\x74\x2d\x66\x6f\x75\x6e\x64\x3c\x2f\x70\x3e\xa\x20\x20\x20\x20\x20\x20\x20\x20\x3c\x70\x20\x63\x6c\x61\x73\x73\x3d\x22\x65\x72\x72\x6f\x72\x2d\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6f\x6e\x22\x3e\x53\x6f\x72\x72\x79\x2c\x20\x74\x68\x69\x73\x20\x70\x61\x67\x65\x20\x6e\x6f\x74\x20\x66\x6f\x75\x6e\x64\x2e\x3c\x2f\x70\x3e\xa\x20\x20\x20\x20\x20\x20\x20\x20\x3c\x61\x20\x68\x72\x65\x66\x3d\x22\x2f\x22\x20\x63\x6c\x61\x73\x73\x3d\x22\x65\x72\x72\x6f\x72\x2d\x6c\x69\x6e\x6b\x22\x3e\x62\x61\x63\x6b\x3c\x2f\x61\x3e\xa\x20\x20\x20\x20\x3c\x2f\x64\x69\x76\x3e\xa\x3c\x2f\x62\x6f\x64\x79\x3e\xa\x3c\x2f\x68\x74\x6d\x6c\x3e";
@@ -2563,11 +3016,11 @@ const char * CTextStack_typeof_in_str(struct CTextStack *self){
     else if(current_type == CTEXT_LONG){
         return "long";
     }
-
+    
     else if(current_type == CTEXT_DOUBLE){
         return "double";
     }
-
+    
     else{
         return "invalid";
     }
@@ -2619,14 +3072,14 @@ void CTextStack_text(struct CTextStack *self, const char *text){
     }
 
     size_t text_size = strlen(text);
-
+    
     self->size += text_size;
     private_ctext_text_double_size_if_reachs(self);
-
+    
     memcpy(
             self->rendered_text + self->size - text_size,
         text,
-        text_size
+        text_size 
     );
     self->rendered_text[self->size] = '\0';
 }
@@ -3337,7 +3790,7 @@ CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks)
 {
     if (hooks == NULL)
     {
-
+        
         global_hooks.allocate = malloc;
         global_hooks.deallocate = free;
         global_hooks.reallocate = realloc;
@@ -3356,7 +3809,7 @@ CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks)
         global_hooks.deallocate = hooks->free_fn;
     }
 
-
+    
     global_hooks.reallocate = NULL;
     if ((global_hooks.allocate == malloc) && (global_hooks.deallocate == free))
     {
@@ -3416,7 +3869,7 @@ typedef struct
     const unsigned char *content;
     size_t length;
     size_t offset;
-    size_t depth;
+    size_t depth; 
     internal_hooks hooks;
 } parse_buffer;
 
@@ -3442,7 +3895,7 @@ static cJSON_bool parse_number(cJSON * const item, parse_buffer * const input_bu
         return false;
     }
 
-
+    
     for (i = 0; (i < (sizeof(number_c_string) - 1)) && can_access_at_index(input_buffer, i); i++)
     {
         switch (buffer_at_offset(input_buffer)[i])
@@ -3478,12 +3931,12 @@ loop_end:
     number = strtod((const char*)number_c_string, (char**)&after_end);
     if (number_c_string == after_end)
     {
-        return false;
+        return false; 
     }
 
     item->valuedouble = number;
 
-
+    
     if (number >= INT_MAX)
     {
         item->valueint = INT_MAX;
@@ -3525,7 +3978,7 @@ CJSON_PUBLIC(double) cJSON_SetNumberHelper(cJSON *object, double number)
 CJSON_PUBLIC(char*) cJSON_SetValuestring(cJSON *object, const char *valuestring)
 {
     char *copy = NULL;
-
+    
     if (!(object->type & cJSON_String) || (object->type & cJSON_IsReference))
     {
         return NULL;
@@ -3554,9 +4007,9 @@ typedef struct
     unsigned char *buffer;
     size_t length;
     size_t offset;
-    size_t depth;
+    size_t depth; 
     cJSON_bool noalloc;
-    cJSON_bool format;
+    cJSON_bool format; 
     internal_hooks hooks;
 } printbuffer;
 
@@ -3573,13 +4026,13 @@ static unsigned char* ensure(printbuffer * const p, size_t needed)
 
     if ((p->length > 0) && (p->offset >= p->length))
     {
-
+        
         return NULL;
     }
 
     if (needed > INT_MAX)
     {
-
+        
         return NULL;
     }
 
@@ -3593,10 +4046,10 @@ static unsigned char* ensure(printbuffer * const p, size_t needed)
         return NULL;
     }
 
-
+    
     if (needed > (INT_MAX / 2))
     {
-
+        
         if (needed <= INT_MAX)
         {
             newsize = INT_MAX;
@@ -3613,7 +4066,7 @@ static unsigned char* ensure(printbuffer * const p, size_t needed)
 
     if (p->hooks.reallocate != NULL)
     {
-
+        
         newbuffer = (unsigned char*)p->hooks.reallocate(p->buffer, newsize);
         if (newbuffer == NULL)
         {
@@ -3626,7 +4079,7 @@ static unsigned char* ensure(printbuffer * const p, size_t needed)
     }
     else
     {
-
+        
         newbuffer = (unsigned char*)p->hooks.allocate(newsize);
         if (!newbuffer)
         {
@@ -3673,7 +4126,7 @@ static cJSON_bool print_number(const cJSON * const item, printbuffer * const out
     double d = item->valuedouble;
     int length = 0;
     size_t i = 0;
-    unsigned char number_buffer[26] = {0};
+    unsigned char number_buffer[26] = {0}; 
     unsigned char decimal_point = get_decimal_point();
     double test = 0.0;
 
@@ -3682,7 +4135,7 @@ static cJSON_bool print_number(const cJSON * const item, printbuffer * const out
         return false;
     }
 
-
+    
     if (isnan(d) || isinf(d))
     {
         length = sprintf((char*)number_buffer, "null");
@@ -3693,31 +4146,31 @@ static cJSON_bool print_number(const cJSON * const item, printbuffer * const out
 	}
     else
     {
-
+        
         length = sprintf((char*)number_buffer, "%1.15g", d);
 
-
+        
         if ((sscanf((char*)number_buffer, "%lg", &test) != 1) || !compare_double((double)test, d))
         {
-
+            
             length = sprintf((char*)number_buffer, "%1.17g", d);
         }
     }
 
-
+    
     if ((length < 0) || (length > (int)(sizeof(number_buffer) - 1)))
     {
         return false;
     }
 
-
+    
     output_pointer = ensure(output_buffer, (size_t)length + sizeof(""));
     if (output_pointer == NULL)
     {
         return false;
     }
 
-
+    
     for (i = 0; i < ((size_t)length); i++)
     {
         if (number_buffer[i] == decimal_point)
@@ -3743,7 +4196,7 @@ static unsigned parse_hex4(const unsigned char * const input)
 
     for (i = 0; i < 4; i++)
     {
-
+        
         if ((input[i] >= '0') && (input[i] <= '9'))
         {
             h += (unsigned int) input[i] - '0';
@@ -3756,14 +4209,14 @@ static unsigned parse_hex4(const unsigned char * const input)
         {
             h += (unsigned int) 10 + input[i] - 'a';
         }
-        else
+        else 
         {
             return 0;
         }
 
         if (i < 3)
         {
-
+            
             h = h << 4;
         }
     }
@@ -3784,95 +4237,95 @@ static unsigned char utf16_literal_to_utf8(const unsigned char * const input_poi
 
     if ((input_end - first_sequence) < 6)
     {
-
+        
         goto fail;
     }
 
-
+    
     first_code = parse_hex4(first_sequence + 2);
 
-
+    
     if (((first_code >= 0xDC00) && (first_code <= 0xDFFF)))
     {
         goto fail;
     }
 
-
+    
     if ((first_code >= 0xD800) && (first_code <= 0xDBFF))
     {
         const unsigned char *second_sequence = first_sequence + 6;
         unsigned int second_code = 0;
-        sequence_length = 12;
+        sequence_length = 12; 
 
         if ((input_end - second_sequence) < 6)
         {
-
+            
             goto fail;
         }
 
         if ((second_sequence[0] != '\\') || (second_sequence[1] != 'u'))
         {
-
+            
             goto fail;
         }
 
-
+        
         second_code = parse_hex4(second_sequence + 2);
-
+        
         if ((second_code < 0xDC00) || (second_code > 0xDFFF))
         {
-
+            
             goto fail;
         }
 
 
-
+        
         codepoint = 0x10000 + (((first_code & 0x3FF) << 10) | (second_code & 0x3FF));
     }
     else
     {
-        sequence_length = 6;
+        sequence_length = 6; 
         codepoint = first_code;
     }
 
-
+    
     if (codepoint < 0x80)
     {
-
+        
         utf8_length = 1;
     }
     else if (codepoint < 0x800)
     {
-
+        
         utf8_length = 2;
-        first_byte_mark = 0xC0;
+        first_byte_mark = 0xC0; 
     }
     else if (codepoint < 0x10000)
     {
-
+        
         utf8_length = 3;
-        first_byte_mark = 0xE0;
+        first_byte_mark = 0xE0; 
     }
     else if (codepoint <= 0x10FFFF)
     {
-
+        
         utf8_length = 4;
-        first_byte_mark = 0xF0;
+        first_byte_mark = 0xF0; 
     }
     else
     {
-
+        
         goto fail;
     }
 
-
+    
     for (utf8_position = (unsigned char)(utf8_length - 1); utf8_position > 0; utf8_position--)
     {
-
+        
         (*output_pointer)[utf8_position] = (unsigned char)((codepoint | 0x80) & 0xBF);
         codepoint >>= 6;
     }
-
+    
     if (utf8_length > 1)
     {
         (*output_pointer)[0] = (unsigned char)((codepoint | first_byte_mark) & 0xFF);
@@ -3898,24 +4351,24 @@ static cJSON_bool parse_string(cJSON * const item, parse_buffer * const input_bu
     unsigned char *output_pointer = NULL;
     unsigned char *output = NULL;
 
-
+    
     if (buffer_at_offset(input_buffer)[0] != '\"')
     {
         goto fail;
     }
 
     {
-
+        
         size_t allocation_length = 0;
         size_t skipped_bytes = 0;
         while (((size_t)(input_end - input_buffer->content) < input_buffer->length) && (*input_end != '\"'))
         {
-
+            
             if (input_end[0] == '\\')
             {
                 if ((size_t)(input_end + 1 - input_buffer->content) >= input_buffer->length)
                 {
-
+                    
                     goto fail;
                 }
                 skipped_bytes++;
@@ -3925,27 +4378,27 @@ static cJSON_bool parse_string(cJSON * const item, parse_buffer * const input_bu
         }
         if (((size_t)(input_end - input_buffer->content) >= input_buffer->length) || (*input_end != '\"'))
         {
-            goto fail;
+            goto fail; 
         }
 
-
+        
         allocation_length = (size_t) (input_end - buffer_at_offset(input_buffer)) - skipped_bytes;
         output = (unsigned char*)input_buffer->hooks.allocate(allocation_length + sizeof(""));
         if (output == NULL)
         {
-            goto fail;
+            goto fail; 
         }
     }
 
     output_pointer = output;
-
+    
     while (input_pointer < input_end)
     {
         if (*input_pointer != '\\')
         {
             *output_pointer++ = *input_pointer++;
         }
-
+        
         else
         {
             unsigned char sequence_length = 2;
@@ -3977,12 +4430,12 @@ static cJSON_bool parse_string(cJSON * const item, parse_buffer * const input_bu
                     *output_pointer++ = input_pointer[1];
                     break;
 
-
+                
                 case 'u':
                     sequence_length = utf16_literal_to_utf8(input_pointer, input_end, &output_pointer);
                     if (sequence_length == 0)
                     {
-
+                        
                         goto fail;
                     }
                     break;
@@ -3994,7 +4447,7 @@ static cJSON_bool parse_string(cJSON * const item, parse_buffer * const input_bu
         }
     }
 
-
+    
     *output_pointer = '\0';
 
     item->type = cJSON_String;
@@ -4026,7 +4479,7 @@ static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffe
     unsigned char *output = NULL;
     unsigned char *output_pointer = NULL;
     size_t output_length = 0;
-
+    
     size_t escape_characters = 0;
 
     if (output_buffer == NULL)
@@ -4034,7 +4487,7 @@ static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffe
         return false;
     }
 
-
+    
     if (input == NULL)
     {
         output = ensure(output_buffer, sizeof("\"\""));
@@ -4047,7 +4500,7 @@ static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffe
         return true;
     }
 
-
+    
     for (input_pointer = input; *input_pointer; input_pointer++)
     {
         switch (*input_pointer)
@@ -4059,13 +4512,13 @@ static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffe
             case '\n':
             case '\r':
             case '\t':
-
+                
                 escape_characters++;
                 break;
             default:
                 if (*input_pointer < 32)
                 {
-
+                    
                     escape_characters += 5;
                 }
                 break;
@@ -4079,7 +4532,7 @@ static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffe
         return false;
     }
 
-
+    
     if (escape_characters == 0)
     {
         output[0] = '\"';
@@ -4092,17 +4545,17 @@ static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffe
 
     output[0] = '\"';
     output_pointer = output + 1;
-
+    
     for (input_pointer = input; *input_pointer != '\0'; (void)input_pointer++, output_pointer++)
     {
         if ((*input_pointer > 31) && (*input_pointer != '\"') && (*input_pointer != '\\'))
         {
-
+            
             *output_pointer = *input_pointer;
         }
         else
         {
-
+            
             *output_pointer++ = '\\';
             switch (*input_pointer)
             {
@@ -4128,7 +4581,7 @@ static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffe
                     *output_pointer = 't';
                     break;
                 default:
-
+                    
                     sprintf((char*)output_pointer, "u%04x", *input_pointer);
                     output_pointer += 4;
                     break;
@@ -4206,7 +4659,7 @@ CJSON_PUBLIC(cJSON *) cJSON_ParseWithOpts(const char *value, const char **return
         return NULL;
     }
 
-
+    
     buffer_length = strlen(value) + sizeof("");
 
     return cJSON_ParseWithLengthOpts(value, buffer_length, return_parse_end, require_null_terminated);
@@ -4218,7 +4671,7 @@ CJSON_PUBLIC(cJSON *) cJSON_ParseWithLengthOpts(const char *value, size_t buffer
     parse_buffer buffer = { 0, 0, 0, 0, { 0, 0, 0 } };
     cJSON *item = NULL;
 
-
+    
     global_error.json = NULL;
     global_error.position = 0;
 
@@ -4233,18 +4686,18 @@ CJSON_PUBLIC(cJSON *) cJSON_ParseWithLengthOpts(const char *value, size_t buffer
     buffer.hooks = global_hooks;
 
     item = cJSON_New_Item(&global_hooks);
-    if (item == NULL)
+    if (item == NULL) 
     {
         goto fail;
     }
 
     if (!parse_value(item, buffer_skip_whitespace(skip_utf8_bom(&buffer))))
     {
-
+        
         goto fail;
     }
 
-
+    
     if (require_null_terminated)
     {
         buffer_skip_whitespace(&buffer);
@@ -4313,7 +4766,7 @@ static unsigned char *print(const cJSON * const item, cJSON_bool format, const i
 
     memset(buffer, 0, sizeof(buffer));
 
-
+    
     buffer->buffer = (unsigned char*) hooks->allocate(default_buffer_size);
     buffer->length = default_buffer_size;
     buffer->format = format;
@@ -4323,14 +4776,14 @@ static unsigned char *print(const cJSON * const item, cJSON_bool format, const i
         goto fail;
     }
 
-
+    
     if (!print_value(item, buffer))
     {
         goto fail;
     }
     update_offset(buffer);
 
-
+    
     if (hooks->reallocate != NULL)
     {
         printed = (unsigned char*) hooks->reallocate(buffer->buffer, buffer->offset + 1);
@@ -4339,7 +4792,7 @@ static unsigned char *print(const cJSON * const item, cJSON_bool format, const i
         }
         buffer->buffer = NULL;
     }
-    else
+    else 
     {
         printed = (unsigned char*) hooks->allocate(buffer->offset + 1);
         if (printed == NULL)
@@ -4347,9 +4800,9 @@ static unsigned char *print(const cJSON * const item, cJSON_bool format, const i
             goto fail;
         }
         memcpy(printed, buffer->buffer, cjson_min(buffer->length, buffer->offset + 1));
-        printed[buffer->offset] = '\0';
+        printed[buffer->offset] = '\0'; 
 
-
+        
         hooks->deallocate(buffer->buffer);
     }
 
@@ -4434,25 +4887,25 @@ static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buf
 {
     if ((input_buffer == NULL) || (input_buffer->content == NULL))
     {
-        return false;
+        return false; 
     }
 
-
-
+    
+    
     if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "null", 4) == 0))
     {
         item->type = cJSON_NULL;
         input_buffer->offset += 4;
         return true;
     }
-
+    
     if (can_read(input_buffer, 5) && (strncmp((const char*)buffer_at_offset(input_buffer), "false", 5) == 0))
     {
         item->type = cJSON_False;
         input_buffer->offset += 5;
         return true;
     }
-
+    
     if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "true", 4) == 0))
     {
         item->type = cJSON_True;
@@ -4460,22 +4913,22 @@ static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buf
         input_buffer->offset += 4;
         return true;
     }
-
+    
     if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '\"'))
     {
         return parse_string(item, input_buffer);
     }
-
+    
     if (can_access_at_index(input_buffer, 0) && ((buffer_at_offset(input_buffer)[0] == '-') || ((buffer_at_offset(input_buffer)[0] >= '0') && (buffer_at_offset(input_buffer)[0] <= '9'))))
     {
         return parse_number(item, input_buffer);
     }
-
+    
     if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '['))
     {
         return parse_array(item, input_buffer);
     }
-
+    
     if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '{'))
     {
         return parse_object(item, input_buffer);
@@ -4561,18 +5014,18 @@ static cJSON_bool print_value(const cJSON * const item, printbuffer * const outp
 
 static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buffer)
 {
-    cJSON *head = NULL;
+    cJSON *head = NULL; 
     cJSON *current_item = NULL;
 
     if (input_buffer->depth >= CJSON_NESTING_LIMIT)
     {
-        return false;
+        return false; 
     }
     input_buffer->depth++;
 
     if (buffer_at_offset(input_buffer)[0] != '[')
     {
-
+        
         goto fail;
     }
 
@@ -4580,49 +5033,49 @@ static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buf
     buffer_skip_whitespace(input_buffer);
     if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ']'))
     {
-
+        
         goto success;
     }
 
-
+    
     if (cannot_access_at_index(input_buffer, 0))
     {
         input_buffer->offset--;
         goto fail;
     }
 
-
+    
     input_buffer->offset--;
-
+    
     do
     {
-
+        
         cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
         if (new_item == NULL)
         {
-            goto fail;
+            goto fail; 
         }
 
-
+        
         if (head == NULL)
         {
-
+            
             current_item = head = new_item;
         }
         else
         {
-
+            
             current_item->next = new_item;
             new_item->prev = current_item;
             current_item = new_item;
         }
 
-
+        
         input_buffer->offset++;
         buffer_skip_whitespace(input_buffer);
         if (!parse_value(current_item, input_buffer))
         {
-            goto fail;
+            goto fail; 
         }
         buffer_skip_whitespace(input_buffer);
     }
@@ -4630,7 +5083,7 @@ static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buf
 
     if (cannot_access_at_index(input_buffer, 0) || buffer_at_offset(input_buffer)[0] != ']')
     {
-        goto fail;
+        goto fail; 
     }
 
 success:
@@ -4668,8 +5121,8 @@ static cJSON_bool print_array(const cJSON * const item, printbuffer * const outp
         return false;
     }
 
-
-
+    
+    
     output_pointer = ensure(output_buffer, 1);
     if (output_pointer == NULL)
     {
@@ -4721,84 +5174,84 @@ static cJSON_bool print_array(const cJSON * const item, printbuffer * const outp
 
 static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_buffer)
 {
-    cJSON *head = NULL;
+    cJSON *head = NULL; 
     cJSON *current_item = NULL;
 
     if (input_buffer->depth >= CJSON_NESTING_LIMIT)
     {
-        return false;
+        return false; 
     }
     input_buffer->depth++;
 
     if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '{'))
     {
-        goto fail;
+        goto fail; 
     }
 
     input_buffer->offset++;
     buffer_skip_whitespace(input_buffer);
     if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '}'))
     {
-        goto success;
+        goto success; 
     }
 
-
+    
     if (cannot_access_at_index(input_buffer, 0))
     {
         input_buffer->offset--;
         goto fail;
     }
 
-
+    
     input_buffer->offset--;
-
+    
     do
     {
-
+        
         cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
         if (new_item == NULL)
         {
-            goto fail;
+            goto fail; 
         }
 
-
+        
         if (head == NULL)
         {
-
+            
             current_item = head = new_item;
         }
         else
         {
-
+            
             current_item->next = new_item;
             new_item->prev = current_item;
             current_item = new_item;
         }
 
-
+        
         input_buffer->offset++;
         buffer_skip_whitespace(input_buffer);
         if (!parse_string(current_item, input_buffer))
         {
-            goto fail;
+            goto fail; 
         }
         buffer_skip_whitespace(input_buffer);
 
-
+        
         current_item->string = current_item->valuestring;
         current_item->valuestring = NULL;
 
         if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != ':'))
         {
-            goto fail;
+            goto fail; 
         }
 
-
+        
         input_buffer->offset++;
         buffer_skip_whitespace(input_buffer);
         if (!parse_value(current_item, input_buffer))
         {
-            goto fail;
+            goto fail; 
         }
         buffer_skip_whitespace(input_buffer);
     }
@@ -4806,7 +5259,7 @@ static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_bu
 
     if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '}'))
     {
-        goto fail;
+        goto fail; 
     }
 
 success:
@@ -4843,8 +5296,8 @@ static cJSON_bool print_object(const cJSON * const item, printbuffer * const out
         return false;
     }
 
-
-    length = (size_t) (output_buffer->format ? 2 : 1);
+    
+    length = (size_t) (output_buffer->format ? 2 : 1); 
     output_pointer = ensure(output_buffer, length + 1);
     if (output_pointer == NULL)
     {
@@ -4876,7 +5329,7 @@ static cJSON_bool print_object(const cJSON * const item, printbuffer * const out
             output_buffer->offset += output_buffer->depth;
         }
 
-
+        
         if (!print_string_ptr((unsigned char*)current_item->string, output_buffer))
         {
             return false;
@@ -4896,14 +5349,14 @@ static cJSON_bool print_object(const cJSON * const item, printbuffer * const out
         }
         output_buffer->offset += length;
 
-
+        
         if (!print_value(current_item, output_buffer))
         {
             return false;
         }
         update_offset(output_buffer);
 
-
+        
         length = ((size_t)(output_buffer->format ? 1 : 0) + (size_t)(current_item->next ? 1 : 0));
         output_pointer = ensure(output_buffer, length + 1);
         if (output_pointer == NULL)
@@ -4964,7 +5417,7 @@ CJSON_PUBLIC(int) cJSON_GetArraySize(const cJSON *array)
         child = child->next;
     }
 
-
+    
 
     return (int)size;
 }
@@ -5084,17 +5537,17 @@ static cJSON_bool add_item_to_array(cJSON *array, cJSON *item)
     }
 
     child = array->child;
-
+    
     if (child == NULL)
     {
-
+        
         array->child = item;
         item->prev = item;
         item->next = NULL;
     }
     else
     {
-
+        
         if (child->prev)
         {
             suffix_object(child->prev, item);
@@ -5312,27 +5765,27 @@ CJSON_PUBLIC(cJSON *) cJSON_DetachItemViaPointer(cJSON *parent, cJSON * const it
 
     if (item != parent->child)
     {
-
+        
         item->prev->next = item->next;
     }
     if (item->next != NULL)
     {
-
+        
         item->next->prev = item->prev;
     }
 
     if (item == parent->child)
     {
-
+        
         parent->child = item->next;
     }
     else if (item->next == NULL)
     {
-
+        
         parent->child->prev = item->prev;
     }
 
-
+    
     item->prev = NULL;
     item->next = NULL;
 
@@ -5436,7 +5889,7 @@ CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemViaPointer(cJSON * const parent, cJSON
         parent->child = replacement;
     }
     else
-    {
+    {   
         if (replacement->prev != NULL)
         {
             replacement->prev->next = replacement;
@@ -5471,7 +5924,7 @@ static cJSON_bool replace_item_in_object(cJSON *object, const char *string, cJSO
         return false;
     }
 
-
+    
     if (!(replacement->type & cJSON_StringIsConst) && (replacement->string != NULL))
     {
         cJSON_free(replacement->string);
@@ -5550,7 +6003,7 @@ CJSON_PUBLIC(cJSON *) cJSON_CreateNumber(double num)
         item->type = cJSON_Number;
         item->valuedouble = num;
 
-
+        
         if (num >= INT_MAX)
         {
             item->valueint = INT_MAX;
@@ -5826,18 +6279,18 @@ CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse)
     cJSON *next = NULL;
     cJSON *newchild = NULL;
 
-
+    
     if (!item)
     {
         goto fail;
     }
-
+    
     newitem = cJSON_New_Item(&global_hooks);
     if (!newitem)
     {
         goto fail;
     }
-
+    
     newitem->type = item->type & (~cJSON_IsReference);
     newitem->valueint = item->valueint;
     newitem->valuedouble = item->valuedouble;
@@ -5857,30 +6310,30 @@ CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse)
             goto fail;
         }
     }
-
+    
     if (!recurse)
     {
         return newitem;
     }
-
+    
     child = item->child;
     while (child != NULL)
     {
-        newchild = cJSON_Duplicate(child, true);
+        newchild = cJSON_Duplicate(child, true); 
         if (!newchild)
         {
             goto fail;
         }
         if (next != NULL)
         {
-
+            
             next->next = newchild;
             newchild->prev = next;
             next = newchild;
         }
         else
         {
-
+            
             newitem->child = newchild;
             next = newchild;
         }
@@ -5995,7 +6448,7 @@ CJSON_PUBLIC(void) cJSON_Minify(char *json)
         }
     }
 
-
+    
     *into = '\0';
 }
 
@@ -6106,7 +6559,7 @@ CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * cons
         return false;
     }
 
-
+    
     switch (a->type & 0xFF)
     {
         case cJSON_False:
@@ -6123,7 +6576,7 @@ CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * cons
             return false;
     }
 
-
+    
     if (a == b)
     {
         return true;
@@ -6131,7 +6584,7 @@ CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * cons
 
     switch (a->type & 0xFF)
     {
-
+        
         case cJSON_False:
         case cJSON_True:
         case cJSON_NULL:
@@ -6173,7 +6626,7 @@ CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * cons
                 b_element = b_element->next;
             }
 
-
+            
             if (a_element != b_element) {
                 return false;
             }
@@ -6187,7 +6640,7 @@ CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * cons
             cJSON *b_element = NULL;
             cJSON_ArrayForEach(a_element, a)
             {
-
+                
                 b_element = get_object_item(b, a_element->string, case_sensitive);
                 if (b_element == NULL)
                 {
@@ -6200,7 +6653,7 @@ CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * cons
                 }
             }
 
-
+            
             cJSON_ArrayForEach(b_element, b)
             {
                 a_element = get_object_item(a, b_element->string, case_sensitive);
@@ -6234,6 +6687,229 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 }
 
 
+
+
+
+
+#endif
+
+
+#ifndef  UNIVERSAL_GARBAGE_H
+#define UNIVERSAL_GARBAGE_H
+//path: src/dependencies/UniversalGarbage/definition.c
+
+
+//path: src/dependencies/UniversalGarbage/functions/definition.c
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/garbage_element.c
+
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/../unique.definition_requirements.h
+
+
+
+
+
+
+
+privateUniversalGarbageElement * private_newUniversalGarbageSimpleElement(void (*dealocator_callback)(void *element), void **pointer){
+
+    privateUniversalGarbageElement * self = UniversalGarbage_create_empty_struct(
+        self,
+        privateUniversalGarbageElement
+    );
+    self->pointer = pointer;
+    self->deallocator_callback = dealocator_callback;
+    self->pointed_value = *pointer;
+    return  self;
+}
+void private_UniversalGarbageSimpleElement_free_pointed_value(privateUniversalGarbageElement *self){
+    if(self->pointed_value){
+        self->deallocator_callback(self->pointed_value);
+        self->pointed_value = NULL;
+    }
+}
+
+void private_UniversalGarbageSimpleElement_free(privateUniversalGarbageElement *self){
+    private_UniversalGarbageSimpleElement_free_pointed_value(self);
+    free(self);
+}
+
+
+//path: src/dependencies/UniversalGarbage/functions/garbage/garbage.c
+
+
+
+
+UniversalGarbage * private_new_MainUniversalGarbage(){
+    UniversalGarbage *self = UniversalGarbage_create_empty_struct(self,UniversalGarbage)
+    self->elements = (privateUniversalGarbageElement**)malloc(0);
+    self->is_the_root = false;
+    return self;
+}
+
+UniversalGarbage * newUniversalGarbage(){
+    UniversalGarbage *self = UniversalGarbage_create_empty_struct(self,UniversalGarbage)
+    self->is_the_root = true;
+    self->elements = (privateUniversalGarbageElement**)malloc(0);
+    self->return_values =private_new_MainUniversalGarbage();
+
+    return self;
+}
+
+
+
+
+bool  rawUniversalGarbage_reallocate(UniversalGarbage *self, void **pointer){
+
+    if(self->is_the_root){
+
+        if(rawUniversalGarbage_reallocate(self->return_values,pointer)){
+            return true;
+        }
+    }
+
+
+    for(int i = 0; i < self->elements_size; i++){
+
+        privateUniversalGarbageElement *current = self->elements[i];
+        bool reallocate = current->pointer == pointer;
+
+        if(reallocate){
+            current->pointed_value = *pointer;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool rawUniversalGarbage_resset(UniversalGarbage *self, void **pointer){
+
+    if(self->is_the_root){
+        if(rawUniversalGarbage_resset(self->return_values,pointer)){
+            return true;
+        }
+    }
+
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        bool resset = current->pointer == pointer;
+        if(resset){
+            private_UniversalGarbageSimpleElement_free_pointed_value(current);
+            current->pointed_value = *pointer;
+            return true;
+        }
+    }
+    return  false;
+
+}
+bool  rawUniversalGarbage_remove(UniversalGarbage *self, void **pointer){
+    if(self->is_the_root){
+        if(rawUniversalGarbage_remove(self->return_values,pointer)){
+            *pointer = NULL;
+            return true;
+        }
+    }
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        if(current->pointer == pointer){
+            private_UniversalGarbageSimpleElement_free(current);
+            self->elements_size-=1;
+            bool its_not_the_last = i < self->elements_size;
+            if(its_not_the_last){
+                self->elements[i] = self->elements[self->elements_size];
+
+            }
+            *pointer = NULL;
+            return  true;
+        }
+    }
+    return  false;
+}
+bool  rawUniversalGarbage_disconnect(UniversalGarbage *self, void **pointer){
+    if(self->is_the_root){
+        if(rawUniversalGarbage_disconnect(self->return_values,pointer)){
+            return true;
+        }
+    }
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        if(current->pointer == pointer){
+            free(current);
+            self->elements_size-=1;
+            bool its_not_the_last = i < self->elements_size;
+            if(its_not_the_last){
+                self->elements[i] = self->elements[self->elements_size];
+            }
+            return true;
+        }
+    }
+    return  false;
+
+
+
+}
+bool  rawUniversalGarbage_add(UniversalGarbage *self,  void (*dealocator_callback)(void *element), void **pointer){
+
+    if(!pointer){
+        return false;
+    }
+
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        if(current->pointer == pointer){
+            return false;
+        }
+    }
+
+    self->elements = (privateUniversalGarbageElement**)realloc(
+            self->elements,
+            (self->elements_size + 1) * sizeof(privateUniversalGarbageElement*)
+    );
+
+
+
+    self->elements[self->elements_size] = private_newUniversalGarbageSimpleElement(dealocator_callback, pointer);
+    self->elements_size+=1;
+    return  true;
+}
+
+
+
+void  private_UniversalGarbage_free_all_sub_elements(UniversalGarbage *self){
+    for(int i = 0; i < self->elements_size; i++){
+        private_UniversalGarbageSimpleElement_free(self->elements[i]);
+    }
+    free(self->elements);
+}
+
+void UniversalGarbage_free_including_return(UniversalGarbage *self){
+    private_UniversalGarbage_free_all_sub_elements(self);
+    if(self->is_the_root){
+        UniversalGarbage_free(self->return_values);
+    }
+    free(self);
+}
+
+void UniversalGarbage_free(UniversalGarbage *self){
+    private_UniversalGarbage_free_all_sub_elements(self);
+
+    if(self->is_the_root){
+
+        UniversalGarbage *return_garbage = self->return_values;
+        for(int i = 0; i < return_garbage->elements_size; i++){
+            free(return_garbage->elements[i]);
+        }
+
+        free(return_garbage->elements);
+        free(return_garbage);
+    }
+
+
+    free(self);
+}
 
 
 
@@ -7234,7 +7910,7 @@ void CwebDict_represent(CwebDict *dict){
 }
 
 void CwebDict_free(CwebDict *self){
-
+    
     for(int i = 0; i < self->size; i++){
         CwebKeyVal *key_val = self->keys_vals[i];
          CwebKeyVal_free(key_val);
@@ -7794,10 +8470,6 @@ CwebHttpResponse * private_cweb_treat_five_icon(){
     if(possible_png_file){
         fclose(possible_png_file);
         return cweb_send_file(possible_png_path,CWEB_AUTO_SET_CONTENT,200);
-
-
-
-
     }
 
     char possible_jpg_path[1000] = {0};
@@ -8634,60 +9306,108 @@ CwebNamespace newCwebNamespace(){
 
 
 //path: src/functions/namespace/hydratation_module/definition.c
+//path: src/functions/namespace/hydratation_module/actions/actions.c
+
+
+
+CWebHydrationActionsNamespace newCWebHydrationActionsNamespace(){
+    CWebHydrationActionsNamespace self ={0};
+    self.set_session_storage_data = CWebHyDrationBridge_set_session_storage_data;
+    self.alert = CWebHyDrationBridge_alert;
+    self.execute_script = CWebHyDrationBridge_execute_script;
+    self.replace_element_by_id = CWebHyDrationBridge_replace_element_by_id;
+    self.destroy_by_id = CWebHyDrationBridge_destroy_by_id;
+    return self;
+}
+
+
 //path: src/functions/namespace/hydratation_module/args/args.c
 
 
 
 CWebHydrationArgsNamespace newCWebHydrationArgsNamespace(){
     CWebHydrationArgsNamespace self = {0};
-    self.read_double = CWebHyDrationBridge_read_double_arg;
-    self.read_long = CWebHyDrationBridge_read_long_arg;
-    self.read_bool = CWebHyDrationBridge_read_bool_arg;
-    self.read_str = CWebHyDrationBridge_read_str_arg;
+    self.get_args_size  = CWebHyDrationBridge_get_args_size;
+    self.is_arg_number = CWebHyDrationBridge_is_arg_number;
+    self.is_arg_bool = CWebHyDrationBridge_is_arg_bool;
+    self.is_arg_string  = CWebHyDrationBridge_is_arg_string;
+    self.get_double_arg = CWebHyDrationBridge_get_double_arg;
+    self.get_long_arg = CWebHyDrationBridge_get_long_arg;
+    self.get_bool_arg = CWebHyDrationBridge_get_bool_arg;
+    self.get_str_arg = CWebHyDrationBridge_get_str_arg;
+    self.get_cJSON_arg  = CWebHyDrationBridge_get_cJSON_arg;
     return self;
 }
 
 
-//path: src/functions/namespace/hydratation_module/content/content.c
+//path: src/functions/namespace/hydratation_module/bridge/bridge.c
 
 
 
-CWebHydrationContentNamespace newCWebHydrationContentNamespace(){
-    CWebHydrationContentNamespace self = {0};
-    self.read_double = CWebHyDrationBridge_read_double_content;
-    self.read_long = CWebHyDrationBridge_read_long_content;
-    self.read_bool = CWebHyDrationBridge_read_bool_content;
-    self.read_str = CWebHyDrationBridge_read_str_content;
+CWebHydrationBridgeNamespace newCWebHydrationBridgetNamespace(){
+    CWebHydrationBridgeNamespace self = {0};
+    self.call = CWebHyDrationBridge_call;
+    self.onclick =CWebHyDrationBridge_onclick;
+    self.onfoccusout =CWebHyDrationBridge_onfoccusout;
+    self.has_errors = CWebHyDrationBridge_has_errors;
+    self.create_bridge = CWebHyDration_create_bridge;
+
     return self;
 }
 
 
-//path: src/functions/namespace/hydratation_module/requirements/requirements.c
+//path: src/functions/namespace/hydratation_module/search_requirements/search_requirements.c
 
 
 
 
-CWebHydrationRequirementsNamespace newCWebHydrationRequirementsNamespace(){
-    CWebHydrationRequirementsNamespace self = {0};
-    self.add_required_function = CWebHyDrationBridge_add_required_function;
-    self.add_required_text_by_id = CWebHyDrationBridge_add_required_by_id;
-    self.add_required_text_number_by_id = CWebHyDrationBridge_add_required_number_by_id;
-    self.add_required_input_by_id = CWebHyDrationBridge_add_required_input_by_id;
-    self.add_required_input_number_by_id = CWebHyDrationBridge_add_required_input_number_by_id;
+CWebHydrationSearchRequirementsNamespace newCWebHydrationSearchRequirementsNamespace(){
+    CWebHydrationSearchRequirementsNamespace self = {0};
+
+
+    self.newSearchRequirements = CWebHyDrationBridge_newSearchRequirements;
+    self.add_function = CWebHyDrationSearchRequirements_add_function;
+    self.add_elements_by_query_selector = CWebHyDrationSearchRequirements_add_elements_by_query_selector;
+    self.add_elements_by_query_selector_not_auto_converting = CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting;
+    self.add_elements_by_attribute = CWebHyDrationSearchRequirements_add_elements_by_attribute;
+    self.add_elements_by_attribute_not_auto_converting = CWebHyDrationSearchRequirements_add_elements_by_attribute_not_auto_converting;
+    self.add_elements_by_class_name = CWebHyDrationSearchRequirements_add_elements_by_class_name;
+    self.add_elements_by_class_name_not_auto_converting =CWebHyDrationSearchRequirements_add_elements_by_class_name_not_auto_converting;
+    self.add_elements_by_id = CWebHyDrationSearchRequirements_add_elements_by_id;
+    self.add_elements_by_id_not_auto_converting = CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting;
+    self.add_session_storage_item_not_converting = CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting;
+    self.add_session_storage_item = CWebHyDrationSearchRequirements_add_session_storage_item;
+
     return self;
 }
 
 
-//path: src/functions/namespace/hydratation_module/response/response.c
+//path: src/functions/namespace/hydratation_module/search_result/search_result.c
 
 
 
-CWebHydrationResponseNamespace newCWebHydrationResponseNamespace(){
-    CWebHydrationResponseNamespace self ={0};
-    self.alert = CWebHyDrationBridge_alert;
-    self.execute_script = CWebHyDrationBridge_execute_script;
-    self.replace_element_by_id = CWebHyDrationBridge_replace_element_by_id;
-    self.destroy_by_id = CWebHyDrationBridge_destroy_by_id;
+CWebHydrationSearchResultNamespace newCWebHydrationSearchResultNamespace(){
+    CWebHydrationSearchResultNamespace self = {0};
+    self.get_total_avaialible_searchs = CWebHyDrationBridge_get_total_avaialible_searchs;
+    self.get_search_by_index = CWebHyDrationBridge_get_search_by_index;
+    self.get_search_by_name =  CWebHyDrationBridge_get_search_by_name;
+    self.search_exist = CWebHyDrationBridge_search_exist;
+    self.get_double_from_first_element_of_search = CWebHyDrationBridge_get_double_from_first_element_of_search;
+    self.get_long_from_first_element_of_search = CWebHyDrationBridge_get_long_from_first_element_of_search;
+    self.get_bool_from_first_element_of_search = CWebHyDrationBridge_get_bool_from_first_element_of_search;
+    self.get_string_from_first_element_of_search = CWebHyDrationBridge_get_string_from_first_element_of_search;
+    self.get_cJSON_from_first_element_of_search = CWebHyDrationBridge_get_cJSON_from_first_element_of_search;
+    self.get_total_itens = CWebHyDrationSearchResult_get_total_itens;
+    self.search_item_exist = CWebHyDrationSearchResult_search_item_exist;
+    self.is_search_item_number = CWebHyDrationSearchResult_is_search_item_number;
+    self.is_search_item_bool =  CWebHyDrationSearchResult_is_search_item_bool;
+    self.is_search_item_string = CWebHyDrationSearchResult_is_search_item_string;
+    self.get_double = CWebHyDrationSearchResult_get_double;
+    self.get_long = CWebHyDrationSearchResult_get_long;
+    self.get_bool = CWebHyDrationSearchResult_get_bool;
+    self.get_string = CWebHyDrationSearchResult_get_string;
+    self.get_cJSON = CWebHyDrationSearchResult_get_cJSON;
+
     return self;
 }
 
@@ -8699,19 +9419,13 @@ CWebHydrationResponseNamespace newCWebHydrationResponseNamespace(){
 
 CWebHydrationNamespace newCWebHydrationNamespace() {
     CWebHydrationNamespace self = {0};
-    self.has_errors = CWebHyDrationBridge_has_errors;
-    self.call = CWebHyDrationBridge_call;
     self.newCWebHyDration = newCWebHyDration;
-
-    self.create_bridge = CWebHyDration_create_bridge;
     self.is_the_trigger = CWebHyDration_is_the_trigger;
-    self.generate_response = CWebHydration_generate_response;
     self.create_script = CWebHyDration_create_script;
-    self.requirements = newCWebHydrationRequirementsNamespace();
-    self.response = newCWebHydrationResponseNamespace();
-    self.args = newCWebHydrationArgsNamespace();
-    self.content = newCWebHydrationContentNamespace();
-
+    self.bridge = newCWebHydrationBridgetNamespace();
+    self.actions =newCWebHydrationActionsNamespace();
+    self.search_requirements =newCWebHydrationSearchRequirementsNamespace();
+    self.search_result = newCWebHydrationSearchResultNamespace();
     return self;
 }
 
@@ -8722,8 +9436,7 @@ CWebHydrationNamespace newCWebHydrationNamespace() {
 
 //path: src/functions/hydratation/definition.c
 //path: src/functions/hydratation/bridge/definition.c
-//path: src/functions/hydratation/bridge/bridge/definition.c
-//path: src/functions/hydratation/bridge/bridge/basic/basic.c
+//path: src/functions/hydratation/bridge/basic/basic.c
 
 
 
@@ -8741,10 +9454,26 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
     self->name = strdup(name);
     self->callback = callback;
     self->hydration = (void*)hydration;
-    self->entries_callbacks =newCwebStringArray();
-    self->calls = newCwebStringArray();
+    self->requirements_code =newCwebStringArray();
     return  self;
 }
+
+CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
+    CWebHyDrationBridge *self, const char *name,...){
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements *search = (CWebHyDrationSearchRequirements*)malloc(sizeof(CWebHyDrationSearchRequirements));
+    search->bridge = self;
+    search->name =formmated_name;
+    CWebHyDration *hydration = (CWebHyDration *)self->hydration;
+    UniversalGarbage_add(hydration->garbage,private_CWebHyDrationSearchRequirements_free,search);
+    return search;
+}
+
+
 
 
 CTextStack*  private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self) {
@@ -8759,11 +9488,11 @@ CTextStack*  private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self
 
     CTextStack_format(function,"\tlet content = {}\n");
 
-    for(int i= 0; i < self->entries_callbacks->size;i++) {
+    for(int i= 0; i < self->requirements_code->size;i++) {
         CTextStack_format(
             function,
-            "\tprivate_cweb_handle_required_data(%s, args, content);\n",
-            self->entries_callbacks->strings[i]
+            "%s\n",
+            self->requirements_code->strings[i]
         );
     }
 
@@ -8784,341 +9513,373 @@ bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self){
     return true;
 }
 
-char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *trigger,const char *func_args,...){
-    CTextStack *callback= newCTextStack_string_empty();
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
 
-    if(func_args == NULL) {
 
-        CTextStack_format(callback,"%s = 'private_cweb_bridges[\"%s\"]([]);'",trigger,self->name);
-        CwebStringArray_add(self->calls,callback->rendered_text);
-        CTextStack_free(callback);
-        return self->calls->strings[self->calls->size-1];
-
-    }
-
-    va_list  args;
-    va_start(args,func_args);
-    char *result = private_CWeb_format_vaarg(func_args,args);
-    va_end(args);
-    CTextStack_format(
-        callback,
-       "%s = 'private_cweb_bridges[\"%s\"]([%sc]);'",
-        trigger,
-        self->name,
-        result);
-    CTextStack_self_replace(callback, "\'","'");
-
-    CwebStringArray_add(self->calls,callback->rendered_text);
-    CTextStack_free(callback);
-    return self->calls->strings[self->calls->size-1];
-
-}
 void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {
 free(self->name);
-    CwebStringArray_free(self->entries_callbacks);
-    CwebStringArray_free(self->calls);
+    CwebStringArray_free(self->requirements_code);
     free(self);
 }
 
 
-//path: src/functions/hydratation/bridge/bridge/requirements/requirements.c
+//path: src/functions/hydratation/bridge/args/args.c
 
 
 
 
-void CWebHyDrationBridge_add_required_function(CWebHyDrationBridge *self,const char *function,...){
-    va_list  args;
-    va_start(args,function);
-    char *result = private_CWeb_format_vaarg(function,args);
-    va_end(args);
-    CwebStringArray_add_getting_ownership(self->entries_callbacks, result);
-}
-
-
-void CWebHyDrationBridge_add_required_by_id(CWebHyDrationBridge *self, const char * id){
-
-    CWebHyDrationBridge_add_required_function(self,
-        "private_cweb_entrie_clojure_constructors.get_text_by_id('%s')",
-        id
-    );
-}
-
-void CWebHyDrationBridge_add_required_number_by_id(CWebHyDrationBridge *self, const char * id){
-
-    CWebHyDrationBridge_add_required_function(self,
-            "private_cweb_entrie_clojure_constructors.get_text_number_by_id('%s')",
-            id
-        );
-}
-
-
-void CWebHyDrationBridge_add_required_input_by_id(CWebHyDrationBridge *self, const char * id){
-    CWebHyDrationBridge_add_required_function(self,
-            "private_cweb_entrie_clojure_constructors.get_input_by_id('%s')",
-            id
-        );
-}
-
-void CWebHyDrationBridge_add_required_input_number_by_id(CWebHyDrationBridge *self, const char * id){
-    CWebHyDrationBridge_add_required_function(self,
-            "private_cweb_entrie_clojure_constructors.get_input_number_by_id('%s')",
-            id
-        );
-}
-
-
-//path: src/functions/hydratation/bridge/bridge/args/args.c
-
-
-
-
-double  CWebHyDrationBridge_read_double_arg(CWebHyDrationBridge *self,int index){
-
-    cJSON *item = cJSON_GetArrayItem(self->args,index);
+int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self,int index){
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    return cJSON_GetArraySize(hydration->args);
+}
+
+
+bool private_cweb_hydration_type_verifier(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)(const cJSON * const item)){
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    cJSON *item = cJSON_GetArrayItem(hydration->args, index);
+    if(item == NULL){
+        return false;
+    }
+    return (bool)callback_verifier(item);
+}
+
+bool   CWebHyDrationBridge_is_arg_number(CWebHyDrationBridge *self,int index){
+    return private_cweb_hydration_type_verifier(self,index,cJSON_IsNumber);
+}
+
+bool   CWebHyDrationBridge_is_arg_bool(CWebHyDrationBridge *self,int index){
+    return private_cweb_hydration_type_verifier(self,index,cJSON_IsBool);
+}
+bool   CWebHyDrationBridge_is_arg_string(CWebHyDrationBridge *self,int index){
+    return private_cweb_hydration_type_verifier(self,index,cJSON_IsString);
+}
+
+
+cJSON *privateCWebHyDration_get_arg_index(
+    CWebHyDrationBridge *self,
+    int index,
+    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    const char *expected_type
+){
+        CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+
+    cJSON *item = cJSON_GetArrayItem(hydration->args,index);
 
     if(item == NULL){
         privateCWebHydration_raise_error(
             hydration,
             self,
-            CWEB_HYDRATION_INDEX_NOT_PROVIDED,
-            CWEB_HYDRATION_INDEX_NOT_PROVIDED_MSG,
+            CWEB_HYDRATION_INDEX_ARGS_NOT_PROVIDED,
+            CWEB_HYDRATION_INDEX_ARGS_NOT_PROVIDED_MSG,
             index);
-        return -1;
+        return NULL;
     }
-    if(!cJSON_IsNumber(item)){
+    if(!callback_verifier){
+        return  item;
+    }
+
+    if(!callback_verifier(item)){
         privateCWebHydration_raise_error(
             hydration,
             self,
-            CWEB_HYDRATION_INDEX_WRONG_TYPE,
-            CWEB_HYDRATION_INDEX_WRONG_TYPE_MSG,
+            CWEB_HYDRATION_INDEX_ARGS_WRONG_TYPE,
+            CWEB_HYDRATION_INDEX_ARGS_WRONG_TYPE_MSG,
             index,
-            CWEB_HYDRATION_NUMBER
+            expected_type
         );
+        return NULL;
+    }
+    return item;
+}
+
+double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index){
+
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    if(item == NULL){
         return -1;
     }
 
     return cJSON_GetNumberValue(item);
 }
 
-long  CWebHyDrationBridge_read_long_arg(CWebHyDrationBridge *self,int index){
-    return (long)CWebHyDrationBridge_read_double_arg(self,index);
-}
+long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index){
 
-
-
-bool  CWebHyDrationBridge_read_bool_arg(CWebHyDrationBridge *self,int index){
-
-    cJSON *item = cJSON_GetArrayItem(self->args,index);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_INDEX_NOT_PROVIDED,
-            CWEB_HYDRATION_INDEX_NOT_PROVIDED_MSG,
-            index);
-        return -1;
-    }
-    if(!cJSON_IsBool(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_INDEX_WRONG_TYPE,
-            CWEB_HYDRATION_INDEX_WRONG_TYPE_MSG,
-            index,
-            CWEB_HYDRATION_BOOL
-        );
         return -1;
     }
 
-    return (bool)item->valueint;
-}
-
-char* CWebHyDrationBridge_read_str_arg(CWebHyDrationBridge *self,int index){
-
-    cJSON *item = cJSON_GetArrayItem(self->args,index);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
-    if(item == NULL){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_INDEX_NOT_PROVIDED,
-            CWEB_HYDRATION_INDEX_NOT_PROVIDED_MSG,
-            index);
-        return NULL;
-    }
-    if(!cJSON_IsString(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_INDEX_WRONG_TYPE,
-            CWEB_HYDRATION_INDEX_WRONG_TYPE_MSG,
-            index,
-            CWEB_HYDRATION_STRING
-        );
-        return NULL;
-    }
-    return cJSON_GetStringValue(item);
-}
-
-
-//path: src/functions/hydratation/bridge/bridge/content/content.c
-
-
-
-
-
-
-double CWebHyDrationBridge_read_double_content(CWebHyDrationBridge *self,const char *key,...){
-
-    va_list  args;
-    va_start(args,key);
-    char *key_formmated = private_CWeb_format_vaarg(key,args);
-    va_end(args);
-
-    cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
-    if(item == NULL){
-            privateCWebHydration_raise_error(
-                hydration,
-                self,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG,
-                key_formmated);
-            free(key_formmated);
-            return -1;
-    }
-    if(!cJSON_IsNumber(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_KEY_WRONG_TYPE,
-            CWEB_HYDRATION_KEY_WRONG_TYPE_MSG,
-            key_formmated,
-            CWEB_HYDRATION_NUMBER
-        );
-        free(key_formmated);
-        return -1;
-    }
-    free(key_formmated);
-    return cJSON_GetNumberValue(item);
-}
-
-
-long  CWebHyDrationBridge_read_long_content(CWebHyDrationBridge *self,const char *key,...){
-
-    va_list  args;
-    va_start(args,key);
-    char *key_formmated = private_CWeb_format_vaarg(key,args);
-    va_end(args);
-
-    cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
-    if(item == NULL){
-            privateCWebHydration_raise_error(
-                hydration,
-                self,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG,
-                key_formmated);
-            free(key_formmated);
-            return -1;
-    }
-    if(!cJSON_IsNumber(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_KEY_WRONG_TYPE,
-            CWEB_HYDRATION_KEY_WRONG_TYPE_MSG,
-            key_formmated,
-            CWEB_HYDRATION_NUMBER
-        );
-        free(key_formmated);
-        return -1;
-    }
-    free(key_formmated);
     return (long)cJSON_GetNumberValue(item);
 }
-bool  CWebHyDrationBridge_read_bool_content(CWebHyDrationBridge *self,const char *key,...){
 
-    va_list  args;
-    va_start(args,key);
-    char *key_formmated = private_CWeb_format_vaarg(key,args);
-    va_end(args);
 
-    cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
 
-    if(item == NULL){
-            privateCWebHydration_raise_error(
-                hydration,
-                self,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG,
-                key_formmated);
-            free(key_formmated);
+bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index){
+
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_BOOL);
+        if(item == NULL){
             return -1;
-    }
-    if(!cJSON_IsBool(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_KEY_WRONG_TYPE,
-            CWEB_HYDRATION_KEY_WRONG_TYPE_MSG,
-            key_formmated,
-            CWEB_HYDRATION_BOOL
-        );
-        free(key_formmated);
-        return -1;
-    }
-    free(key_formmated);
+        }
+
     return (bool)item->valueint;
 }
 
-char*  CWebHyDrationBridge_read_str_content(CWebHyDrationBridge *self,const char *key,...){
+char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index){
 
-    va_list  args;
-    va_start(args,key);
-    char *key_formmated = private_CWeb_format_vaarg(key,args);
-    va_end(args);
-
-    cJSON *item = cJSON_GetObjectItem(self->content,key_formmated);
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-
-    if(item == NULL){
-            privateCWebHydration_raise_error(
-                hydration,
-                self,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED,
-                CWEB_HYDRATION_KEY_NOT_PROVIDED_MSG,
-                key_formmated);
-            free(key_formmated);
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_STRING);
+        if(item == NULL){
             return NULL;
-    }
-    if(!cJSON_IsString(item)){
-        privateCWebHydration_raise_error(
-            hydration,
-            self,
-            CWEB_HYDRATION_KEY_WRONG_TYPE,
-            CWEB_HYDRATION_KEY_WRONG_TYPE_MSG,
-            key_formmated,
-            CWEB_HYDRATION_STRING
-        );
-        free(key_formmated);
-        return NULL;
-    }
-    free(key_formmated);
-    return  cJSON_GetStringValue(item);
+        }
+
+    return cJSON_GetStringValue(item);
+}
+cJSON * CWebHyDrationBridge_get_cJSON_arg(CWebHyDrationBridge *self,int index){
+    return  privateCWebHyDration_get_arg_index(self,index,NULL,NULL);
 }
 
 
-//path: src/functions/hydratation/bridge/bridge/responses/responses.c
+//path: src/functions/hydratation/bridge/calls/calls.c
+
+
+
+#include <time.h>
+
+
+
+char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...){
+
+    CTextStack *callback= newCTextStack_string_empty();
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+
+    if(func_args != NULL){
+        va_list  args;
+        va_start(args,func_args);
+        char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
+        va_end(args);
+        CTextStack_format(
+            callback,
+           "private_cweb_bridges[`%s`]([%s]);",
+            self->name,
+            formmated_func_args
+        );
+        free(formmated_func_args);
+    }
+
+    if(func_args == NULL) {
+        CTextStack_format(
+            callback,
+            "private_cweb_bridges[`%s`]([]);",
+            self->name
+        );
+    }
+
+    UniversalGarbage_add(hydration->garbage,CTextStack_free, callback);
+    return callback->rendered_text;
+
+}
+
+
+char *private_CWebHyDrationBridge_call_trigger(
+    CWebHyDrationBridge *self,
+    const char *trigger,
+    const char *func_args
+){
+
+
+    CTextStack *callback= newCTextStack_string_empty();
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+
+    CTextStack_format(
+        callback,
+        "%s = 'private_cweb_bridges[`%s`]([%s])';",
+        trigger,
+        self->name,
+        func_args
+    );
+    UniversalGarbage_add(hydration->garbage,CTextStack_free, callback);
+    return callback->rendered_text;
+}
+
+char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_args,...){
+
+    if(func_args==NULL){
+        return private_CWebHyDrationBridge_call_trigger(self,"onclick","");
+    }
+
+    va_list  args;
+    va_start(args,func_args);
+    char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
+    va_end(args);
+
+    char *result = private_CWebHyDrationBridge_call_trigger(self,"onclick",formmated_func_args);
+    free(formmated_func_args);
+    return result;
+}
+
+
+char *CWebHyDrationBridge_onfoccusout(CWebHyDrationBridge *self,const char *func_args,...){
+
+    if(func_args==NULL){
+        return private_CWebHyDrationBridge_call_trigger(self,"onfocusout","");
+    }
+
+    va_list  args;
+    va_start(args,func_args);
+    char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
+    va_end(args);
+
+    char *result = private_CWebHyDrationBridge_call_trigger(self,"onfocusout",formmated_func_args);
+    free(formmated_func_args);
+    return result;
+}
+
+
+//path: src/functions/hydratation/bridge/search_result/search_result.c
+
+
+
+
+
+
+int  CWebHyDrationBridge_get_total_avaialible_searchs(CWebHyDrationBridge *self){
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    return cJSON_GetArraySize(hydration->content);
+}
+
+
+CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_index(CWebHyDrationBridge *self,int index){
+
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    cJSON *search =  cJSON_GetArrayItem(hydration->content, index);
+    if(search == NULL){
+        privateCWebHydration_raise_error(
+            hydration,
+            self,
+            CWEB_HYDRATION_CONTENT_SEARCH_NOT_EXIST,
+            CWEB_HYDRATION_CONTENT_SEARCH_NOT_EXIST_MSG,
+            index
+        );
+        return NULL;
+    }
+    CWebHyDrationSearchResult *result = private_newCWebHyDrationSearchResult(self, search);
+    UniversalGarbage_add(hydration->garbage,privateCWebHyDrationSearchResult_free,result);
+    return result;
+}
+
+CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_name(CWebHyDrationBridge *self,const char *name,...){
+
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    cJSON *search = cJSON_GetObjectItem(hydration->content,formmated_name);
+    if(search == NULL){
+        privateCWebHydration_raise_error(
+            hydration,
+            self,
+            CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED,
+            CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED_MSG,
+            formmated_name
+        );
+        free(formmated_name);
+        return NULL;
+    }
+    free(formmated_name);
+
+    CWebHyDrationSearchResult *result = private_newCWebHyDrationSearchResult(self, search);
+    UniversalGarbage_add(hydration->garbage,privateCWebHyDrationSearchResult_free,result);
+    return result;
+}
+
+bool CWebHyDrationBridge_search_exist(CWebHyDrationBridge *self,const char *name,...){
+
+    va_list  args;
+        va_start(args,name);
+        char *formmated_name = private_CWeb_format_vaarg(name,args);
+        va_end(args);
+
+        CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+        cJSON *search = cJSON_GetObjectItem(hydration->content,formmated_name);
+        free(formmated_name);
+        return search != NULL;
+}
+
+double CWebHyDrationBridge_get_double_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  -1;
+    }
+    return CWebHyDrationSearchResult_get_double(search,0);
+}
+
+long CWebHyDrationBridge_get_long_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  -1;
+    }
+    return CWebHyDrationSearchResult_get_long(search,0);
+}
+
+
+bool CWebHyDrationBridge_get_bool_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  false;
+    }
+    return CWebHyDrationSearchResult_get_bool(search,0);
+}
+
+
+char* CWebHyDrationBridge_get_string_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  NULL;
+    }
+    return CWebHyDrationSearchResult_get_string(search,0);
+}
+
+cJSON* CWebHyDrationBridge_get_cJSON_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  NULL;
+    }
+    return CWebHyDrationSearchResult_get_cJSON(search,0);
+}
+
+
+//path: src/functions/hydratation/bridge/action/action.c
 
 
 
@@ -9131,6 +9892,18 @@ void privateCWebHyDrationBridge_add_response(CWebHyDrationBridge *self,const cha
     cJSON_AddItemToArray(hydraation->response,current_response);
 }
 
+void CWebHyDrationBridge_set_session_storage_data(
+    CWebHyDrationBridge *self,const char*key, const char *value,...){
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,value);
+    char *value_formmat = private_CWeb_format_vaarg(value,args);
+    va_end(args);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_KEY, key);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_VALUE,value_formmat);
+    free(value_formmat);
+    privateCWebHyDrationBridge_add_response(self,"set_session_storage",obj);
+}
 
 void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,...){
     cJSON *obj = cJSON_CreateObject();
@@ -9176,7 +9949,7 @@ void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id
 
 
 
-//path: src/functions/hydratation/bridge/bridge_array/bridge_array.c
+//path: src/functions/hydratation/bridge_array/bridge_array.c
 
 
 
@@ -9204,6 +9977,418 @@ void privateCWebHyDrationBridgeArray_free(privateCWebHyDrationBridgeArray *self)
 
 
 
+//path: src/functions/hydratation/search_requirements/search_requirements.c
+
+
+
+
+
+
+
+
+
+void private_CWebHyDrationSearchRequirements_free(CWebHyDrationSearchRequirements *self){
+        free(self->name);
+        free(self);
+}
+
+
+void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirements *self,const char *function,...){
+    va_list  args;
+    va_start(args,function);
+    char *func_value = private_CWeb_format_vaarg(function,args);
+    va_end(args);
+
+
+    CTextStack *callback = newCTextStack_string_format(
+        "private_cweb_handle_required_data(%s,args,content,'%s');",
+        func_value,
+        self->name
+    );
+
+    free(func_value);
+    char *callback_str = CTextStack_self_transform_in_string_and_self_clear(callback);
+    CwebStringArray_add_getting_ownership(self->bridge->requirements_code, callback_str);
+}
+
+void private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,bool auto_convert
+){
+    const char *auto_convert_str = "false";
+    if(auto_convert){
+        auto_convert_str = "true";
+    }
+    CWebHyDrationSearchRequirements_add_function(self,
+        "function (args){\
+            return private_cweb_get_elements_and_set_to_content({\
+            content:content,\
+            query_selector:`%s`,\
+            auto_convert:%s\
+            })\
+        }",
+        query_selector,
+        auto_convert_str
+    );
+
+}
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,
+    ...
+){
+
+    va_list  args;
+    va_start(args,query_selector);
+    char *formmated_query_selector = private_CWeb_format_vaarg(query_selector,args);
+    va_end(args);
+
+    private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        formmated_query_selector,
+        true
+    );
+    free(formmated_query_selector);
+}
+
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,const char *query_selector,...){
+
+    va_list  args;
+    va_start(args,query_selector);
+    char *formmated_query_selector = private_CWeb_format_vaarg(query_selector,args);
+    va_end(args);
+
+    private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        formmated_query_selector,
+        false
+    );
+    free(formmated_query_selector);
+}
+
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute(
+    CWebHyDrationSearchRequirements *self,
+   const char *attribute,
+   const char*attribute_value,
+   ...
+){
+
+    va_list  args;
+    va_start(args,attribute_value);
+    char *formmated_attribute = private_CWeb_format_vaarg(attribute_value,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        "[%s='%s']",
+        attribute,
+        attribute_value
+    );
+    free(formmated_attribute);
+}
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *attribute,
+    const char*attribute_value,
+    ...
+){
+
+    va_list  args;
+    va_start(args,attribute_value);
+    char *formmated_attribute = private_CWeb_format_vaarg(attribute_value,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+        self,
+        "[%s='%s']",
+        attribute,
+        attribute_value
+    );
+    free(formmated_attribute);
+}
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,
+    ...
+){
+
+    va_list  args;
+    va_start(args,class_value);
+    char *formmatted_class = private_CWeb_format_vaarg(class_value,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        "[class='%s']",
+        formmatted_class
+    );
+    free(formmatted_class);
+}
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,...
+){
+    va_list  args;
+    va_start(args,class_value);
+    char *formmatted_class = private_CWeb_format_vaarg(class_value,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+        self,
+        "[class='%s']",
+        formmatted_class
+    );
+    free(formmatted_class);
+}
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_id(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+){
+
+    va_list  args;
+    va_start(args,id_values);
+    char *formmated_id = private_CWeb_format_vaarg(id_values,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        "[id='%s']",
+        formmated_id
+    );
+    free(formmated_id);
+}
+
+void CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+){
+
+    va_list  args;
+    va_start(args,id_values);
+    char *formmated_id = private_CWeb_format_vaarg(id_values,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+        self,
+        "[id='%s']",
+        formmated_id
+    );
+    free(formmated_id);
+}
+
+void CWebHyDrationSearchRequirements_add_session_storage_item_not_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_function(self,
+        "function (args,content){\
+            private_cweb_get_session_storage_item({\
+            content:content,\
+            name:`%s`,\
+            search_name:`%s`,\
+            auto_convert:false\
+            })\
+        }",
+        formmated_name
+    );
+    free(formmated_name);
+}
+
+
+void CWebHyDrationSearchRequirements_add_session_storage_item(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_function(self,
+        "function (args,content){\
+            private_cweb_get_session_storage_item({\
+            content:content,\
+            name:`%s`,\
+            search_name:`%s`,\
+            auto_convert:true\
+            })\
+        }",
+        formmated_name
+    );
+    free(formmated_name);
+}
+
+
+//path: src/functions/hydratation/search_result/search_result.c
+
+
+
+
+
+
+
+CWebHyDrationSearchResult * private_newCWebHyDrationSearchResult(CWebHyDrationBridge *bridge,cJSON *search){
+    CWebHyDrationSearchResult *self = (CWebHyDrationSearchResult*)malloc(sizeof(CWebHyDrationSearchResult));
+    self->bridge = bridge;
+    self->search = search;
+    self->name = search->string;
+    return  self;
+}
+
+void privateCWebHyDrationSearchResult_free(CWebHyDrationSearchResult *self){
+    free(self);
+}
+
+int  CWebHyDrationSearchResult_get_total_itens(CWebHyDrationSearchResult *self){
+    return cJSON_GetArraySize(self->search);
+}
+
+
+
+bool  CWebHyDrationSearchResult_search_item_exist(CWebHyDrationSearchResult *self,int index){
+   cJSON *item = cJSON_GetArrayItem(self->search, index);
+   return item != NULL;
+}
+
+
+
+bool  CWebHyDrationSearchResult_is_search_item_number(CWebHyDrationSearchResult *self,int index){
+    cJSON *item = cJSON_GetArrayItem(self->search, index);
+    if(item == NULL){
+        return false;
+    }
+   return cJSON_IsNumber(item);
+}
+
+bool  CWebHyDrationSearchResult_is_search_item_bool(CWebHyDrationSearchResult *self,int index){
+    cJSON *item = cJSON_GetArrayItem(self->search, index);
+    if(item == NULL){
+        return false;
+    }
+   return cJSON_IsBool(item);
+}
+
+
+
+
+bool  CWebHyDrationSearchResult_is_search_item_string(CWebHyDrationSearchResult *self,int index){
+    cJSON *item = cJSON_GetArrayItem(self->search, index);
+    if(item == NULL){
+        return false;
+    }
+   return cJSON_IsString(item);
+}
+
+
+cJSON * private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+    CWebHyDrationSearchResult *self,
+    int index,
+    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    const char *expected_type
+){
+
+    cJSON *item  = cJSON_GetArrayItem(self->search,index);
+    CWebHyDrationBridge *bridge = (CWebHyDrationBridge*)self->bridge;
+    CWebHyDration *hydration = (CWebHyDration*)bridge->hydration;
+    if(item == NULL){
+        privateCWebHydration_raise_error(
+            hydration,
+            bridge,
+            CWEB_HYDRATION_SEARCH_ITEM_NOT_EXIST,
+            CWEB_HYDRATION_SEARCH_ITEM_NOT_EXIST_MSG,
+            self->name,
+            index
+        );
+        return NULL;
+    }
+
+    if(!callback_verifier(item)){
+        privateCWebHydration_raise_error(
+            hydration,
+            bridge,
+            CWEB_HYDRATION_SEARCH_ITEM_WRONG_TYPE,
+            CWEB_HYDRATION_SEARCH_ITEM_WRONG_TYPE_MSG,
+            self->name,
+            index,
+            expected_type
+        );
+        return NULL;
+    }
+
+    return item;
+}
+
+double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int  index){
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    if(item == NULL){
+        return -1;
+    }
+    return cJSON_GetNumberValue(item);
+}
+
+long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  index){
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    if(item == NULL){
+        return -1;
+    }
+    return (long)cJSON_GetNumberValue(item);
+}
+
+long CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  index){
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    if(item == NULL){
+        return -1;
+    }
+    return (bool)item->valueint;
+}
+
+
+char*  CWebHyDrationSearchResult_get_string(CWebHyDrationSearchResult *self,int  index){
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    if(item == NULL){
+        return NULL;
+    }
+    return cJSON_GetStringValue(item);
+}
+
+cJSON *  CWebHyDrationSearchResult_get_cJSON(CWebHyDrationSearchResult *self,int  index){
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    return item;
+}
+
 
 //path: src/functions/hydratation/hydration/hydration.c
 
@@ -9223,8 +10408,10 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     self->all_bridges = private_new_privateCWebHyDrationBridgeArray();
     self->request =  request;
     self->response = cJSON_CreateArray();
+    self->garbage = newUniversalGarbage();
     self->max_content_size = CWEB_HYDRATION_DEFAULT_BODY_SIZE;
     request->hydratation = (void *)self;
+
     return self;
 }
 
@@ -9345,6 +10532,23 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
         );
         return private_CWebHydration_formmat_error_response(self);
     }
+
+    int size =cJSON_GetArraySize(content);
+    for(int i = 0; i < size;i++){
+        cJSON *current_search  = cJSON_GetArrayItem(content, i);
+        if(!cJSON_IsArray(current_search)){
+            privateCWebHydration_raise_error(
+                self,
+                NULL,
+                CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY,
+                CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY_MSG,
+                current_search->string
+            );
+            return private_CWebHydration_formmat_error_response(self);
+        }
+    }
+
+
     char *name_str = cJSON_GetStringValue(name);
     CWebHyDrationBridge *target_bridge = NULL;
     for(int i = 0; i < self->all_bridges->size;i++){
@@ -9365,8 +10569,8 @@ CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
         return private_CWebHydration_formmat_error_response(self);
     }
 
-    target_bridge->args =args;
-    target_bridge->content = content;
+    self->args =args;
+    self->content = content;
     target_bridge->callback(target_bridge);
     if(self->error_code){
         return private_CWebHydration_formmat_error_response(self);
@@ -9412,6 +10616,9 @@ void private_CWebHyDration_free(CWebHyDration *self) {
     }
     if(self->response){
         cJSON_Delete(self->response);
+    }
+    if(self->garbage){
+       UniversalGarbage_free(self->garbage);
     }
 
     privateCWebHyDrationBridgeArray_free(self->all_bridges);
