@@ -16,7 +16,7 @@ cJSON *privateCWebHyDration_get_arg_index(CWebHyDrationBridge *self,int index,cJ
 
 double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index);
 
-long  CWebHyDrationBridge_read_long_arg(CWebHyDrationBridge *self,int index);
+long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index);
 
 bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index);
 

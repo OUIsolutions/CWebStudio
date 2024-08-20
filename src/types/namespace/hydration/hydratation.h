@@ -1,7 +1,7 @@
 #include "../../hydration/all.h"
 
 #include "requirements.h"
-#include "content.h"
+#include "search.h"
 #include "args.h"
 #include "response_namespace.h"
 
@@ -21,7 +21,7 @@ typedef struct CWebHydrationNamespace{
     CWebHydrationRequirementsNamespace requirements;
     CWebHydrationResponseNamespace response;
     CWebHydrationArgsNamespace args;
-    CWebHydrationContentNamespace content;
+    CWebHydrationContentNamespace search;
 
 }CWebHydrationNamespace;
 
