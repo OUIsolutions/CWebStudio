@@ -15,7 +15,6 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
     self->callback = callback;
     self->hydration = (void*)hydration;
     self->entries_callbacks =newCwebStringArray();
-    self->calls = newCwebStringArray();
     return  self;
 }
 
