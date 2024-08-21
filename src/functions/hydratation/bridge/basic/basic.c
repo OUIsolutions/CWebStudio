@@ -19,18 +19,28 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
 }
 
 CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
-    CWebHyDrationBridge *self, const char *name,...){
+    CWebHyDrationBridge *self, const char *name,...)
+{
+    printf("chamou com o nome %s\n",name);
     va_list  args;
     va_start(args,name);
     char *formmated_name = private_CWeb_format_vaarg(name,args);
     va_end(args);
 
-    CWebHyDrationSearchRequirements *search = (CWebHyDrationSearchRequirements*)malloc(sizeof(CWebHyDrationSearchRequirements));
-    search->bridge = self;
-    search->name =formmated_name;
-    CWebHyDration *hydration = (CWebHyDration *)self->hydration;
-    UniversalGarbage_add(hydration->garbage,private_CWebHyDrationSearchRequirements_free,search);
-    return search;
+    CWebHyDrationSearchRequirements *created_search =
+    private_newCWebHyDrationSearchRequirements_getting_name_ownership(
+        self,
+        formmated_name
+    );
+    printf("endereço %p\n",(void**)&created_search);
+
+    CWebHyDration *hydration =(CWebHyDration*)self->hydration;
+   UniversalGarbage_add(
+        hydration->garbage,
+        private_CWebHyDrationSearchRequirements_free,
+        created_search
+    );
+    return created_search;
 }
 
 

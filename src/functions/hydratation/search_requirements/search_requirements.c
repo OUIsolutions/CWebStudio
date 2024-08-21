@@ -3,10 +3,18 @@
 
 
 
-
+CWebHyDrationSearchRequirements * private_newCWebHyDrationSearchRequirements_getting_name_ownership(
+    CWebHyDrationBridge *bridge, char *name
+){
+    CWebHyDrationSearchRequirements *self = malloc(sizeof(CWebHyDrationSearchRequirements));
+    self->bridge =bridge;
+    self->name =name;
+    return self;
+}
 
 
 void private_CWebHyDrationSearchRequirements_free(CWebHyDrationSearchRequirements *self){
+        printf("deletou com o nome %s\n",self->name);
         free(self->name);
         free(self);
 }

@@ -102,7 +102,8 @@ bool  rawUniversalGarbage_disconnect(UniversalGarbage *self, void **pointer){
             self->elements_size-=1;
             bool its_not_the_last = i < self->elements_size;
             if(its_not_the_last){
-                self->elements[i] = self->elements[self->elements_size];
+                privateUniversalGarbageElement *last_element =  self->elements[self->elements_size];
+                self->elements[i] = last_element;
             }
             return true;
         }
@@ -118,13 +119,15 @@ bool  rawUniversalGarbage_add(UniversalGarbage *self,  void (*dealocator_callbac
         return false;
     }
 
-
-    for(int i = 0; i < self->elements_size; i++){
-        privateUniversalGarbageElement *current = self->elements[i];
-        if(current->pointer == pointer){
-            return false;
+    if(*pointer){
+        for(int i = 0; i < self->elements_size; i++){
+            privateUniversalGarbageElement *current = self->elements[i];
+            if(current->pointed_value == *pointer){
+                return false;
+            }
         }
     }
+
 
     self->elements = (privateUniversalGarbageElement**)realloc(
             self->elements,
