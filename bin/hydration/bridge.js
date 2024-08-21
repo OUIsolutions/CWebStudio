@@ -9,6 +9,10 @@ async function private_cweb_send_to_server(name, args, content) {
   const ROUTE = "/private_cweb_hydration_main_callback_handler";
   let result = await fetch(ROUTE, props);
   let actions = await result.json();
+  if (!result.ok) {
+    console.log(actions);
+    return;
+  }
   actions.forEach(function (item) {
     try {
       let response_action = private_cweb_actions_handlers[item.name];

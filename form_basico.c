@@ -16,7 +16,7 @@ void  ponte_de_login(CWebHyDrationBridge *ponte){
   CWebHyDrationSearchResult  * senha = cweb.hydration.search_result.get_search_by_name(ponte, "senha");
   const char *senha_str = cweb.hydration.search_result.get_string(senha,0);
 
-  CWebHyDrationSearchResult  * senha_repetida = cweb.hydration.search_result.get_search_by_name(ponte, "repetir_senha");
+  CWebHyDrationSearchResult  * senha_repetida = cweb.hydration.search_result.get_search_by_name(ponte, "repita_senha");
   const char *senha_repetida_str = cweb.hydration.search_result.get_string(senha_repetida,0);
   CWebHydrationHandleErrors(ponte);
 
@@ -75,18 +75,18 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
         CTextScope(text, "h4"){
             stack.text(text, "digite seu email:");
         }
-
         CText$Scope(text, "input", " id='email'");
+        CText$Scope(text,"h3","id='erro_email' style='color:red;display:none;'")
         CTextScope(text, "h4"){
             stack.text(text, "digite uma senha");
         }
-
         CText$Scope(text, "input", "type='password' id='senha'");
         CTextScope(text, "h4"){
             stack.text(text, "repita a senha");
         }
 
-        CText$Scope(text, "input", "type='password id='repita_senha'");
+        CText$Scope(text, "input", "type='password' id='repita_senha'");
+        CText$Scope(text,"h3","id='erro_senha' style='color:red;display:none;'")
         CTextScope(text, "br");
 
         CText$Scope(text, "button", cweb.hydration.bridge.onclick(ponte_de_login_obj,NULL)){
@@ -111,16 +111,21 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
         hydration, "ponte de login "
         , ponte_de_login
     );
+    CWebHyDrationSearchRequirements *nome = cweb.hydration.search_requirements.newSearchRequirements(
+        ponte_de_login_obj,"nome");
+    cweb.hydration.search_requirements.add_elements_by_id(nome,"nome");
 
     CWebHyDrationSearchRequirements *email = cweb.hydration.search_requirements.newSearchRequirements(
         ponte_de_login_obj,"email");
     cweb.hydration.search_requirements.add_elements_by_id(email,"email");
 
 
-    CWebHyDrationSearchRequirements *senha = cweb.hydration.search_requirements.newSearchRequirements(ponte_de_login_obj,"email");
+    CWebHyDrationSearchRequirements *senha = cweb.hydration.search_requirements.newSearchRequirements(
+        ponte_de_login_obj,"senha");
     cweb.hydration.search_requirements.add_elements_by_id(senha,"senha");
 
-    CWebHyDrationSearchRequirements *repita_senha = cweb.hydration.search_requirements.newSearchRequirements(ponte_de_login_obj,"email");
+    CWebHyDrationSearchRequirements *repita_senha = cweb.hydration.search_requirements.newSearchRequirements(
+        ponte_de_login_obj,"repita_senha");
     cweb.hydration.search_requirements.add_elements_by_id(repita_senha,"repita_senha");
 
 
