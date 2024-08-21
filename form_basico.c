@@ -1,3 +1,4 @@
+#include "src/dependencies/declaration.h"
 #include "src/one.c"
 
 CwebNamespace cweb;
@@ -77,7 +78,7 @@ void  ponte_de_login(CWebHyDrationBridge *ponte){
       cweb.hydration.actions.alert(ponte,"%s foi cadastrado no sistema",nome_str);
   }
 
-
+  UniversalGarbage_free(garbage);
   stack.free(text);
 }
 
