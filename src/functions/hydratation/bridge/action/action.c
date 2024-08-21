@@ -74,6 +74,25 @@ void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,const c
     privateCWebHyDrationBridge_add_response(self,"replace_element_by_id",obj);
 }
 
+void CWebHyDrationBridge_hide_element_by_id(CWebHyDrationBridge *self,const char *id){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
+    privateCWebHyDrationBridge_add_response(self,"hide_element_by_id",obj);
+}
+
+void CWebHyDrationBridge_unhide_element_by_id(CWebHyDrationBridge *self,const char *id){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
+    privateCWebHyDrationBridge_add_response(self,"unhide_element_by_id",obj);
+}
+
+
 void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id){
     if(CWebHyDrationBridge_has_errors(self)){
         return ;

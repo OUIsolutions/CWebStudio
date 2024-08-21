@@ -8,6 +8,8 @@
 
 typedef struct CWebHydrationResponseNamespace {
 
+    void (*hide_element_by_id)(CWebHyDrationBridge *self,const char *id);
+    void (*unhide_element_by_id)(CWebHyDrationBridge *self,const char *id);
 
     void (*set_session_storage_data)(CWebHyDrationBridge *self,const char*key, const char *value,...);
     void (*alert)(CWebHyDrationBridge *self,const char *menssage,...);

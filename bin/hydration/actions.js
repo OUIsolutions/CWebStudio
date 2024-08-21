@@ -19,6 +19,20 @@ let private_cweb_actions_handlers = {
     element.insertAdjacentHTML("afterend", data.html);
     element.remove();
   },
+  hide_element_by_id: function (data) {
+    let element = document.getElementById(data.id);
+    if (!element) {
+      return;
+    }
+    element.style.display = "none";
+  },
+  unhide_element_by_id: function (data) {
+    let element = document.getElementById(data.id);
+    if (!element) {
+      return;
+    }
+    element.style.display = "show";
+  },
 
   destroy_by_id: function (data) {
     let element = document.getElementById(data.id);

@@ -1,11 +1,11 @@
-
-#include "src/functions/declarations.h"
 #include "src/one.c"
 
 CwebNamespace cweb;
 CTextStackModule stack;
 
-void  ponte_de_validacao(CWebHyDrationBridge *ponte){
+
+
+void  ponte_de_login(CWebHyDrationBridge *ponte){
 
   CWebHyDrationSearchResult  * nome = cweb.hydration.search_result.get_search_by_name(ponte, "nome");
   const char *nome_str = cweb.hydration.search_result.get_string(nome,0);
@@ -16,14 +16,43 @@ void  ponte_de_validacao(CWebHyDrationBridge *ponte){
   CWebHyDrationSearchResult  * senha = cweb.hydration.search_result.get_search_by_name(ponte, "senha");
   const char *senha_str = cweb.hydration.search_result.get_string(senha,0);
 
-
-
+  CWebHyDrationSearchResult  * senha_repetida = cweb.hydration.search_result.get_search_by_name(ponte, "repetir_senha");
+  const char *senha_repetida_str = cweb.hydration.search_result.get_string(senha_repetida,0);
   CWebHydrationHandleErrors(ponte);
+
+  UniversalGarbage *garbage = newUniversalGarbage();
   CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
-  CText$Scope(text, "h3", "id='response'"){
-    stack.format(text, "Você digitou valor: %s", valor);
+  CTextStack * email_parseado = stack.newStack_string(email_str);
+  UniversalGarbage_add(garbage, stack.free,email_parseado);
+
+  if(stack.index_of(email_parseado,"@") == -1){
+
+      CTextStack *email_error_msg =  stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+      UniversalGarbage_add(garbage, stack.free,email_error_msg);
+
+      CText$Scope(email_error_msg,"h3","id='erro_email' style='color:red;'"){
+          stack.text(email_error_msg,"email não é válido");
+      }
+      cweb.hydration.actions.replace_element_by_id(ponte,"erro_email",email_error_msg->rendered_text);
   }
+  else{
+      cweb.hydration.actions.hide_element_by_id(ponte,"erro_email");
+  }
+
+
+  if(strcmp(senha_str, senha_repetida_str) != 0){
+      CTextStack *erro_senhas_diferenes =  stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+      UniversalGarbage_add(garbage, stack.free,erro_senhas_diferenes);
+
+      CText$Scope(erro_senhas_diferenes,"h3","id='erro_senha' style='color:red;'"){
+          stack.text(erro_senhas_diferenes,"sehas não correspondem");
+      }
+      cweb.hydration.actions.replace_element_by_id(ponte,"erro_senha",erro_senhas_diferenes->rendered_text);
+  }{
+      cweb.hydration.actions.hide_element_by_id(ponte,"erro_senha");
+  }
+
 
   cweb.hydration.actions.replace_element_by_id(ponte, "response", text->rendered_text);
   cweb.hydration.actions.alert(ponte, "Msg");
@@ -31,17 +60,41 @@ void  ponte_de_validacao(CWebHyDrationBridge *ponte){
   stack.free(text);
 }
 
-CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydration,CWebHyDrationBridge *imprime_texto){
+CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydration,CWebHyDrationBridge *ponte_de_login_obj){
     CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+
     CTextScope(text,CTEXT_BODY){
         CText$Scope(text, "script", "src='/hydration_script'");
         //CWebHyDrationBridge_onfoccusout
-        CText$Scope(text, "h4", "digite seu nome:");
+
+        CTextScope(text, "h4"){
+            stack.text(text, "digite seu nome:");
+        }
         CText$Scope(text, "input", " id='nome'");
-        CText$Scope(text, "h4", "digite seu email:");
+
+        CTextScope(text, "h4"){
+            stack.text(text, "digite seu email:");
+        }
+
         CText$Scope(text, "input", " id='email'");
-        CText$Scope(text, "button", "validar");
+        CTextScope(text, "h4"){
+            stack.text(text, "digite uma senha");
+        }
+
+        CText$Scope(text, "input", "type='password' id='senha'");
+        CTextScope(text, "h4"){
+            stack.text(text, "repita a senha");
+        }
+
+        CText$Scope(text, "input", "type='password id='repita_senha'");
+        CTextScope(text, "br");
+
+        CText$Scope(text, "button", cweb.hydration.bridge.onclick(ponte_de_login_obj,NULL)){
+            stack.text(text,"validar ");
+        }
+
     }
+
     //CwebStringArray_add;
     return  cweb.response.send_rendered_CTextStack_cleaning_memory(text,200);
 }
@@ -54,21 +107,30 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
     }
 
     CWebHyDration *hydration = cweb.hydration.newCWebHyDration(request);
-    CWebHyDrationBridge *ponte_imprime = cweb.hydration.bridge.create_bridge(hydration, "set num ", ponte_imprime_texto);
-    //precisa desse id
-
-    CWebHyDrationSearchRequirements *valor =  cweb.hydration.search_requirements.newSearchRequirements(
-        ponte_imprime,
-        "valor"
+    CWebHyDrationBridge *ponte_de_login_obj = cweb.hydration.bridge.create_bridge(
+        hydration, "ponte de login "
+        , ponte_de_login
     );
-    cweb.hydration.search_requirements.add_elements_by_id(valor, "valor");
+
+    CWebHyDrationSearchRequirements *email = cweb.hydration.search_requirements.newSearchRequirements(
+        ponte_de_login_obj,"email");
+    cweb.hydration.search_requirements.add_elements_by_id(email,"email");
+
+
+    CWebHyDrationSearchRequirements *senha = cweb.hydration.search_requirements.newSearchRequirements(ponte_de_login_obj,"email");
+    cweb.hydration.search_requirements.add_elements_by_id(senha,"senha");
+
+    CWebHyDrationSearchRequirements *repita_senha = cweb.hydration.search_requirements.newSearchRequirements(ponte_de_login_obj,"email");
+    cweb.hydration.search_requirements.add_elements_by_id(repita_senha,"repita_senha");
+
+
 
     CWebHydrationHandleTriggers(hydration);
 
     if(strcmp(request->route,"/hydration_script") == 0){
         return cweb.response.send_text(cweb.hydration.create_script(hydration),200);
     }
-    return pagina_principal(request,hydration,ponte_imprime);
+    return pagina_principal(request,hydration,ponte_de_login_obj);
 
 }
 
