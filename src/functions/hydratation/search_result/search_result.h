@@ -7,6 +7,8 @@ CWebHyDrationSearchResult * private_newCWebHyDrationSearchResult(CWebHyDrationBr
 
 void privateCWebHyDrationSearchResult_free(CWebHyDrationSearchResult *self);
 
+bool  privateCWebHyDrationSearchResult_has_erorrs(CWebHyDrationSearchResult *self);
+
 
 int  CWebHyDrationSearchResult_get_total_itens(CWebHyDrationSearchResult *self);
 
