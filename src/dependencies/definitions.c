@@ -2,7 +2,7 @@
 
 #ifndef CTEXTENGINE_H
 #define CTEXTENGINE_H
-#include "CTextEngine/definition.h"
+#include "CTextEngine/definition.c"
 #endif
 
 #ifndef cJSON__h
