@@ -10,7 +10,7 @@ query parameters, returning files, and text.
 CWebSudio is made to be as dumb as possible and adopt the idea of single file library.
 For installation, simply copy the **CWebStudio.h** into your project and compile with gcc/g++ or clang.
 
-[Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v122/CWebStudio.h)
+[Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v123/CWebStudio.h)
 
 ~~~c
 #include "CWebStudio.h"
@@ -836,4 +836,4 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+SOFTWARE

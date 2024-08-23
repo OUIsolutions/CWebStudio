@@ -7,6 +7,10 @@ let private_cweb_actions_handlers = {
     eval(data["code"]);
   },
 
+  redirect: function (data){
+    window.location.href = data['url'];
+  },
+
   set_session_storage: function (data) {
     sessionStorage.setItem(data["key"], data["value"]);
   },

@@ -101,3 +101,14 @@ void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
     privateCWebHyDrationBridge_add_response(self,"destroy_by_id",obj);
 }
+
+void CWebHydration_redirect(CWebHyDrationBridge *self, const char *url){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj, CWEB_HYDRATION_JSON_URL, url);
+    privateCWebHyDrationBridge_add_response(self,"redirect",obj);
+}
+
+
