@@ -1,7 +1,7 @@
 #include "../uniq.definitions_requirements.h"
 
 
-int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self,int index){
+int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self){
     if(CWebHyDrationBridge_has_errors(self)){
         return 0;
     }

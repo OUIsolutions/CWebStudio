@@ -12,6 +12,7 @@ typedef struct CWebHydrationNamespace{
     CWebHydrationActionsNamespace actions;
     CWebHydrationSearchRequirementsNamespace search_requirements;
     CWebHydrationSearchResultNamespace search_result;
+    CWebHydrationArgsNamespace args;
 }CWebHydrationNamespace;
 
 #endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES

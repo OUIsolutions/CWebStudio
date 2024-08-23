@@ -1,7 +1,7 @@
 #include "../uniq.declaration_requirements.h"
 
 
-int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self,int index);
+int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self);
 
 bool private_cweb_hydration_type_verifier(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)(const cJSON * const item));
 

@@ -1,5 +1,5 @@
 
-#include "src/one.c"
+#include "../src/one.c"
 
 CwebNamespace cweb;
 CTextStackModule stack;
@@ -11,14 +11,14 @@ void  ponte_de_adiciona(CWebHyDrationBridge *ponte){
     CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
     CTextScope(text, "div"){
         CTextScope(text,"h4"){
-            stack.text(text,"digite um nome");
+  stack.text(text,"digite um nome");
         }
-        CTextScope(text,"input"){}
+  CTextScope(text,"input"){}
         CTextScope(text,"br"){}
     }
 
     cweb.hydration.actions.append_by_id(ponte,"element",text->rendered_text);
-    stack.free(text);
+  stack.free(text);
 }
 
 
@@ -33,7 +33,7 @@ CwebHttpResponse *pagina_principal(
         //CWebHyDrationBridge_onfoccusout
         CTextScope_format(text, "div","id='element'");
 
-        CTextScope_format(text, "button",cweb.hydration.bridge.onclick(ponte_adiciona_obj,NULL)){
+        CTextScope_format(text, "button",cweb.hydration.bridge.onclick(ponte_adiciona_obj, "%d, %d, \"%s\"", 1, 5, "Hello Word!")){
             stack.text(text,"adicionar item");
         }
 

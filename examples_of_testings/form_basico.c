@@ -1,6 +1,4 @@
-#include "src/dependencies/CTextEngine/macros/all.h"
-#include "src/dependencies/declaration.h"
-#include "src/one.c"
+#include "../src/one.c"
 
 CwebNamespace cweb;
 CTextStackModule stack;
@@ -9,12 +7,12 @@ CTextStackModule stack;
 
 void  ponte_de_login(CWebHyDrationBridge *ponte){
 
-    cweb.hydration.actions.redirect(ponte, "google.com");
+    //cweb.hydration.actions.redirect(ponte, "google.com");
 
-    return;
+    //return;
 
   CWebHyDrationSearchResult  * nome = cweb.hydration.search_result.get_search_by_name(ponte, "nome");//pegando por id
-  const char *nome_str = cweb.hydration.search_result.get_string(nome,1);
+  const char *nome_str = cweb.hydration.search_result.get_string(nome,0);
 
     printf("\n\t%s\n\n", nome_str);
 

@@ -9,7 +9,7 @@
 typedef struct CWebHydrationArgsNamespace {
 
 
-    int   (*get_args_size)(CWebHyDrationBridge *self,int index);
+    int   (*get_args_size)(CWebHyDrationBridge *self);
     bool   (*is_arg_number)(CWebHyDrationBridge *self,int index);
     bool   (*is_arg_bool)(CWebHyDrationBridge *self,int index);
     bool   (*is_arg_string)(CWebHyDrationBridge *self,int index);

@@ -10,5 +10,6 @@ CWebHydrationNamespace newCWebHydrationNamespace() {
     self.actions =newCWebHydrationActionsNamespace();
     self.search_requirements =newCWebHydrationSearchRequirementsNamespace();
     self.search_result = newCWebHydrationSearchResultNamespace();
+    self.args = newCWebHydrationArgsNamespace();
     return self;
 }
