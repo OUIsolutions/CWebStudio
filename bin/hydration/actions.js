@@ -7,8 +7,8 @@ let private_cweb_actions_handlers = {
     eval(data["code"]);
   },
 
-  redirect: function (data){
-    window.location.href = data['url'];
+  redirect: function (data) {
+    window.location.href = data["url"];
   },
 
   set_session_storage: function (data) {
@@ -23,6 +23,14 @@ let private_cweb_actions_handlers = {
     element.insertAdjacentHTML("afterend", data.html);
     element.remove();
   },
+  append_by_id: function (data) {
+    let element = document.getElementById(data.id);
+    if (!element) {
+      return;
+    }
+    element.innerHTML += data.html;
+  },
+
   hide_element_by_id: function (data) {
     let element = document.getElementById(data.id);
     if (!element) {
