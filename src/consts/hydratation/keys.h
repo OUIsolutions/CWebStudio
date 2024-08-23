@@ -12,6 +12,7 @@
 #define CWEB_HYDRATON_JSON_ID "id"
 #define CWEB_HYDRATON_JSON_KEY "key"
 #define CWEB_HYDRATON_JSON_VALUE "value"
+#define CWEB_HYDRATION_JSON_URL "url"
 
 #define CWEB_HYDRATON_JSON_ARGS "args"
 #define CWEB_HYDRATON_JSON_CONTENT "content"

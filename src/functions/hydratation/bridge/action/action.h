@@ -17,3 +17,5 @@ void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id
 void CWebHyDrationBridge_hide_element_by_id(CWebHyDrationBridge *self,const char *id);
 
 void CWebHyDrationBridge_unhide_element_by_id(CWebHyDrationBridge *self,const char *id);
+
+void CWebHydration_redirect(CWebHyDrationBridge *self, const char *url);

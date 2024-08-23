@@ -9,5 +9,6 @@ CWebHydrationActionsNamespace newCWebHydrationActionsNamespace(){
     self.execute_script = CWebHyDrationBridge_execute_script;
     self.replace_element_by_id = CWebHyDrationBridge_replace_element_by_id;
     self.destroy_by_id = CWebHyDrationBridge_destroy_by_id;
+    self.redirect = CWebHydration_redirect;
     return self;
 }
