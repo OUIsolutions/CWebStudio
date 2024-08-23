@@ -11,12 +11,13 @@ void  ponte_de_adiciona(CWebHyDrationBridge *ponte){
     CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
     CTextScope(text, "div"){
         CTextScope(text,"h4"){
-  stack.text(text,"digite um nome");
+        stack.text(text,"digite um nome");
         }
-  CTextScope(text,"input"){}
+        CTextScope(text,"input"){}
         CTextScope(text,"br"){}
     }
 
+    printf("%s", text->rendered_text);
     cweb.hydration.actions.append_by_id(ponte,"element",text->rendered_text);
   stack.free(text);
 }

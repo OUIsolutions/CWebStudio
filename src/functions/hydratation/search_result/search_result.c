@@ -1,9 +1,5 @@
 
 #include "../uniq.definitions_requirements.h"
-#include <stdio.h>
-#include <time.h>
-
-
 
 
 CWebHyDrationSearchResult * private_newCWebHyDrationSearchResult(CWebHyDrationBridge *bridge,cJSON *search){

@@ -16,6 +16,14 @@ void bridge_obj_number(CWebHyDrationBridge *bridge){
       printf("h2 existe");
     }
     printf("This is a number: %s", cweb.hydration.search_result.is_search_item_number(h2, 0)?"É um numero":"Não é um numero");
+
+    CTextStack *html_h2 = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+
+    CTextScope_format(html_h2, "h2", "id='window'"){
+      stack.format(html_h2, "%hd", number);
+    }
+
+    cweb.hydration.actions.replace_element_by_id(bridge, "window", html_h2->rendered_text);
 /*
     bool is_number_result = cweb.hydration.search_result.is_search_item_number(h2, 0);
     if(is_number_result){

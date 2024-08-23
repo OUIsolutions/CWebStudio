@@ -1,7 +1,5 @@
 
 #include "../uniq.definitions_requirements.h"
-#include <time.h>
-
 
 
 char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...){

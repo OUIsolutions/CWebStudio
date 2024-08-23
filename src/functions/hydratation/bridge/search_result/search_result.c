@@ -1,9 +1,6 @@
 
 
 #include "../uniq.definitions_requirements.h"
-#include <stdbool.h>
-#include <time.h>
-
 
 int  CWebHyDrationBridge_get_total_avaialible_searchs(CWebHyDrationBridge *self){
     if(CWebHyDrationBridge_has_errors(self)){

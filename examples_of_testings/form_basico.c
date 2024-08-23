@@ -14,8 +14,6 @@ void  ponte_de_login(CWebHyDrationBridge *ponte){
   CWebHyDrationSearchResult  * nome = cweb.hydration.search_result.get_search_by_name(ponte, "nome");//pegando por id
   const char *nome_str = cweb.hydration.search_result.get_string(nome,0);
 
-    printf("\n\t%s\n\n", nome_str);
-
   CWebHyDrationSearchResult  * email = cweb.hydration.search_result.get_search_by_name(ponte, "email");
   const char *email_str = cweb.hydration.search_result.get_string(email,0);
 
