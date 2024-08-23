@@ -6,15 +6,14 @@ CTextStackModule stack;
 
 void bridge_obj_number(CWebHyDrationBridge *bridge){
 
+  /*
   printf("\nHello Word!");//Por que não aparece?
   
   bool is_number = cweb.hydration.args.is_arg_number(bridge, 0);
+
   if(is_number){
     short number = cweb.hydration.args.get_long_arg(bridge, 0);
     CWebHyDrationSearchResult *h2 = cweb.hydration.search_result.get_search_by_name(bridge, "window");
-    if(h2){
-      printf("h2 existe");
-    }
     printf("This is a number: %s", cweb.hydration.search_result.is_search_item_number(h2, 0)?"É um numero":"Não é um numero");
 
     CTextStack *html_h2 = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
@@ -24,7 +23,6 @@ void bridge_obj_number(CWebHyDrationBridge *bridge){
     }
 
     cweb.hydration.actions.replace_element_by_id(bridge, "window", html_h2->rendered_text);
-/*
     bool is_number_result = cweb.hydration.search_result.is_search_item_number(h2, 0);
     if(is_number_result){
       cweb.hydration.actions.alert(bridge, "É um numero");
@@ -33,8 +31,9 @@ void bridge_obj_number(CWebHyDrationBridge *bridge){
     if(number_in_window){
       cweb.hydration.actions.alert(bridge, "Existe%d", number_in_window);
     }
-*/
   }
+*/
+
 }
 
 CwebHttpResponse *page_main(CWebHyDrationBridge *bridge_obj_number_button, CWebHyDrationBridge *bridge_obj_simbol_result){
