@@ -6,34 +6,24 @@ CTextStackModule stack;
 
 void bridge_obj_number(CWebHyDrationBridge *bridge){
 
-  /*
-  printf("\nHello Word!");//Por que não aparece?
-  
   bool is_number = cweb.hydration.args.is_arg_number(bridge, 0);
 
+  CWebHyDrationSearchResult *h2_name = cweb.hydration.search_result.get_search_by_name(bridge, "h2_name");
+  int number_in_html = cweb.hydration.search_result.get_long(h2_name, 0);
+
+  cweb.hydration.actions.alert(bridge, "%d", number_in_html);
+
   if(is_number){
-    short number = cweb.hydration.args.get_long_arg(bridge, 0);
-    CWebHyDrationSearchResult *h2 = cweb.hydration.search_result.get_search_by_name(bridge, "window");
-    printf("This is a number: %s", cweb.hydration.search_result.is_search_item_number(h2, 0)?"É um numero":"Não é um numero");
+    int number = (int)cweb.hydration.args.get_long_arg(bridge, 0);//Não funciona com short
 
     CTextStack *html_h2 = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
     CTextScope_format(html_h2, "h2", "id='window'"){
-      stack.format(html_h2, "%hd", number);
+      stack.format(html_h2, "%d", number);
     }
 
     cweb.hydration.actions.replace_element_by_id(bridge, "window", html_h2->rendered_text);
-    bool is_number_result = cweb.hydration.search_result.is_search_item_number(h2, 0);
-    if(is_number_result){
-      cweb.hydration.actions.alert(bridge, "É um numero");
-    }
-    int number_in_window = (int)cweb.hydration.search_result.get_long(h2, 0);
-    if(number_in_window){
-      cweb.hydration.actions.alert(bridge, "Existe%d", number_in_window);
-    }
   }
-*/
-
 }
 
 CwebHttpResponse *page_main(CWebHyDrationBridge *bridge_obj_number_button, CWebHyDrationBridge *bridge_obj_simbol_result){
@@ -95,6 +85,9 @@ CwebHttpResponse *main_server(CwebHttpRequest *rq){
   CWebHyDration *hydration = cweb.hydration.newCWebHyDration(rq);
   CWebHyDrationBridge *bridge_obj_number_in_window = cweb.hydration.bridge.create_bridge(hydration, "Bridge_pencil_number_in_window", bridge_obj_number);
   CWebHyDrationBridge *bridge_obj_result_in_window;
+
+  CWebHyDrationSearchRequirements *h2_element_from_name = cweb.hydration.search_requirements.newSearchRequirements(bridge_obj_number_in_window, "h2_name");
+  cweb.hydration.search_requirements.add_elements_by_id(h2_element_from_name, "window");
 
   CWebHydrationHandleTriggers(hydration);
 

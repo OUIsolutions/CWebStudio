@@ -21,7 +21,7 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
 CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
     CWebHyDrationBridge *self, const char *name,...)
 {
-    printf("chamou com o nome %s\n",name);
+    //printf("chamou com o nome %s\n",name);
     va_list  args;
     va_start(args,name);
     char *formmated_name = private_CWeb_format_vaarg(name,args);
@@ -32,7 +32,7 @@ CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
         self,
         formmated_name
     );
-    printf("endereço %p\n",(void**)&created_search);
+    //printf("endereço %p\n",(void**)&created_search);
 
     CWebHyDration *hydration =(CWebHyDration*)self->hydration;
    UniversalGarbage_add(
