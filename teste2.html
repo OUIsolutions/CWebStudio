@@ -7,26 +7,9 @@
     </head>
 
     <body>
-        <div class="teste">aaa</div>
-        <input class="teste" type="checkbox" />
-        <input class="teste"></textarea>
-        <button id="verificar">verificar</button>
+        <div>
+            <p class="formkey" style="display: none">a</p>
+            <input class="form" />
+        </div>
     </body>
-    <script>
-        let content = {};
-        let args = [];
-        let callback = function (args, content) {
-            private_cweb_get_elements_and_set_to_content({
-                content: content,
-                search_name:"teste",
-                query_selector: `[class="teste"]`,
-                key_name: "teste",
-                auto_convert: true,
-            });
-        };
-        document.getElementById("verificar").addEventListener("click", () => {
-            callback(args, content);
-            console.log(content);
-        });
-    </script>
 </html>

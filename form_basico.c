@@ -1,3 +1,5 @@
+#include "src/dependencies/CTextEngine/macros/all.h"
+#include "src/dependencies/declaration.h"
 #include "src/one.c"
 
 CwebNamespace cweb;
@@ -37,7 +39,7 @@ void  ponte_de_login(CWebHyDrationBridge *ponte){
       CTextStack *email_error_msg =  stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
       UniversalGarbage_add(garbage, stack.free,email_error_msg);
 
-      CText$Scope(email_error_msg,"h4","id='erro_email' style='color:red;'"){
+      CTextScope_format(email_error_msg,"h4","id='erro_email' style='color:red;'"){
           stack.text(email_error_msg,"email não é válido");
       }
       cweb.hydration.actions.replace_element_by_id(ponte,"erro_email",email_error_msg->rendered_text);
@@ -51,7 +53,7 @@ void  ponte_de_login(CWebHyDrationBridge *ponte){
           CTextStack *erro_senhas_diferenes =  stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
           UniversalGarbage_add(garbage, stack.free,erro_senhas_diferenes);
 
-          CText$Scope(erro_senhas_diferenes,"h4","id='erro_senha' style='color:red;'"){
+          CTextScope_format(erro_senhas_diferenes,"h4","id='erro_senha' style='color:red;'"){
               stack.text(erro_senhas_diferenes,"sehas não correspondem");
           }
           cweb.hydration.actions.replace_element_by_id(ponte,"erro_senha",erro_senhas_diferenes->rendered_text);
@@ -64,7 +66,7 @@ void  ponte_de_login(CWebHyDrationBridge *ponte){
           CTextStack *erro_senhas_diferenes =  stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
           UniversalGarbage_add(garbage, stack.free,erro_senhas_diferenes);
 
-          CText$Scope(erro_senhas_diferenes,"h4","id='erro_senha' style='color:red;'"){
+          CTextScope_format(erro_senhas_diferenes,"h4","id='erro_senha' style='color:red;'"){
               stack.text(erro_senhas_diferenes,"sehas não pode ser vazia");
           }
           cweb.hydration.actions.replace_element_by_id(ponte,"erro_senha",erro_senhas_diferenes->rendered_text);
@@ -83,7 +85,7 @@ void  ponte_de_login(CWebHyDrationBridge *ponte){
       cweb.hydration.actions.alert(ponte,"%s foi cadastrado no sistema",nome_str);
   }
 
-
+  UniversalGarbage_free(garbage);
   stack.free(text);
 }
 
@@ -91,19 +93,19 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
     CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
     CTextScope(text,CTEXT_BODY){
-        CText$Scope(text, "script", "src='/hydration_script'");
+        CTextScope_format(text, "script", "src='/hydration_script'");
         //CWebHyDrationBridge_onfoccusout
 
         CTextScope(text, "h4"){
             stack.text(text, "digite seu nome:");
         }
-        CText$Scope(text, "input", " id='nome'");
+        CTextScope_format(text, "input", " id='nome'");
 
         CTextScope(text, "h4"){
             stack.text(text, "digite seu email:");
         }
-        CText$Scope(text, "input", " id='email'");
-        CText$Scope(text,"h4","id='erro_email' style='color:red;display:none;'")
+        CTextScope_format(text, "input", " id='email'");
+        CTextScope_format(text,"h4","id='erro_email' style='color:red;display:none;'")
 
         CTextScope(text, "h4"){
             stack.text(text, "digite uma senha");
@@ -111,19 +113,19 @@ CwebHttpResponse *pagina_principal(CwebHttpRequest *request,CWebHyDration *hydra
 
         CTextScope(text, "br");
 
-        CText$Scope(text, "input", "type='password' id='senha'");
+        CTextScope_format(text, "input", "type='password' id='senha'");
         CTextScope(text, "h4"){
             stack.text(text, "repita a senha");
         }
 
-        CText$Scope(text, "input", "type='password' id='repita_senha'");
+        CTextScope_format(text, "input", "type='password' id='repita_senha'");
         CTextScope(text, "br");
 
-        CText$Scope(text,"h4","id='erro_senha' style='color:red;display:none;'")
+        CTextScope_format(text,"h4","id='erro_senha' style='color:red;display:none;'")
 
         CTextScope(text, "br");
 
-        CText$Scope(text, "button", cweb.hydration.bridge.onclick(ponte_de_login_obj,NULL)){
+        CTextScope_format(text, "button", cweb.hydration.bridge.onclick(ponte_de_login_obj,NULL)){
             stack.text(text,"validar ");
         }
 
@@ -175,10 +177,10 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request) {
 
 
 int main(int argc, char *argv[]){
-
-
     cweb = newCwebNamespace();
     stack = newCTextStackModule();
+
+
     for(int i=3000;i < 4000;i++){
         CwebServer server = newCwebSever(i, main_sever);
         server.single_process = true;
