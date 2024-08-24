@@ -53,7 +53,7 @@ char *private_CWebHyDrationBridge_call_trigger(
 
     CTextStack_format(
         callback,
-        "%s = 'private_cweb_bridges[`%s`]([%s])';",
+        "%s = private_cweb_bridges['%s']([%s]);",
         trigger,
         self->name,
         func_args

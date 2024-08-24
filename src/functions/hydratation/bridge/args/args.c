@@ -126,7 +126,7 @@ char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return NULL;
     }
-    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_STRING);
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsString,CWEB_HYDRATION_STRING);
         if(item == NULL){
             return NULL;
         }

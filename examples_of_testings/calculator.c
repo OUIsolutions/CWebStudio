@@ -4,29 +4,62 @@
 CwebNamespace cweb;
 CTextStackModule stack;
 
-void bridge_obj_number(CWebHyDrationBridge *bridge){
+void bridge_set_operator(CWebHyDrationBridge *bridge){
+    CWebHyDrationSearchResult *visor = cweb.hydration.search_result.get_search_by_name(
+        bridge,
+        "window"
+    );
+    char * visor_str = cweb.hydration.search_result.get_string(visor,0);
 
-  CWebHyDrationSearchResult *h2_name = cweb.hydration.search_result.get_search_by_name(bridge, "h2_name");
-  CWebHyDrationSearchResult *input_name = cweb.hydration.search_result.get_search_by_name(bridge, "input_checkbox_add_or_subtract");
-  int number_in_html = cweb.hydration.search_result.get_long(h2_name, 0);
-  bool input_checkbox = cweb.hydration.search_result.get_bool(input_name, 0);
+    char * operator_str = cweb.hydration.args.get_str_arg(bridge,0);
+    CWebHydrationHandleErrors(bridge);
 
-  bool is_number = cweb.hydration.args.is_arg_number(bridge, 0);
 
-  if(is_number){
-    int number = (int)cweb.hydration.args.get_long_arg(bridge, 0);//Não funciona com short
+    cweb.hydration.actions.set_session_storage_data(bridge,"operator",operator_str);
 
-    CTextStack *html_h2 = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+    CTextStack *first_num_formmated = stack.newStack_string(visor_str);
+    stack.self_replace(first_num_formmated,"\n","");
+    stack.self_replace(first_num_formmated," ","");
 
-    CTextScope_format(html_h2, "h2", "id='window'"){
-      stack.format(html_h2, "%d", input_checkbox?number_in_html-number:number_in_html+number);
-    }
+    cweb.hydration.actions.set_session_storage_data(bridge,"first_num",first_num_formmated->rendered_text);
 
+    CTextStack *html_h2 = stack.newStack_string_empty();
+    CTextScope_format(html_h2, CTEXT_H2, "id='window'"){}
     cweb.hydration.actions.replace_element_by_id(bridge, "window", html_h2->rendered_text);
-  }
+    stack.free(first_num_formmated);
+    stack.free(html_h2);
 }
 
-CwebHttpResponse *page_main(CWebHyDrationBridge *bridge_obj_number_button, CWebHyDrationBridge *bridge_obj_simbol_result){
+
+void bridge_write_number(CWebHyDrationBridge *bridge){
+
+  CWebHyDrationSearchResult *visor = cweb.hydration.search_result.get_search_by_name(
+      bridge,
+      "window"
+  );
+  long num =cweb.hydration.args.get_long_arg(bridge,0);
+  char * visor_str = cweb.hydration.search_result.get_string(visor,0);
+  CWebHydrationHandleErrors(bridge);
+  CTextStack *html_h2 = stack.newStack_string_empty();
+
+  if(strlen(visor_str) > 10){
+      return;;
+  }
+  CTextScope_format(html_h2, CTEXT_H2, "id='window'"){
+    stack.format(html_h2, "%s%d",visor_str,num);
+  }
+  cweb.hydration.actions.replace_element_by_id(bridge, "window", html_h2->rendered_text);
+  stack.free(html_h2);
+
+}
+
+
+CwebHttpResponse *page_main(
+
+    CWebHyDrationBridge *bridge_obj_number_button,
+    CWebHyDrationBridge *bridge_obj_set_operator
+
+){
 
   CTextStack *html = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
 
@@ -34,30 +67,48 @@ CwebHttpResponse *page_main(CWebHyDrationBridge *bridge_obj_number_button, CWebH
 
     CTextScope_format(html, CTEXT_SCRIPT, "src='/main_script_hydration'");
 
-    CTextScope_format(html, CTEXT_H1, "class='titulo'"){
+    CTextScope(html, CTEXT_H1){
       stack.format(html, "Calculator");
     }
-    CTextScope_format(html, CTEXT_H2, "id='window'"){
-      stack.format(html, "0");
+
+    CTextScope_format(html, CTEXT_H2, "id='window'"){}
+    CTextScope_format(html, CTEXT_BUTTON,
+        cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 1)){
+            stack.format(html, "1");
     }
-    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 1)){
-      stack.format(html, "1");
-    }
-    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 2)){
+
+    CTextScope_format(html, CTEXT_BUTTON,
+        cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 2)
+    ){
       stack.format(html, "2");
     }
-    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 3)){
+    CTextScope_format(html, CTEXT_BUTTON,
+        cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 3)
+    ){
       stack.format(html, "3");
     }
-    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 4)){
+
+    CTextScope(html,CTEXT_BR);
+
+    CTextScope_format(html, CTEXT_BUTTON,
+        cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 4)
+    ){
       stack.format(html, "4");
     }
-    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 5)){
+
+    CTextScope_format(html, CTEXT_BUTTON,
+        cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 5))
+    {
       stack.format(html, "5");
     }
+
     CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 6)){
       stack.format(html, "6");
     }
+
+    CTextScope(html,CTEXT_BR);
+
+
     CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 7)){
       stack.format(html, "7");
     }
@@ -67,11 +118,27 @@ CwebHttpResponse *page_main(CWebHyDrationBridge *bridge_obj_number_button, CWebH
     CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 9)){
       stack.format(html, "9");
     }
+
+    CTextScope(html,CTEXT_BR);
+
     CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "%d", 0)){
       stack.format(html, "0");
     }
-    CTextScope_format(html, CTEXT_INPUT, "type='checkbox' id='input_add_or_subtract'"){
-      stack.format(html, "substract");
+
+    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_set_operator, "'+'")){
+          stack.format(html, "+");
+    }
+
+    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_set_operator, "'-'")){
+          stack.format(html, "-");
+    }
+
+    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_set_operator, "'x'")){
+          stack.format(html, "x");
+    }
+
+    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "'/'")){
+          stack.format(html, "/");
     }
   }
 
@@ -86,14 +153,36 @@ CwebHttpResponse *main_server(CwebHttpRequest *rq){
   }
 
   CWebHyDration *hydration = cweb.hydration.newCWebHyDration(rq);
-  CWebHyDrationBridge *bridge_obj_number_in_window = cweb.hydration.bridge.create_bridge(hydration, "Bridge_pencil_number_in_window", bridge_obj_number);
-  CWebHyDrationBridge *bridge_obj_result_in_window;
+  CWebHyDrationBridge *bridge_obj_number_in_window =
+  cweb.hydration.bridge.create_bridge(hydration,
+      "Bridge_pencil_number_in_window",
+      bridge_write_number
+  );
+  CWebHyDrationSearchRequirements *window_obj_num =
+    cweb.hydration.search_requirements.newSearchRequirements(
+        bridge_obj_number_in_window,
+        "window"
+  );
+  cweb.hydration.search_requirements.add_elements_by_id_not_auto_converting(window_obj_num,"window");
 
-  CWebHyDrationSearchRequirements *h2_element_from_name = cweb.hydration.search_requirements.newSearchRequirements(bridge_obj_number_in_window, "h2_name");
-  cweb.hydration.search_requirements.add_elements_by_id(h2_element_from_name, "window");
 
-  CWebHyDrationSearchRequirements *input_checkbox_add_or_subtract = cweb.hydration.search_requirements.newSearchRequirements(bridge_obj_number_in_window, "input_checkbox_add_or_subtract");
-  cweb.hydration.search_requirements.add_elements_by_id(input_checkbox_add_or_subtract, "input_add_or_subtract");
+  CWebHyDrationBridge *bridge_operator =
+  cweb.hydration.bridge.create_bridge(hydration,
+      "bridge_operator",
+      bridge_set_operator
+  );
+
+  CWebHyDrationSearchRequirements *window_bridge_operator =
+    cweb.hydration.search_requirements.newSearchRequirements(
+        bridge_operator,
+        "window"
+  );
+  cweb.hydration.search_requirements.add_elements_by_id_not_auto_converting(window_bridge_operator,"window");
+
+
+
+
+
 
   CWebHydrationHandleTriggers(hydration);
 
@@ -101,11 +190,11 @@ CwebHttpResponse *main_server(CwebHttpRequest *rq){
     return cweb.response.send_text(cweb.hydration.create_script(hydration), 200);
   }
 
-  return page_main(bridge_obj_number_in_window, bridge_obj_result_in_window);
+  return page_main(bridge_obj_number_in_window, bridge_operator);
 }
 
 int main(){
-  
+
   cweb = newCwebNamespace();
   stack = newCTextStackModule();
 
