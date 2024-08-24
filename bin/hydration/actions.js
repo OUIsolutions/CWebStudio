@@ -15,39 +15,40 @@ let private_cweb_actions_handlers = {
     sessionStorage.setItem(data["key"], data["value"]);
   },
 
-  replace_element_by_id: function (data) {
-    let element = document.getElementById(data.id);
+  replace_element_by_query_selector: function (data) {
+    let element = document.querySelector(data.query_selector);
     if (!element) {
       return;
     }
     element.insertAdjacentHTML("afterend", data.html);
     element.remove();
   },
-  append_by_id: function (data) {
-    let element = document.getElementById(data.id);
+
+  append_by_query_selector: function (data) {
+    let element = document.querySelector(data.query_selector);
     if (!element) {
       return;
     }
     element.innerHTML += data.html;
   },
 
-  hide_element_by_id: function (data) {
-    let element = document.getElementById(data.id);
+  hide_element_by_query_selector: function (data) {
+    let element = document.querySelector(data.query_selector);
     if (!element) {
       return;
     }
     element.style.display = "none";
   },
-  unhide_element_by_id: function (data) {
-    let element = document.getElementById(data.id);
+  unhide_element_by_query_selector: function (data) {
+    let element = document.querySelector(data.query_selector);
     if (!element) {
       return;
     }
     element.style.display = "show";
   },
 
-  destroy_by_id: function (data) {
-    let element = document.getElementById(data.id);
+  destroy_by_query_selector: function (data) {
+    let element = document.querySelector(data.query_selector);
     if (element) {
       element.remove();
     }

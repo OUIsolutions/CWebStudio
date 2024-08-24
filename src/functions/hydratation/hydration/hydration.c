@@ -1,5 +1,7 @@
 
 #include "../uniq.definitions_requirements.h"
+#include <string.h>
+#include <time.h>
 
 
 
@@ -20,6 +22,17 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
 
     return self;
 }
+
+CWebHyDrationBridge * CWebHyDration_get_child_bridge(CWebHyDration *self,const char *name){
+    for(int i = 0; i < self->all_bridges->size;i++){
+        CWebHyDrationBridge *current =  self->all_bridges->elments[i];
+        if(strcmp(current->name,name) == 0){
+            return  current;
+        }
+    }
+    return NULL;
+}
+
 
 CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *)){
     CWebHyDrationBridge *created = private_newCWebHyDrationBridge(name,callback,self);

@@ -14,7 +14,6 @@ CWebHyDrationSearchRequirements * private_newCWebHyDrationSearchRequirements_get
 
 
 void private_CWebHyDrationSearchRequirements_free(CWebHyDrationSearchRequirements *self){
-        printf("deletou com o nome %s\n",self->name);
         free(self->name);
         free(self);
 }

@@ -5,6 +5,8 @@ CWebHyDration * newCWebHyDration(CwebHttpRequest *request);
 
 CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *));
 
+CWebHyDrationBridge * CWebHyDration_get_child_bridge(CWebHyDration *self,const char *name);
+
 void privateCWebHydration_raise_error(CWebHyDration *self,CWebHyDrationBridge *bridge, int error_code, const char *format,...);
 
 CwebHttpResponse *private_CWebHydration_formmat_error_response(CWebHyDration *self);

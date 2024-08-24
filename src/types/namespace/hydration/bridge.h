@@ -14,6 +14,8 @@ typedef struct CWebHydrationBridgeNamespace{
     char *(*onclick)(CWebHyDrationBridge *self,const char *func_args,...);
     char *(*onfoccusout)(CWebHyDrationBridge *self,const char *func_args,...);
     bool (*has_errors)(CWebHyDrationBridge *self);
+    CWebHyDrationBridge * (*get_child_bridge)(CWebHyDration *self,const char *name);
+    CWebHyDrationBridge * (*get_brother_bridge)(CWebHyDrationBridge *self,const char *name);
 
 }CWebHydrationBridgeNamespace;
 

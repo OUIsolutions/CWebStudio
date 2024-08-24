@@ -59,6 +59,89 @@ void CWebHyDrationBridge_execute_script(CWebHyDrationBridge *self,const char *co
     privateCWebHyDrationBridge_add_response(self,"execute_script",obj);
 }
 
+void CWebHyDrationBridge_replace_element_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char *query_selector,
+    const char *code,
+    ...
+){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,code);
+    char *html_format = private_CWeb_format_vaarg(code,args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selector);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_HTML, html_format);
+    free(html_format);
+    privateCWebHyDrationBridge_add_response(self,"replace_element_by_query_selector",obj);
+}
+
+
+void CWebHyDrationBridge_append_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char *query_selector,
+    const char *code,
+    ...
+){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,code);
+    char *html_format = private_CWeb_format_vaarg(code,args);
+    va_end(args);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selector);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_HTML, html_format);
+    free(html_format);
+    privateCWebHyDrationBridge_add_response(self,"append_by_query_selector",obj);
+}
+
+
+
+void CWebHyDrationBridge_destroy_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char * query_selecor
+){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selecor);
+    privateCWebHyDrationBridge_add_response(self,"destroy_by_query_selector",obj);
+}
+
+
+void CWebHyDrationBridge_hide_element_by_query_selector(
+CWebHyDrationBridge *self,
+const char *query_selecor){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selecor);
+    privateCWebHyDrationBridge_add_response(self,"hide_element_by_query_selector",obj);
+}
+
+void CWebHyDrationBridge_unhide_element_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char *query_selector
+){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selector);
+    privateCWebHyDrationBridge_add_response(self,"unhide_element_by_id",obj);
+}
+
+
+
+
 void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,const char *id, const char *code,...){
     if(CWebHyDrationBridge_has_errors(self)){
         return ;
@@ -68,10 +151,12 @@ void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,const c
     va_start(args,code);
     char *html_format = private_CWeb_format_vaarg(code,args);
     va_end(args);
-    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_HTML, html_format);
     free(html_format);
-    privateCWebHyDrationBridge_add_response(self,"replace_element_by_id",obj);
+    privateCWebHyDrationBridge_add_response(self,"replace_element_by_query_selector",obj);
 }
 
 void CWebHyDrationBridge_append_by_id(CWebHyDrationBridge *self,const char *id, const char *code,...){
@@ -83,10 +168,12 @@ void CWebHyDrationBridge_append_by_id(CWebHyDrationBridge *self,const char *id, 
     va_start(args,code);
     char *html_format = private_CWeb_format_vaarg(code,args);
     va_end(args);
-    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
     cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_HTML, html_format);
     free(html_format);
-    privateCWebHyDrationBridge_add_response(self,"append_by_id",obj);
+    privateCWebHyDrationBridge_add_response(self,"append_by_query_selector",obj);
 }
 
 
@@ -95,8 +182,12 @@ void CWebHyDrationBridge_hide_element_by_id(CWebHyDrationBridge *self,const char
         return ;
     }
     cJSON *obj = cJSON_CreateObject();
-    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
-    privateCWebHyDrationBridge_add_response(self,"hide_element_by_id",obj);
+
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
+
+    privateCWebHyDrationBridge_add_response(self,"hide_element_by_query_selector",obj);
 }
 
 void CWebHyDrationBridge_unhide_element_by_id(CWebHyDrationBridge *self,const char *id){
@@ -104,8 +195,12 @@ void CWebHyDrationBridge_unhide_element_by_id(CWebHyDrationBridge *self,const ch
         return ;
     }
     cJSON *obj = cJSON_CreateObject();
-    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
-    privateCWebHyDrationBridge_add_response(self,"unhide_element_by_id",obj);
+
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
+
+    privateCWebHyDrationBridge_add_response(self,"unhide_element_by_query_selector",obj);
 }
 
 
@@ -114,8 +209,12 @@ void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id
         return ;
     }
     cJSON *obj = cJSON_CreateObject();
-    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_ID, id);
-    privateCWebHyDrationBridge_add_response(self,"destroy_by_id",obj);
+
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
+
+    privateCWebHyDrationBridge_add_response(self,"destroy_by_query_selector",obj);
 }
 
 void CWebHydration_redirect(CWebHyDrationBridge *self, const char *url){

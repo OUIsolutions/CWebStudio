@@ -9,8 +9,9 @@
 #define CWEB_HYDRATON_JSON_HTML "html"
 #define CWEB_HYDRATON_JSON_MSG "msg"
 #define CWEB_HYDRATON_JSON_CODE "code"
-#define CWEB_HYDRATON_JSON_ID "id"
 #define CWEB_HYDRATON_JSON_KEY "key"
+#define CWEB_HYDRATON_JSON_QUERY_SELECTOR "query_selector"
+
 #define CWEB_HYDRATON_JSON_VALUE "value"
 #define CWEB_HYDRATION_JSON_URL "url"
 

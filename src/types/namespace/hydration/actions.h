@@ -7,7 +7,36 @@
 
 
 typedef struct CWebHydrationResponseNamespace {
+    void (*replace_element_by_query_selector)(
+        CWebHyDrationBridge *self,
+        const char *query_selector,
+        const char *code,
+        ...
+    );
 
+    void (*append_by_query_selector)(
+        CWebHyDrationBridge *self,
+        const char *query_selector,
+        const char *code,
+        ...
+    );
+
+
+    void (*destroy_by_query_selector)(
+        CWebHyDrationBridge *self,
+        const char * query_selecor
+    );
+
+
+
+    void (*hide_element_by_query_selector)(
+    CWebHyDrationBridge *self,
+    const char *query_selecor);
+
+    void (*unhide_element_by_query_selector)(
+        CWebHyDrationBridge *self,
+        const char *query_selector
+    );
     void (*hide_element_by_id)(CWebHyDrationBridge *self,const char *id);
     void (*unhide_element_by_id)(CWebHyDrationBridge *self,const char *id);
     void (*append_by_id)(CWebHyDrationBridge *self,const char *id, const char *code,...);

@@ -189,7 +189,8 @@ bool private_cweb_is_string_from_point(const char *content, long content_size, c
      vsnprintf(buffer,sizeof (char) * required_size+1,expresion,args);
      return buffer;
  }
- char * private_CWebHydration_format(const char *expresion, ...){
+
+ char * private_CWeb_format(const char *expresion, ...){
      va_list  args;
      va_start(args,expresion);
      char *result = private_CWeb_format_vaarg(expresion,args);
