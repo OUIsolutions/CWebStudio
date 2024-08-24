@@ -9,12 +9,14 @@ function private_cweb_try_to_convert_to_number(possible_number) {
 
 function private_cweb_get_session_storage_item(props) {
   let finalvalue = sessionStorage.getItem(props.name);
+
   if (!finalvalue) {
     return [];
   }
   if (props.auto_convert) {
     finalvalue = private_cweb_try_to_convert_to_number(finalvalue);
   }
+
   return [finalvalue];
 }
 

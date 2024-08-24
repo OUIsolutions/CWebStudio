@@ -232,11 +232,9 @@ void CWebHyDrationSearchRequirements_add_session_storage_item_not_converting(
     va_end(args);
 
     CWebHyDrationSearchRequirements_add_function(self,
-        "function (args,content){\
-            private_cweb_get_session_storage_item({\
-            content:content,\
+        "function (args){\
+            return private_cweb_get_session_storage_item({\
             name:`%s`,\
-            search_name:`%s`,\
             auto_convert:false\
             })\
         }",
@@ -258,11 +256,9 @@ void CWebHyDrationSearchRequirements_add_session_storage_item(
     va_end(args);
 
     CWebHyDrationSearchRequirements_add_function(self,
-        "function (args,content){\
-            private_cweb_get_session_storage_item({\
-            content:content,\
+        "function (args){\
+            return private_cweb_get_session_storage_item({\
             name:`%s`,\
-            search_name:`%s`,\
             auto_convert:true\
             })\
         }",

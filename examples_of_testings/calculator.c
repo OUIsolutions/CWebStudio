@@ -29,7 +29,55 @@ void bridge_set_operator(CWebHyDrationBridge *bridge){
     stack.free(first_num_formmated);
     stack.free(html_h2);
 }
+void bridge_set_result(CWebHyDrationBridge *bridge){
 
+    CWebHyDrationSearchResult *visor = cweb.hydration.search_result.get_search_by_name(
+        bridge,
+        "window"
+    );
+    long visor_num  = cweb.hydration.search_result.get_long(visor,0);
+
+    CWebHyDrationSearchResult *first_num = cweb.hydration.search_result.get_search_by_name(
+        bridge,
+        "first_num"
+    );
+    long first_num_num = cweb.hydration.search_result.get_long(first_num,0);
+
+
+    CWebHyDrationSearchResult *operator = cweb.hydration.search_result.get_search_by_name(
+            bridge,
+            "operator"
+        );
+    char * operator_str = cweb.hydration.search_result.get_string(operator,0);
+
+    CWebHydrationHandleErrors(bridge);
+
+    long result = 0;
+    if(strcmp(operator_str, "+") == 0){
+        result =first_num_num + visor_num;
+    }
+
+    if(strcmp(operator_str, "-") ==0 ){
+        result =first_num_num - visor_num;
+    }
+
+    if(strcmp(operator_str, "x") == 0){
+        result =first_num_num * visor_num;
+    }
+
+    if(strcmp(operator_str, "/")==0){
+        result =first_num_num / visor_num;
+    }
+
+    CTextStack *html_h2 = stack.newStack_string_empty();
+
+    CTextScope_format(html_h2, CTEXT_H2, "id='window'"){
+      stack.format(html_h2, "%d",result);
+    }
+    cweb.hydration.actions.replace_element_by_id(bridge, "window", html_h2->rendered_text);
+    stack.free(html_h2);
+
+}
 
 void bridge_write_number(CWebHyDrationBridge *bridge){
 
@@ -50,18 +98,17 @@ void bridge_write_number(CWebHyDrationBridge *bridge){
   }
   cweb.hydration.actions.replace_element_by_id(bridge, "window", html_h2->rendered_text);
   stack.free(html_h2);
-
 }
 
 
 CwebHttpResponse *page_main(
 
     CWebHyDrationBridge *bridge_obj_number_button,
-    CWebHyDrationBridge *bridge_obj_set_operator
-
+    CWebHyDrationBridge *bridge_obj_set_operator,
+    CWebHyDrationBridge *bridge_obj_set_result
 ){
 
-  CTextStack *html = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+  CTextStack *html = stack.newStack("", "");
 
   CTextScope(html, CTEXT_BODY){
 
@@ -140,10 +187,26 @@ CwebHttpResponse *page_main(
     CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_number_button, "'/'")){
           stack.format(html, "/");
     }
+
+    CTextScope_format(html, CTEXT_BUTTON,cweb.hydration.bridge.onclick(bridge_obj_set_result, NULL)){
+          stack.format(html, "=");
+    }
+
+
   }
 
   return cweb.response.send_rendered_CTextStack_cleaning_memory(html, 200);
 }
+
+void create_window_requirements(CWebHyDrationBridge *bridge){
+    CWebHyDrationSearchRequirements *window_obj_num =
+      cweb.hydration.search_requirements.newSearchRequirements(
+          bridge,
+          "window"
+    );
+    cweb.hydration.search_requirements.add_elements_by_id_not_auto_converting(window_obj_num,"window");
+}
+
 
 CwebHttpResponse *main_server(CwebHttpRequest *rq){
 
@@ -158,30 +221,52 @@ CwebHttpResponse *main_server(CwebHttpRequest *rq){
       "Bridge_pencil_number_in_window",
       bridge_write_number
   );
-  CWebHyDrationSearchRequirements *window_obj_num =
-    cweb.hydration.search_requirements.newSearchRequirements(
-        bridge_obj_number_in_window,
-        "window"
-  );
-  cweb.hydration.search_requirements.add_elements_by_id_not_auto_converting(window_obj_num,"window");
-
+  create_window_requirements(bridge_obj_number_in_window);
 
   CWebHyDrationBridge *bridge_operator =
-  cweb.hydration.bridge.create_bridge(hydration,
+    cweb.hydration.bridge.create_bridge(hydration,
       "bridge_operator",
       bridge_set_operator
   );
 
-  CWebHyDrationSearchRequirements *window_bridge_operator =
+  create_window_requirements(bridge_operator);
+
+  CWebHyDrationBridge *bridge_result_object =
+  cweb.hydration.bridge.create_bridge(hydration,
+      "bridge_result",
+      bridge_set_result
+  );
+  CWebHyDrationSearchRequirements *window =
     cweb.hydration.search_requirements.newSearchRequirements(
-        bridge_operator,
+        bridge_result_object,
         "window"
   );
-  cweb.hydration.search_requirements.add_elements_by_id_not_auto_converting(window_bridge_operator,"window");
+
+  cweb.hydration.search_requirements.add_elements_by_id(
+      window,"window"
+  );
 
 
+  CWebHyDrationSearchRequirements * first_num =
+  cweb.hydration.search_requirements.newSearchRequirements(
+      bridge_result_object,
+      "first_num"
+  );
 
+  cweb.hydration.search_requirements.add_session_storage_item(
+      first_num,
+      "first_num"
+  );
 
+  CWebHyDrationSearchRequirements * operator =
+  cweb.hydration.search_requirements.newSearchRequirements(
+      bridge_result_object,"operator"
+  );
+
+  cweb.hydration.search_requirements.add_session_storage_item(
+      operator,
+      "operator"
+  );
 
 
   CWebHydrationHandleTriggers(hydration);
@@ -190,7 +275,7 @@ CwebHttpResponse *main_server(CwebHttpRequest *rq){
     return cweb.response.send_text(cweb.hydration.create_script(hydration), 200);
   }
 
-  return page_main(bridge_obj_number_in_window, bridge_operator);
+  return page_main(bridge_obj_number_in_window, bridge_operator,bridge_result_object);
 }
 
 int main(){
@@ -198,7 +283,7 @@ int main(){
   cweb = newCwebNamespace();
   stack = newCTextStackModule();
 
-  CwebServer server = newCwebSever(3000, main_server);
+  CwebServer server = newCwebSever(3001, main_server);
   server.single_process = true;
   cweb.server.start(&server);
 }
