@@ -199,12 +199,9 @@ CwebHttpResponse *page_main(
 }
 
 void create_window_requirements(CWebHyDrationBridge *bridge){
-    CWebHyDrationSearchRequirements *window_obj_num =
-      cweb.hydration.search_requirements.newSearchRequirements(
-          bridge,
-          "window"
+    cweb.hydration.search_requirements.add_element_by_id_setting_search_as_same_name_not_formmating(
+        bridge,"window"
     );
-    cweb.hydration.search_requirements.add_elements_by_id_not_auto_converting(window_obj_num,"window");
 }
 
 
@@ -236,14 +233,8 @@ CwebHttpResponse *main_server(CwebHttpRequest *rq){
       "bridge_result",
       bridge_set_result
   );
-  CWebHyDrationSearchRequirements *window =
-    cweb.hydration.search_requirements.newSearchRequirements(
-        bridge_result_object,
-        "window"
-  );
-
-  cweb.hydration.search_requirements.add_elements_by_id(
-      window,"window"
+  cweb.hydration.search_requirements.add_element_by_id_setting_search_as_same_name(
+      bridge_result_object,"window"
   );
 
 
@@ -283,7 +274,7 @@ int main(){
   cweb = newCwebNamespace();
   stack = newCTextStackModule();
 
-  CwebServer server = newCwebSever(3001, main_server);
+  CwebServer server = newCwebSever(3010, main_server);
   server.single_process = true;
   cweb.server.start(&server);
 }
