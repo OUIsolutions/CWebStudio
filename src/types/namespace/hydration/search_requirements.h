@@ -67,6 +67,13 @@ typedef struct CWebHydrationSearchRequirementsNamespace {
     );
 
 
+    void (*add_element_by_id_setting_search_as_same_name)(
+        CWebHyDrationBridge *self, const char *id
+    );
+
+    void (*add_element_by_id_setting_search_as_same_name_not_formmating)(
+        CWebHyDrationBridge *self, const char *id
+    );
     void (*add_session_storage_item)(
         CWebHyDrationSearchRequirements *self,
         const char *name,

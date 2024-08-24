@@ -18,5 +18,12 @@ CWebHydrationSearchRequirementsNamespace newCWebHydrationSearchRequirementsNames
     self.add_session_storage_item_not_converting = CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting;
     self.add_session_storage_item = CWebHyDrationSearchRequirements_add_session_storage_item;
 
+    self.add_element_by_id_setting_search_as_same_name =
+        CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name;
+    self.add_element_by_id_setting_search_as_same_name_not_formmating =
+        CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name_not_format;
+
+
+
     return self;
 }

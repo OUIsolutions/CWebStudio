@@ -48,8 +48,22 @@ CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
     return created_search;
 }
 
+void CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name(
+    CWebHyDrationBridge *self, const char *id
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,id);
+    CWebHyDrationSearchRequirements_add_elements_by_id(search, id);
 
+}
 
+void CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name_not_format(
+    CWebHyDrationBridge *self, const char *id
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,id);
+    CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting(search, id);
+}
 
 
 CTextStack*  private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self) {
