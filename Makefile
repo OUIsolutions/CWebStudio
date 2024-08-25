@@ -14,6 +14,12 @@ all: clear check_file setPort
 	@echo ""
 	@$(ROUTE)/a.out
 
+build: clear
+	@sh ./pre_build.sh
+	@echo ""
+	@./build.out
+	@echo ""
+
 setfile:
 	@echo "FILE=$(FILE)" > $(FILE_STORE)
 	@echo "FILE set to: $(FILE)"
