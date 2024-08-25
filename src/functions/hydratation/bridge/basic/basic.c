@@ -14,6 +14,11 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
 ) {
     CWebHyDrationBridge *self = (CWebHyDrationBridge*)malloc(sizeof(CWebHyDrationBridge));
     *self = (CWebHyDrationBridge){0};
+    /*
+    CTextStack * name_formmated = newCTextStack_string(name);
+    CTextStack_self_replace(name_formmated," ","");
+    CTextStack_self_replace(name_formmated,"-","");
+    */
     self->name = strdup(name);
     self->callback = callback;
     self->hydration = (void*)hydration;

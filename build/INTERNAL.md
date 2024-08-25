@@ -264,6 +264,24 @@ codeof:  examples/hydration_getting_a_entrie.c
 you also can use shortcuts, to set the search requirements as the same name of the
 id/class that you want to find
 
+codeof:  examples/hydration_getting_a_entrie_shor.c
+
+where you can use **get_string_from_first_element_of_search** to retrive the first element of the search
+
+```c
+char *first_result_of_name = result_module.get_string_from_first_element_of_search(bridge,"name");
+```
+or **add_elements_by_id_setting_search_as_same_name** to create a requirements with same name of the id/class
+element
+
+```c
+requirements.add_elements_by_id_setting_search_as_same_name(alert_bridge,"name");
+```
+
+## Handling Numbers
+you also can handle numbers, because the system will autoconvert all elements , unless you specify with the **not_auto_convert**
+sulfix in functions requirements
+
 
 # Used Dependencies And Atributions
 DoTheWorld includes all self dependecies in the single file. If one of these libraries is used in your code, be mindful of circular imports.

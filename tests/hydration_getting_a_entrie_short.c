@@ -1,4 +1,6 @@
-#include "CWebStudio.h"
+
+#include "../CWebStudio.h"
+
 
 CwebNamespace cweb;
 CTextStackModule stack;
@@ -13,8 +15,24 @@ CWebHydrationArgsNamespace hydration_args;
 
 
 void alert_bridge_callback(CWebHyDrationBridge * bridge){
-    actions.alert(bridge,"you clicked in the button");
+    char *first_result_of_name = result_module.get_string_from_first_element_of_search(bridge,"name");
+
+    //means some information were not provided or its with the
+    //wrong type
+    if(bridge_module.has_errors(bridge)){
+        return;
+    }
+    bool name_its_empty =strcmp(first_result_of_name,"") ==0;
+    bool name_its_filled = !name_its_empty;
+    if(name_its_empty){
+        actions.alert(bridge,"you did not typed your name");
+    }
+    if(name_its_filled){
+        actions.alert(bridge,"hello %s",first_result_of_name);
+
+    }
 }
+
 
 CTextStack *create_main_page(CWebHyDration *hydration){
 
@@ -34,7 +52,8 @@ CTextStack *create_main_page(CWebHyDration *hydration){
             CWebHyDrationBridge *alert_bridge = bridge_module.get_child_bridge(
                 hydration,ALERT_BRIDGE
             );
-
+            CTextScope_format(main_html, CTEXT_INPUT," placeholder='type your name' id='name'")
+            CTextScope(main_html, CTEXT_BR){}
             CTextScope_format(main_html,CTEXT_BUTTON,
                 bridge_module.onclick(alert_bridge,NULL)
             ){
@@ -48,13 +67,15 @@ CTextStack *create_main_page(CWebHyDration *hydration){
 
 CwebHttpResponse *main_server(CwebHttpRequest *request){
 
-
     CWebHyDration *hydration = hydration_module.newCWebHyDration(request);
-    CWebHyDrationBridge *alert_bridge = bridge_module.create_bridge(
+    CWebHyDrationBridge * alert_bridge = bridge_module.create_bridge(
         hydration,
         ALERT_BRIDGE,
         alert_bridge_callback
     );
+
+    requirements.add_elements_by_id_setting_search_as_same_name(alert_bridge,"name");
+
     //if is
     if(hydration_module.is_the_trigger(hydration)){
         return hydration_module.generate_response(hydration);
@@ -76,6 +97,5 @@ int main(){
     hydration_args = hydration_module.args;
     actions = hydration_module.actions;
     CwebServer server = newCwebSever(3000, main_server);
-    server.single_process = true;
     cweb.server.start(&server);
 }

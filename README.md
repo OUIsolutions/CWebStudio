@@ -791,6 +791,255 @@ int main(){
 ~~~
 
 
+# HyDration
+The HyDration mechanic it's a mecanic to generate front end code in C, its based on the ideia
+of controling the browser by creating javascript
+
+
+~~~c
+#include "CWebStudio.h"
+
+CwebNamespace cweb;
+CTextStackModule stack;
+CWebHydrationNamespace hydration_module;
+CWebHydrationBridgeNamespace bridge_module;
+CWebHydrationActionsNamespace actions;
+CWebHydrationSearchRequirementsNamespace requirements;
+CWebHydrationSearchResultNamespace result_module;
+CWebHydrationArgsNamespace hydration_args;
+
+#define ALERT_BRIDGE "alert"
+
+
+void alert_bridge_callback(CWebHyDrationBridge * bridge){
+    actions.alert(bridge,"you clicked in the button");
+}
+
+CTextStack *create_main_page(CWebHyDration *hydration){
+
+    CTextStack  *main_html =  hydration_module.create_stack(hydration);
+
+    CTextScope(main_html, CTEXT_HTML){
+        CTextScope(main_html, CTEXT_HEAD){
+            CTextScope(main_html, CTEXT_HEAD){
+                CTextScope(main_html, CTEXT_SCRIPT){
+                    char *script_generation = hydration_module.create_script(hydration);
+                    stack.text(main_html,script_generation);
+                }
+            }
+        }
+        CTextScope(main_html, CTEXT_BODY){
+
+            CWebHyDrationBridge *alert_bridge = bridge_module.get_child_bridge(
+                hydration,ALERT_BRIDGE
+            );
+
+            CTextScope_format(main_html,CTEXT_BUTTON,
+                bridge_module.onclick(alert_bridge,NULL)
+            ){
+                stack.text(main_html,"click me");
+            }
+
+        }
+    }
+    return main_html;
+}
+
+CwebHttpResponse *main_server(CwebHttpRequest *request){
+
+
+    CWebHyDration *hydration = hydration_module.newCWebHyDration(request);
+    CWebHyDrationBridge *alert_bridge = bridge_module.create_bridge(
+        hydration,
+        ALERT_BRIDGE,
+        alert_bridge_callback
+    );
+    //if is
+    if(hydration_module.is_the_trigger(hydration)){
+        return hydration_module.generate_response(hydration);
+    }
+
+    CTextStack  *page =  create_main_page(hydration);
+    return cweb.response.send_rendered_CTextStack(page,200);
+}
+
+
+int main(){
+
+    cweb = newCwebNamespace();
+    stack = newCTextStackModule();
+    hydration_module = cweb.hydration;
+    bridge_module = hydration_module.bridge;
+    requirements = hydration_module.search_requirements;
+    result_module  = hydration_module.search_result;
+    hydration_args = hydration_module.args;
+    actions = hydration_module.actions;
+    CwebServer server = newCwebSever(3000, main_server);
+    server.single_process = true;
+    cweb.server.start(&server);
+}
+
+~~~
+
+# HyDration Explanation
+The HyDration its divided in 3 steps , first , you create the bridges, which its
+the functions to be called when some event get dispached, than you need to specify which elements
+the requirements the browser must return to thatfunction, it can be a html element, a session element
+etc, than the the bridge callback handler its called, and the server returns to the browser, what actions
+must be made
+
+![Hydration](graphics/images/hydration.jpg)
+
+
+# Search Requirements
+Search Requirements, its where you specify which elements the browser must return to the bridge lambda
+
+```c
+
+CWebHyDrationBridge * alert_bridge = bridge_module.create_bridge(
+    hydration,
+    ALERT_BRIDGE,
+    alert_bridge_callback
+);
+
+CWebHyDrationSearchRequirements *name =
+requirements.newSearchRequirements(alert_bridge,"name");
+requirements.add_elements_by_id(name,"name");
+
+```
+# Search Result
+SearchResult are  the objects  used to retrive the informations sended by the
+browser, defined in the search requirements
+
+```c
+CWebHyDrationSearchResult * name = result_module.get_search_by_name(bridge,"name");
+char *first_result_of_name = result_module.get_string(name,0);
+```
+
+# Actions
+The Actions its the actions that you want to be executed in the browser, it can be a alert
+a javascript execution, a  element to add/replace/destroy
+
+```c
+actions.alert(bridge,"hello %s",first_result_of_name);
+```
+
+## Full Runalble exemplo
+
+~~~c
+
+#include "CWebStudio.h"
+
+
+CwebNamespace cweb;
+CTextStackModule stack;
+CWebHydrationNamespace hydration_module;
+CWebHydrationBridgeNamespace bridge_module;
+CWebHydrationActionsNamespace actions;
+CWebHydrationSearchRequirementsNamespace requirements;
+CWebHydrationSearchResultNamespace result_module;
+CWebHydrationArgsNamespace hydration_args;
+
+#define ALERT_BRIDGE "alert"
+
+
+void alert_bridge_callback(CWebHyDrationBridge * bridge){
+    CWebHyDrationSearchResult * name = result_module.get_search_by_name(bridge,"name");
+    char *first_result_of_name = result_module.get_string(name,0);
+
+    //means some information were not provided or its with the
+    //wrong type
+    if(bridge_module.has_errors(bridge)){
+        return;
+    }
+    bool name_its_empty =strcmp(first_result_of_name,"") ==0;
+    bool name_its_filled = !name_its_empty;
+    if(name_its_empty){
+        actions.alert(bridge,"you did not typed your name");
+    }
+    if(name_its_filled){
+        actions.alert(bridge,"hello %s",first_result_of_name);
+
+    }
+}
+
+
+CTextStack *create_main_page(CWebHyDration *hydration){
+
+    CTextStack  *main_html =  hydration_module.create_stack(hydration);
+
+    CTextScope(main_html, CTEXT_HTML){
+        CTextScope(main_html, CTEXT_HEAD){
+            CTextScope(main_html, CTEXT_HEAD){
+                CTextScope(main_html, CTEXT_SCRIPT){
+                    char *script_generation = hydration_module.create_script(hydration);
+                    stack.text(main_html,script_generation);
+                }
+            }
+        }
+        CTextScope(main_html, CTEXT_BODY){
+
+            CWebHyDrationBridge *alert_bridge = bridge_module.get_child_bridge(
+                hydration,ALERT_BRIDGE
+            );
+            CTextScope_format(main_html, CTEXT_INPUT," placeholder='type your name' id='name'")
+            CTextScope(main_html, CTEXT_BR){}
+            CTextScope_format(main_html,CTEXT_BUTTON,
+                bridge_module.onclick(alert_bridge,NULL)
+            ){
+                stack.text(main_html,"click me");
+            }
+
+        }
+    }
+    return main_html;
+}
+
+CwebHttpResponse *main_server(CwebHttpRequest *request){
+
+    CWebHyDration *hydration = hydration_module.newCWebHyDration(request);
+    CWebHyDrationBridge * alert_bridge = bridge_module.create_bridge(
+        hydration,
+        ALERT_BRIDGE,
+        alert_bridge_callback
+    );
+
+    CWebHyDrationSearchRequirements *name =
+    requirements.newSearchRequirements(alert_bridge,"name");
+    requirements.add_elements_by_id(name,"name");
+
+    //if is
+    if(hydration_module.is_the_trigger(hydration)){
+        return hydration_module.generate_response(hydration);
+    }
+
+    CTextStack  *page =  create_main_page(hydration);
+    return cweb.response.send_rendered_CTextStack(page,200);
+}
+
+
+int main(){
+
+    cweb = newCwebNamespace();
+    stack = newCTextStackModule();
+    hydration_module = cweb.hydration;
+    bridge_module = hydration_module.bridge;
+    requirements = hydration_module.search_requirements;
+    result_module  = hydration_module.search_result;
+    hydration_args = hydration_module.args;
+    actions = hydration_module.actions;
+    CwebServer server = newCwebSever(3000, main_server);
+    cweb.server.start(&server);
+}
+
+~~~
+
+
+## ShortCuts
+you also can use shortcuts, to set the search requirements as the same name of the
+id/class that you want to find
+
+
 # Used Dependencies And Atributions
 DoTheWorld includes all self dependecies in the single file. If one of these libraries is used in your code, be mindful of circular imports.
 
@@ -838,4 +1087,4 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE
+SOFTWARE.
