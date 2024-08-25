@@ -3,6 +3,7 @@
 CWebHydrationBridgeNamespace newCWebHydrationBridgetNamespace(){
     CWebHydrationBridgeNamespace self = {0};
     self.call = CWebHyDrationBridge_call;
+    self.call_trigger = CWebHyDrationBridge_call_trigger;
     self.onclick =CWebHyDrationBridge_onclick;
     self.onfoccusout =CWebHyDrationBridge_onfoccusout;
     self.has_errors = CWebHyDrationBridge_has_errors;

@@ -82,7 +82,6 @@ char *CWebHyDrationBridge_call_trigger(
 
 
 char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_args,...){
-
     va_list  args;
     va_start(args,func_args);
     char *result =privateCWebHyDrationBridge_call_trigger_by_vaarg(self,"onclick",func_args,args);
