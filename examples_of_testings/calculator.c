@@ -5,13 +5,12 @@ CwebNamespace cweb;
 CTextStackModule stack;
 
 void bridge_set_operator(CWebHyDrationBridge *bridge){
+
     char * visor_str = cweb.hydration.search_result.get_string_from_first_element_of_search(bridge, "window");
 
     char * operator_str = cweb.hydration.args.get_str_arg(bridge,0);
 
-
     CWebHydrationHandleErrors(bridge);
-
 
     cweb.hydration.actions.set_session_storage_data(bridge,"operator",operator_str);
 
@@ -112,7 +111,7 @@ CwebHttpResponse *page_main(
 
     CTextScope_format(html, CTEXT_SCRIPT, "src='/main_script_hydration'");
 
-    CTextScope(html, CTEXT_H1){
+    CTextScope_format(html, CTEXT_H1, "id='slaslasla'"){
       stack.format(html, "Calculator");
     }
 

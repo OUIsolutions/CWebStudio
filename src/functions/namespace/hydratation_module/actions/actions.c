@@ -20,6 +20,10 @@ CWebHydrationActionsNamespace newCWebHydrationActionsNamespace(){
     self.add_cookie_with_time = CWebHydrationBridge_creatCookie_with_time;
     self.add_cookie = CWebHydrationBridge_creatCookie;
     self.delet_cookie = CWebHyDrationBridge_deletCookie;
+    self.console_log = CWebHyDration_console_log;
+    self.console_warn = CWebHyDration_console_warn;
+    self.console_clear = CWebHyDration_console_clear;
+    self.console_error = CWebHyDration_console_error;
 
     return self;
 }

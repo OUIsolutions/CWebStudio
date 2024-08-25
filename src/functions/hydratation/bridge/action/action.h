@@ -69,5 +69,16 @@ void CWebHydrationBridge_creatCookie_with_time(CWebHyDrationBridge *self, const 
 
 void CWebHyDrationBridge_deletCookie(CWebHyDrationBridge *self, const char *key);
 
+void CWebHyDration_console_log(CWebHyDrationBridge *self, const char *menssage, ...);
+void CWebHyDration_console_warn(CWebHyDrationBridge *self, const char *menssage, ...);
+void CWebHyDration_console_error(CWebHyDrationBridge *self, const char *menssage, ...);
+void CWebHyDration_console_clear(CWebHyDrationBridge *self);
+
+
+
+
+
+
+
 
 

@@ -50,6 +50,11 @@ typedef struct CWebHydrationResponseNamespace {
     void (*add_cookie_with_time)(CWebHyDrationBridge *self, const char *key, long time, const char *value, ...);
     void (*add_cookie)(CWebHyDrationBridge *self, const char *key, const char *value, ...);
     void (*delet_cookie)(CWebHyDrationBridge *self, const char *key);
+    void (*console_log)(CWebHyDrationBridge *self,const char *menssage,...);
+    void (*console_warn)(CWebHyDrationBridge *self,const char *menssage,...);
+    void (*console_error)(CWebHyDrationBridge *self,const char *menssage,...);
+    void (*console_clear)(CWebHyDrationBridge *self);
+
 
 }CWebHydrationActionsNamespace;
 

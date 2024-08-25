@@ -270,3 +270,56 @@ void CWebHydration_redirect(CWebHyDrationBridge *self, const char *url){
     cJSON_AddStringToObject(obj, CWEB_HYDRATION_JSON_URL, url);
     privateCWebHyDrationBridge_add_response(self,"redirect",obj);
 }
+
+void CWebHyDration_console_log(CWebHyDrationBridge *self, const char *menssage, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, menssage);
+    char *menssage_formated = private_CWeb_format_vaarg(menssage, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "message", menssage_formated);
+    privateCWebHyDrationBridge_add_response(self, "log", obj);
+}
+void CWebHyDration_console_warn(CWebHyDrationBridge *self, const char *menssage, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, menssage);
+    char *menssage_formated = private_CWeb_format_vaarg(menssage, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "message", menssage_formated);
+    privateCWebHyDrationBridge_add_response(self, "warn", obj);
+}
+void CWebHyDration_console_error(CWebHyDrationBridge *self, const char *menssage, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, menssage);
+    char *menssage_formated = private_CWeb_format_vaarg(menssage, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "message", menssage_formated);
+    privateCWebHyDrationBridge_add_response(self, "error", obj);
+}
+void CWebHyDration_console_clear(CWebHyDrationBridge *self){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    privateCWebHyDrationBridge_add_response(self, "clear", obj);
+}
+
+

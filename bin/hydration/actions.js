@@ -72,4 +72,22 @@ let private_cweb_actions_handlers = {
       element.remove();
     }
   },
+
+  log: function(data){
+    console.log(data.message);
+  },
+
+  warn: function(data){
+    console.warn(data.message);
+  },
+
+  error: function(data){
+    console.error(data.message);
+  },
+
+  clear: function(data){
+    console.clear();
+  }
+
+
 };
