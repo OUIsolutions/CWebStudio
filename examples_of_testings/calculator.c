@@ -9,13 +9,7 @@ void bridge_set_operator(CWebHyDrationBridge *bridge){
     char * visor_str = cweb.hydration.search_result.get_string_from_first_element_of_search(bridge, "window");
 
     char * operator_str = cweb.hydration.args.get_str_arg(bridge,0);
-<<<<<<< HEAD
-
     CWebHydrationHandleErrors(bridge);
-
-=======
-    CWebHydrationHandleErrors(bridge);
->>>>>>> ecbe6a107a013c420b75e5af8ba02821bb0be127
     cweb.hydration.actions.set_session_storage_data(bridge,"operator",operator_str);
 
     CTextStack *first_num_formmated = stack.newStack_string(visor_str);
