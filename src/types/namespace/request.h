@@ -33,6 +33,10 @@ typedef struct CwebHttpRequestModule{
 
     int (*parse_http_request)(struct CwebHttpRequest *self);
 
+    CTextStack *(*create_empty_stack)(CwebHttpRequest *self);
+    CTextStack *(*create_stack)(CwebHttpRequest *self);
+
+
     void (*free)(struct CwebHttpRequest *request);
     void (*represent)(struct CwebHttpRequest *request);
 }CwebHttpRequestModule;

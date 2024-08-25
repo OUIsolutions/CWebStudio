@@ -7,6 +7,7 @@
     self->socket = socket;
     self->params = newCwebDict();
     self->headers = newCwebDict();
+    self->garbage = newUniversalGarbage();
     return self;
 }
 
@@ -146,6 +147,17 @@ void CwebHttpRequest_represent( CwebHttpRequest *self){
     }
 
 }
+CTextStack *CwebHttpRequest_create_empty_stack(CwebHttpRequest *self){
+    CTextStack *created = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+    UniversalGarbage_add(self->garbage, CTextStack_free, created);
+    return created;
+}
+
+CTextStack *CwebHttpRequest_create_stack(CwebHttpRequest *self){
+    CTextStack *created = newCTextStack_string_empty();
+    UniversalGarbage_add(self->garbage, CTextStack_free, created);
+    return created;
+}
 
 
 void CwebHttpRequest_free( CwebHttpRequest *self){
@@ -175,6 +187,7 @@ void CwebHttpRequest_free( CwebHttpRequest *self){
     if(self->hydratation){
         private_CWebHyDration_free((CWebHyDration *)self->hydratation);
     }
+    UniversalGarbage_free(self->garbage);
 
     CwebDict_free(self->params);
 

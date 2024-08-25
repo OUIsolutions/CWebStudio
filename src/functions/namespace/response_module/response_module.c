@@ -13,7 +13,7 @@ CwebHttpResponseModule newCwebHttpResponseModule(){
     self.send_var_html_cleaning_memory = cweb_send_json_string_cleaning_memory;
     self.send_text = cweb_send_text;
     self.send_text_cleaning_memory = cweb_send_text_cleaning_memory;
-    self.send_rendered_CTextStack_cleaning_memory = cweb_send_rendered_CTextStack_cleaning_memory;
+    self.send_rendered_CTextStack = cweb_send_rendered_CTextStack;
     self.send_var_html = cweb_send_var_html;
     self.send_var_html_cleaning_memory = cweb_send_var_html_cleaning_memory;
     self.send_file = cweb_send_file;

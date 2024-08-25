@@ -9,9 +9,13 @@ void bridge_set_operator(CWebHyDrationBridge *bridge){
     char * visor_str = cweb.hydration.search_result.get_string_from_first_element_of_search(bridge, "window");
 
     char * operator_str = cweb.hydration.args.get_str_arg(bridge,0);
+<<<<<<< HEAD
 
     CWebHydrationHandleErrors(bridge);
 
+=======
+    CWebHydrationHandleErrors(bridge);
+>>>>>>> ecbe6a107a013c420b75e5af8ba02821bb0be127
     cweb.hydration.actions.set_session_storage_data(bridge,"operator",operator_str);
 
     CTextStack *first_num_formmated = stack.newStack_string(visor_str);
@@ -26,6 +30,9 @@ void bridge_set_operator(CWebHyDrationBridge *bridge){
     stack.free(first_num_formmated);
     stack.free(html_h2);
 }
+
+
+
 void bridge_set_result(CWebHyDrationBridge *bridge){
 
     CWebHyDrationSearchResult *value_by_confirm = cweb.hydration.search_result.get_search_by_name(bridge, "slaslasla");
@@ -103,6 +110,7 @@ void bridge_write_number(CWebHyDrationBridge *bridge){
 }
 
 
+
 CwebHttpResponse *page_main(
 
     CWebHyDrationBridge *bridge_obj_number_button,
@@ -110,7 +118,7 @@ CwebHttpResponse *page_main(
     CWebHyDrationBridge *bridge_obj_set_result
 ){
 
-  CTextStack *html = stack.newStack("", "");
+  CTextStack *html = cweb.hydration.bridge.create_stack(bridge_obj_number_button);
 
   CTextScope(html, CTEXT_BODY){
 
@@ -197,7 +205,7 @@ CwebHttpResponse *page_main(
 
   }
 
-  return cweb.response.send_rendered_CTextStack_cleaning_memory(html, 200);
+  return cweb.response.send_rendered_CTextStack(html, 200);
 }
 
 void create_window_requirements(CWebHyDrationBridge *bridge){

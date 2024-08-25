@@ -16,7 +16,6 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     self->all_bridges = private_new_privateCWebHyDrationBridgeArray();
     self->request =  request;
     self->response = cJSON_CreateArray();
-    self->garbage = newUniversalGarbage();
     self->max_content_size = CWEB_HYDRATION_DEFAULT_BODY_SIZE;
     request->hydratation = (void *)self;
 
@@ -31,6 +30,16 @@ CWebHyDrationBridge * CWebHyDration_get_child_bridge(CWebHyDration *self,const c
         }
     }
     return NULL;
+}
+
+
+CTextStack  * CWebHyDration_create_stack(CWebHyDration *self){
+    return CwebHttpRequest_create_stack(self->request);
+}
+
+CTextStack  * CWebHyDration_create_empty_stack(CWebHyDration *self){
+    return CwebHttpRequest_create_empty_stack(self->request);
+
 }
 
 
@@ -236,9 +245,7 @@ void private_CWebHyDration_free(CWebHyDration *self) {
     if(self->response){
         cJSON_Delete(self->response);
     }
-    if(self->garbage){
-       UniversalGarbage_free(self->garbage);
-    }
+
 
     privateCWebHyDrationBridgeArray_free(self->all_bridges);
     free(self);

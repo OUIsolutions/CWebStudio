@@ -23,6 +23,16 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
     return  self;
 }
 
+
+
+CTextStack * CWebHyDrationBridge_create_stack(CWebHyDrationBridge *self){
+    return CWebHyDration_create_stack((CWebHyDration*)self->hydration);
+}
+
+CTextStack * CWebHyDrationBridge_create_empty_stack(CWebHyDrationBridge *self){
+    return CWebHyDration_create_empty_stack((CWebHyDration*)self->hydration);
+}
+
 CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
     CWebHyDrationBridge *self, const char *name,...)
 {
@@ -40,8 +50,10 @@ CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
     //printf("endereço %p\n",(void**)&created_search);
 
     CWebHyDration *hydration =(CWebHyDration*)self->hydration;
+    UniversalGarbage *garbage = hydration->request->garbage;
+
    UniversalGarbage_add(
-        hydration->garbage,
+       garbage,
         private_CWebHyDrationSearchRequirements_free,
         created_search
     );

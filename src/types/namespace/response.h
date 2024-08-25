@@ -45,7 +45,7 @@ typedef struct CwebHttpResponseModule{
             int status_code
     );
 
-    CwebHttpResponse* (*send_rendered_CTextStack_cleaning_memory)(struct CTextStack *stack,int status_code);
+    CwebHttpResponse* (*send_rendered_CTextStack)(struct CTextStack *stack,int status_code);
 
     CwebHttpResponse* (*send_var_html)(const char *content,int status_code);
 

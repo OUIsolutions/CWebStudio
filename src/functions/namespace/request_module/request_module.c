@@ -19,6 +19,10 @@ CwebHttpRequestModule newCwebRequestModule(){
     self.get_header_by_normalized_key = CwebHttpRequest_get_header_by_normalized_key;
     self.get_param = CwebHttpRequest_get_param;
     self.represent = CwebHttpRequest_represent;
+    self.create_stack = CwebHttpRequest_create_empty_stack;
+    self.create_empty_stack =CwebHttpRequest_create_stack;
+
+
     self.free =CwebHttpRequest_free;
     return self;
 }

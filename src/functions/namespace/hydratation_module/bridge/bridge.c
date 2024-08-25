@@ -9,5 +9,9 @@ CWebHydrationBridgeNamespace newCWebHydrationBridgetNamespace(){
     self.create_bridge = CWebHyDration_create_bridge;
     self.get_child_bridge = CWebHyDration_get_child_bridge;
     self.get_brother_bridge =CWebHyDrationBridge_get_brother_bridge;
+
+    self.create_stack = CWebHyDrationBridge_create_stack;
+    self.create_empty_stack = CWebHyDrationBridge_create_empty_stack;
+
     return self;
 }
