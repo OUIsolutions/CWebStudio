@@ -31,8 +31,9 @@ char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,.
             self->name
         );
     }
+    UniversalGarbage *garbage = hydration->request->garbage;
 
-    UniversalGarbage_add(hydration->garbage,CTextStack_free, callback);
+    UniversalGarbage_add(garbage,CTextStack_free, callback);
     return callback->rendered_text;
 
 }
@@ -58,7 +59,8 @@ char *private_CWebHyDrationBridge_call_trigger(
         self->name,
         func_args
     );
-    UniversalGarbage_add(hydration->garbage,CTextStack_free, callback);
+    UniversalGarbage *garbage = hydration->request->garbage;
+    UniversalGarbage_add(garbage,CTextStack_free, callback);
     return callback->rendered_text;
 }
 

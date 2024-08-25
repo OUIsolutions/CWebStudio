@@ -29,7 +29,9 @@ CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_index(CWebHyDratio
         return NULL;
     }
     CWebHyDrationSearchResult *result = private_newCWebHyDrationSearchResult(self, search);
-    UniversalGarbage_add(hydration->garbage,privateCWebHyDrationSearchResult_free,result);
+    UniversalGarbage *garbage = hydration->request->garbage;
+
+    UniversalGarbage_add(garbage,privateCWebHyDrationSearchResult_free,result);
     return result;
 }
 
@@ -59,7 +61,8 @@ CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_name(CWebHyDration
     free(formmated_name);
 
     CWebHyDrationSearchResult *result = private_newCWebHyDrationSearchResult(self, search);
-    UniversalGarbage_add(hydration->garbage,privateCWebHyDrationSearchResult_free,result);
+    UniversalGarbage *garbage = hydration->request->garbage;
+    UniversalGarbage_add(garbage,privateCWebHyDrationSearchResult_free,result);
     return result;
 }
 
