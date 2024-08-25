@@ -62,3 +62,12 @@ void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id
 
 
 void CWebHydration_redirect(CWebHyDrationBridge *self, const char *url);
+
+void CWebHydrationBridge_creatCookie(CWebHyDrationBridge *self, const char *key, const char *value, ...);
+
+void CWebHydrationBridge_creatCookie_with_time(CWebHyDrationBridge *self, const char *key, long time, const char *value, ...);
+
+void CWebHyDrationBridge_deletCookie(CWebHyDrationBridge *self, const char *key);
+
+
+

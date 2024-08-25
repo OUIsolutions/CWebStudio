@@ -1,3 +1,4 @@
+
 let private_cweb_actions_handlers = {
   alert: function (data) {
     alert(data["msg"]);
@@ -13,6 +14,24 @@ let private_cweb_actions_handlers = {
 
   set_session_storage: function (data) {
     sessionStorage.setItem(data["key"], data["value"]);
+  },
+
+  add_cookie_with_time: function (data){
+    let expires = "";
+    if (data.days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (data.days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = data.name + "=" + (data.value || "") + expires + "; path=/";
+  },
+
+  add_cookie: function (data) {
+    document.cookie = data.name + "=" + (data.value || "") + "; path=/";
+  },
+
+  delet_cookie: function (name) {   
+    document.cookie = name + '=; Max-Age=-99999999;';  
   },
 
   replace_element_by_query_selector: function (data) {

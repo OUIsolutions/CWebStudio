@@ -47,6 +47,9 @@ typedef struct CWebHydrationResponseNamespace {
     void (*replace_element_by_id)(CWebHyDrationBridge *self,const char *id, const char *code,...);
     void (*destroy_by_id)(CWebHyDrationBridge *self,const char * id);
     void (*redirect)(CWebHyDrationBridge *self, const char *url);
+    void (*add_cookie_with_time)(CWebHyDrationBridge *self, const char *key, long time, const char *value, ...);
+    void (*add_cookie)(CWebHyDrationBridge *self, const char *key, const char *value, ...);
+    void (*delet_cookie)(CWebHyDrationBridge *self, const char *key);
 
 }CWebHydrationActionsNamespace;
 

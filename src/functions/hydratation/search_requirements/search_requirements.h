@@ -49,6 +49,9 @@ void CWebHyDrationSearchRequirements_add_elements_by_attribute_not_auto_converti
     ...
 );
 
+void CWebHyDrationSearchRequirements_add_cookie_item(CWebHyDrationSearchRequirements *self, const char *name);
+
+
 
 void CWebHyDrationSearchRequirements_add_elements_by_class_name(
     CWebHyDrationSearchRequirements *self,

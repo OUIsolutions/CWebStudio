@@ -3,7 +3,6 @@
 CWebHydrationActionsNamespace newCWebHydrationActionsNamespace(){
     CWebHydrationActionsNamespace self ={0};
 
-
     self.replace_element_by_query_selector = CWebHyDrationBridge_replace_element_by_query_selector;
     self.append_by_query_selector = CWebHyDrationBridge_append_by_query_selector;
     self.destroy_by_query_selector =  CWebHyDrationBridge_destroy_by_query_selector;
@@ -18,5 +17,9 @@ CWebHydrationActionsNamespace newCWebHydrationActionsNamespace(){
     self.replace_element_by_id = CWebHyDrationBridge_replace_element_by_id;
     self.destroy_by_id = CWebHyDrationBridge_destroy_by_id;
     self.redirect = CWebHydration_redirect;
+    self.add_cookie_with_time = CWebHydrationBridge_creatCookie_with_time;
+    self.add_cookie = CWebHydrationBridge_creatCookie;
+    self.delet_cookie = CWebHyDrationBridge_deletCookie;
+
     return self;
 }

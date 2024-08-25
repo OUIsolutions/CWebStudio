@@ -42,3 +42,16 @@ function private_cweb_get_elements(props) {
     return finalvalue;
   });
 }
+
+function private_cweb_get_value_cookie_by_key(props){
+  const nameEQ = props.name + "=";
+    const cookiesArray = document.cookie.split(';');
+    
+    for (let i = 0; i < cookiesArray.length; i++) {
+        let cookie = cookiesArray[i].trim();
+        if (cookie.indexOf(nameEQ) === 0) {
+            return [cookie.substring(nameEQ.length, cookie.length)];
+        }
+    }
+    return []; 
+}

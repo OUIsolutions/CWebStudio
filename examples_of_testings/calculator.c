@@ -4,14 +4,8 @@
 CwebNamespace cweb;
 CTextStackModule stack;
 
-CWebHydrationBridgeNamespace nome;
-
 void bridge_set_operator(CWebHyDrationBridge *bridge){
-    CWebHyDrationSearchResult *visor = cweb.hydration.search_result.get_search_by_name(
-        bridge,
-        "window"
-    );
-    char * visor_str = cweb.hydration.search_result.get_string(visor,0);
+    char * visor_str = cweb.hydration.search_result.get_string_from_first_element_of_search(bridge, "window");
 
     char * operator_str = cweb.hydration.args.get_str_arg(bridge,0);
 
@@ -277,7 +271,6 @@ int main(){
 
   cweb = newCwebNamespace();
   stack = newCTextStackModule();
-  nome = cweb.hydration.bridge;
 
   CwebServer server = newCwebSever(3010, main_server);
   server.single_process = true;

@@ -45,6 +45,51 @@ void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,..
 
 }
 
+void CWebHydrationBridge_creatCookie_with_time(CWebHyDrationBridge *self, const char *key, long time, const char *value, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return;
+    }
+    cJSON *obj = cJSON_CreateObject();
+
+    va_list args;
+    va_start(args, value);
+    char *value_formated = private_CWeb_format_vaarg(value, args);
+    va_end(args);
+    cJSON_AddStringToObject(obj, "name", key);
+    cJSON_AddStringToObject(obj, "value", value_formated);
+    cJSON_AddNumberToObject(obj, "days", time);
+    free(value_formated);
+    privateCWebHyDrationBridge_add_response(self, "add_cookie_with_time", obj);
+}
+
+void CWebHydrationBridge_creatCookie(CWebHyDrationBridge *self, const char *key, const char *value, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return;
+    }
+    cJSON *obj = cJSON_CreateObject();
+
+    va_list args;
+    va_start(args, value);
+    char *value_formated = private_CWeb_format_vaarg(value, args);
+    va_end(args);
+    cJSON_AddStringToObject(obj, "name", key);
+    cJSON_AddStringToObject(obj, "value", value_formated);
+    free(value_formated);
+    privateCWebHyDrationBridge_add_response(self, "add_cookie", obj);
+}
+
+void CWebHyDrationBridge_deletCookie(CWebHyDrationBridge *self, const char *key){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return;
+    }
+    cJSON *obj = cJSON_CreateObject();
+
+    cJSON_AddStringToObject(obj, "name", key);
+    privateCWebHyDrationBridge_add_response(self, "delet_cookie", obj);
+}
+
 void CWebHyDrationBridge_execute_script(CWebHyDrationBridge *self,const char *code,...){
     if(CWebHyDrationBridge_has_errors(self)){
         return ;
