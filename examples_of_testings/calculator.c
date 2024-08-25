@@ -1,10 +1,13 @@
 
 #include "../src/one.c"
+#include "port.h"
 
 CwebNamespace cweb;
 CTextStackModule stack;
 
 void bridge_set_operator(CWebHyDrationBridge *bridge){
+
+    cweb.hydration.actions.add_class_by_id(bridge, "window", "%s", "slaslaslaslaslalsalsalslalsalslaslalslaslalslas");
 
     char * visor_str = cweb.hydration.search_result.get_string_from_first_element_of_search(bridge, "window");
 
@@ -51,6 +54,7 @@ void bridge_set_result(CWebHyDrationBridge *bridge){
             bridge,
             "operator"
         );
+
     char * operator_str = cweb.hydration.search_result.get_string(operator,0);
 
     CWebHydrationHandleErrors(bridge);
@@ -281,7 +285,7 @@ int main(){
   cweb = newCwebNamespace();
   stack = newCTextStackModule();
 
-  CwebServer server = newCwebSever(3001, main_server);
+  CwebServer server = newCwebSever(PORT_SERVER_GLOBAL_IN_MAKE, main_server);
   server.single_process = true;
   cweb.server.start(&server);
 }

@@ -298,6 +298,7 @@ void CWebHyDration_console_warn(CWebHyDrationBridge *self, const char *menssage,
 
     cJSON_AddStringToObject(obj, "message", menssage_formated);
     privateCWebHyDrationBridge_add_response(self, "warn", obj);
+    free(menssage_formated);
 }
 void CWebHyDration_console_error(CWebHyDrationBridge *self, const char *menssage, ...){
 
@@ -312,6 +313,7 @@ void CWebHyDration_console_error(CWebHyDrationBridge *self, const char *menssage
 
     cJSON_AddStringToObject(obj, "message", menssage_formated);
     privateCWebHyDrationBridge_add_response(self, "error", obj);
+    free(menssage_formated);
 }
 void CWebHyDration_console_clear(CWebHyDrationBridge *self){
 
@@ -320,6 +322,70 @@ void CWebHyDration_console_clear(CWebHyDrationBridge *self){
     }
     cJSON *obj = cJSON_CreateObject();
     privateCWebHyDrationBridge_add_response(self, "clear", obj);
+}
+
+void CWebHyDrationBridge_remove_class_by_id(CWebHyDrationBridge *self, const char *id, const char *class_name, ...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, class_name);
+    char *menssage_formated = private_CWeb_format_vaarg(class_name, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "class_name", menssage_formated);
+    cJSON_AddStringToObject(obj, "id", id);
+    privateCWebHyDrationBridge_add_response(self, "remove_class_by_id", obj);
+    free(menssage_formated);
+}
+
+void CWebHyDrationBridge_add_class_by_id(CWebHyDrationBridge *self, const char *id, const char *class_name, ...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, class_name);
+    char *menssage_formated = private_CWeb_format_vaarg(class_name, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "class_name", menssage_formated);
+    cJSON_AddStringToObject(obj, "id", id);
+    privateCWebHyDrationBridge_add_response(self, "add_class_by_id", obj);
+    free(menssage_formated);
+}
+
+void CWebHyDrationBridge_remove_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, class_name);
+    char *menssage_formated = private_CWeb_format_vaarg(class_name, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "class_name", menssage_formated);
+    cJSON_AddStringToObject(obj, "query_selector", element);
+    privateCWebHyDrationBridge_add_response(self, "remove_class_by_id", obj);
+    free(menssage_formated);
+}
+
+void CWebHyDrationBridge_add_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, class_name);
+    char *menssage_formated = private_CWeb_format_vaarg(class_name, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "class_name", menssage_formated);
+    cJSON_AddStringToObject(obj, "query_selector", element);
+    privateCWebHyDrationBridge_add_response(self, "add_class_by_id", obj);
+    free(menssage_formated);
 }
 
 

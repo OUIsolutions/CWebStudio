@@ -24,6 +24,9 @@ CWebHydrationActionsNamespace newCWebHydrationActionsNamespace(){
     self.console_warn = CWebHyDration_console_warn;
     self.console_clear = CWebHyDration_console_clear;
     self.console_error = CWebHyDration_console_error;
+    self.add_class_by_id = CWebHyDrationBridge_add_class_by_id;
+    self.remove_class_by_id = CWebHyDrationBridge_remove_class_by_id;
+    self.remove_class_by_query_selector = CWebHyDrationBridge_remove_class_by_query_selector;
 
     return self;
 }

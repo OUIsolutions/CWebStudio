@@ -87,7 +87,45 @@ let private_cweb_actions_handlers = {
 
   clear: function(data){
     console.clear();
+  },
+
+  add_class_by_query_selector: function (data) {
+    let element = document.querySelector(data.query_selector);
+    if (!element) {
+        return;
+    }
+    element.classList.add(data.class_name);
+  },
+
+  remove_class_by_query_selector: function (data) {
+    let element = document.querySelector(data.query_selector);
+    if (!element) {
+        return;
+    }
+    element.classList.remove(data.class_name);
+  },
+
+
+  add_class_by_id: function (data) {
+      let element = document.getElementById(data.id);
+      if (!element) {
+          return;
+      }
+      element.classList.add(data.class_name);
+  },
+
+  remove_class_by_id: function (data) {
+      let element = document.getElementById(data.id);
+      if (!element) {
+          return;
+      }
+      element.classList.remove(data.class_name);
   }
 
-
 };
+
+
+
+
+
+
