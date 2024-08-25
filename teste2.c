@@ -1,7 +1,6 @@
 
 #include "CWebStudio.h"
-#include <stdio.h>
-#include <time.h>
+
 
 CwebNamespace cweb;
 CTextStackModule stack;

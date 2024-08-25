@@ -66,7 +66,6 @@ CwebHttpResponse *main_server(CwebHttpRequest *request){
 
 
 int main(){
-    newUniversalGarbage()
 
     cweb = newCwebNamespace();
     stack = newCTextStackModule();

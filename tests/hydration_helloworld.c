@@ -1,4 +1,4 @@
-#include "CWebStudio.h"
+#include "../CWebStudio.h"
 
 CwebNamespace cweb;
 CTextStackModule stack;
@@ -66,7 +66,6 @@ CwebHttpResponse *main_server(CwebHttpRequest *request){
 
 
 int main(){
-    newUniversalGarbage()
 
     cweb = newCwebNamespace();
     stack = newCTextStackModule();
