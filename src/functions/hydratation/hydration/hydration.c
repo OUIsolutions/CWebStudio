@@ -247,15 +247,16 @@ char *CWebHyDration_create_script(CWebHyDration *self) {
 
     self->script_text = newCTextStack_string_empty();
 
-    CTextStack_format(self->script_text,"%s", private_cweb_hydration_js_content);
 
-    CTextStack_format(self->script_text, "let %s =[\n", PRIVATE_CWEB_PRIVATE_STACK);
+    CTextStack_format(self->script_text, "\nlet %s =[\n", PRIVATE_CWEB_PRIVATE_STACK);
     for(int i =0; i< self->stack_elements->size;i++){
         char *current = self->stack_elements->strings[i];
         CTextStack_format(self->script_text,"%s,\n",current);
     }
-
     CTextStack_text(self->script_text, "];\n");
+
+    CTextStack_format(self->script_text,"%s", private_cweb_hydration_js_content);
+
     for(int i =0; i < self->all_bridges->size;i++) {
         CWebHyDrationBridge *current = self->all_bridges->elments[i];
         CTextStack* created_code =private_CWebHyDrationBridge_create_script(current);

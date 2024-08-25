@@ -15,7 +15,8 @@ char *privateCWebHyDrationBridge_call_by_vaargss(CWebHyDrationBridge *self,const
     if(func_args == NULL) {
             CTextStack_format(
                 callback,
-                "private_cweb_bridges[%d]([]);",
+                "private_cweb_bridges[%s[%d]]([]);",
+                PRIVATE_CWEB_PRIVATE_STACK,
                 name_index
             );
             return callback->rendered_text;
@@ -30,8 +31,10 @@ char *privateCWebHyDrationBridge_call_by_vaargss(CWebHyDrationBridge *self,const
 
     CTextStack_format(
         callback,
-        "private_cweb_bridges[%d](%d);",
+        "private_cweb_bridges[%s[%d]](%s[%d]);",
+        PRIVATE_CWEB_PRIVATE_STACK,
         name_index,
+        PRIVATE_CWEB_PRIVATE_STACK,
         args_index
     );
 
