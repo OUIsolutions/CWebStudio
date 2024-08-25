@@ -29,6 +29,9 @@ function Generate_amalgamation_recursive(start_point, already_included_list)
 
     local start_point_sha = dtw.generate_sha_from_file(start_point)
     if already_included_list.is_included(start_point_sha) then
+        if start_point == 'src/dependencies/UniversalGarbage/definition.c' then
+
+        end
         clib.print(ANSI_YELLOW .. "file " .. start_point .. " already included\n ")
         return ""
     end
