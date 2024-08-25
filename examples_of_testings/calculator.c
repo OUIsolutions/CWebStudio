@@ -13,8 +13,6 @@ void bridge_set_operator(CWebHyDrationBridge *bridge){
 
     char * operator_str = cweb.hydration.args.get_str_arg(bridge,0);
     CWebHydrationHandleErrors(bridge);
-
-
     cweb.hydration.actions.set_session_storage_data(bridge,"operator",operator_str);
 
     CTextStack *first_num_formmated = stack.newStack_string(visor_str);
@@ -29,6 +27,9 @@ void bridge_set_operator(CWebHyDrationBridge *bridge){
     stack.free(first_num_formmated);
     stack.free(html_h2);
 }
+
+
+
 void bridge_set_result(CWebHyDrationBridge *bridge){
 
     CWebHyDrationSearchResult *visor = cweb.hydration.search_result.get_search_by_name(
@@ -99,6 +100,7 @@ void bridge_write_number(CWebHyDrationBridge *bridge){
   cweb.hydration.actions.replace_element_by_id(bridge, "window", html_h2->rendered_text);
   stack.free(html_h2);
 }
+
 
 
 CwebHttpResponse *page_main(

@@ -33,6 +33,16 @@ CWebHyDrationBridge * CWebHyDration_get_child_bridge(CWebHyDration *self,const c
 }
 
 
+CTextStack  * CWebHyDration_create_stack(CWebHyDration *self){
+    return CwebHttpRequest_create_stack(self->request);
+}
+
+CTextStack  * CWebHyDration_create_empty_stack(CWebHyDration *self){
+    return CwebHttpRequest_create_empty_stack(self->request);
+
+}
+
+
 CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *)){
     CWebHyDrationBridge *created = private_newCWebHyDrationBridge(name,callback,self);
     privateCWebHyDrationBridgeArray_append(self->all_bridges,created);

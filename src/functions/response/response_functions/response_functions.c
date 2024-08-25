@@ -49,13 +49,9 @@ CwebHttpResponse* cweb_send_any_cleaning_memory(const char *content_type,size_t 
 }
 
 
-CwebHttpResponse* cweb_send_rendered_CTextStack_cleaning_memory(struct CTextStack *stack,int status_code){
-
-     CwebHttpResponse *response = cweb_send_var_html(stack->rendered_text,status_code);
-    CTextStack_free(stack);
-    return response;
+CwebHttpResponse* cweb_send_rendered_CTextStack(struct CTextStack *stack,int status_code){
+    return cweb_send_var_html(stack->rendered_text,status_code);
 }
-
 
 
 CwebHttpResponse* cweb_send_text(const char *content,int status_code){

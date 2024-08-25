@@ -26,13 +26,11 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
 
 
 CTextStack * CWebHyDrationBridge_create_stack(CWebHyDrationBridge *self){
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-    return CwebHttpRequest_create_stack(hydration->request);
+    return CWebHyDration_create_stack((CWebHyDration*)self->hydration);
 }
 
 CTextStack * CWebHyDrationBridge_create_empty_stack(CWebHyDrationBridge *self){
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-    return CwebHttpRequest_create_empty_stack(hydration->request);
+    return CWebHyDration_create_empty_stack((CWebHyDration*)self->hydration);
 }
 
 CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
