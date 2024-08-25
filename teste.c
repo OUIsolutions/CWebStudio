@@ -1,4 +1,4 @@
-#include "src/one.c"
+#include "CWebStudio.h"
 
 CwebNamespace cweb;
 CTextStackModule stack;
@@ -47,7 +47,6 @@ CTextStack *create_main_page(CWebHyDration *hydration){
 }
 
 CwebHttpResponse *main_server(CwebHttpRequest *request){
-
 
     CWebHyDration *hydration = hydration_module.newCWebHyDration(request);
     bridge_module.create_bridge(
