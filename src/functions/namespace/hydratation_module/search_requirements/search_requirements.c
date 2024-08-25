@@ -19,6 +19,7 @@ CWebHydrationSearchRequirementsNamespace newCWebHydrationSearchRequirementsNames
     self.add_session_storage_item = CWebHyDrationSearchRequirements_add_session_storage_item;
     self.add_value_cookie_by_key = CWebHyDrationSearchRequirements_add_cookie_item;
     self.add_confirm = CWebHyDrationSearchRequirements_add_confirm;
+    self.add_prompt = CWebHyDrationSearchRequirements_add_prompt;
 
 
     self.add_element_by_id_setting_search_as_same_name =

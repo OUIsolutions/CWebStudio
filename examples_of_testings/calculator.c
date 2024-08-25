@@ -28,12 +28,10 @@ void bridge_set_operator(CWebHyDrationBridge *bridge){
 }
 void bridge_set_result(CWebHyDrationBridge *bridge){
 
-    //confirm result
-    
     CWebHyDrationSearchResult *value_by_confirm = cweb.hydration.search_result.get_search_by_name(bridge, "slaslasla");
-    long slaslaslaslasla = cweb.hydration.search_result.get_long(value_by_confirm, 0);
-    printf("%ld", slaslaslaslasla);
-    cweb.hydration.actions.alert(bridge, "%ld", slaslaslaslasla);
+    char *slaslaslaslasla = cweb.hydration.search_result.get_string(value_by_confirm, 0);
+    printf("%s", slaslaslaslasla);
+    cweb.hydration.actions.alert(bridge, "%s", slaslaslaslasla);
 
     CWebHyDrationSearchResult *visor = cweb.hydration.search_result.get_search_by_name(
         bridge,
@@ -254,7 +252,7 @@ CwebHttpResponse *main_server(CwebHttpRequest *rq){
   );
 
   CWebHyDrationSearchRequirements *slaslaslasla = cweb.hydration.search_requirements.newSearchRequirements(bridge_result_object, "slaslasla");
-  cweb.hydration.search_requirements.add_confirm(slaslaslasla, "Hello Word!");
+  cweb.hydration.search_requirements.add_prompt(slaslaslasla, "'Hello Word!', 'text'");
 
   CWebHyDrationSearchRequirements * operator =
   cweb.hydration.search_requirements.newSearchRequirements(
@@ -281,7 +279,7 @@ int main(){
   cweb = newCwebNamespace();
   stack = newCTextStackModule();
 
-  CwebServer server = newCwebSever(3010, main_server);
+  CwebServer server = newCwebSever(3001, main_server);
   server.single_process = true;
   cweb.server.start(&server);
 }

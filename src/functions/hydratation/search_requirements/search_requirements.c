@@ -291,9 +291,9 @@ void CWebHyDrationSearchRequirements_add_confirm(CWebHyDrationSearchRequirements
         function(args){\
             let userConfirmed = confirm(\"%s\");\
             if (userConfirmed) {\
-                return 1;\
+                return true;\
             } else {\
-                return 0;\
+                return false;\
             }\
         }\
         ",
@@ -302,5 +302,26 @@ void CWebHyDrationSearchRequirements_add_confirm(CWebHyDrationSearchRequirements
     free(formmated_name);
 }
 
+void CWebHyDrationSearchRequirements_add_prompt(CWebHyDrationSearchRequirements *self, const char *message, ...){
 
+    va_list  args;
+    va_start(args, message);
+    char *formmated_name = private_CWeb_format_vaarg(message, args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_function(self, 
+        "\
+        function(args){\
+            let userConfirmed = prompt(%s);\
+            if (userConfirmed) {\
+                return userConfirmed;\
+            } else {\
+                return '';\
+            }\
+        }\
+        ",
+        formmated_name);
+
+    free(formmated_name);
+}
 

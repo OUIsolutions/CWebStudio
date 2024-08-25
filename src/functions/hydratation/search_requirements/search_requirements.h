@@ -89,3 +89,5 @@ void CWebHyDrationSearchRequirements_add_session_storage_item(
     const char *name,
     ...
 );
+
+void CWebHyDrationSearchRequirements_add_prompt(CWebHyDrationSearchRequirements *self, const char *message, ...);
