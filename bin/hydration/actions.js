@@ -1,39 +1,32 @@
-
 let private_cweb_actions_handlers = {
   alert: function (data) {
     alert(data["msg"]);
   },
-
   execute_script: function (data) {
     eval(data["code"]);
   },
-
   redirect: function (data) {
     window.location.href = data["url"];
   },
-
   set_session_storage: function (data) {
     sessionStorage.setItem(data["key"], data["value"]);
   },
-
-  add_cookie_with_time: function (data){
+  add_cookie_with_time: function (data) {
     let expires = "";
     if (data.days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (data.days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
+      const date = new Date();
+      date.setTime(date.getTime() + data.days * 24 * 60 * 60 * 1000);
+      expires = "; expires=" + date.toUTCString();
     }
-    document.cookie = data.name + "=" + (data.value || "") + expires + "; path=/";
+    document.cookie =
+      data.name + "=" + (data.value || "") + expires + "; path=/";
   },
-
   add_cookie: function (data) {
     document.cookie = data.name + "=" + (data.value || "") + "; path=/";
   },
-
-  delet_cookie: function (name) {   
-    document.cookie = name + '=; Max-Age=-99999999;';  
+  delet_cookie: function (name) {
+    document.cookie = name + "=; Max-Age=-99999999;";
   },
-
   replace_element_by_query_selector: function (data) {
     let element = document.querySelector(data.query_selector);
     if (!element) {
@@ -73,19 +66,19 @@ let private_cweb_actions_handlers = {
     }
   },
 
-  log: function(data){
+  log: function (data) {
     console.log(data.message);
   },
 
-  warn: function(data){
+  warn: function (data) {
     console.warn(data.message);
   },
 
-  error: function(data){
+  error: function (data) {
     console.error(data.message);
   },
 
-  clear: function(data){
+  clear: function (data) {
     console.clear();
   },
 

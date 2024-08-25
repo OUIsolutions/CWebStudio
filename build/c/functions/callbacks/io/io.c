@@ -61,3 +61,15 @@ LuaCEmbedResponse *custom_print(LuaCEmbedTable *self,LuaCEmbed *args){
     }
     return NULL;
 }
+
+
+LuaCEmbedResponse *absolute_path(LuaCEmbedTable *self,LuaCEmbed *args){
+    char *relative = lua.args.get_str(args,0);
+    if(lua.has_errors(args)){
+        char *error_msg = lua.get_error_message(args);
+        return  lua.response.send_error(error_msg);
+    }
+    char absolute_path[2000] ={0};
+    realpath(relative, absolute_path);
+    return lua.response.send_str(absolute_path);
+}

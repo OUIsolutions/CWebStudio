@@ -1,5 +1,3 @@
-
-
 ---@class Clib
 ---@field load_string fun(path:string):string
 ---@field get_char fun(path:string,i:number):string
@@ -11,6 +9,7 @@
 ---@field system_with_string fun(comand:string):string
 ---@field indexof fun(content:string,comparation:string):number
 ---@field out_extension fun():string
+---@field absolute_path fun(path:string):string
 ---@field replace fun(content:string,target:string,value_to_replace:string):string
 ---@field trim fun(content:string):string
 ---@field convert_to_hexa fun(content:string):string

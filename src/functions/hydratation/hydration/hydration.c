@@ -1,9 +1,5 @@
 
 #include "../uniq.definitions_requirements.h"
-#include <string.h>
-#include <time.h>
-
-
 
 CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
 
@@ -29,7 +25,8 @@ CWebHyDrationBridge * CWebHyDration_get_child_bridge(CWebHyDration *self,const c
             return  current;
         }
     }
-    return NULL;
+
+    return CWebHyDration_create_bridge(self,name,NULL);
 }
 
 

@@ -13,9 +13,10 @@ LuaCEmbedResponse *convert_string_to_hexa(LuaCEmbedTable *self,LuaCEmbed *args){
 
     CTextStack *final = stack.newStack_string_empty();
 
+
     for(int i = 0; i < size; i++){
-        char bytes[10] = {0};
-        sprintf(bytes, "\\x%x", str[i]);
+        char bytes[15] = {0};
+        sprintf(bytes, "%d,", str[i]);
         stack.format(final, "%s", bytes);
     }
 
@@ -25,5 +26,3 @@ LuaCEmbedResponse *convert_string_to_hexa(LuaCEmbedTable *self,LuaCEmbed *args){
 
     return response;
 }
-
-

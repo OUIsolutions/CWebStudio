@@ -11,7 +11,7 @@
 #endif
 
 
-#ifndef  UNIVERSAL_GARBAGE_H
+#ifndef UNIVERSAL_GARBAGE_H
 #define UNIVERSAL_GARBAGE_H
 #include "UniversalGarbage/definition.c"
 #endif

@@ -4,16 +4,14 @@
 
 
 CWebHyDrationBridge * CWebHyDrationBridge_get_brother_bridge(CWebHyDrationBridge *self,const char *name){
-
     CWebHyDration *hydration = (CWebHyDration *)self->hydration;
     return CWebHyDration_get_child_bridge(hydration,name);
-
 }
+
 CWebHyDrationBridge *private_newCWebHyDrationBridge(
     const char *name,
     void (*callback)(CWebHyDrationBridge *),CWebHyDration *hydration
 ) {
-
     CWebHyDrationBridge *self = (CWebHyDrationBridge*)malloc(sizeof(CWebHyDrationBridge));
     *self = (CWebHyDrationBridge){0};
     self->name = strdup(name);
@@ -36,7 +34,6 @@ CTextStack * CWebHyDrationBridge_create_empty_stack(CWebHyDrationBridge *self){
 CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
     CWebHyDrationBridge *self, const char *name,...)
 {
-    //printf("chamou com o nome %s\n",name);
     va_list  args;
     va_start(args,name);
     char *formmated_name = private_CWeb_format_vaarg(name,args);
@@ -47,7 +44,6 @@ CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
         self,
         formmated_name
     );
-    //printf("endereço %p\n",(void**)&created_search);
 
     CWebHyDration *hydration =(CWebHyDration*)self->hydration;
     UniversalGarbage *garbage = hydration->request->garbage;
