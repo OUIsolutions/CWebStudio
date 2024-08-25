@@ -74,10 +74,10 @@ void CWebHyDration_console_warn(CWebHyDrationBridge *self, const char *menssage,
 void CWebHyDration_console_error(CWebHyDrationBridge *self, const char *menssage, ...);
 void CWebHyDration_console_clear(CWebHyDrationBridge *self);
 
-
-
-
-
+void CWebHyDrationBridge_remove_class_by_id(CWebHyDrationBridge *self, const char *id, const char *class_name, ...);
+void CWebHyDrationBridge_add_class_by_id(CWebHyDrationBridge *self, const char *id, const char *class_name, ...);
+void CWebHyDrationBridge_remove_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
+void CWebHyDrationBridge_add_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
 
 
 

@@ -54,6 +54,11 @@ typedef struct CWebHydrationResponseNamespace {
     void (*console_warn)(CWebHyDrationBridge *self,const char *menssage,...);
     void (*console_error)(CWebHyDrationBridge *self,const char *menssage,...);
     void (*console_clear)(CWebHyDrationBridge *self);
+    void (*add_class_by_query_selector)(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
+    void (*remove_class_by_query_selector)(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
+    void (*remove_class_by_id)(CWebHyDrationBridge *self, const char *id, const char *class_name, ...);
+    void (*add_class_by_id)(CWebHyDrationBridge *self, const char *id, const char *class_name, ...);
+
 
 
 }CWebHydrationActionsNamespace;
