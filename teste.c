@@ -10,7 +10,7 @@ CWebHydrationSearchRequirementsNamespace requirements;
 CWebHydrationSearchResultNamespace result_module;
 CWebHydrationArgsNamespace hydration_args;
 
-#define NUM_MODIFIER "num modifier"
+#define NUM_MODIFIER "nummodifier"
 
 
 //components
@@ -44,12 +44,7 @@ CTextStack *create_main_page(CWebHyDration *hydration){
 
     CTextScope(main_html, CTEXT_HTML){
         CTextScope(main_html, CTEXT_HEAD){
-            CTextScope(main_html, CTEXT_HEAD){
-                CTextScope(main_html, CTEXT_SCRIPT){
-                    char *script_generation = hydration_module.create_script(hydration);
-                    stack.text(main_html,script_generation);
-                }
-            }
+            CTextScope(main_html, CTEXT_HEAD){}
         }
         CTextScope(main_html, CTEXT_BODY){
 
@@ -72,7 +67,11 @@ CTextStack *create_main_page(CWebHyDration *hydration){
                 stack.text(main_html,"increment");
             }
 
-
+            //always ut the script on booton of  html
+            CTextScope(main_html, CTEXT_SCRIPT){
+                char *script_generation = hydration_module.create_script(hydration);
+                stack.text(main_html,script_generation);
+            }
         }
     }
     return main_html;
@@ -109,6 +108,6 @@ int main(){
     result_module  = hydration_module.search_result;
     hydration_args = hydration_module.args;
     actions = hydration_module.actions;
-    CwebServer server = newCwebSever(3001, main_server);
+    CwebServer server = newCwebSever(3000, main_server);
     cweb.server.start(&server);
 }

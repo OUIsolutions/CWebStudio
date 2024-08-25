@@ -9,10 +9,6 @@ CTextStack  * CWebHyDration_create_stack(CWebHyDration *self);
 
 CTextStack  * CWebHyDration_create_empty_stack(CWebHyDration *self);
 
-int private_cweb_add_stack_item_getting_ownership(CWebHyDration *self,char *value);
-
-int private_cweb_add_stack_item(CWebHyDration *self,const char *value);
-
 CWebHyDrationBridge * CWebHyDration_get_child_bridge(CWebHyDration *self,const char *name);
 
 void privateCWebHydration_raise_error(CWebHyDration *self,CWebHyDrationBridge *bridge, int error_code, const char *format,...);

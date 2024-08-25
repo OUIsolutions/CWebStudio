@@ -9,35 +9,26 @@ char *privateCWebHyDrationBridge_call_by_vaargss(CWebHyDrationBridge *self,const
     CTextStack *callback= CWebHyDrationBridge_create_empty_stack(self);
 
     CWebHyDration *hydration = (CWebHyDration*)self->hydration;
-    int name_index = private_cweb_add_stack_item(hydration,self->name);
-
 
     if(func_args == NULL) {
             CTextStack_format(
                 callback,
-                "private_cweb_bridges[%s[%d]]([]);",
-                PRIVATE_CWEB_PRIVATE_STACK,
-                name_index
-            );
+                "private_cweb_bridges['%s']([]);",
+                self->name            );
             return callback->rendered_text;
     }
 
     char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
-    char *formmated_func_array = private_CWeb_format("[%s]",formmated_func_args);
-    free(formmated_func_args);
 
-    int args_index = private_cweb_add_stack_item_getting_ownership(hydration,formmated_func_array);
 
 
     CTextStack_format(
         callback,
-        "private_cweb_bridges[%s[%d]](%s[%d]);",
-        PRIVATE_CWEB_PRIVATE_STACK,
-        name_index,
-        PRIVATE_CWEB_PRIVATE_STACK,
-        args_index
+        "private_cweb_bridges[`%s`]([%s]);",
+        self->name,
+        formmated_func_args
     );
-
+    free(formmated_func_args);
     return callback->rendered_text;
 }
 
