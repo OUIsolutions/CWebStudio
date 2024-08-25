@@ -10042,6 +10042,7 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
 ) {
     CWebHyDrationBridge *self = (CWebHyDrationBridge*)malloc(sizeof(CWebHyDrationBridge));
     *self = (CWebHyDrationBridge){0};
+    
     self->name = strdup(name);
     self->callback = callback;
     self->hydration = (void*)hydration;
@@ -10301,7 +10302,7 @@ char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,.
         va_end(args);
         CTextStack_format(
             callback,
-           "private_cweb_bridges[`%s`]([%s]);",
+           "private_cweb_bridges['%s']([%s]);",
             self->name,
             formmated_func_args
         );

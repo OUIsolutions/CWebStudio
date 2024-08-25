@@ -11,6 +11,7 @@ CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
     *self = (CWebHyDration){0};
     self->all_bridges = private_new_privateCWebHyDrationBridgeArray();
     self->request =  request;
+    self->stack_elements = newCwebStringArray();
     self->response = cJSON_CreateArray();
     self->max_content_size = CWEB_HYDRATION_DEFAULT_BODY_SIZE;
     request->hydratation = (void *)self;
@@ -213,6 +214,31 @@ CwebHttpResponse *private_CWebHydration_formmat_error_response(CWebHyDration *se
     return cweb_send_cJSON_cleaning_memory(response, 404);
 }
 
+
+int private_cweb_add_stack_item_getting_ownership(CWebHyDration *self,char *value){
+    int index = CwebStringArray_find(self->stack_elements, value);
+    bool element_found = index != -1;
+    if(element_found){
+        free(value);
+        return index;
+    }
+
+    CwebStringArray_add_getting_ownership(self->stack_elements, value);
+    index = self->stack_elements->size-1;
+    return index;
+}
+int private_cweb_add_stack_item(CWebHyDration *self,const char *value){
+    int index = CwebStringArray_find(self->stack_elements, value);
+    bool element_found = index != -1;
+    if(element_found){
+        return index;
+    }
+
+    CwebStringArray_add(self->stack_elements, value);
+    index = self->stack_elements->size-1;
+    return index;
+}
+
 char *CWebHyDration_create_script(CWebHyDration *self) {
 
     if(self->script_text) {
@@ -223,6 +249,13 @@ char *CWebHyDration_create_script(CWebHyDration *self) {
 
     CTextStack_format(self->script_text,"%s", private_cweb_hydration_js_content);
 
+    CTextStack_format(self->script_text, "let %s =[\n", PRIVATE_CWEB_PRIVATE_STACK);
+    for(int i =0; i< self->stack_elements->size;i++){
+        char *current = self->stack_elements->strings[i];
+        CTextStack_format(self->script_text,"%s,\n",current);
+    }
+
+    CTextStack_text(self->script_text, "];\n");
     for(int i =0; i < self->all_bridges->size;i++) {
         CWebHyDrationBridge *current = self->all_bridges->elments[i];
         CTextStack* created_code =private_CWebHyDrationBridge_create_script(current);
@@ -242,7 +275,9 @@ void private_CWebHyDration_free(CWebHyDration *self) {
     if(self->response){
         cJSON_Delete(self->response);
     }
-
+    if(self->stack_elements){
+        CwebStringArray_free(self->stack_elements);
+    }
 
     privateCWebHyDrationBridgeArray_free(self->all_bridges);
     free(self);
