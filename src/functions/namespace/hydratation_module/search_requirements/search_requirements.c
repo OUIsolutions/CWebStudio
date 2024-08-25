@@ -21,12 +21,17 @@ CWebHydrationSearchRequirementsNamespace newCWebHydrationSearchRequirementsNames
     self.add_confirm = CWebHyDrationSearchRequirements_add_confirm;
     self.add_prompt = CWebHyDrationSearchRequirements_add_prompt;
 
+    self.add_elements_by_id_setting_search_as_same_name =
+        CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name;
 
-    self.add_element_by_id_setting_search_as_same_name =
-        CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name;
-    self.add_element_by_id_setting_search_as_same_name_not_formmating =
-        CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name_not_format;
+    self.add_elements_by_id_setting_search_as_same_name_not_auto_converting =
+        CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name_not_auto_converting;
 
+    self.add_elements_by_class_name_setting_search_as_same_name =
+        CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name;
+
+    self.add_elements_by_class_name_setting_search_as_same_name_not_auto_converting =
+        CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name_not_auto_converting;
 
 
     return self;

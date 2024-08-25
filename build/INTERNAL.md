@@ -226,7 +226,43 @@ must be made
 # Search Requirements
 Search Requirements, its where you specify which elements the browser must return to the bridge lambda
 
+```c
 
+CWebHyDrationBridge * alert_bridge = bridge_module.create_bridge(
+    hydration,
+    ALERT_BRIDGE,
+    alert_bridge_callback
+);
+
+CWebHyDrationSearchRequirements *name =
+requirements.newSearchRequirements(alert_bridge,"name");
+requirements.add_elements_by_id(name,"name");
+
+```
+# Search Result
+SearchResult are  the objects  used to retrive the informations sended by the
+browser, defined in the search requirements
+
+```c
+CWebHyDrationSearchResult * name = result_module.get_search_by_name(bridge,"name");
+char *first_result_of_name = result_module.get_string(name,0);
+```
+
+# Actions
+The Actions its the actions that you want to be executed in the browser, it can be a alert
+a javascript execution, a  element to add/replace/destroy
+
+```c
+actions.alert(bridge,"hello %s",first_result_of_name);
+```
+
+## Full Runalble exemplo
+codeof:  examples/hydration_getting_a_entrie.c
+
+
+## ShortCuts
+you also can use shortcuts, to set the search requirements as the same name of the
+id/class that you want to find
 
 
 # Used Dependencies And Atributions

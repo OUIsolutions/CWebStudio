@@ -1,5 +1,6 @@
 
-#include "src/one.c"
+#include "../CWebStudio.h"
+
 
 CwebNamespace cweb;
 CTextStackModule stack;

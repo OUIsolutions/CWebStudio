@@ -1566,14 +1566,24 @@ typedef struct CWebHydrationSearchRequirementsNamespace {
         ...
     );
 
-
-    void (*add_element_by_id_setting_search_as_same_name)(
+    void (*add_elements_by_id_setting_search_as_same_name)(
         CWebHyDrationBridge *self, const char *id
     );
 
-    void (*add_element_by_id_setting_search_as_same_name_not_formmating)(
+
+    void (*add_elements_by_id_setting_search_as_same_name_not_auto_converting)(
         CWebHyDrationBridge *self, const char *id
     );
+
+
+    void (*add_elements_by_class_name_setting_search_as_same_name)(
+        CWebHyDrationBridge *self, const char *class_name
+    );
+
+    void (*add_elements_by_class_name_setting_search_as_same_name_not_auto_converting)(
+        CWebHyDrationBridge *self, const char *class_name
+    );
+
     void (*add_session_storage_item)(
         CWebHyDrationSearchRequirements *self,
         const char *name,
@@ -2527,13 +2537,6 @@ CTextStack * CWebHyDrationBridge_create_empty_stack(CWebHyDrationBridge *self);
 
 CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(CWebHyDrationBridge *self, const char *name,...);
 
-void CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name(
-    CWebHyDrationBridge *self, const char *id
-);
-
-void CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name_not_format(
-    CWebHyDrationBridge *self, const char *id
-);
 
 char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...);
 
@@ -2703,6 +2706,31 @@ void CWebHyDrationBridge_add_class_by_query_selector(CWebHyDrationBridge *self, 
 
 
 
+
+
+//path: src/functions/hydratation/bridge/search_requirements/search_requirements.h
+
+
+
+
+
+void CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name(
+    CWebHyDrationBridge *self, const char *id
+);
+
+
+void CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name_not_auto_converting(
+    CWebHyDrationBridge *self, const char *id
+);
+
+
+void CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name(
+    CWebHyDrationBridge *self, const char *class_name
+);
+
+void CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name_not_auto_converting(
+    CWebHyDrationBridge *self, const char *class_name
+);
 
 
 
@@ -9914,12 +9942,17 @@ CWebHydrationSearchRequirementsNamespace newCWebHydrationSearchRequirementsNames
     self.add_confirm = CWebHyDrationSearchRequirements_add_confirm;
     self.add_prompt = CWebHyDrationSearchRequirements_add_prompt;
 
+    self.add_elements_by_id_setting_search_as_same_name =
+        CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name;
 
-    self.add_element_by_id_setting_search_as_same_name =
-        CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name;
-    self.add_element_by_id_setting_search_as_same_name_not_formmating =
-        CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name_not_format;
+    self.add_elements_by_id_setting_search_as_same_name_not_auto_converting =
+        CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name_not_auto_converting;
 
+    self.add_elements_by_class_name_setting_search_as_same_name =
+        CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name;
+
+    self.add_elements_by_class_name_setting_search_as_same_name_not_auto_converting =
+        CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name_not_auto_converting;
 
 
     return self;
@@ -10051,22 +10084,6 @@ CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
     return created_search;
 }
 
-void CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name(
-    CWebHyDrationBridge *self, const char *id
-){
-    CWebHyDrationSearchRequirements * search =
-    CWebHyDrationBridge_newSearchRequirements(self,id);
-    CWebHyDrationSearchRequirements_add_elements_by_id(search, id);
-
-}
-
-void CWebHyDrationBridge_add_element_by_id_setting_search_as_same_name_not_format(
-    CWebHyDrationBridge *self, const char *id
-){
-    CWebHyDrationSearchRequirements * search =
-    CWebHyDrationBridge_newSearchRequirements(self,id);
-    CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting(search, id);
-}
 
 
 CTextStack*  private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self) {
@@ -10932,6 +10949,47 @@ void CWebHyDrationBridge_add_class_by_query_selector(CWebHyDrationBridge *self, 
 }
 
 
+
+
+//path: src/functions/hydratation/bridge/search_requirements/search_requirements.c
+
+
+
+void CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name(
+    CWebHyDrationBridge *self, const char *id
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,id);
+    CWebHyDrationSearchRequirements_add_elements_by_id(search, id);
+
+}
+
+
+void CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name_not_auto_converting(
+    CWebHyDrationBridge *self, const char *id
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,id);
+    CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting(search, id);
+}
+
+void CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name(
+    CWebHyDrationBridge *self, const char *class_name
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,class_name);
+    CWebHyDrationSearchRequirements_add_elements_by_class_name(search, class_name);
+
+}
+
+
+void CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name_not_auto_converting(
+    CWebHyDrationBridge *self, const char *class_name
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,class_name);
+    CWebHyDrationSearchRequirements_add_elements_by_class_name_not_auto_converting(search, class_name);
+}
 
 
 
