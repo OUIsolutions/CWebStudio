@@ -6,7 +6,7 @@
 CWebHyDrationSearchRequirements * private_newCWebHyDrationSearchRequirements_getting_name_ownership(
     CWebHyDrationBridge *bridge, char *name
 ){
-    CWebHyDrationSearchRequirements *self = malloc(sizeof(CWebHyDrationSearchRequirements));
+    CWebHyDrationSearchRequirements *self = (CWebHyDrationSearchRequirements*)malloc(sizeof(CWebHyDrationSearchRequirements));
     self->bridge =bridge;
     self->name =name;
     return self;
@@ -268,8 +268,8 @@ void CWebHyDrationSearchRequirements_add_session_storage_item(
 }
 
 void CWebHyDrationSearchRequirements_add_cookie_item(CWebHyDrationSearchRequirements *self, const char *name){
-    
-    CWebHyDrationSearchRequirements_add_function(self, 
+
+    CWebHyDrationSearchRequirements_add_function(self,
         "\
         function(args){\
             return private_cweb_get_value_cookie_by_key(\"%s\")\
@@ -286,7 +286,7 @@ void CWebHyDrationSearchRequirements_add_confirm(CWebHyDrationSearchRequirements
     char *formmated_name = private_CWeb_format_vaarg(message, args);
     va_end(args);
 
-    CWebHyDrationSearchRequirements_add_function(self, 
+    CWebHyDrationSearchRequirements_add_function(self,
         "\
         function(args){\
             let userConfirmed = confirm(\"%s\");\
@@ -309,7 +309,7 @@ void CWebHyDrationSearchRequirements_add_prompt(CWebHyDrationSearchRequirements 
     char *formmated_name = private_CWeb_format_vaarg(message, args);
     va_end(args);
 
-    CWebHyDrationSearchRequirements_add_function(self, 
+    CWebHyDrationSearchRequirements_add_function(self,
         "\
         function(args){\
             let userConfirmed = prompt(%s);\
@@ -324,4 +324,3 @@ void CWebHyDrationSearchRequirements_add_prompt(CWebHyDrationSearchRequirements 
 
     free(formmated_name);
 }
-

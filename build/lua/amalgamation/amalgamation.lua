@@ -27,16 +27,14 @@ function Generate_amalgamation_recursive(start_point, already_included_list)
         clib.exit(1)
     end
 
-    local start_point_sha = dtw.generate_sha_from_file(start_point)
-    if already_included_list.is_included(start_point_sha) then
-        if start_point == 'src/dependencies/UniversalGarbage/definition.c' then
+    local real_path = clib.absolute_path(start_point)
 
-        end
-        clib.print(ANSI_YELLOW .. "file " .. start_point .. " already included\n ")
+    if already_included_list.is_included(real_path) then
+        clib.print(ANSI_YELLOW .. "file " .. real_path .. " already included\n ")
         return ""
     end
 
-    already_included_list.append(start_point_sha)
+    already_included_list.append(real_path)
     ---@type AMalgamationStateMachine
     local content = dtw.load_file(start_point)
     local state_machine = {

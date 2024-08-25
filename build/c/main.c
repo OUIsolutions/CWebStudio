@@ -12,6 +12,7 @@ void add_callbacks(LuaCEmbed *main_obj){
     lua.tables.set_method(clib,"indexof",lua_index_of);
     lua.tables.set_method(clib,"replace",lua_replace_string);
     lua.tables.set_method(clib,"trim",lua_trim);
+    lua.tables.set_method(clib,"absolute_path",absolute_path);
     lua.tables.set_method(clib, "convert_to_hexa", convert_string_to_hexa);
 }
 
