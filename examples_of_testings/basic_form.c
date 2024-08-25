@@ -94,7 +94,7 @@ CwebHttpResponse *main_page(
     CWebHyDrationBridge *autentication_bridge
 ){
 
-    CTextStack * text = stack.newStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+    CTextStack * text = cweb.request.create_stack(request);
     CTextScope(text,CTEXT_HTML){
         CTextScope(text,CTEXT_HEAD){
             CTextScope_format(text, CTEXT_SCRIPT, "src='/hydration_script'");
@@ -133,7 +133,7 @@ CwebHttpResponse *main_page(
         }
     }
 
-    return  cweb.response.send_rendered_CTextStack_cleaning_memory(text,200);
+    return  cweb.response.send_rendered_CTextStack(text,200);
 }
 CWebHyDrationBridge *  create_autentication_bridge(CWebHyDration *hydration){
     CWebHyDrationBridge *autentication_bridge_object = cweb.hydration.bridge.create_bridge(

@@ -110,7 +110,7 @@ CwebHttpResponse *page_main(
     CWebHyDrationBridge *bridge_obj_set_result
 ){
 
-  CTextStack *html = stack.newStack("", "");
+  CTextStack *html = cweb.hydration.bridge.create_stack(bridge_obj_number_button);
 
   CTextScope(html, CTEXT_BODY){
 
@@ -197,7 +197,7 @@ CwebHttpResponse *page_main(
 
   }
 
-  return cweb.response.send_rendered_CTextStack_cleaning_memory(html, 200);
+  return cweb.response.send_rendered_CTextStack(html, 200);
 }
 
 void create_window_requirements(CWebHyDrationBridge *bridge){
