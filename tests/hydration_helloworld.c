@@ -6,7 +6,7 @@ CWebHydrationNamespace hydration_module;
 CWebHydrationBridgeNamespace bridge_module;
 CWebHydrationActionsNamespace actions;
 CWebHydrationSearchRequirementsNamespace requirements;
-CWebHydrationSearchResultNamespace result;
+CWebHydrationSearchResultNamespace result_module;
 CWebHydrationArgsNamespace hydration_args;
 
 #define ALERT_BRIDGE "alert"
@@ -72,7 +72,7 @@ int main(){
     hydration_module = cweb.hydration;
     bridge_module = hydration_module.bridge;
     requirements = hydration_module.search_requirements;
-    result  = hydration_module.search_result;
+    result_module  = hydration_module.search_result;
     hydration_args = hydration_module.args;
     actions = hydration_module.actions;
     CwebServer server = newCwebSever(3000, main_server);

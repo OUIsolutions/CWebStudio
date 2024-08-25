@@ -207,6 +207,28 @@ Several server configuration parameters may be set:
 codeof:  examples/server_paramns.c
 
 
+# HyDration
+The HyDration mechanic it's a mecanic to generate front end code in C, its based on the ideia
+of controling the browser by creating javascript
+
+codeof:  examples/hydration_helloworld.c
+
+# HyDration Explanation
+The HyDration its divided in 3 steps , first , you create the bridges, which its
+the functions to be called when some event get dispached, than you need to specify which elements
+the requirements the browser must return to thatfunction, it can be a html element, a session element
+etc, than the the bridge callback handler its called, and the server returns to the browser, what actions
+must be made
+
+![Hydration](graphics/images/hydration.jpg)
+
+
+# Search Requirements
+Search Requirements, its where you specify which elements the browser must return to the bridge lambda
+
+
+
+
 # Used Dependencies And Atributions
 DoTheWorld includes all self dependecies in the single file. If one of these libraries is used in your code, be mindful of circular imports.
 
