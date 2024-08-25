@@ -81,6 +81,9 @@ typedef struct CWebHydrationSearchRequirementsNamespace {
     );
 
     void (*add_value_cookie_by_key)(CWebHyDrationSearchRequirements *self, const char *key);
+    void (*add_confirm)(CWebHyDrationSearchRequirements *self, const char*message, ...);
+
+
 
 
 }CWebHydrationSearchRequirementsNamespace;

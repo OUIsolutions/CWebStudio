@@ -279,5 +279,28 @@ void CWebHyDrationSearchRequirements_add_cookie_item(CWebHyDrationSearchRequirem
     );
 }
 
+void CWebHyDrationSearchRequirements_add_confirm(CWebHyDrationSearchRequirements *self, const char *message, ...){
+
+    va_list  args;
+    va_start(args, message);
+    char *formmated_name = private_CWeb_format_vaarg(message, args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_function(self, 
+        "\
+        function(args){\
+            let userConfirmed = confirm(\"%s\");\
+            if (userConfirmed) {\
+                return 1;\
+            } else {\
+                return 0;\
+            }\
+        }\
+        ",
+        formmated_name);
+
+    free(formmated_name);
+}
+
 
 

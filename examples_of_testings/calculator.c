@@ -28,6 +28,13 @@ void bridge_set_operator(CWebHyDrationBridge *bridge){
 }
 void bridge_set_result(CWebHyDrationBridge *bridge){
 
+    //confirm result
+    
+    CWebHyDrationSearchResult *value_by_confirm = cweb.hydration.search_result.get_search_by_name(bridge, "slaslasla");
+    long slaslaslaslasla = cweb.hydration.search_result.get_long(value_by_confirm, 0);
+    printf("%ld", slaslaslaslasla);
+    cweb.hydration.actions.alert(bridge, "%ld", slaslaslaslasla);
+
     CWebHyDrationSearchResult *visor = cweb.hydration.search_result.get_search_by_name(
         bridge,
         "window"
@@ -245,6 +252,9 @@ CwebHttpResponse *main_server(CwebHttpRequest *rq){
       first_num,
       "first_num"
   );
+
+  CWebHyDrationSearchRequirements *slaslaslasla = cweb.hydration.search_requirements.newSearchRequirements(bridge_result_object, "slaslasla");
+  cweb.hydration.search_requirements.add_confirm(slaslaslasla, "Hello Word!");
 
   CWebHyDrationSearchRequirements * operator =
   cweb.hydration.search_requirements.newSearchRequirements(
