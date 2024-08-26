@@ -2,6 +2,7 @@
 #include "src/one.c"
 
 
+
 CwebNamespace cweb;
 CTextStackModule stack;
 CWebHydrationNamespace hydration_module;
@@ -11,38 +12,28 @@ CWebHydrationSearchRequirementsNamespace requirements;
 CWebHydrationSearchResultNamespace result_module;
 CWebHydrationArgsNamespace hydration_args;
 
-#define ARGS_BRIDGE "args"
+#define ALERT_BRIDGE "alert"
 
 
-//components
+void alert_bridge_callback(CWebHyDrationBridge * bridge){
+    CWebHyDrationSearchResult * name = result_module.get_search_by_name(bridge,"name");
+    char *first_result_of_name = result_module.get_string(name,0);
 
-void args_bridge_callback(CWebHyDrationBridge * bridge){
-
-    long size = hydration_args.get_args_size(bridge);
-    for(int i = 0; i < size;i++){
-
-        if(hydration_args.is_arg_number(bridge,i)){
-        long value = hydration_args.get_long_arg(bridge,i);
-            printf("arg %d: %ld\n",i,value);
-        }
-
-        if(hydration_args.is_arg_bool(bridge,i)){
-            bool value = hydration_args.get_bool_arg(bridge,i);
-            printf("arg %d: %s\n",i,value ? "true":"false");
-        }
-
-        if(hydration_args.is_arg_string(bridge,i)){
-            char *value = hydration_args.get_str_arg(bridge,i);
-            printf("arg %d: %s\n",i,value);
-        }
-        if(hydration_args.is_arg_null(bridge,i)){
-            printf("arg %d: NULL\n",i);
-        }
+    //means some information were not provided or its with the
+    //wrong type
+    if(bridge_module.has_errors(bridge)){
+        return;
+    }
+    bool name_its_empty =strcmp(first_result_of_name,"") ==0;
+    bool name_its_filled = !name_its_empty;
+    if(name_its_empty){
+        actions.alert(bridge,"you did not typed your name");
+    }
+    if(name_its_filled){
+        actions.alert(bridge,"hello %s",first_result_of_name);
 
     }
-    printf("====================================\n");
 }
-
 
 
 CTextStack *create_main_page(CWebHyDration *hydration){
@@ -51,44 +42,26 @@ CTextStack *create_main_page(CWebHyDration *hydration){
 
     CTextScope(main_html, CTEXT_HTML){
         CTextScope(main_html, CTEXT_HEAD){
-            CTextScope(main_html, CTEXT_HEAD){}
+            CTextScope(main_html, CTEXT_HEAD){
+                CTextScope(main_html, CTEXT_SCRIPT){
+                    char *script_generation = hydration_module.create_script(hydration);
+                    stack.text(main_html,script_generation);
+                }
+            }
         }
         CTextScope(main_html, CTEXT_BODY){
 
-            CWebHyDrationBridge *args_bridge = bridge_module.get_child_bridge(
-                hydration,ARGS_BRIDGE
+            CWebHyDrationBridge *alert_bridge = bridge_module.get_child_bridge(
+                hydration,ALERT_BRIDGE
             );
-
+            CTextScope_format(main_html, CTEXT_INPUT," placeholder='type your name' id='name'")
             CTextScope(main_html, CTEXT_BR){}
-
             CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(args_bridge,"10,'second argument'")
+                bridge_module.onclick(alert_bridge,NULL)
             ){
-                stack.text(main_html,"number and string");
-            }
-            CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(args_bridge,"10")
-            ){
-                stack.text(main_html,"number ");
+                stack.text(main_html,"click me");
             }
 
-            CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(args_bridge,"true")
-            ){
-                stack.text(main_html,"boolean");
-            }
-
-            CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(args_bridge,"null,'second argument'")
-            ){
-                stack.text(main_html,"null and string");
-            }
-
-            //always ut the script on booton of  html
-            CTextScope(main_html, CTEXT_SCRIPT){
-                char *script_generation = hydration_module.create_script(hydration);
-                stack.text(main_html,script_generation);
-            }
         }
     }
     return main_html;
@@ -96,13 +69,16 @@ CTextStack *create_main_page(CWebHyDration *hydration){
 
 CwebHttpResponse *main_server(CwebHttpRequest *request){
 
-
     CWebHyDration *hydration = hydration_module.newCWebHyDration(request);
-    CWebHyDrationBridge * args_brige = bridge_module.create_bridge(
+    CWebHyDrationBridge * alert_bridge = bridge_module.create_bridge(
         hydration,
-        ARGS_BRIDGE,
-        args_bridge_callback
+        ALERT_BRIDGE,
+        alert_bridge_callback
     );
+
+    CWebHyDrationSearchRequirements *name =
+    requirements.newSearchRequirements(alert_bridge,"name");
+    requirements.add_elements_by_id(name,"name");
 
     //if is
     if(hydration_module.is_the_trigger(hydration)){
@@ -124,6 +100,6 @@ int main(){
     result_module  = hydration_module.search_result;
     hydration_args = hydration_module.args;
     actions = hydration_module.actions;
-    CwebServer server = newCwebSever(3001, main_server);
+    CwebServer server = newCwebSever(3000, main_server);
     cweb.server.start(&server);
 }

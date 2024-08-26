@@ -264,7 +264,7 @@ codeof:  examples/hydration_getting_a_entrie.c
 you also can use shortcuts, to set the search requirements as the same name of the
 id/class that you want to find
 
-codeof:  examples/hydration_getting_a_entrie_shor.c
+codeof:  examples/hydration_getting_a_entrie_short.c
 
 where you can use **get_string_from_first_element_of_search** to retrive the first element of the search
 
@@ -277,11 +277,23 @@ element
 ```c
 requirements.add_elements_by_id_setting_search_as_same_name(alert_bridge,"name");
 ```
-codeof:  examples/append.c
+
+
+## Handling Args
+you can pass arguments between bridges,  note that they must be separated by **,** , and
+strings must be with **'** or **"**
+
+```c
+bridge_module.onclick(args_bridge,"10,'second argument'")
+```
+
+codeof:  examples/args.c
 
 ## Handling Numbers
 you also can handle numbers, because the system will autoconvert all elements , unless you specify with the **not_auto_convert**
 sulfix in functions requirements
+
+codeof:  examples/incrementer.c
 
 
 
