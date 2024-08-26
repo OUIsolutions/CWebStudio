@@ -10,7 +10,7 @@ CWebHydrationSearchRequirementsNamespace requirements;
 CWebHydrationSearchResultNamespace result_module;
 CWebHydrationArgsNamespace hydration_args;
 
-#define NUM_MODIFIER "nummodifier"
+#define NUM_MODIFIER "num modifier"
 
 
 //components
@@ -56,7 +56,7 @@ CTextStack *create_main_page(CWebHyDration *hydration){
             CTextScope(main_html, CTEXT_BR){}
 
             CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(num_modifier,"%d",-1)
+                bridge_module.onclick(num_modifier,"%d, 'aaa',\"220\"",-1)
             ){
                 stack.text(main_html,"decrement");
             }
@@ -108,6 +108,6 @@ int main(){
     result_module  = hydration_module.search_result;
     hydration_args = hydration_module.args;
     actions = hydration_module.actions;
-    CwebServer server = newCwebSever(3000, main_server);
+    CwebServer server = newCwebSever(3001, main_server);
     cweb.server.start(&server);
 }

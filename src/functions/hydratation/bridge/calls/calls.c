@@ -7,28 +7,36 @@ char *privateCWebHyDrationBridge_call_by_vaargss(CWebHyDrationBridge *self,const
     }
 
     CTextStack *callback= CWebHyDrationBridge_create_empty_stack(self);
+    UniversalGarbage *garbage = newUniversalGarbage();
 
-    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    CTextStack *name_assci = private_cweb_create_assci_code(self->name);
+    UniversalGarbage_add(garbage, CTextStack_free, name_assci);
+
 
     if(func_args == NULL) {
             CTextStack_format(
                 callback,
-                "private_cweb_bridges['%s']([]);",
-                self->name            );
+                "private_cweb_call_bridge_with_assic(%t,[]);",
+                name_assci);
+            UniversalGarbage_free(garbage);
             return callback->rendered_text;
     }
 
     char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
-
+    UniversalGarbage_add_simple(garbage, formmated_func_args);
+    CTextStack * args_assci = private_cweb_create_assci_code(formmated_func_args);
+    UniversalGarbage_add(garbage, CTextStack_free, args_assci);
 
 
     CTextStack_format(
         callback,
-        "private_cweb_bridges[`%s`]([%s]);",
-        self->name,
-        formmated_func_args
+        "private_cweb_call_bridge_with_assic(%t,%t);",
+        name_assci,
+        args_assci
     );
-    free(formmated_func_args);
+
+    UniversalGarbage_free(garbage);
+
     return callback->rendered_text;
 }
 

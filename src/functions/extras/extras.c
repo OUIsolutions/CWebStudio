@@ -1,5 +1,6 @@
 
 #include "../uniq.definitions_requirements.h"
+#include <string.h>
 
 
 
@@ -207,4 +208,15 @@ bool private_cweb_is_string_from_point(const char *content, long content_size, c
          CTextStack_format(hexa_format,"%s",buffer);
      };
      return CTextStack_self_transform_in_string_and_self_clear(hexa_format);
+ }
+
+
+ CTextStack  *private_cweb_create_assci_code(const char *msg){
+     CTextStack *data = newCTextStack_string("[");
+     long size = strlen(msg);
+     for(int i =0; i < size;i++){
+         CTextStack_format(data, "%d,", msg[i]);
+     }
+     CTextStack_text(data,"]");
+     return data;
  }
