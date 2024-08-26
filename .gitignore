@@ -12,7 +12,7 @@ lua_debug.ua
 *.elf
 teste.py
 a.png
-main.c
+
 requisicao
 aaa.jpg
 # Linker output
@@ -20,7 +20,6 @@ aaa.jpg
 *.map
 *.exp
 trash
-bin
 # Precompiled Headers
 *.gch
 *.pch
@@ -61,3 +60,5 @@ Mkfile.old
 dkms.conf
 !build.exe
 !build.out
+.idea
+.vscode

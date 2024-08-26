@@ -207,6 +207,96 @@ Several server configuration parameters may be set:
 codeof:  examples/server_paramns.c
 
 
+# HyDration
+The HyDration mechanic it's a mecanic to generate front end code in C, its based on the ideia
+of controling the browser by creating javascript
+
+codeof:  examples/hydration_helloworld.c
+
+# HyDration Explanation
+The HyDration its divided in 3 steps , first , you create the bridges, which its
+the functions to be called when some event get dispached, than you need to specify which elements
+the requirements the browser must return to thatfunction, it can be a html element, a session element
+etc, than the the bridge callback handler its called, and the server returns to the browser, what actions
+must be made
+
+![Hydration](graphics/images/hydration.jpg)
+
+
+# Search Requirements
+Search Requirements, its where you specify which elements the browser must return to the bridge lambda
+
+```c
+
+CWebHyDrationBridge * alert_bridge = bridge_module.create_bridge(
+    hydration,
+    ALERT_BRIDGE,
+    alert_bridge_callback
+);
+
+CWebHyDrationSearchRequirements *name =
+requirements.newSearchRequirements(alert_bridge,"name");
+requirements.add_elements_by_id(name,"name");
+
+```
+# Search Result
+SearchResult are  the objects  used to retrive the informations sended by the
+browser, defined in the search requirements
+
+```c
+CWebHyDrationSearchResult * name = result_module.get_search_by_name(bridge,"name");
+char *first_result_of_name = result_module.get_string(name,0);
+```
+
+# Actions
+The Actions its the actions that you want to be executed in the browser, it can be a alert
+a javascript execution, a  element to add/replace/destroy
+
+```c
+actions.alert(bridge,"hello %s",first_result_of_name);
+```
+
+## Full Runalble exemplo
+codeof:  examples/hydration_getting_a_entrie.c
+
+
+## ShortCuts
+you also can use shortcuts, to set the search requirements as the same name of the
+id/class that you want to find
+
+codeof:  examples/hydration_getting_a_entrie_short.c
+
+where you can use **get_string_from_first_element_of_search** to retrive the first element of the search
+
+```c
+char *first_result_of_name = result_module.get_string_from_first_element_of_search(bridge,"name");
+```
+or **add_elements_by_id_setting_search_as_same_name** to create a requirements with same name of the id/class
+element
+
+```c
+requirements.add_elements_by_id_setting_search_as_same_name(alert_bridge,"name");
+```
+
+
+## Handling Args
+you can pass arguments between bridges,  note that they must be separated by **,** , and
+strings must be with **'** or **"**
+
+```c
+bridge_module.onclick(args_bridge,"10,'second argument'")
+```
+
+codeof:  examples/args.c
+
+## Handling Numbers
+you also can handle numbers, because the system will autoconvert all elements , unless you specify with the **not_auto_convert**
+sulfix in functions requirements
+
+codeof:  examples/incrementer.c
+
+
+
 # Used Dependencies And Atributions
 DoTheWorld includes all self dependecies in the single file. If one of these libraries is used in your code, be mindful of circular imports.
 

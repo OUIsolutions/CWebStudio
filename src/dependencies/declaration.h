@@ -9,4 +9,10 @@
 #undef cJSON__h
 #endif
 
+
+#ifndef  UNIVERSAL_GARBAGE_H
+#include "UniversalGarbage/declaration.h"
+#endif
+
+
 #endif

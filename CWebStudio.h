@@ -35,7 +35,7 @@
 
 #ifndef CTEXTENGINE_H
 //path: src/dependencies/CTextEngine/declaration.h
-//path: src/dependencies/CTextEngine/depencies.h
+//path: src/dependencies/CTextEngine/imports.h
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -45,24 +45,30 @@
 
 
 
-//path: src/dependencies/CTextEngine/macros.h
+//path: src/dependencies/CTextEngine/constants/all.h
+#ifndef PRIVATE_CTEXT_CONST
+#define PRIVATE_CTEXT_CONST
 
-#define CTextScope(s,t)\
-ctext_open(s, t);\
-for(int snaunduwwqwetjsdvda = 0; snaunduwwqwetjsdvda < 1; ctext_close(s, t), ++snaunduwwqwetjsdvda)
-
-#define CText$Scope(s,t, ...)\
-CTextStack_$open(s,t,__VA_ARGS__);\
-for(int snaunduwwqwetjsdvda = 0; snaunduwwqwetjsdvda < 1; ctext_close(s, t), ++snaunduwwqwetjsdvda)
-
-
-//path: src/dependencies/CTextEngine/constants.h
+//path: src/dependencies/CTextEngine/constants/ownership.h
 
 #define CTEXT_BY_OWNESHIP 1
 #define CTEXT_BY_COPY 2
 #define CTEXT_BY_REFERENCE 3
 
-//path: src/dependencies/CTextEngine/tags.h
+
+//path: src/dependencies/CTextEngine/constants/types.h
+
+
+#define CTEXT_LINE_BREAKER "\n"
+#define CTEXT_SEPARATOR "   "
+
+#define CTEXT_LONG 1
+#define CTEXT_DOUBLE 2
+#define CTEXT_BOOL 3
+#define CTEXT_STRING 4
+
+
+//path: src/dependencies/CTextEngine/constants/tags.h
 ////
 #define CTEXT_HTML "html"
 #define CTEXT_BODY "body"
@@ -129,17 +135,36 @@ for(int snaunduwwqwetjsdvda = 0; snaunduwwqwetjsdvda < 1; ctext_close(s, t), ++s
 
 
 
-//path: src/dependencies/CTextEngine/CTextStack/CTextStack.h
+#endif
 
 
-#define CTEXT_LINE_BREAKER "\n"
-#define CTEXT_SEPARATOR "   "
+//path: src/dependencies/CTextEngine/macros/all.h
 
-#define CTEXT_LONG 1
-#define CTEXT_DOUBLE 2
-#define CTEXT_BOOL 3
-#define CTEXT_STRING 4
+#ifndef PRIVATE_CTEXT_MACROS
+#define PRIVATE_CTEXT_MACROS
+//path: src/dependencies/CTextEngine/macros/scope.h
 
+#define CTextScope(s,t)\
+ctext_open(s, t);\
+for(int snaunduwwqwetjsdvda = 0; snaunduwwqwetjsdvda < 1; ctext_close(s, t), ++snaunduwwqwetjsdvda)
+
+#define CTextScope_format(s,t, ...)\
+CTextStack_open_format(s,t,__VA_ARGS__);\
+for(int snaunduwwqwetjsdvda = 0; snaunduwwqwetjsdvda < 1; ctext_close(s, t), ++snaunduwwqwetjsdvda)
+
+
+#endif
+
+
+//path: src/dependencies/CTextEngine/types/all.h
+//path: src/dependencies/CTextEngine/types/CTextArray.h
+
+//path: src/dependencies/CTextEngine/types/CTextStack.h
+
+
+
+#ifndef PRIVATE_CTEXT_STACK_TYPE_H
+#define PRIVATE_CTEXT_STACK_TYPE_H
 typedef struct CTextStack{
 
     char *rendered_text;
@@ -151,143 +176,12 @@ typedef struct CTextStack{
     int ident_level;
 
 }CTextStack;
+#endif
 
-struct CTextStack *newCTextStack(const char *line_breaker, const char *separator);
 
 
-struct CTextStack *newCTextStack_string(const char *starter);
-
-struct CTextStack *newCTextStack_string_format(const char *format, ...);
-
-struct CTextStack *newCTextStack_string_getting_ownership(const char *starter);
-
-struct CTextStack *newCTextStack_string_empty();
-
-
-void CTextStack_text(struct CTextStack *self, const char *text);
-
-
-void private_ctext_text_double_size_if_reachs(struct CTextStack *self);
-
-
-void CTextStack_segment_text(struct CTextStack *self, const char *text);
-
-
-void CTextStack_segment(struct CTextStack *self);
-
-
-void CTextStack_$open(struct CTextStack *self, const char *tag, const char *format, ...);
-
-
-
-void CTextStack_only$open(struct CTextStack *self, const char *tag, const char *format, ...);
-
-
-void CTextStack_auto$close(struct CTextStack *self, const char *tag, const char *format, ...);
-
-
-void CTextStack_format(struct CTextStack *self, const char *format, ...);
-
-
-void CTextStack_segment_format(struct CTextStack *self, const char *format, ...);
-
-
-void ctext_open(struct CTextStack *self, const char *tag);
-
-
-
-void ctext_close(struct CTextStack *self, const char *tag);
-
-void CTextStack_represent(struct CTextStack *self);
-void CTextStack_free(struct CTextStack *self);
-
-
-struct CTextStack * CTextStack_clone(struct CTextStack *self);
-
-
-char * CTextStack_self_transform_in_string_and_self_clear(struct CTextStack *self);
-
-void private_CTextStack_parse_ownership(struct CTextStack *self, struct CTextStack *new_string);
-
-
-void CTextStack_restart(struct CTextStack *self);
-
-
-struct CTextStack *CTextStack_substr(struct CTextStack *self, long starter, long end);
-void CTextStack_self_substr(struct CTextStack *self, long starter, long end);
-
-
-struct CTextStack *CTextStack_pop(struct CTextStack *self, long starter, long end);
-void  CTextStack_self_pop(struct CTextStack *self, long starter, long end);
-
-
-struct CTextStack *CTextStack_replace(struct CTextStack *self,const char *element, const char *element_to_replace);
-void CTextStack_self_replace(struct CTextStack *self,const char *element, const char *element_to_replace);
-
-
-struct CTextStack *CTextStack_replace_long(struct CTextStack *self,const char *element, long element_to_replace);
-void CTextStack_self_replace_long(struct CTextStack *self,const char *element, long element_to_replace);
-
-struct CTextStack *CTextStack_replace_double(struct CTextStack *self,const char *element, double element_to_replace);
-void CTextStack_self_replace_double(struct CTextStack *self,const char *element, double element_to_replace);
-
-
-struct CTextStack *CTextStack_insert_at(struct CTextStack *self,long point, const char *element);
-void CTextStack_self_insert_at(struct CTextStack *self,long point, const char *element);
-
-
-long CTextStack_index_of_char(struct  CTextStack *self, char element);
-long CTextStack_index_of(struct  CTextStack *self, const char *element);
-
-bool CTextStack_starts_with(struct  CTextStack *self, const char *element);
-bool CTextStack_ends_with(struct  CTextStack *self, const char *element);
-
-bool CTextStack_equal(struct  CTextStack *self,const char *element);
-
-struct CTextStack *CTextStack_trim(struct CTextStack *self);
-void CTextStack_self_trim(struct CTextStack *self);
-
-struct CTextStack *CTextStack_lower(struct CTextStack *self);
-void CTextStack_self_lower(struct CTextStack *self);
-
-struct CTextStack *CTextStack_captalize(struct CTextStack *self);
-void CTextStack_self_captalize(struct CTextStack *self);
-
-struct CTextStack *CTextStack_upper(struct CTextStack *self);
-void CTextStack_self_upper(struct CTextStack *self);
-
-int CTextStack_typeof(struct CTextStack *self);
-
-bool CTextStack_is_a_num(struct CTextStack *self);
-
-
-const char * CTextStack_typeof_in_str(struct CTextStack *self);
-bool  CTextStack_parse_to_bool(struct CTextStack *self);
-long  CTextStack_parse_to_integer(struct CTextStack *self);
-double  CTextStack_parse_to_double(struct CTextStack *self);
-
-
-struct CTextStack *CTextStack_reverse(struct CTextStack *self);
-void CTextStack_self_reverse(struct CTextStack *self);
-
-
-
-
-//path: src/dependencies/CTextEngine/extras/extras.h
-
-
-long private_CText_transform_index(long size, long value);
-
-
-void private_ctext_generate_formated_text(
-    struct CTextStack *stack,
-    const char *format,
-    va_list argptr
-    );
-
-//path: src/dependencies/CTextEngine/CTextArray/CTextArray.h
-
-
+#ifndef  PRIVATE_CTEXT_ARRAY_TYPE_H
+#define PRIVATE_CTEXT_ARRAY_TYPE_H
 typedef struct CTextArray{
 
     CTextStack **stacks;
@@ -296,34 +190,44 @@ typedef struct CTextArray{
 
 }CTextArray;
 
-CTextArray * newCTextArray();
+#endif
 
 
-void CTextArray_append(CTextArray *self,CTextStack *element);
 
 
-void CTextArray_append_string(CTextArray *self,const char *element);
-
-CTextStack * CTextArray_join(CTextArray *self,const char *separator);
-
-CTextArray * CTextArray_split(const char *element,const char *target);
-
-CTextArray * CTextArray_map(CTextArray *self, CTextStack *(caller)(CTextStack* element));
-
-CTextArray * CTextArray_filter(CTextArray *self, bool (caller)(CTextStack* element));
-
-void  CTextArray_foreach(CTextArray *self, void (*caller)(CTextStack* element));
-
-bool CTextArray_includes(CTextArray *self,const char *element);
-
-void  CTextArray_free(CTextArray *self);
-
-void CTextArray_represent(CTextArray *self);
+//path: src/dependencies/CTextEngine/types/namespace/all.h
+//path: src/dependencies/CTextEngine/types/namespace/array.h
 
 
-//path: src/dependencies/CTextEngine/CTextNamespace/declaration.h
-//path: src/dependencies/CTextEngine/CTextNamespace/CTexStackModule/CTextStackModule.h
+#ifndef PRIVATE_CTEXT_ARRAY_NAMESPACE_MODULE
+#define PRIVATE_CTEXT_ARRAY_NAMESPACE_MODULE
+typedef struct CTextArrayModule{
+    CTextArray *(*newArray)();
+    void (*append)(CTextArray *self,CTextStack *element);
+    void (*append_string)(CTextArray *self,const char *element);
+    CTextStack * (*join)(CTextArray *self,const char *separator);
 
+    CTextArray * (*map)(CTextArray *self, CTextStack *(caller)(CTextStack* element));
+    CTextArray * (*filter)(CTextArray *self, bool (caller)(CTextStack* element));
+    void  (*foreach)(CTextArray *self, void (*caller)(CTextStack* element));
+    bool (*includes)(CTextArray *self,const char *element);
+    void (*represent)(CTextArray *self);
+    void (*free)(CTextArray *self);
+
+}CTextArrayModule;
+#endif
+
+
+//path: src/dependencies/CTextEngine/types/namespace/namespace.h
+
+
+
+//path: src/dependencies/CTextEngine/types/namespace/stack.h
+
+
+
+#ifndef  PRIVATE_CTEXT_STACK_NAMESPACE_MODULE
+#define PRIVATE_CTEXT_STACK_NAMESPACE_MODULE
 
 typedef struct CTextStackModule{
 
@@ -352,11 +256,11 @@ typedef struct CTextStackModule{
 
     void (*segment_format)(struct CTextStack *self, const char *format, ...);
 
-    void (*$open)(struct CTextStack *self, const char *tag, const char *format,...);
+    void (*open_format)(struct CTextStack *self, const char *tag, const char *format,...);
 
-    void (*only$open)(struct CTextStack *self, const char *tag, const char *format,...);
+    void (*only_open_format)(struct CTextStack *self, const char *tag, const char *format,...);
 
-    void (*auto$close)(struct CTextStack *self, const char *tag, const char *format,...);
+    void (*auto_close_format)(struct CTextStack *self, const char *tag, const char *format,...);
 
     void (*open)(struct CTextStack *self, const char *tag);
 
@@ -419,38 +323,295 @@ typedef struct CTextStackModule{
     long (*index_of_char)(struct CTextStack *self, char element);
 }CTextStackModule;
 
-CTextStackModule newCTextStackModule();
 
-//path: src/dependencies/CTextEngine/CTextNamespace/CTextArrayModule/CTextArrayModule.h
-
-typedef struct CTextArrayModule{
-    CTextArray *(*newArray)();
-    void (*append)(CTextArray *self,CTextStack *element);
-    void (*append_string)(CTextArray *self,const char *element);
-    CTextStack * (*join)(CTextArray *self,const char *separator);
-
-    CTextArray * (*map)(CTextArray *self, CTextStack *(caller)(CTextStack* element));
-    CTextArray * (*filter)(CTextArray *self, bool (caller)(CTextStack* element));
-    void  (*foreach)(CTextArray *self, void (*caller)(CTextStack* element));
-    bool (*includes)(CTextArray *self,const char *element);
-    void (*represent)(CTextArray *self);
-    void (*free)(CTextArray *self);
-
-}CTextArrayModule;
-
-CTextArrayModule newCTextArrayModule();
-
-//path: src/dependencies/CTextEngine/CTextNamespace/CTextNamespace/CTextNamespace.h
+#endif
 
 
+
+#ifndef PRIVATE_CTEXT_NAMESPACE_TYPE
+#define PRIVATE_CTEXT_NAMESPACE_TYPE
 typedef struct CTextNamespace{
 
     CTextArrayModule array;
     CTextStackModule stack;
 
 }CTextNamespace;
+#endif
+
+
+
+
+
+
+
+
+//path: src/dependencies/CTextEngine/functions/declaration.h
+
+#ifndef PRIVATE_CTEXT_FUNCTION_DECLARATION
+#define PRIVATE_CTEXT_FUNCTION_DECLARATION
+//path: src/dependencies/CTextEngine/functions/CTextStack/declaration.h
+//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/admnistrative_methods.h
+
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/../unique.declaration_requirements.h
+//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/../../unique.declaration_requirements.h
+
+
+
+
+
+
+
+
+
+
+
+
+char * CTextStack_self_transform_in_string_and_self_clear(struct CTextStack *self);
+
+void private_CTextStack_parse_ownership(struct CTextStack *self, struct CTextStack *new_stack);
+
+void CTextStack_restart(struct CTextStack *self);
+
+void CTextStack_represent(struct CTextStack *self);
+
+void CTextStack_free(struct CTextStack *self);
+
+ CTextStack * CTextStack_clone(struct CTextStack *self);
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/algo_methods/algo_methods.h
+
+
+
+
+
+ CTextStack * CTextStack_substr(struct CTextStack *self, long starter, long end);
+
+
+void CTextStack_self_substr(struct CTextStack *self, long starter, long end);
+
+struct CTextStack *CTextStack_replace(struct CTextStack *self,const char *element, const char *element_to_replace);
+
+void CTextStack_self_replace(struct CTextStack *self,const char *element, const char *element_to_replace);
+
+
+struct CTextStack *CTextStack_replace_long(struct CTextStack *self,const char *element, long element_to_replace);
+
+
+
+void CTextStack_self_replace_long(struct CTextStack *self,const char *element, long element_to_replace);
+
+
+struct CTextStack *CTextStack_replace_double(struct CTextStack *self,const char *element, double element_to_replace);
+
+
+void CTextStack_self_replace_double(struct CTextStack *self,const char *element, double element_to_replace);
+
+
+long CTextStack_index_of(struct  CTextStack *self, const char *element);
+
+long CTextStack_index_of_char(struct  CTextStack *self, char element);
+
+bool CTextStack_starts_with(struct  CTextStack *self, const char *element);
+
+
+bool CTextStack_ends_with(struct  CTextStack *self, const char *element);
+
+
+
+struct CTextStack *CTextStack_lower(struct CTextStack *self);
+
+void CTextStack_self_lower(struct CTextStack *self);
+
+
+struct CTextStack *CTextStack_upper(struct CTextStack *self);
+
+
+CTextStack *CTextStack_captalize(struct CTextStack *self);
+
+void CTextStack_self_captalize(struct CTextStack *self);
+
+
+void CTextStack_self_upper(struct CTextStack *self);
+
+
+ CTextStack *CTextStack_reverse(struct CTextStack *self);
+
+void CTextStack_self_reverse(struct CTextStack *self);
+
+
+CTextStack *CTextStack_pop(struct CTextStack *self, long starter, long end);
+
+
+void  CTextStack_self_pop(struct CTextStack *self, long starter, long end);
+
+
+
+CTextStack *CTextStack_insert_at(struct CTextStack *self,long point, const char *element);
+
+
+void CTextStack_self_insert_at(struct CTextStack *self,long point, const char *element);
+
+CTextStack *CTextStack_trim(struct CTextStack *self);
+
+void CTextStack_self_trim(struct CTextStack *self);
+
+bool CTextStack_equal(  CTextStack *self,const char *element);
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/constructors/constructors.h
+
+
+
+ CTextStack * newCTextStack(const char *line_breaker, const char *separator);
+
+ CTextStack *newCTextStack_string(const char *starter);
+
+
+ CTextStack *newCTextStack_string_format(const char *format, ...);
+
+
+ CTextStack *newCTextStack_string_getting_ownership(const char *starter);
+
+ CTextStack *newCTextStack_string_empty();
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/parsers/parsers.h
+
+
+
+int CTextStack_typeof(struct CTextStack *self);
+
+bool CTextStack_is_a_num(struct CTextStack *self);
+
+const char * CTextStack_typeof_in_str(struct CTextStack *self);
+
+bool  CTextStack_parse_to_bool(struct CTextStack *self);
+
+long  CTextStack_parse_to_integer(struct CTextStack *self);
+
+double  CTextStack_parse_to_double(struct CTextStack *self);
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/render_methods/render_methods.h
+
+
+
+void private_ctext_text_double_size_if_reachs(struct CTextStack *self);
+
+
+void CTextStack_text(struct CTextStack *self, const char *text);
+
+
+
+void CTextStack_segment_text(struct CTextStack *self, const char *text);
+
+
+void CTextStack_format(struct CTextStack *self, const char *format, ...);
+
+
+void CTextStack_segment_format(struct CTextStack *self, const char *format, ...);
+
+
+
+void CTextStack_segment(struct CTextStack *self);
+
+
+void CTextStack_open_format(struct CTextStack *self, const char *tag, const char *format, ...);
+
+
+
+
+void CTextStack_only_open_format(struct CTextStack *self, const char *tag, const char *format, ...);
+
+
+void CTextStack_auto_close_format(struct CTextStack *self, const char *tag, const char *format, ...);
+
+
+void ctext_open(struct CTextStack *self, const char *tag);
+
+
+
+void ctext_close(struct CTextStack *self, const char *tag);
+
+
+
+
+//path: src/dependencies/CTextEngine/functions/CTextArray/CTextArray.h
+
+
+
+
+CTextArray * newCTextArray();
+
+
+void CTextArray_append(CTextArray *self,CTextStack *element);
+
+
+void CTextArray_append_string(CTextArray *self,const char *element);
+
+CTextStack * CTextArray_join(CTextArray *self,const char *separator);
+
+CTextArray * CTextArray_split(const char *element,const char *target);
+
+CTextArray * CTextArray_map(CTextArray *self, CTextStack *(caller)(CTextStack* element));
+
+CTextArray * CTextArray_filter(CTextArray *self, bool (caller)(CTextStack* element));
+
+void  CTextArray_foreach(CTextArray *self, void (*caller)(CTextStack* element));
+
+bool CTextArray_includes(CTextArray *self,const char *element);
+
+void  CTextArray_free(CTextArray *self);
+
+void CTextArray_represent(CTextArray *self);
+
+
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/declaration.h
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTexStackModule/CTextStackModule.h
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTexStackModule/../unique.declaration_requirements.h
+
+
+
+
+
+CTextStackModule newCTextStackModule();
+
+
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTextArrayModule/CTextArrayModule.h
+
+
+
+
+
+CTextArrayModule newCTextArrayModule();
+
+
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTextNamespace/CTextNamespace.h
+
+
+
 
 CTextNamespace newCTextNamespace();
+
+
+
+//path: src/dependencies/CTextEngine/functions/extras/extras.h
+
+
+long private_CText_transform_index(long size, long value);
+
+
+void private_ctext_generate_formated_text(
+    struct CTextStack *stack,
+    const char *format,
+    va_list argptr
+    );
+
+#endif
+
 
 
 
@@ -713,7 +874,152 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 #undef cJSON__h
 #endif
 
+
+#ifndef  UNIVERSAL_GARBAGE_H
+//path: src/dependencies/UniversalGarbage/declaration.h
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+
+
+//path: src/dependencies/UniversalGarbage/macros.h
+
+#define UniversalGarbage_create_empty_struct(name,element_type) \
+(element_type*)malloc(sizeof(element_type));    \
+*name = (element_type){0};
+
+
+#define UniversalGarbage_cast(value) ((void**)&value)
+
+
+#define UniversalGarbage_add(garbage,deallocator_callback,value) \
+    rawUniversalGarbage_add(garbage,(void(*)(void*))deallocator_callback,UniversalGarbage_cast(value))
+
+#define UniversalGarbage_add_simple(garbage,value) \
+     UniversalGarbage_add(garbage,free,value)
+
+
+#define UniversalGarbage_add_return(garbage,deallocator_callback,value) \
+        UniversalGarbage_add(garbage->return_values,deallocator_callback,value)
+
+
+#define UniversalGarbage_add_simple_return(garbage,value) \
+    UniversalGarbage_add_simple(garbage->return_values,value)
+
+
+
+#define  UniversalGarbage_remove(garbage,value) \
+    rawUniversalGarbage_remove(garbage,UniversalGarbage_cast(value));
+
+
+#define  UniversalGarbage_disconnect(garbage,value) \
+    rawUniversalGarbage_disconnect(garbage,UniversalGarbage_cast(value));
+
+
+
+
+#define UniversalGarbage_reallocate(garbage,value) \
+    rawUniversalGarbage_reallocate(garbage,UniversalGarbage_cast(value))
+
+
+#define UniversalGarbage_resset(garbage,value) \
+    rawUniversalGarbage_resset(garbage,UniversalGarbage_cast(value))
+
+
+//path: src/dependencies/UniversalGarbage/types/all.h
+//path: src/dependencies/UniversalGarbage/types/garbage.h
+//path: src/dependencies/UniversalGarbage/types/garbage_element.h
+
+#ifndef PRIVATE_UNIVERSGAL_GARBAGE_ELEMENT_TYPE
+#define PRIVATE_UNIVERSGAL_GARBAGE_ELEMENT_TYPE
+typedef struct privateUniversalGarbageElement{
+    void **pointer;
+    void (*deallocator_callback)(void *element);
+    void *pointed_value;
+}privateUniversalGarbageElement;
 #endif
+
+
+
+#ifndef  PRIVATE_UNIVERSAL_GARBAGE_TYPE
+#define PRIVATE_UNIVERSAL_GARBAGE_TYPE
+
+
+typedef  struct UniversalGarbage{
+
+    struct UniversalGarbage *return_values;
+    privateUniversalGarbageElement **elements;
+    int  elements_size;
+    bool is_the_root;
+
+}UniversalGarbage;
+#endif
+
+
+
+
+
+
+//path: src/dependencies/UniversalGarbage/functions/declaration.h
+
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/garbage_element.h
+
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/../unique.declaration_requirements.h
+
+
+
+
+
+
+void private_UniversalGarbageSimpleElement_free_pointed_value(privateUniversalGarbageElement *self);
+
+
+void private_UniversalGarbageSimpleElement_free(privateUniversalGarbageElement *self);
+
+privateUniversalGarbageElement * private_newUniversalGarbageSimpleElement(void (*dealocator_callback)(void *element), void **pointer);
+
+
+//path: src/dependencies/UniversalGarbage/functions/garbage/garbage.h
+
+
+
+
+
+UniversalGarbage * newUniversalGarbage();
+
+UniversalGarbage * private_new_MainUniversalGarbage();
+
+
+
+bool  rawUniversalGarbage_resset(UniversalGarbage *self, void **pointer);
+
+bool  rawUniversalGarbage_remove(UniversalGarbage *self, void **pointer);
+
+bool  rawUniversalGarbage_disconnect(UniversalGarbage *self, void **pointer);
+
+bool rawUniversalGarbage_reallocate(UniversalGarbage *self, void **pointer);
+
+bool  rawUniversalGarbage_add(UniversalGarbage *self,  void (*dealocator_callback)(void *element), void **pointer);
+
+void private_UniversalGarbage_free_all_sub_elements(UniversalGarbage *self);
+
+void UniversalGarbage_free_including_return(UniversalGarbage *self);
+
+void UniversalGarbage_free(UniversalGarbage *self);
+
+
+
+
+
+
+#endif
+
+
+#endif
+
 
 //path: src/consts/all.h
 #ifndef PRIVATE_CWEB_HTTP_CONSTS_CONSTS
@@ -740,6 +1046,117 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 #define CWEB_BAD_REQUEST 400
 #define CWEB_FORBIDDEN 403
 #define CWEB_INTERNAL_SERVER_ERROR 500
+
+
+//path: src/consts/hydratation/all.h
+//path: src/consts/hydratation/callbacks.h
+#define PRIVATE_CWEB_HYDRATION_CALLBACK_KEY "callback"
+#define PRIVATE_CWEB_HYDRATION_ARGS_KEY "args"
+#define PRIVATE_CWEB_HYDRATION_ID_KEY "id"
+#define PRIVATE_CWEB_HYDRATION_HTML_KEY "html"
+#define PRIVATE_CWEB_HYDRATION_MENSSAGE_KEY "menssage"
+
+
+#define PRIVATE_CWEB_HYDRATION_ALERT "private_cweb_alert"
+#define PRIVATE_CWEB_HYDRATION_DESTROY_BY_ID "private_cweb_destroy_by_id"
+#define PRIVATE_CWEB_HYDRATION_REPLACE_BY_ID "private_cweb_hydration_replace_by_id"
+
+
+//path: src/consts/hydratation/app.h
+#define CWEB_HYDRATION_DEFAULT_BODY_SIZE 5000
+#define CWEB_HYDRATION_CALBACK_HANDLER_ROUTE "/private_cweb_hydration_main_callback_handler"
+
+
+//path: src/consts/hydratation/errors.h
+#define CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED 1
+#define CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG "json body not provided"
+
+#define CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT 2
+#define CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT_MSG  "json body not not object"
+
+
+#define CWEB_HYDRATION_NAME_NOT_PROVIDED 3
+#define CWEB_HYDRATION_NAME_NOT_PROVIDED_MSG  "body['name'] not provided"
+
+#define CWEB_HYDRATION_NAME_NOT_STRING 4
+#define CWEB_HYDRATION_NAME_NOT_STRING_MSG  "body['name'] its not string"
+
+
+#define CWEB_HYDRATION_ARGS_NOT_PROVIDED 5
+#define CWEB_HYDRATION_ARGS_NOT_PROVIDED_MSG  "body['args'] not provided"
+
+#define CWEB_HYDRATION_ARGS_NOT_ARRAY 6
+#define CWEB_HYDRATION_ARGS_NOT_ARRAY_MSG  "body['args'] its not array"
+
+
+#define CWEB_HYDRATION_CONTENT_NOT_PROVIDED 7
+#define CWEB_HYDRATION_CONTENT_NOT_PROVIDED_MSG  "body['content'] not provided"
+
+#define CWEB_HYDRATION_CONTENT_NOT_OBJECT 8
+#define CWEB_HYDRATION_CONTENT_NOT_OBJECT_MSG  "body['content'] not a object"
+
+
+#define CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED 9
+#define CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED_MSG  "body['content']['%s'] not provided at content"
+
+#define CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY 10
+#define CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY_MSG "body['content']['%s']   is not of array"
+
+
+
+#define CWEB_HYDRATION_CONTENT_SEARCH_NOT_EXIST 11
+#define CWEB_HYDRATION_CONTENT_SEARCH_NOT_EXIST_MSG "search at index %d  not exist"
+
+
+#define CWEB_HYDRATION_SEARCH_ITEM_NOT_EXIST 12
+#define CWEB_HYDRATION_SEARCH_ITEM_NOT_EXIST_MSG "body['content']['%s'][%d] not exist"
+
+
+#define CWEB_HYDRATION_SEARCH_ITEM_WRONG_TYPE 13
+#define CWEB_HYDRATION_SEARCH_ITEM_WRONG_TYPE_MSG "body['content']['%s'][%d] its not of type %s"
+
+
+#define CWEB_HYDRATION_INDEX_ARGS_NOT_PROVIDED  14
+#define CWEB_HYDRATION_INDEX_ARGS_NOT_PROVIDED_MSG  "body['args'][%d]  not provided"
+
+#define CWEB_HYDRATION_INDEX_ARGS_WRONG_TYPE 15
+#define CWEB_HYDRATION_INDEX_ARGS_WRONG_TYPE_MSG  "body['args'][%d] is not of type %s"
+
+
+
+#define CWEB_BRIDGE_NOT_FOUND 16
+#define CWEB_BRIDGE_NOT_FOUND_MSG  "bridge of name %s not found"
+
+#define CWEB_SEARCH_NOT_EXIST 17
+#define CWEB_SEARCH_NOT_EXIST_MSG "search at index %d not exist"
+
+#define CWEB_HYDRATION_STRING "string"
+#define CWEB_HYDRATION_BOOL  "bool"
+#define CWEB_HYDRATION_NUMBER "number"
+
+
+//path: src/consts/hydratation/keys.h
+
+
+
+#define CWEB_HYDRATION_JSON_ERROR_CODE_KEY "error_code"
+#define CWEB_HYDRATION_JSON_ERROR_MENSSAGE "error_menssage"
+#define CWEB_HYDRATON_JSON_DATA "data"
+
+#define CWEB_HYDRATON_JSON_NAME "name"
+#define CWEB_HYDRATON_JSON_HTML "html"
+#define CWEB_HYDRATON_JSON_MSG "msg"
+#define CWEB_HYDRATON_JSON_CODE "code"
+#define CWEB_HYDRATON_JSON_KEY "key"
+#define CWEB_HYDRATON_JSON_QUERY_SELECTOR "query_selector"
+
+#define CWEB_HYDRATON_JSON_VALUE "value"
+#define CWEB_HYDRATION_JSON_URL "url"
+
+#define CWEB_HYDRATON_JSON_ARGS "args"
+#define CWEB_HYDRATON_JSON_CONTENT "content"
+
+
 
 
 
@@ -815,16 +1232,31 @@ typedef struct CwebDictModule{
 
 
 
-//path: src/types/namespace/namespace.h
+//path: src/types/namespace/hydration/all.h
+//path: src/types/namespace/hydration/args.h
+
+//path: src/types/namespace/hydration/../../hydration/all.h
+
+//path: src/types/namespace/hydration/../../hydration/bridge.h
+
+//path: src/types/namespace/hydration/../../hydration/../string_array.h
+#ifndef PRIVATE_CWEB_HTTP_STRINGARRAY_TYPES
+#define PRIVATE_CWEB_HTTP_STRINGARRAY_TYPES
 
 
-//path: src/types/namespace/request.h
-//path: src/types/namespace/../uniq.tipes_requirements.h
+typedef struct CwebStringArray {
+  int size;         
+
+  char **strings;       
+
+}CwebStringArray; // End the structure with a semicolon
+
+#endif //PRIVATE_CWEB_HTTP_STRINGARRAY_TYPES
+
+//path: src/types/namespace/hydration/../../hydration/../request.h
 
 
-
-//path: src/types/namespace/../request.h
-
+//path: src/types/namespace/hydration/../../hydration/../uniq.tipes_requirements.h
 
 
 
@@ -845,54 +1277,117 @@ typedef struct CwebHttpRequest{
     int content_length;
     unsigned char *content;
     cJSON *json;
+    void *hydratation;
+    void *extra_args;
+    UniversalGarbage *garbage;
 
 }CwebHttpRequest;
 
 #endif //PRIVATE_CWEB_HTTP_REQUEST_TYPES
 
 
-#ifndef PRIVATE_CWEB_HTTP_NAMESPACE_REQUEST_TYPES
-#define PRIVATE_CWEB_HTTP_NAMESPACE_REQUEST_TYPES
+
+#ifndef PRIVATE_CWEB_HYDRATATION_BRIDGET_BRIDGET_TYPES
+#define PRIVATE_CWEB_HYDRATATION_BRIDGET_BRIDGET_TYPES
 
 
-typedef struct CwebHttpRequestModule{
-    CwebHttpRequest *(*newCwebHttpRequest)(int socket);
-    unsigned char*(*read_content)(struct CwebHttpRequest *self,long max_content_size);
-    cJSON * (*read_cJSON)(CwebHttpRequest *self, long max_content_size);
+typedef struct  CWebHyDrationBridge {
+    char *name;
+    void  *hydration;
+    void  (*callback)(struct CWebHyDrationBridge *bridge);
 
-    void (*set_url)(struct CwebHttpRequest *self,const char *url);
-    void (*set_route)(struct CwebHttpRequest *self,const char *route);
-    void (*set_method)(struct CwebHttpRequest *self,const char *method);
+    CwebStringArray *requirements_code;
 
-    void (*add_header)(struct CwebHttpRequest *self,const char *key,const char *value);
-    void (*add_param)(struct CwebHttpRequest *self,const char *key,const char *value);
-    void (*set_content_string)(struct CwebHttpRequest *self,const char *content);
+    void *extra_args;
 
+}CWebHyDrationBridge;
 
-    char *(*get_header)(struct CwebHttpRequest *self,const char *key);
-    char *(*get_header_by_normalized_key)(
-            struct CwebHttpRequest *self,
-            const char *key,
-            const char *chars_to_remove
-    );
-
-    char *(*get_param)(struct CwebHttpRequest *self,const char *key);
-    char *(*get_param_by_sanitized_key)(struct CwebHttpRequest *self,const char *key,
-                                        const char *chars_to_remove);
+#endif //PRIVATE_CWEB_HYDRATATION_BRIDGET_BRIDGET_TYPES
 
 
-    int (*parse_http_request)(struct CwebHttpRequest *self);
-
-    void (*free)(struct CwebHttpRequest *request);
-    void (*represent)(struct CwebHttpRequest *request);
-}CwebHttpRequestModule;
-
-#endif //PRIVATE_CWEB_HTTP_NAMESPACE_REQUEST_TYPES
-
-//path: src/types/namespace/response.h
+//path: src/types/namespace/hydration/../../hydration/bridge_array.h
 
 
-//path: src/types/namespace/../response.h
+
+
+#ifndef PRIVATE_CWEB_HYDRATATION_BRIDGET_ARRAY_TYPES
+#define PRIVATE_CWEB_HYDRATATION_BRIDGET_ARRAY_TYPES
+
+typedef struct privateCWebHyDrationBridgeArray {
+    CWebHyDrationBridge **elments;
+    int size;
+
+}privateCWebHyDrationBridgeArray;
+
+#endif //PRIVATE_CWEB_HYDRATATION_BRIDGET_ARRAY_TYPES
+
+
+//path: src/types/namespace/hydration/../../hydration/hydratation.h
+
+
+
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATATION_HYDRATATION_TYPES
+#define PRIVATE_CWEB_HYDRATATION_HYDRATATION_TYPES
+
+typedef struct CWebHyDration {
+    CwebHttpRequest *request;
+   const  char *error_bridge_name;
+    char *error_msg;
+    cJSON *response;
+    cJSON *args;
+    cJSON *content;
+
+    int error_code;
+   // CwebStringArray *stack_elements;
+    CTextStack *script_text;
+    long max_content_size;
+    privateCWebHyDrationBridgeArray *all_bridges;
+
+}CWebHyDration;
+
+#endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_TYPES
+
+
+//path: src/types/namespace/hydration/../../hydration/search_result.h
+
+
+
+
+
+#ifndef  PRIVATE_CWEB_HYDRATION_SEARCH_RESULT_TYPE
+#define PRIVATE_CWEB_HYDRATION_SEARCH_RESULT_TYPE
+
+typedef struct{
+    CWebHyDrationBridge *bridge;
+    cJSON *search;
+    const char *name;
+} CWebHyDrationSearchResult;
+
+#endif
+
+
+//path: src/types/namespace/hydration/../../hydration/search_requirements.h
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATION_SEARCH_REQUIREMENTS_TYPE
+#define PRIVATE_CWEB_HYDRATION_SEARCH_REQUIREMENTS_TYPE
+typedef  struct{
+    char *name;
+    CWebHyDrationBridge *bridge;
+} CWebHyDrationSearchRequirements;
+#endif
+
+
+
+
+//path: src/types/namespace/hydration/../response.h
+
+
+//path: src/types/namespace/hydration/../../response.h
 #ifndef PRIVATE_CWEB_HTTP_RESPONSE_TYPES
 #define PRIVATE_CWEB_HTTP_RESPONSE_TYPES
 
@@ -952,7 +1447,7 @@ typedef struct CwebHttpResponseModule{
             int status_code
     );
 
-    CwebHttpResponse* (*send_rendered_CTextStack_cleaning_memory)(struct CTextStack *stack,int status_code);
+    CwebHttpResponse* (*send_rendered_CTextStack)(struct CTextStack *stack,int status_code);
 
     CwebHttpResponse* (*send_var_html)(const char *content,int status_code);
 
@@ -977,6 +1472,356 @@ typedef struct CwebHttpResponseModule{
 }CwebHttpResponseModule;
 
 #endif //PRIVATE_CWEB_HTTP_NAMESPACE_RESPONSE_TYPES
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATATION_ARGS_NAMESPACE_TYPES
+#define PRIVATE_CWEB_HYDRATATION_ARGS_NAMESPACE_TYPES
+
+
+typedef struct CWebHydrationArgsNamespace {
+
+    bool   (*is_arg_null)(CWebHyDrationBridge *self,int index);
+    int   (*get_args_size)(CWebHyDrationBridge *self);
+    bool   (*is_arg_number)(CWebHyDrationBridge *self,int index);
+    bool   (*is_arg_bool)(CWebHyDrationBridge *self,int index);
+    bool   (*is_arg_string)(CWebHyDrationBridge *self,int index);
+    double  (*get_double_arg)(CWebHyDrationBridge *self,int index);
+    long  (*get_long_arg)(CWebHyDrationBridge *self,int index);
+    bool  (*get_bool_arg)(CWebHyDrationBridge *self,int index);
+    char* (*get_str_arg)(CWebHyDrationBridge *self,int index);
+    cJSON * (*get_cJSON_arg)(CWebHyDrationBridge *self,int index);
+
+}CWebHydrationArgsNamespace;
+#endif
+
+
+//path: src/types/namespace/hydration/search_requirements.h
+
+
+
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATATION_REQUIREMENTS_NAMESPACE_TYPES
+#define PRIVATE_CWEB_HYDRATATION_REQUIREMENTS_NAMESPACE_TYPES
+
+
+typedef struct CWebHydrationSearchRequirementsNamespace {
+
+
+
+
+    CWebHyDrationSearchRequirements * (*newSearchRequirements)(CWebHyDrationBridge *self, const char *name,...);
+
+    void (*add_function)(CWebHyDrationSearchRequirements *self,const char *function,...);
+    void (*add_elements_by_query_selector)(
+        CWebHyDrationSearchRequirements *self,
+        const char *query_selector,
+        ...
+    );
+    void (*add_elements_by_query_selector_not_auto_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char *query_selector,
+        ...
+    );
+    void (*add_elements_by_attribute)(
+        CWebHyDrationSearchRequirements *self,
+       const char *attribute,
+       const char*attribute_value,
+       ...
+    );
+    void (*add_elements_by_attribute_not_auto_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char *attribute,
+        const char*attribute_value,
+        ...
+    );
+
+    void (*add_elements_by_class_name)(
+        CWebHyDrationSearchRequirements *self,
+        const char*class_value,
+        ...
+    );
+
+    void (*add_elements_by_class_name_not_auto_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char*class_value,...
+    );
+
+    void (*add_elements_by_id)(
+        CWebHyDrationSearchRequirements *self,
+        const char*id_values,
+        ...
+    );
+
+    void (*add_elements_by_id_not_auto_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char*id_values,
+        ...
+    );
+
+    void (*add_session_storage_item_not_converting)(
+        CWebHyDrationSearchRequirements *self,
+        const char *name,
+        ...
+    );
+
+    void (*add_elements_by_id_setting_search_as_same_name)(
+        CWebHyDrationBridge *self, const char *id
+    );
+
+
+    void (*add_elements_by_id_setting_search_as_same_name_not_auto_converting)(
+        CWebHyDrationBridge *self, const char *id
+    );
+
+
+    void (*add_elements_by_class_name_setting_search_as_same_name)(
+        CWebHyDrationBridge *self, const char *class_name
+    );
+
+    void (*add_elements_by_class_name_setting_search_as_same_name_not_auto_converting)(
+        CWebHyDrationBridge *self, const char *class_name
+    );
+
+    void (*add_session_storage_item)(
+        CWebHyDrationSearchRequirements *self,
+        const char *name,
+        ...
+    );
+
+    void (*add_value_cookie_by_key)(CWebHyDrationSearchRequirements *self, const char *key);
+    void (*add_confirm)(CWebHyDrationSearchRequirements *self, const char*message, ...);
+    void (*add_prompt)(CWebHyDrationSearchRequirements *self, const char *message, ...);
+
+}CWebHydrationSearchRequirementsNamespace;
+#endif
+
+
+//path: src/types/namespace/hydration/search_result.h
+
+
+
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATATION_SEARCH_RESULT_NAMESPACE_TYPE
+#define PRIVATE_CWEB_HYDRATATION_SEARCH_RESULT_NAMESPACE_TYPE
+
+
+typedef struct CWebHydrationSearchResultNamespace {
+
+    int  (*get_total_avaialible_searchs)(CWebHyDrationBridge *self);
+    CWebHyDrationSearchResult * (*get_search_by_index)(CWebHyDrationBridge *self,int index);
+    CWebHyDrationSearchResult * (*get_search_by_name)(CWebHyDrationBridge *self,const char *name,...);
+    bool (*search_exist)(CWebHyDrationBridge *self,const char *name,...);
+    double (*get_double_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    long (*get_long_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    bool (*get_bool_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    char* (*get_string_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    cJSON* (*get_cJSON_from_first_element_of_search)(CWebHyDrationBridge *self,const char *name,...);
+    int  (*get_total_itens)(CWebHyDrationSearchResult *self);
+    bool  (*search_item_exist)(CWebHyDrationSearchResult *self,int index);
+    bool  (*is_search_item_number)(CWebHyDrationSearchResult *self,int index);
+    bool  (*is_search_item_bool)(CWebHyDrationSearchResult *self,int index);
+    bool  (*is_search_item_string)(CWebHyDrationSearchResult *self,int index);
+    double (*get_double)(CWebHyDrationSearchResult *self,int  index);
+    long (*get_long)(CWebHyDrationSearchResult *self,int  index);
+    bool (*get_bool)(CWebHyDrationSearchResult *self,int  index);
+    char*  (*get_string)(CWebHyDrationSearchResult *self,int  index);
+    cJSON *  (*get_cJSON)(CWebHyDrationSearchResult *self,int  index);
+
+}CWebHydrationSearchResultNamespace;
+#endif
+
+
+//path: src/types/namespace/hydration/hydratation.h
+
+
+//path: src/types/namespace/hydration/bridge.h
+
+
+
+
+
+
+
+
+//path: src/types/namespace/hydration/actions.h
+
+
+
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATATION_RESPONSE_NAMESPACE_TYPES
+#define PRIVATE_CWEB_HYDRATATION_RESPONSE_NAMESPACE_TYPES
+
+
+typedef struct CWebHydrationResponseNamespace {
+    void (*replace_element_by_query_selector)(
+        CWebHyDrationBridge *self,
+        const char *query_selector,
+        const char *code,
+        ...
+    );
+
+    void (*append_by_query_selector)(
+        CWebHyDrationBridge *self,
+        const char *query_selector,
+        const char *code,
+        ...
+    );
+
+
+    void (*destroy_by_query_selector)(
+        CWebHyDrationBridge *self,
+        const char * query_selecor
+    );
+
+
+
+    void (*hide_element_by_query_selector)(
+    CWebHyDrationBridge *self,
+    const char *query_selecor);
+
+    void (*unhide_element_by_query_selector)(
+        CWebHyDrationBridge *self,
+        const char *query_selector
+    );
+    void (*hide_element_by_id)(CWebHyDrationBridge *self,const char *id);
+    void (*unhide_element_by_id)(CWebHyDrationBridge *self,const char *id);
+    void (*append_by_id)(CWebHyDrationBridge *self,const char *id, const char *code,...);
+
+    void (*set_session_storage_data)(CWebHyDrationBridge *self,const char*key, const char *value,...);
+    void (*alert)(CWebHyDrationBridge *self,const char *menssage,...);
+    void (*execute_script)(CWebHyDrationBridge *self,const char *code,...);
+    void (*replace_element_by_id)(CWebHyDrationBridge *self,const char *id, const char *code,...);
+    void (*destroy_by_id)(CWebHyDrationBridge *self,const char * id);
+    void (*redirect)(CWebHyDrationBridge *self, const char *url);
+    void (*add_cookie_with_time)(CWebHyDrationBridge *self, const char *key, long time, const char *value, ...);
+    void (*add_cookie)(CWebHyDrationBridge *self, const char *key, const char *value, ...);
+    void (*delet_cookie)(CWebHyDrationBridge *self, const char *key);
+    void (*console_log)(CWebHyDrationBridge *self,const char *menssage,...);
+    void (*console_warn)(CWebHyDrationBridge *self,const char *menssage,...);
+    void (*console_error)(CWebHyDrationBridge *self,const char *menssage,...);
+    void (*console_clear)(CWebHyDrationBridge *self);
+    void (*add_class_by_query_selector)(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
+    void (*remove_class_by_query_selector)(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
+    void (*remove_class_by_id)(CWebHyDrationBridge *self, const char *id, const char *class_name, ...);
+    void (*add_class_by_id)(CWebHyDrationBridge *self, const char *id, const char *class_name, ...);
+
+
+
+}CWebHydrationActionsNamespace;
+
+#endif
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATATION_BRIDGE_NAMESPACE_TYPES
+#define PRIVATE_CWEB_HYDRATATION_BRIDGE_NAMESPACE_TYPES
+
+typedef struct CWebHydrationBridgeNamespace{
+
+    CWebHyDrationBridge * (*create_bridge)(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *));
+    char *(*call_trigger)(
+        CWebHyDrationBridge *self,
+        const char *trigger,
+        const char *func_args,
+        ...
+    );
+
+    char *(*call)(CWebHyDrationBridge *self,const char *func_args,...);
+    char *(*onclick)(CWebHyDrationBridge *self,const char *func_args,...);
+    char *(*onfoccusout)(CWebHyDrationBridge *self,const char *func_args,...);
+
+    CTextStack * (*create_stack)(CWebHyDrationBridge *self);
+    CTextStack * (*create_empty_stack)(CWebHyDrationBridge *self);
+
+    bool (*has_errors)(CWebHyDrationBridge *self);
+    CWebHyDrationBridge * (*get_child_bridge)(CWebHyDration *self,const char *name);
+    CWebHyDrationBridge * (*get_brother_bridge)(CWebHyDrationBridge *self,const char *name);
+
+}CWebHydrationBridgeNamespace;
+
+#endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
+
+
+
+#ifndef PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
+#define PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
+
+typedef struct CWebHydrationNamespace{
+    CWebHyDration *(*newCWebHyDration)(CwebHttpRequest *request);
+    bool (*is_the_trigger)(CWebHyDration *self);
+    char *(*create_script)(CWebHyDration *self);
+    CwebHttpResponse *(*generate_response)(CWebHyDration *self);
+    CTextStack  * (*create_stack)(CWebHyDration *self);
+    CTextStack  * (*create_empty_stack)(CWebHyDration *self);
+    CWebHydrationBridgeNamespace bridge;
+    CWebHydrationActionsNamespace actions;
+    CWebHydrationSearchRequirementsNamespace search_requirements;
+    CWebHydrationSearchResultNamespace search_result;
+    CWebHydrationArgsNamespace args;
+}CWebHydrationNamespace;
+
+#endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
+
+
+
+
+//path: src/types/namespace/request.h
+
+
+
+
+
+#ifndef PRIVATE_CWEB_HTTP_NAMESPACE_REQUEST_TYPES
+#define PRIVATE_CWEB_HTTP_NAMESPACE_REQUEST_TYPES
+
+
+typedef struct CwebHttpRequestModule{
+    CwebHttpRequest *(*newCwebHttpRequest)(int socket);
+    unsigned char*(*read_content)(struct CwebHttpRequest *self,long max_content_size);
+    cJSON * (*read_cJSON)(CwebHttpRequest *self, long max_content_size);
+
+    void (*set_url)(struct CwebHttpRequest *self,const char *url);
+    void (*set_route)(struct CwebHttpRequest *self,const char *route);
+    void (*set_method)(struct CwebHttpRequest *self,const char *method);
+
+    void (*add_header)(struct CwebHttpRequest *self,const char *key,const char *value);
+    void (*add_param)(struct CwebHttpRequest *self,const char *key,const char *value);
+    void (*set_content_string)(struct CwebHttpRequest *self,const char *content);
+
+
+    char *(*get_header)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_header_by_normalized_key)(
+            struct CwebHttpRequest *self,
+            const char *key,
+            const char *chars_to_remove
+    );
+
+    char *(*get_param)(struct CwebHttpRequest *self,const char *key);
+    char *(*get_param_by_sanitized_key)(struct CwebHttpRequest *self,const char *key,
+                                        const char *chars_to_remove);
+
+
+    int (*parse_http_request)(struct CwebHttpRequest *self);
+
+    CTextStack *(*create_empty_stack)(CwebHttpRequest *self);
+    CTextStack *(*create_stack)(CwebHttpRequest *self);
+
+
+    void (*free)(struct CwebHttpRequest *request);
+    void (*represent)(struct CwebHttpRequest *request);
+}CwebHttpRequestModule;
+
+#endif //PRIVATE_CWEB_HTTP_NAMESPACE_REQUEST_TYPES
+
+
+
 
 //path: src/types/namespace/server.h
 //path: src/types/namespace/../server.h
@@ -1020,19 +1865,7 @@ typedef struct CwebServerModule{
 #endif //PRIVATE_CWEB_HTTP_NAMESPACE_SERVER_TYPES
 
 //path: src/types/namespace/string.h
-//path: src/types/namespace/../string_array.h
-#ifndef PRIVATE_CWEB_HTTP_STRINGARRAY_TYPES
-#define PRIVATE_CWEB_HTTP_STRINGARRAY_TYPES
 
-
-typedef struct CwebStringArray {
-  int size;         
-
-  char **strings;       
-
-}CwebStringArray; // End the structure with a semicolon
-
-#endif //PRIVATE_CWEB_HTTP_STRINGARRAY_TYPES
 
 
 #ifndef PRIVATE_CWEB_HTTP_NAMESPACE_STRING_TYPES
@@ -1051,6 +1884,19 @@ typedef struct CwebStringArrayModule{
 
 #endif //PRIVATE_CWEB_HTTP_NAMESPACE_STRING_TYPES
 
+//path: src/types/namespace/namespace.h
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifndef PRIVATE_CWEB_HTTP_NAMESPACE_NAMESPACE_TYPES
 #define PRIVATE_CWEB_HTTP_NAMESPACE_NAMESPACE_TYPES
@@ -1062,18 +1908,10 @@ typedef struct CwebNamespace{
     CwebHttpResponseModule response;
     CwebServerModule server;
     CwebStringArrayModule  string_array;
+    CWebHydrationNamespace hydration;
 }CwebNamespace;
 
 #endif //PRIVATE_CWEB_HTTP_NAMESPACE_NAMESPACE_TYPES
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1123,6 +1961,8 @@ typedef struct{
 
 
 
+
+
 //path: src/macros/all.h
 #ifndef PRIVATE_CWEB_MACROS
 #define  PRIVATE_CWEB_MACROS
@@ -1133,10 +1973,9 @@ typedef struct{
 #define cweb_print(...);
 #endif
 
-#define CWEB_END_ROUTE()\
-if(strcmp(request->route,"/end" ) ==0){ \
-        cweb_end_server = true;\
-}
+
+//path: src/macros/hydration.h
+
 
 
 #endif
@@ -1158,6 +1997,9 @@ CwebStringArray * newCwebStringArray();
 
 int  CwebStringArray_find(struct CwebStringArray *self, const char *string);
 void CwebStringArray_add(struct CwebStringArray *self, const char *string);
+
+void CwebStringArray_add_getting_ownership(struct CwebStringArray *self, char *string);
+
 void CwebStringArray_merge(struct CwebStringArray *self, struct CwebStringArray *other);
 void CwebStringArray_represent(struct CwebStringArray *self);
 void CwebStringArray_free(struct CwebStringArray *self);
@@ -1185,6 +2027,8 @@ char* cweb_replace_string(const char *target, const char *old_element, const cha
 //path: src/functions/extras/extras.h
 
 
+
+
 unsigned char *cweb_load_any_content(const char * path,int *size,bool *is_binary);
 
 char *cweb_load_string_file_content(const char * path);
@@ -1196,6 +2040,14 @@ const char *cweb_generate_content_type(const char *file_name);
 
 char *private_cweb_convert_url_encoded_text(const char *text);
 
+
+
+char * private_CWeb_format_vaarg(const char *expresion, va_list args);
+
+char * private_CWeb_format(const char *expresion, ...);char *private_cweb_convert_to_hexa(const char *data);
+
+
+CTextStack  *private_cweb_create_assci_code(const char *msg);
 
 
 
@@ -1237,6 +2089,10 @@ void CwebDict_free(CwebDict *self);
 //path: src/functions/response/response/response.h
 
 
+//path: src/functions/response/response/../uniq.declaration_requirements.h
+
+
+
 
 
 
@@ -1272,7 +2128,7 @@ CwebHttpResponse * cweb_send_cJSON_cleaning_memory(cJSON *content, int status_co
 CwebHttpResponse* cweb_send_any_cleaning_memory(const char *content_type,size_t content_length,unsigned char *content,int status_code);
 
 
-CwebHttpResponse* cweb_send_rendered_CTextStack_cleaning_memory(struct CTextStack *stack,int status_code);
+CwebHttpResponse* cweb_send_rendered_CTextStack(struct CTextStack *stack,int status_code);
 
 
 
@@ -1297,6 +2153,10 @@ CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,
 //path: src/functions/request/request/request.h
 
 
+//path: src/functions/request/request/../uniq.declaration_requirements.h
+
+
+
 
 
 
@@ -1309,6 +2169,9 @@ unsigned char * CwebHttpRequest_read_content( CwebHttpRequest *self, long max_co
 cJSON * CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
 
 
+CTextStack *CwebHttpRequest_create_empty_stack(CwebHttpRequest *self);
+
+CTextStack *CwebHttpRequest_create_stack(CwebHttpRequest *self);
 
 
 char * CwebHttpRequest_get_header( CwebHttpRequest *self, const char *key);
@@ -1365,6 +2228,10 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self);
 
 //path: src/functions/static/declaration.h
 //path: src/functions/static/smart_cache/smart_cache.h
+//path: src/functions/static/smart_cache/../uniq.declaration_requirements.h
+
+
+
 
 
 
@@ -1379,6 +2246,14 @@ CTextStack * private_cweb_change_smart_cache(CTextStack *content);
 //path: src/functions/static/inline_inclusion/declaration.h
 //path: src/functions/static/inline_inclusion/recursion_protection/declaration.h
 //path: src/functions/static/inline_inclusion/recursion_protection/recursion_element/recursion_element.h
+//path: src/functions/static/inline_inclusion/recursion_protection/recursion_element/../uniq.declaration_requirements.h
+
+//path: src/functions/static/inline_inclusion/recursion_protection/recursion_element/../../uniq.declaration_requirements.h
+
+
+
+
+
 
 
 
@@ -1455,6 +2330,10 @@ void  private_cweb_generate_cors_response(struct CwebHttpResponse *response);
 //path: src/functions/server/declaration.h
 //path: src/functions/server/server_functions/server_functions.h
 
+//path: src/functions/server/server_functions/../uniq.declaration_requirements.h
+
+
+
 
 
 
@@ -1475,6 +2354,10 @@ void private_cweb_handle_child_termination(int signal);
 
 //path: src/functions/server/server/declaration.h
 //path: src/functions/server/server/constructors/constructors.h
+//path: src/functions/server/server/constructors/../uniq.declaration_requirements.h
+
+
+
 
 
 
@@ -1521,6 +2404,10 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self);
 //path: src/functions/namespace/declaration.h
 //path: src/functions/namespace/string_array_module/string_array_module.h
 
+//path: src/functions/namespace/string_array_module/../uniq.declaration_requirements.h
+
+
+
 
 
 
@@ -1529,6 +2416,10 @@ CwebStringArrayModule newCwebStringArrayModule();
 
 //path: src/functions/namespace/dict_module/declaration.h
 //path: src/functions/namespace/dict_module/keyval_module/keyval_module.h
+//path: src/functions/namespace/dict_module/keyval_module/../uniq.declaration_requirements.h
+
+
+
 
 
 
@@ -1545,7 +2436,10 @@ CwebDictModule newCwebDictModule();
 
 //path: src/functions/namespace/request_module/request_module.h
 
+
+
 CwebHttpRequestModule newCwebRequestModule();
+
 
 //path: src/functions/namespace/response_module/response_module.h
 
@@ -1563,7 +2457,496 @@ CwebServerModule newCwebServerModule();
 
 //path: src/functions/namespace/namespace/namespace.h
 
+
+
 CwebNamespace newCwebNamespace();
+
+
+//path: src/functions/namespace/hydratation_module/declaration.h
+//path: src/functions/namespace/hydratation_module/actions/actions.h
+//path: src/functions/namespace/hydratation_module/actions/../uniq.declaration_requirements.h
+
+
+
+
+
+
+CWebHydrationActionsNamespace newCWebHydrationActionsNamespace();
+
+
+//path: src/functions/namespace/hydratation_module/args/args.h
+
+
+
+
+CWebHydrationArgsNamespace newCWebHydrationArgsNamespace();
+
+
+//path: src/functions/namespace/hydratation_module/bridge/bridge.h
+
+
+
+CWebHydrationBridgeNamespace newCWebHydrationBridgetNamespace();
+
+
+//path: src/functions/namespace/hydratation_module/search_requirements/search_requirements.h
+
+
+
+CWebHydrationSearchRequirementsNamespace newCWebHydrationSearchRequirementsNamespace();
+
+
+//path: src/functions/namespace/hydratation_module/search_result/search_result.h
+
+
+
+
+CWebHydrationSearchResultNamespace newCWebHydrationSearchResultNamespace();
+
+
+//path: src/functions/namespace/hydratation_module/hydration/hydration.h
+
+
+
+
+CWebHydrationNamespace newCWebHydrationNamespace();
+
+
+
+
+
+//path: src/functions/hydratation/declaration.h
+//path: src/functions/hydratation/bridge/declaration.h
+//path: src/functions/hydratation/bridge/basic/basic.h
+
+//path: src/functions/hydratation/bridge/basic/../uniq.declaration_requirements.h
+
+//path: src/functions/hydratation/bridge/basic/../../uniq.declaration_requirements.h
+
+
+
+
+
+
+
+CWebHyDrationBridge *private_newCWebHyDrationBridge(
+    const char *name,
+    void (*callback)(CWebHyDrationBridge *),
+
+    CWebHyDration *hydration
+);
+
+
+
+CWebHyDrationBridge * CWebHyDrationBridge_get_brother_bridge(CWebHyDrationBridge *self,const char *name);
+
+bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self);
+
+CTextStack * CWebHyDrationBridge_create_stack(CWebHyDrationBridge *self);
+
+CTextStack * CWebHyDrationBridge_create_empty_stack(CWebHyDrationBridge *self);
+
+CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(CWebHyDrationBridge *self, const char *name,...);
+
+
+char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...);
+
+
+
+CTextStack* private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self);
+
+
+void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self);
+
+
+//path: src/functions/hydratation/bridge/args/args.h
+
+
+
+
+int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self);
+
+bool private_cweb_hydration_type_verifier(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)(const cJSON * const item));
+
+bool   CWebHyDrationBridge_is_arg_number(CWebHyDrationBridge *self,int index);
+
+bool   CWebHyDrationBridge_is_arg_bool(CWebHyDrationBridge *self,int index);
+
+bool   CWebHyDrationBridge_is_arg_null(CWebHyDrationBridge *self,int index);
+
+bool   CWebHyDrationBridge_is_arg_string(CWebHyDrationBridge *self,int index);
+
+cJSON *privateCWebHyDration_get_arg_index(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)(const cJSON * const item),const char *expected_type);
+
+double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index);
+
+long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index);
+
+bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index);
+
+char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index);
+
+cJSON * CWebHyDrationBridge_get_cJSON_arg(CWebHyDrationBridge *self,int index);
+
+
+//path: src/functions/hydratation/bridge/calls/calls.h
+
+
+
+
+
+char *privateCWebHyDrationBridge_call_by_vaargss(CWebHyDrationBridge *self,const char *func_args,va_list  args);
+
+
+char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...);
+
+char *privateCWebHyDrationBridge_call_trigger_by_vaarg(
+    CWebHyDrationBridge *self,
+    const char *trigger,
+    const char *func_args,
+    va_list  args
+);
+
+
+char *CWebHyDrationBridge_call_trigger(
+    CWebHyDrationBridge *self,
+    const char *trigger,
+    const char *func_args,
+    ...
+);
+
+
+char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_args,...);
+
+char *CWebHyDrationBridge_onfoccusout(CWebHyDrationBridge *self,const char *func_args,...);
+
+
+//path: src/functions/hydratation/bridge/search_result/search_result.h
+
+
+
+
+int  CWebHyDrationBridge_get_total_avaialible_searchs(CWebHyDrationBridge *self);
+
+CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_index(CWebHyDrationBridge *self,int index);
+
+CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_name(CWebHyDrationBridge *self,const char *name,...);
+
+bool CWebHyDrationBridge_search_exist(CWebHyDrationBridge *self,const char *name,...);
+
+double CWebHyDrationBridge_get_double_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+long CWebHyDrationBridge_get_long_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+bool CWebHyDrationBridge_get_bool_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+char* CWebHyDrationBridge_get_string_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+cJSON* CWebHyDrationBridge_get_cJSON_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...);
+
+
+//path: src/functions/hydratation/bridge/action/action.h
+
+
+
+
+void privateCWebHyDrationBridge_add_response(CWebHyDrationBridge *self,const char *name,cJSON *data);
+
+void CWebHyDrationBridge_set_session_storage_data(CWebHyDrationBridge *self,const char*key, const char *value,...);
+
+void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,...);
+
+void CWebHyDrationBridge_execute_script(CWebHyDrationBridge *self,const char *code,...);
+
+void CWebHyDrationBridge_replace_element_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char *query_selector,
+    const char *code,
+    ...
+);
+
+
+void CWebHyDrationBridge_append_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char *query_selector,
+    const char *code,
+    ...
+);
+
+
+
+
+void CWebHyDrationBridge_destroy_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char * query_selecor
+);
+
+
+
+void CWebHyDrationBridge_hide_element_by_query_selector(
+CWebHyDrationBridge *self,
+const char *query_selecor);
+
+
+void CWebHyDrationBridge_unhide_element_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char *query_selector
+);
+
+
+
+void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,const char *id, const char *code,...);
+
+
+void CWebHyDrationBridge_append_by_id(CWebHyDrationBridge *self,const char *id, const char *code,...);
+
+
+void CWebHyDrationBridge_hide_element_by_id(CWebHyDrationBridge *self,const char *id);
+
+
+void CWebHyDrationBridge_unhide_element_by_id(CWebHyDrationBridge *self,const char *id);
+
+
+void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id);
+
+
+void CWebHydration_redirect(CWebHyDrationBridge *self, const char *url);
+
+void CWebHydrationBridge_creatCookie(CWebHyDrationBridge *self, const char *key, const char *value, ...);
+
+void CWebHydrationBridge_creatCookie_with_time(CWebHyDrationBridge *self, const char *key, long time, const char *value, ...);
+
+void CWebHyDrationBridge_deletCookie(CWebHyDrationBridge *self, const char *key);
+
+void CWebHyDration_console_log(CWebHyDrationBridge *self, const char *menssage, ...);
+void CWebHyDration_console_warn(CWebHyDrationBridge *self, const char *menssage, ...);
+void CWebHyDration_console_error(CWebHyDrationBridge *self, const char *menssage, ...);
+void CWebHyDration_console_clear(CWebHyDrationBridge *self);
+
+void CWebHyDrationBridge_remove_class_by_id(CWebHyDrationBridge *self, const char *id, const char *class_name, ...);
+void CWebHyDrationBridge_add_class_by_id(CWebHyDrationBridge *self, const char *id, const char *class_name, ...);
+void CWebHyDrationBridge_remove_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
+void CWebHyDrationBridge_add_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
+
+
+
+
+
+
+//path: src/functions/hydratation/bridge/search_requirements/search_requirements.h
+
+
+
+
+
+void CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name(
+    CWebHyDrationBridge *self, const char *id
+);
+
+
+void CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name_not_auto_converting(
+    CWebHyDrationBridge *self, const char *id
+);
+
+
+void CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name(
+    CWebHyDrationBridge *self, const char *class_name
+);
+
+void CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name_not_auto_converting(
+    CWebHyDrationBridge *self, const char *class_name
+);
+
+
+
+
+//path: src/functions/hydratation/bridge_array/bridge_array.h
+
+
+
+
+privateCWebHyDrationBridgeArray * private_new_privateCWebHyDrationBridgeArray();
+
+void privateCWebHyDrationBridgeArray_append(privateCWebHyDrationBridgeArray *self,CWebHyDrationBridge *element);
+
+void privateCWebHyDrationBridgeArray_free(privateCWebHyDrationBridgeArray *self);
+
+
+//path: src/functions/hydratation/search_requirements/search_requirements.h
+
+
+
+
+
+
+
+
+CWebHyDrationSearchRequirements * private_newCWebHyDrationSearchRequirements_getting_name_ownership(
+    CWebHyDrationBridge *bridge, char *name
+);
+
+
+void private_CWebHyDrationSearchRequirements_free(CWebHyDrationSearchRequirements *self);
+
+
+void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirements *self,const char *function,...);
+
+
+void private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,bool auto_convert
+);
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,
+    ...
+);
+
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,const char *query_selector,...);
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute(
+    CWebHyDrationSearchRequirements *self,
+   const char *attribute,
+   const char*attribute_value,
+   ...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *attribute,
+    const char*attribute_value,
+    ...
+);
+
+void CWebHyDrationSearchRequirements_add_cookie_item(CWebHyDrationSearchRequirements *self, const char *name);
+void CWebHyDrationSearchRequirements_add_confirm(CWebHyDrationSearchRequirements *self, const char*message, ...);
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,
+    ...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_id(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+);
+
+void CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+);
+
+
+void CWebHyDrationSearchRequirements_add_session_storage_item_not_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+);
+
+
+void CWebHyDrationSearchRequirements_add_session_storage_item(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+);
+
+void CWebHyDrationSearchRequirements_add_prompt(CWebHyDrationSearchRequirements *self, const char *message, ...);
+
+
+//path: src/functions/hydratation/search_result/search_result.h
+
+
+
+
+
+
+CWebHyDrationSearchResult * private_newCWebHyDrationSearchResult(CWebHyDrationBridge *bridge,cJSON *search);
+
+void privateCWebHyDrationSearchResult_free(CWebHyDrationSearchResult *self);
+
+bool  privateCWebHyDrationSearchResult_has_erorrs(CWebHyDrationSearchResult *self);
+
+
+int  CWebHyDrationSearchResult_get_total_itens(CWebHyDrationSearchResult *self);
+
+
+bool  CWebHyDrationSearchResult_search_item_exist(CWebHyDrationSearchResult *self,int index);
+
+
+bool  CWebHyDrationSearchResult_is_search_item_number(CWebHyDrationSearchResult *self,int index);
+
+bool  CWebHyDrationSearchResult_is_search_item_bool(CWebHyDrationSearchResult *self,int index);
+
+
+bool  CWebHyDrationSearchResult_is_search_item_string(CWebHyDrationSearchResult *self,int index);
+cJSON * private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+    CWebHyDrationSearchResult *self,
+    int index,
+    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    const char *expected_type
+);
+
+
+double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int  index);
+
+
+long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  index);
+
+
+bool CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  index);
+
+
+
+char*  CWebHyDrationSearchResult_get_string(CWebHyDrationSearchResult *self,int  index);
+
+
+cJSON *  CWebHyDrationSearchResult_get_cJSON(CWebHyDrationSearchResult *self,int  index);
+
+
+//path: src/functions/hydratation/hydration/hydration.h
+
+
+
+
+CWebHyDration * newCWebHyDration(CwebHttpRequest *request);
+
+CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *));
+
+CTextStack  * CWebHyDration_create_stack(CWebHyDration *self);
+
+CTextStack  * CWebHyDration_create_empty_stack(CWebHyDration *self);
+
+CWebHyDrationBridge * CWebHyDration_get_child_bridge(CWebHyDration *self,const char *name);
+
+void privateCWebHydration_raise_error(CWebHyDration *self,CWebHyDrationBridge *bridge, int error_code, const char *format,...);
+
+CwebHttpResponse *private_CWebHydration_formmat_error_response(CWebHyDration *self);
+
+bool CWebHyDration_is_the_trigger(CWebHyDration *self);
+
+CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self);
+
+char *CWebHyDration_create_script(CWebHyDration *self);
+
+void private_CWebHyDration_free(CWebHyDration *self);
+
+
 
 
 
@@ -1572,28 +2955,59 @@ CwebNamespace newCwebNamespace();
 
 
 
-//path: src/globals.c
-
-
+//path: src/globals/all.c
 
 #ifndef PRIVATE_CWEB_GLOBALS
 #define  PRIVATE_CWEB_GLOBALS
+
+//path: src/globals/server.c
+
+
+
+
 static long long  cweb_actual_request = 0;
 static long cweb_total_requests = 0;
 static bool private_cweb_end_server = false;
 
 static const char* cweb_static_folder;
+
+
+//path: src/globals/hydration.c
+const char private_cweb_hydration_js_content[] = {108,101,116,32,112,114,105,118,97,116,101,95,99,119,101,98,95,97,99,116,105,111,110,115,95,104,97,110,100,108,101,114,115,32,61,32,123,10,32,32,97,108,101,114,116,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,97,108,101,114,116,40,100,97,116,97,91,34,109,115,103,34,93,41,59,10,32,32,125,44,10,32,32,101,120,101,99,117,116,101,95,115,99,114,105,112,116,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,101,118,97,108,40,100,97,116,97,91,34,99,111,100,101,34,93,41,59,10,32,32,125,44,10,32,32,114,101,100,105,114,101,99,116,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,119,105,110,100,111,119,46,108,111,99,97,116,105,111,110,46,104,114,101,102,32,61,32,100,97,116,97,91,34,117,114,108,34,93,59,10,32,32,125,44,10,32,32,115,101,116,95,115,101,115,115,105,111,110,95,115,116,111,114,97,103,101,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,115,101,115,115,105,111,110,83,116,111,114,97,103,101,46,115,101,116,73,116,101,109,40,100,97,116,97,91,34,107,101,121,34,93,44,32,100,97,116,97,91,34,118,97,108,117,101,34,93,41,59,10,32,32,125,44,10,32,32,97,100,100,95,99,111,111,107,105,101,95,119,105,116,104,95,116,105,109,101,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,108,101,116,32,101,120,112,105,114,101,115,32,61,32,34,34,59,10,32,32,32,32,105,102,32,40,100,97,116,97,46,100,97,121,115,41,32,123,10,32,32,32,32,32,32,99,111,110,115,116,32,100,97,116,101,32,61,32,110,101,119,32,68,97,116,101,40,41,59,10,32,32,32,32,32,32,100,97,116,101,46,115,101,116,84,105,109,101,40,100,97,116,101,46,103,101,116,84,105,109,101,40,41,32,43,32,100,97,116,97,46,100,97,121,115,32,42,32,50,52,32,42,32,54,48,32,42,32,54,48,32,42,32,49,48,48,48,41,59,10,32,32,32,32,32,32,101,120,112,105,114,101,115,32,61,32,34,59,32,101,120,112,105,114,101,115,61,34,32,43,32,100,97,116,101,46,116,111,85,84,67,83,116,114,105,110,103,40,41,59,10,32,32,32,32,125,10,32,32,32,32,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,32,61,10,32,32,32,32,32,32,100,97,116,97,46,110,97,109,101,32,43,32,34,61,34,32,43,32,40,100,97,116,97,46,118,97,108,117,101,32,124,124,32,34,34,41,32,43,32,101,120,112,105,114,101,115,32,43,32,34,59,32,112,97,116,104,61,47,34,59,10,32,32,125,44,10,32,32,97,100,100,95,99,111,111,107,105,101,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,32,61,32,100,97,116,97,46,110,97,109,101,32,43,32,34,61,34,32,43,32,40,100,97,116,97,46,118,97,108,117,101,32,124,124,32,34,34,41,32,43,32,34,59,32,112,97,116,104,61,47,34,59,10,32,32,125,44,10,32,32,100,101,108,101,116,95,99,111,111,107,105,101,58,32,102,117,110,99,116,105,111,110,32,40,110,97,109,101,41,32,123,10,32,32,32,32,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,32,61,32,110,97,109,101,32,43,32,34,61,59,32,77,97,120,45,65,103,101,61,45,57,57,57,57,57,57,57,57,59,34,59,10,32,32,125,44,10,32,32,114,101,112,108,97,99,101,95,101,108,101,109,101,110,116,95,98,121,95,113,117,101,114,121,95,115,101,108,101,99,116,111,114,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,108,101,116,32,101,108,101,109,101,110,116,32,61,32,100,111,99,117,109,101,110,116,46,113,117,101,114,121,83,101,108,101,99,116,111,114,40,100,97,116,97,46,113,117,101,114,121,95,115,101,108,101,99,116,111,114,41,59,10,32,32,32,32,105,102,32,40,33,101,108,101,109,101,110,116,41,32,123,10,32,32,32,32,32,32,114,101,116,117,114,110,59,10,32,32,32,32,125,10,32,32,32,32,101,108,101,109,101,110,116,46,105,110,115,101,114,116,65,100,106,97,99,101,110,116,72,84,77,76,40,34,97,102,116,101,114,101,110,100,34,44,32,100,97,116,97,46,104,116,109,108,41,59,10,32,32,32,32,101,108,101,109,101,110,116,46,114,101,109,111,118,101,40,41,59,10,32,32,125,44,10,10,32,32,97,112,112,101,110,100,95,98,121,95,113,117,101,114,121,95,115,101,108,101,99,116,111,114,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,108,101,116,32,101,108,101,109,101,110,116,32,61,32,100,111,99,117,109,101,110,116,46,113,117,101,114,121,83,101,108,101,99,116,111,114,40,100,97,116,97,46,113,117,101,114,121,95,115,101,108,101,99,116,111,114,41,59,10,32,32,32,32,105,102,32,40,33,101,108,101,109,101,110,116,41,32,123,10,32,32,32,32,32,32,114,101,116,117,114,110,59,10,32,32,32,32,125,10,32,32,32,32,101,108,101,109,101,110,116,46,105,110,110,101,114,72,84,77,76,32,43,61,32,100,97,116,97,46,104,116,109,108,59,10,32,32,125,44,10,10,32,32,104,105,100,101,95,101,108,101,109,101,110,116,95,98,121,95,113,117,101,114,121,95,115,101,108,101,99,116,111,114,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,108,101,116,32,101,108,101,109,101,110,116,32,61,32,100,111,99,117,109,101,110,116,46,113,117,101,114,121,83,101,108,101,99,116,111,114,40,100,97,116,97,46,113,117,101,114,121,95,115,101,108,101,99,116,111,114,41,59,10,32,32,32,32,105,102,32,40,33,101,108,101,109,101,110,116,41,32,123,10,32,32,32,32,32,32,114,101,116,117,114,110,59,10,32,32,32,32,125,10,32,32,32,32,101,108,101,109,101,110,116,46,115,116,121,108,101,46,100,105,115,112,108,97,121,32,61,32,34,110,111,110,101,34,59,10,32,32,125,44,10,32,32,117,110,104,105,100,101,95,101,108,101,109,101,110,116,95,98,121,95,113,117,101,114,121,95,115,101,108,101,99,116,111,114,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,108,101,116,32,101,108,101,109,101,110,116,32,61,32,100,111,99,117,109,101,110,116,46,113,117,101,114,121,83,101,108,101,99,116,111,114,40,100,97,116,97,46,113,117,101,114,121,95,115,101,108,101,99,116,111,114,41,59,10,32,32,32,32,105,102,32,40,33,101,108,101,109,101,110,116,41,32,123,10,32,32,32,32,32,32,114,101,116,117,114,110,59,10,32,32,32,32,125,10,32,32,32,32,101,108,101,109,101,110,116,46,115,116,121,108,101,46,100,105,115,112,108,97,121,32,61,32,34,115,104,111,119,34,59,10,32,32,125,44,10,10,32,32,100,101,115,116,114,111,121,95,98,121,95,113,117,101,114,121,95,115,101,108,101,99,116,111,114,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,108,101,116,32,101,108,101,109,101,110,116,32,61,32,100,111,99,117,109,101,110,116,46,113,117,101,114,121,83,101,108,101,99,116,111,114,40,100,97,116,97,46,113,117,101,114,121,95,115,101,108,101,99,116,111,114,41,59,10,32,32,32,32,105,102,32,40,101,108,101,109,101,110,116,41,32,123,10,32,32,32,32,32,32,101,108,101,109,101,110,116,46,114,101,109,111,118,101,40,41,59,10,32,32,32,32,125,10,32,32,125,44,10,10,32,32,108,111,103,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,99,111,110,115,111,108,101,46,108,111,103,40,100,97,116,97,46,109,101,115,115,97,103,101,41,59,10,32,32,125,44,10,10,32,32,119,97,114,110,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,99,111,110,115,111,108,101,46,119,97,114,110,40,100,97,116,97,46,109,101,115,115,97,103,101,41,59,10,32,32,125,44,10,10,32,32,101,114,114,111,114,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,99,111,110,115,111,108,101,46,101,114,114,111,114,40,100,97,116,97,46,109,101,115,115,97,103,101,41,59,10,32,32,125,44,10,10,32,32,99,108,101,97,114,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,99,111,110,115,111,108,101,46,99,108,101,97,114,40,41,59,10,32,32,125,44,10,10,32,32,97,100,100,95,99,108,97,115,115,95,98,121,95,113,117,101,114,121,95,115,101,108,101,99,116,111,114,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,108,101,116,32,101,108,101,109,101,110,116,32,61,32,100,111,99,117,109,101,110,116,46,113,117,101,114,121,83,101,108,101,99,116,111,114,40,100,97,116,97,46,113,117,101,114,121,95,115,101,108,101,99,116,111,114,41,59,10,32,32,32,32,105,102,32,40,33,101,108,101,109,101,110,116,41,32,123,10,32,32,32,32,32,32,32,32,114,101,116,117,114,110,59,10,32,32,32,32,125,10,32,32,32,32,101,108,101,109,101,110,116,46,99,108,97,115,115,76,105,115,116,46,97,100,100,40,100,97,116,97,46,99,108,97,115,115,95,110,97,109,101,41,59,10,32,32,125,44,10,10,32,32,114,101,109,111,118,101,95,99,108,97,115,115,95,98,121,95,113,117,101,114,121,95,115,101,108,101,99,116,111,114,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,108,101,116,32,101,108,101,109,101,110,116,32,61,32,100,111,99,117,109,101,110,116,46,113,117,101,114,121,83,101,108,101,99,116,111,114,40,100,97,116,97,46,113,117,101,114,121,95,115,101,108,101,99,116,111,114,41,59,10,32,32,32,32,105,102,32,40,33,101,108,101,109,101,110,116,41,32,123,10,32,32,32,32,32,32,32,32,114,101,116,117,114,110,59,10,32,32,32,32,125,10,32,32,32,32,101,108,101,109,101,110,116,46,99,108,97,115,115,76,105,115,116,46,114,101,109,111,118,101,40,100,97,116,97,46,99,108,97,115,115,95,110,97,109,101,41,59,10,32,32,125,44,10,10,10,32,32,97,100,100,95,99,108,97,115,115,95,98,121,95,105,100,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,32,32,108,101,116,32,101,108,101,109,101,110,116,32,61,32,100,111,99,117,109,101,110,116,46,103,101,116,69,108,101,109,101,110,116,66,121,73,100,40,100,97,116,97,46,105,100,41,59,10,32,32,32,32,32,32,105,102,32,40,33,101,108,101,109,101,110,116,41,32,123,10,32,32,32,32,32,32,32,32,32,32,114,101,116,117,114,110,59,10,32,32,32,32,32,32,125,10,32,32,32,32,32,32,101,108,101,109,101,110,116,46,99,108,97,115,115,76,105,115,116,46,97,100,100,40,100,97,116,97,46,99,108,97,115,115,95,110,97,109,101,41,59,10,32,32,125,44,10,10,32,32,114,101,109,111,118,101,95,99,108,97,115,115,95,98,121,95,105,100,58,32,102,117,110,99,116,105,111,110,32,40,100,97,116,97,41,32,123,10,32,32,32,32,32,32,108,101,116,32,101,108,101,109,101,110,116,32,61,32,100,111,99,117,109,101,110,116,46,103,101,116,69,108,101,109,101,110,116,66,121,73,100,40,100,97,116,97,46,105,100,41,59,10,32,32,32,32,32,32,105,102,32,40,33,101,108,101,109,101,110,116,41,32,123,10,32,32,32,32,32,32,32,32,32,32,114,101,116,117,114,110,59,10,32,32,32,32,32,32,125,10,32,32,32,32,32,32,101,108,101,109,101,110,116,46,99,108,97,115,115,76,105,115,116,46,114,101,109,111,118,101,40,100,97,116,97,46,99,108,97,115,115,95,110,97,109,101,41,59,10,32,32,125,10,10,125,59,10,10,10,10,10,10,10,108,101,116,32,99,119,101,98,95,98,114,105,100,103,101,115,32,61,32,123,125,59,10,10,102,117,110,99,116,105,111,110,32,112,114,105,118,97,116,101,95,99,119,101,98,95,99,111,110,118,101,114,116,95,97,115,115,99,105,40,97,115,99,105,105,76,105,115,116,41,32,123,10,32,32,114,101,116,117,114,110,32,97,115,99,105,105,76,105,115,116,46,109,97,112,40,40,99,111,100,101,41,32,61,62,32,83,116,114,105,110,103,46,102,114,111,109,67,104,97,114,67,111,100,101,40,99,111,100,101,41,41,46,106,111,105,110,40,34,34,41,59,10,125,10,10,97,115,121,110,99,32,102,117,110,99,116,105,111,110,32,112,114,105,118,97,116,101,95,99,119,101,98,95,99,97,108,108,95,98,114,105,100,103,101,95,119,105,116,104,95,97,115,115,105,99,40,10,32,32,98,114,105,100,103,101,95,110,97,109,101,95,97,115,115,99,105,44,10,32,32,98,114,105,100,103,101,95,97,114,103,115,95,97,115,115,99,105,44,10,41,32,123,10,32,32,108,101,116,32,98,114,105,100,103,101,110,97,109,101,95,99,111,110,118,101,114,116,101,100,32,61,32,112,114,105,118,97,116,101,95,99,119,101,98,95,99,111,110,118,101,114,116,95,97,115,115,99,105,40,98,114,105,100,103,101,95,110,97,109,101,95,97,115,115,99,105,41,59,10,32,32,108,101,116,32,98,114,105,100,103,101,95,97,114,103,115,95,99,111,110,118,101,114,116,101,100,32,61,32,112,114,105,118,97,116,101,95,99,119,101,98,95,99,111,110,118,101,114,116,95,97,115,115,99,105,40,98,114,105,100,103,101,95,97,114,103,115,95,97,115,115,99,105,41,59,10,32,32,108,101,116,32,99,117,114,114,101,110,116,95,98,114,105,100,103,101,32,61,32,99,119,101,98,95,98,114,105,100,103,101,115,91,98,114,105,100,103,101,110,97,109,101,95,99,111,110,118,101,114,116,101,100,93,59,10,32,32,108,101,116,32,99,111,100,101,32,61,32,34,99,117,114,114,101,110,116,95,98,114,105,100,103,101,40,34,32,43,32,98,114,105,100,103,101,95,97,114,103,115,95,99,111,110,118,101,114,116,101,100,32,43,32,34,41,34,59,10,32,32,116,114,121,32,123,10,32,32,32,32,101,118,97,108,40,99,111,100,101,41,59,10,32,32,125,32,99,97,116,99,104,32,40,101,114,114,111,114,41,32,123,10,32,32,32,32,99,111,110,115,111,108,101,46,108,111,103,40,101,114,114,111,114,41,59,10,32,32,125,10,125,10,10,97,115,121,110,99,32,102,117,110,99,116,105,111,110,32,112,114,105,118,97,116,101,95,99,119,101,98,95,115,101,110,100,95,116,111,95,115,101,114,118,101,114,40,110,97,109,101,44,32,97,114,103,115,44,32,99,111,110,116,101,110,116,41,32,123,10,32,32,108,101,116,32,98,111,100,121,32,61,32,123,32,110,97,109,101,58,32,110,97,109,101,44,32,97,114,103,115,58,32,97,114,103,115,44,32,99,111,110,116,101,110,116,58,32,99,111,110,116,101,110,116,32,125,59,10,32,32,108,101,116,32,112,114,111,112,115,32,61,32,123,10,32,32,32,32,109,101,116,104,111,100,58,32,34,80,79,83,84,34,44,10,32,32,32,32,98,111,100,121,58,32,74,83,79,78,46,115,116,114,105,110,103,105,102,121,40,98,111,100,121,41,44,10,32,32,125,59,10,32,32,99,111,110,115,116,32,82,79,85,84,69,32,61,32,34,47,112,114,105,118,97,116,101,95,99,119,101,98,95,104,121,100,114,97,116,105,111,110,95,109,97,105,110,95,99,97,108,108,98,97,99,107,95,104,97,110,100,108,101,114,34,59,10,32,32,108,101,116,32,114,101,115,117,108,116,32,61,32,97,119,97,105,116,32,102,101,116,99,104,40,82,79,85,84,69,44,32,112,114,111,112,115,41,59,10,32,32,108,101,116,32,97,99,116,105,111,110,115,32,61,32,97,119,97,105,116,32,114,101,115,117,108,116,46,106,115,111,110,40,41,59,10,32,32,105,102,32,40,33,114,101,115,117,108,116,46,111,107,41,32,123,10,32,32,32,32,99,111,110,115,111,108,101,46,108,111,103,40,97,99,116,105,111,110,115,41,59,10,32,32,32,32,114,101,116,117,114,110,59,10,32,32,125,10,32,32,97,99,116,105,111,110,115,46,102,111,114,69,97,99,104,40,102,117,110,99,116,105,111,110,32,40,105,116,101,109,41,32,123,10,32,32,32,32,116,114,121,32,123,10,32,32,32,32,32,32,108,101,116,32,114,101,115,112,111,110,115,101,95,97,99,116,105,111,110,32,61,32,112,114,105,118,97,116,101,95,99,119,101,98,95,97,99,116,105,111,110,115,95,104,97,110,100,108,101,114,115,91,105,116,101,109,46,110,97,109,101,93,59,10,32,32,32,32,32,32,105,102,32,40,33,114,101,115,112,111,110,115,101,95,97,99,116,105,111,110,41,32,123,10,32,32,32,32,32,32,32,32,116,104,114,111,119,32,69,114,114,111,114,40,34,114,101,115,112,111,110,115,101,32,34,32,43,32,105,116,101,109,46,110,97,109,101,32,43,32,34,105,116,115,32,110,111,116,32,97,32,97,99,116,105,111,110,34,41,59,10,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,114,101,115,112,111,110,115,101,95,97,99,116,105,111,110,40,105,116,101,109,46,100,97,116,97,41,59,10,32,32,32,32,125,32,99,97,116,99,104,32,40,101,114,114,111,114,41,32,123,10,32,32,32,32,32,32,99,111,110,115,111,108,101,46,108,111,103,40,101,114,114,111,114,41,59,10,32,32,32,32,125,10,32,32,125,41,59,10,125,10,10,102,117,110,99,116,105,111,110,32,112,114,105,118,97,116,101,95,99,119,101,98,95,104,97,110,100,108,101,95,114,101,113,117,105,114,101,100,95,100,97,116,97,40,99,97,108,108,98,97,99,107,44,32,97,114,103,115,44,32,99,111,110,116,101,110,116,44,32,110,97,109,101,41,32,123,10,32,32,108,101,116,32,114,101,115,117,108,116,32,61,32,117,110,100,101,102,105,110,101,100,59,10,32,32,116,114,121,32,123,10,32,32,32,32,114,101,115,117,108,116,32,61,32,99,97,108,108,98,97,99,107,40,97,114,103,115,41,59,10,32,32,125,32,99,97,116,99,104,32,40,101,114,114,111,114,41,32,123,10,32,32,32,32,99,111,110,115,111,108,101,46,108,111,103,40,101,114,114,111,114,41,59,10,32,32,32,32,114,101,116,117,114,110,59,10,32,32,125,10,10,32,32,105,102,32,40,33,65,114,114,97,121,46,105,115,65,114,114,97,121,40,114,101,115,117,108,116,41,41,32,123,10,32,32,32,32,114,101,115,117,108,116,32,61,32,91,114,101,115,117,108,116,93,59,10,32,32,125,10,10,32,32,105,102,32,40,33,99,111,110,116,101,110,116,91,110,97,109,101,93,41,32,123,10,32,32,32,32,99,111,110,116,101,110,116,91,110,97,109,101,93,32,61,32,91,93,59,10,32,32,125,10,32,32,99,111,110,116,101,110,116,91,110,97,109,101,93,32,61,32,99,111,110,116,101,110,116,91,110,97,109,101,93,46,99,111,110,99,97,116,40,114,101,115,117,108,116,41,59,10,125,10,102,117,110,99,116,105,111,110,32,112,114,105,118,97,116,101,95,99,119,101,98,95,116,114,121,95,116,111,95,99,111,110,118,101,114,116,95,116,111,95,110,117,109,98,101,114,40,112,111,115,115,105,98,108,101,95,110,117,109,98,101,114,41,32,123,10,32,32,108,101,116,32,112,111,115,115,105,98,108,101,95,99,111,110,118,101,114,115,105,111,110,32,61,32,112,97,114,115,101,70,108,111,97,116,40,112,111,115,115,105,98,108,101,95,110,117,109,98,101,114,41,59,10,32,32,105,102,32,40,105,115,78,97,78,40,112,111,115,115,105,98,108,101,95,99,111,110,118,101,114,115,105,111,110,41,41,32,123,10,32,32,32,32,114,101,116,117,114,110,32,112,111,115,115,105,98,108,101,95,110,117,109,98,101,114,59,10,32,32,125,10,10,32,32,114,101,116,117,114,110,32,112,111,115,115,105,98,108,101,95,99,111,110,118,101,114,115,105,111,110,59,10,125,10,10,102,117,110,99,116,105,111,110,32,112,114,105,118,97,116,101,95,99,119,101,98,95,103,101,116,95,115,101,115,115,105,111,110,95,115,116,111,114,97,103,101,95,105,116,101,109,40,112,114,111,112,115,41,32,123,10,32,32,108,101,116,32,102,105,110,97,108,118,97,108,117,101,32,61,32,115,101,115,115,105,111,110,83,116,111,114,97,103,101,46,103,101,116,73,116,101,109,40,112,114,111,112,115,46,110,97,109,101,41,59,10,10,32,32,105,102,32,40,33,102,105,110,97,108,118,97,108,117,101,41,32,123,10,32,32,32,32,114,101,116,117,114,110,32,91,93,59,10,32,32,125,10,32,32,105,102,32,40,112,114,111,112,115,46,97,117,116,111,95,99,111,110,118,101,114,116,41,32,123,10,32,32,32,32,102,105,110,97,108,118,97,108,117,101,32,61,32,112,114,105,118,97,116,101,95,99,119,101,98,95,116,114,121,95,116,111,95,99,111,110,118,101,114,116,95,116,111,95,110,117,109,98,101,114,40,102,105,110,97,108,118,97,108,117,101,41,59,10,32,32,125,10,10,32,32,114,101,116,117,114,110,32,91,102,105,110,97,108,118,97,108,117,101,93,59,10,125,10,10,102,117,110,99,116,105,111,110,32,112,114,105,118,97,116,101,95,99,119,101,98,95,103,101,116,95,101,108,101,109,101,110,116,115,40,112,114,111,112,115,41,32,123,10,32,32,108,101,116,32,101,108,101,109,101,110,116,115,32,61,32,91,46,46,46,100,111,99,117,109,101,110,116,46,113,117,101,114,121,83,101,108,101,99,116,111,114,65,108,108,40,112,114,111,112,115,46,113,117,101,114,121,95,115,101,108,101,99,116,111,114,41,93,59,10,32,32,114,101,116,117,114,110,32,101,108,101,109,101,110,116,115,46,109,97,112,40,40,101,108,101,109,101,110,116,41,32,61,62,32,123,10,32,32,32,32,108,101,116,32,102,105,110,97,108,118,97,108,117,101,32,61,32,117,110,100,101,102,105,110,101,100,59,10,10,32,32,32,32,105,102,32,40,101,108,101,109,101,110,116,46,116,121,112,101,32,61,61,61,32,34,99,104,101,99,107,98,111,120,34,41,32,123,10,32,32,32,32,32,32,114,101,116,117,114,110,32,101,108,101,109,101,110,116,46,99,104,101,99,107,101,100,59,10,32,32,32,32,125,10,10,32,32,32,32,105,102,32,40,101,108,101,109,101,110,116,46,116,97,103,78,97,109,101,32,61,61,61,32,34,73,78,80,85,84,34,32,124,124,32,101,108,101,109,101,110,116,46,116,97,103,78,97,109,101,32,61,61,61,32,34,84,69,88,84,65,82,69,65,34,41,32,123,10,32,32,32,32,32,32,102,105,110,97,108,118,97,108,117,101,32,61,32,101,108,101,109,101,110,116,46,118,97,108,117,101,59,10,32,32,32,32,125,32,101,108,115,101,32,123,10,32,32,32,32,32,32,102,105,110,97,108,118,97,108,117,101,32,61,32,101,108,101,109,101,110,116,46,116,101,120,116,67,111,110,116,101,110,116,59,10,32,32,32,32,125,10,10,32,32,32,32,105,102,32,40,112,114,111,112,115,46,97,117,116,111,95,99,111,110,118,101,114,116,41,32,123,10,32,32,32,32,32,32,102,105,110,97,108,118,97,108,117,101,32,61,32,112,114,105,118,97,116,101,95,99,119,101,98,95,116,114,121,95,116,111,95,99,111,110,118,101,114,116,95,116,111,95,110,117,109,98,101,114,40,102,105,110,97,108,118,97,108,117,101,41,59,10,32,32,32,32,125,10,10,32,32,32,32,114,101,116,117,114,110,32,102,105,110,97,108,118,97,108,117,101,59,10,32,32,125,41,59,10,125,10,10,102,117,110,99,116,105,111,110,32,112,114,105,118,97,116,101,95,99,119,101,98,95,103,101,116,95,118,97,108,117,101,95,99,111,111,107,105,101,95,98,121,95,107,101,121,40,112,114,111,112,115,41,123,10,32,32,99,111,110,115,116,32,110,97,109,101,69,81,32,61,32,112,114,111,112,115,46,110,97,109,101,32,43,32,34,61,34,59,10,32,32,32,32,99,111,110,115,116,32,99,111,111,107,105,101,115,65,114,114,97,121,32,61,32,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,46,115,112,108,105,116,40,39,59,39,41,59,10,32,32,32,32,10,32,32,32,32,102,111,114,32,40,108,101,116,32,105,32,61,32,48,59,32,105,32,60,32,99,111,111,107,105,101,115,65,114,114,97,121,46,108,101,110,103,116,104,59,32,105,43,43,41,32,123,10,32,32,32,32,32,32,32,32,108,101,116,32,99,111,111,107,105,101,32,61,32,99,111,111,107,105,101,115,65,114,114,97,121,91,105,93,46,116,114,105,109,40,41,59,10,32,32,32,32,32,32,32,32,105,102,32,40,99,111,111,107,105,101,46,105,110,100,101,120,79,102,40,110,97,109,101,69,81,41,32,61,61,61,32,48,41,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,114,101,116,117,114,110,32,91,99,111,111,107,105,101,46,115,117,98,115,116,114,105,110,103,40,110,97,109,101,69,81,46,108,101,110,103,116,104,44,32,99,111,111,107,105,101,46,108,101,110,103,116,104,41,93,59,10,32,32,32,32,32,32,32,32,125,10,32,32,32,32,125,10,32,32,32,32,114,101,116,117,114,110,32,91,93,59,32,10,125,10,0 };
+
+
+
+//path: src/globals/html.c
+const char private_cweb_404[] = {60,33,68,79,67,84,89,80,69,32,104,116,109,108,62,10,60,104,116,109,108,32,108,97,110,103,61,34,112,116,45,66,82,34,62,10,60,104,101,97,100,62,10,32,32,32,32,60,109,101,116,97,32,99,104,97,114,115,101,116,61,34,85,84,70,45,56,34,62,10,32,32,32,32,60,109,101,116,97,32,110,97,109,101,61,34,118,105,101,119,112,111,114,116,34,32,99,111,110,116,101,110,116,61,34,119,105,100,116,104,61,100,101,118,105,99,101,45,119,105,100,116,104,44,32,105,110,105,116,105,97,108,45,115,99,97,108,101,61,49,46,48,34,62,10,32,32,32,32,60,116,105,116,108,101,62,69,114,114,111,60,47,116,105,116,108,101,62,10,32,32,32,32,60,115,116,121,108,101,62,10,32,32,32,32,32,32,32,32,98,111,100,121,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,100,105,115,112,108,97,121,58,32,102,108,101,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,106,117,115,116,105,102,121,45,99,111,110,116,101,110,116,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,97,108,105,103,110,45,105,116,101,109,115,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,104,101,105,103,104,116,58,32,49,48,48,118,104,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,50,56,50,99,51,52,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,102,102,102,102,102,102,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,102,97,109,105,108,121,58,32,39,65,114,105,97,108,39,44,32,115,97,110,115,45,115,101,114,105,102,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,110,116,97,105,110,101,114,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,116,101,120,116,45,97,108,105,103,110,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,120,45,119,105,100,116,104,58,32,57,48,37,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,50,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,114,100,101,114,45,114,97,100,105,117,115,58,32,49,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,58,32,35,51,97,51,102,52,55,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,120,45,115,104,97,100,111,119,58,32,48,32,52,112,120,32,56,112,120,32,114,103,98,97,40,48,44,32,48,44,32,48,44,32,48,46,51,41,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,100,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,48,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,119,101,105,103,104,116,58,32,98,111,108,100,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,102,102,54,98,54,98,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,109,101,115,115,97,103,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,50,52,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,49,48,112,120,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,100,51,100,51,100,51,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,56,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,45,98,111,116,116,111,109,58,32,51,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,97,57,97,57,97,57,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,100,105,115,112,108,97,121,58,32,105,110,108,105,110,101,45,98,108,111,99,107,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,49,50,112,120,32,50,52,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,56,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,50,56,50,99,51,52,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,102,102,54,98,54,98,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,114,100,101,114,45,114,97,100,105,117,115,58,32,53,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,116,101,120,116,45,100,101,99,111,114,97,116,105,111,110,58,32,110,111,110,101,59,10,32,32,32,32,32,32,32,32,32,32,32,32,116,114,97,110,115,105,116,105,111,110,58,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,32,48,46,51,115,32,101,97,115,101,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,58,104,111,118,101,114,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,102,102,52,99,52,99,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,64,109,101,100,105,97,32,40,109,97,120,45,119,105,100,116,104,58,32,54,48,48,112,120,41,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,100,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,54,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,109,101,115,115,97,103,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,50,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,54,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,54,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,125,10,32,32,32,32,60,47,115,116,121,108,101,62,10,60,47,104,101,97,100,62,10,60,98,111,100,121,62,10,32,32,32,32,60,100,105,118,32,99,108,97,115,115,61,34,101,114,114,111,114,45,99,111,110,116,97,105,110,101,114,34,62,10,32,32,32,32,32,32,32,32,60,104,49,32,99,108,97,115,115,61,34,101,114,114,111,114,45,99,111,100,101,34,62,52,48,52,60,47,104,49,62,10,32,32,32,32,32,32,32,32,60,112,32,99,108,97,115,115,61,34,101,114,114,111,114,45,109,101,115,115,97,103,101,34,62,80,97,103,101,32,110,111,116,45,102,111,117,110,100,60,47,112,62,10,32,32,32,32,32,32,32,32,60,112,32,99,108,97,115,115,61,34,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,34,62,83,111,114,114,121,44,32,116,104,105,115,32,112,97,103,101,32,110,111,116,32,102,111,117,110,100,46,60,47,112,62,10,32,32,32,32,32,32,32,32,60,97,32,104,114,101,102,61,34,47,34,32,99,108,97,115,115,61,34,101,114,114,111,114,45,108,105,110,107,34,62,98,97,99,107,60,47,97,62,10,32,32,32,32,60,47,100,105,118,62,10,60,47,98,111,100,121,62,10,60,47,104,116,109,108,62,0 };
+
+const char private_cweb_500[] = {60,33,68,79,67,84,89,80,69,32,104,116,109,108,62,10,60,104,116,109,108,32,108,97,110,103,61,34,112,116,45,66,82,34,62,10,60,104,101,97,100,62,10,32,32,32,32,60,109,101,116,97,32,99,104,97,114,115,101,116,61,34,85,84,70,45,56,34,62,10,32,32,32,32,60,109,101,116,97,32,110,97,109,101,61,34,118,105,101,119,112,111,114,116,34,32,99,111,110,116,101,110,116,61,34,119,105,100,116,104,61,100,101,118,105,99,101,45,119,105,100,116,104,44,32,105,110,105,116,105,97,108,45,115,99,97,108,101,61,49,46,48,34,62,10,32,32,32,32,60,116,105,116,108,101,62,69,114,114,111,60,47,116,105,116,108,101,62,10,32,32,32,32,60,115,116,121,108,101,62,10,32,32,32,32,32,32,32,32,98,111,100,121,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,100,105,115,112,108,97,121,58,32,102,108,101,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,106,117,115,116,105,102,121,45,99,111,110,116,101,110,116,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,97,108,105,103,110,45,105,116,101,109,115,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,104,101,105,103,104,116,58,32,49,48,48,118,104,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,50,56,50,99,51,52,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,102,102,102,102,102,102,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,102,97,109,105,108,121,58,32,39,65,114,105,97,108,39,44,32,115,97,110,115,45,115,101,114,105,102,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,110,116,97,105,110,101,114,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,116,101,120,116,45,97,108,105,103,110,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,120,45,119,105,100,116,104,58,32,57,48,37,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,50,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,114,100,101,114,45,114,97,100,105,117,115,58,32,49,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,58,32,35,51,97,51,102,52,55,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,120,45,115,104,97,100,111,119,58,32,48,32,52,112,120,32,56,112,120,32,114,103,98,97,40,48,44,32,48,44,32,48,44,32,48,46,51,41,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,100,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,48,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,119,101,105,103,104,116,58,32,98,111,108,100,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,102,102,54,98,54,98,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,109,101,115,115,97,103,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,50,52,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,49,48,112,120,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,100,51,100,51,100,51,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,56,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,45,98,111,116,116,111,109,58,32,51,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,97,57,97,57,97,57,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,100,105,115,112,108,97,121,58,32,105,110,108,105,110,101,45,98,108,111,99,107,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,49,50,112,120,32,50,52,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,56,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,50,56,50,99,51,52,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,102,102,54,98,54,98,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,114,100,101,114,45,114,97,100,105,117,115,58,32,53,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,116,101,120,116,45,100,101,99,111,114,97,116,105,111,110,58,32,110,111,110,101,59,10,32,32,32,32,32,32,32,32,32,32,32,32,116,114,97,110,115,105,116,105,111,110,58,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,32,48,46,51,115,32,101,97,115,101,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,58,104,111,118,101,114,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,102,102,52,99,52,99,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,64,109,101,100,105,97,32,40,109,97,120,45,119,105,100,116,104,58,32,54,48,48,112,120,41,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,100,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,54,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,109,101,115,115,97,103,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,50,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,54,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,54,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,125,10,32,32,32,32,60,47,115,116,121,108,101,62,10,60,47,104,101,97,100,62,10,60,98,111,100,121,62,10,32,32,32,32,60,100,105,118,32,99,108,97,115,115,61,34,101,114,114,111,114,45,99,111,110,116,97,105,110,101,114,34,62,10,32,32,32,32,32,32,32,32,60,104,49,32,99,108,97,115,115,61,34,101,114,114,111,114,45,99,111,100,101,34,62,53,48,48,60,47,104,49,62,10,32,32,32,32,32,32,32,32,60,112,32,99,108,97,115,115,61,34,101,114,114,111,114,45,109,101,115,115,97,103,101,34,62,69,114,114,111,114,32,105,110,116,101,114,110,60,47,112,62,10,32,32,32,32,32,32,32,32,60,112,32,99,108,97,115,115,61,34,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,34,62,69,114,114,111,114,32,105,110,32,115,101,114,118,101,114,60,47,112,62,10,32,32,32,32,32,32,32,32,60,97,32,104,114,101,102,61,34,47,34,32,99,108,97,115,115,61,34,101,114,114,111,114,45,108,105,110,107,34,62,98,97,99,107,60,47,97,62,10,32,32,32,32,60,47,100,105,118,62,10,60,47,98,111,100,121,62,10,60,47,104,116,109,108,62,0 };
+
+
+
 #endif
 
 
-//path: src/dependencies/definitions.c
+//path: src/dependencies/definition.c
 
 
 #ifndef CTEXTENGINE_H
 #define CTEXTENGINE_H
-//path: src/dependencies/CTextEngine/definition.h
+//path: src/dependencies/CTextEngine/definition.c
+//CTextEngine
 
-//path: src/dependencies/CTextEngine/CTextStack/admnistrative_methods.c
+
+//path: src/dependencies/CTextEngine/functions/definition.c
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/definition.c
+//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/admnistrative_methods.c
+
+
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/../unique.definition_requirements.h
+//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/../../unique.definition_requirements.h
+
+
 
 
 
@@ -1647,18 +3061,21 @@ void CTextStack_free(struct CTextStack *self){
     free(self);
 }
 
-struct CTextStack * CTextStack_clone(struct CTextStack *self){
+ CTextStack * CTextStack_clone(struct CTextStack *self){
     CTextStack *new_stack = newCTextStack(self->line_breaker,self->separator);
     new_stack->ident_level = self->ident_level;
     CTextStack_text(new_stack,self->rendered_text);
     return new_stack;
 }
 
-//path: src/dependencies/CTextEngine/CTextStack/algo_methods.c
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/algo_methods/algo_methods.c
 
 
 
-struct CTextStack * CTextStack_substr(struct CTextStack *self, long starter, long end){
+
+
+ CTextStack * CTextStack_substr(struct CTextStack *self, long starter, long end){
 
     CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
     new_element->ident_level = self->ident_level;
@@ -1685,7 +3102,7 @@ void CTextStack_self_substr(struct CTextStack *self, long starter, long end){
 }
 
 
-struct CTextStack *CTextStack_replace(struct CTextStack *self,const char *element, const char *element_to_replace){
+ CTextStack *CTextStack_replace(struct CTextStack *self,const char *element, const char *element_to_replace){
 
     CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
     new_element->ident_level = self->ident_level;
@@ -1715,7 +3132,7 @@ void CTextStack_self_replace(struct CTextStack *self,const char *element, const 
 }
 
 
-struct CTextStack *CTextStack_replace_long(struct CTextStack *self,const char *element, long element_to_replace){
+ CTextStack *CTextStack_replace_long(struct CTextStack *self,const char *element, long element_to_replace){
     char num_conversion[20] = {0};
     sprintf(num_conversion,"%ld",element_to_replace);
     return CTextStack_replace(self,element,num_conversion);
@@ -1728,7 +3145,7 @@ void CTextStack_self_replace_long(struct CTextStack *self,const char *element, l
 }
 
 
-struct CTextStack *CTextStack_replace_double(struct CTextStack *self,const char *element, double element_to_replace){
+ CTextStack *CTextStack_replace_double(struct CTextStack *self,const char *element, double element_to_replace){
     CTextStack  *num_formated = newCTextStack_string_empty();
     CTextStack_format(num_formated,"%f",element_to_replace);
     CTextStack  *result = CTextStack_replace(self,element,num_formated->rendered_text);
@@ -1951,9 +3368,17 @@ void CTextStack_self_trim(struct CTextStack *self){
     private_CTextStack_parse_ownership(self,new_stack);
 }
 
-//path: src/dependencies/CTextEngine/CTextStack/constructors.c
-////
-struct CTextStack * newCTextStack(const char *line_breaker, const char *separator){
+
+bool CTextStack_equal(  CTextStack *self,const char *element){
+    return strcmp(self->rendered_text,element) == 0;
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/constructors/constructors.c
+
+
+
+ CTextStack * newCTextStack(const char *line_breaker, const char *separator){
     struct CTextStack *self = (struct CTextStack*)malloc(sizeof(struct CTextStack));
     *self = (CTextStack){0};
     self->rendered_text = (char*)malloc(2);
@@ -1967,7 +3392,7 @@ struct CTextStack * newCTextStack(const char *line_breaker, const char *separato
     return self;
 }
 
-struct CTextStack *newCTextStack_string(const char *starter){
+ CTextStack *newCTextStack_string(const char *starter){
     CTextStack *self = newCTextStack("","");
     if(starter){
         CTextStack_format(self,"%s", starter);
@@ -1975,7 +3400,7 @@ struct CTextStack *newCTextStack_string(const char *starter){
     return self;
 }
 
-struct CTextStack *newCTextStack_string_format(const char *format, ...){
+ CTextStack *newCTextStack_string_format(const char *format, ...){
     CTextStack *self = newCTextStack("","");
     va_list  argptr;
     va_start(argptr, format);
@@ -1985,7 +3410,7 @@ struct CTextStack *newCTextStack_string_format(const char *format, ...){
     return self;
 }
 
-struct CTextStack *newCTextStack_string_getting_ownership(const char *starter){
+ CTextStack *newCTextStack_string_getting_ownership(const char *starter){
     CTextStack *self = newCTextStack("","");
     free(self->rendered_text);
     self->rendered_text = (char*)starter;
@@ -1993,11 +3418,14 @@ struct CTextStack *newCTextStack_string_getting_ownership(const char *starter){
     self->rendered_text_alocation_size = self->size;
     return self;
 }
-struct CTextStack *newCTextStack_string_empty(){
+ CTextStack *newCTextStack_string_empty(){
     return  newCTextStack("","");
 }
 
-//path: src/dependencies/CTextEngine/CTextStack/parsers.c
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/parsers/parsers.c
+
+
 
 int CTextStack_typeof(struct CTextStack *self){
     if(self->size == 0){
@@ -2043,11 +3471,11 @@ const char * CTextStack_typeof_in_str(struct CTextStack *self){
     else if(current_type == CTEXT_LONG){
         return "long";
     }
-    
+
     else if(current_type == CTEXT_DOUBLE){
         return "double";
     }
-    
+
     else{
         return "invalid";
     }
@@ -2079,7 +3507,9 @@ double  CTextStack_parse_to_double(struct CTextStack *self){
 }
 
 
-//path: src/dependencies/CTextEngine/CTextStack/render_methods.c
+//path: src/dependencies/CTextEngine/functions/CTextStack/render_methods/render_methods.c
+
+
 
 void private_ctext_text_double_size_if_reachs(struct CTextStack *self){
 
@@ -2099,14 +3529,14 @@ void CTextStack_text(struct CTextStack *self, const char *text){
     }
 
     size_t text_size = strlen(text);
-    
+
     self->size += text_size;
     private_ctext_text_double_size_if_reachs(self);
-    
+
     memcpy(
             self->rendered_text + self->size - text_size,
         text,
-        text_size 
+        text_size
     );
     self->rendered_text[self->size] = '\0';
 }
@@ -2149,7 +3579,7 @@ void CTextStack_segment(struct CTextStack *self){
 
 }
 
-void CTextStack_$open(struct CTextStack *self, const char *tag, const char *format, ...){
+void CTextStack_open_format(struct CTextStack *self, const char *tag, const char *format, ...){
     CTextStack_segment(self);
     CTextStack_format(self, "%c",'<');
     CTextStack_text(self,tag);
@@ -2172,7 +3602,7 @@ void CTextStack_$open(struct CTextStack *self, const char *tag, const char *form
 
 
 
-void CTextStack_only$open(struct CTextStack *self, const char *tag, const char *format, ...){
+void CTextStack_only_open_format(struct CTextStack *self, const char *tag, const char *format, ...){
     CTextStack_segment(self);
     CTextStack_format(self, "%c",'<');
 
@@ -2192,7 +3622,7 @@ void CTextStack_only$open(struct CTextStack *self, const char *tag, const char *
 
 }
 
-void CTextStack_auto$close(struct CTextStack *self, const char *tag, const char *format, ...){
+void CTextStack_auto_close_format(struct CTextStack *self, const char *tag, const char *format, ...){
     CTextStack_segment(self);
     CTextStack_format(self, "%c",'<');
 
@@ -2217,7 +3647,7 @@ void ctext_open(struct CTextStack *self, const char *tag){
         self->ident_level += 1;
         return;
     }
-    CTextStack_$open(self, tag, NULL);
+    CTextStack_open_format(self, tag, NULL);
 }
 
 
@@ -2242,9 +3672,252 @@ void ctext_close(struct CTextStack *self, const char *tag){
 
 
 
+//path: src/dependencies/CTextEngine/functions/CTextArray/CTextArray.c
 
 
-//path: src/dependencies/CTextEngine/extras/extras.c
+
+CTextArray * newCTextArray(){
+    CTextArray  *self = (CTextArray*) malloc(sizeof (CTextArray));
+    self->size = 0;
+    self->stacks = (CTextStack**) malloc(0);
+    return self;
+}
+
+void CTextArray_append(CTextArray *self,CTextStack *element){
+    self->stacks =  (CTextStack**) realloc(
+            self->stacks,
+            (self->size+1)* sizeof (CTextStack*)
+            );
+
+    self->stacks[self->size] = element;
+    self->size+=1;
+}
+
+
+
+void CTextArray_append_string(CTextArray *self,const char *element){
+    CTextStack *new_element = newCTextStack_string(element);
+    CTextArray_append(self,new_element);
+}
+
+CTextStack * CTextArray_join(CTextArray *self,const char *separator){
+    CTextStack  *result  = newCTextStack_string_empty();
+    for(int i = 0; i < self->size; i++){
+        if(i < self->size -1){
+            CTextStack_format(result,"%t%s",self->stacks[i],separator);
+        }
+        else{
+            CTextStack_format(result,"%t",self->stacks[i]);
+
+        }
+
+    }
+    return result;
+}
+
+CTextArray *CTextArray_split(const char *element,const char *target){
+    CTextArray *self = newCTextArray();
+    CTextStack *text = newCTextStack_string(element);
+    long target_size = (long)strlen(target);
+    CTextStack  *acumulated = newCTextStack_string_empty();
+
+    for(int i = 0; i <text->size; i++){
+        CTextStack  *possible_division = CTextStack_substr(text,i,target_size + i);
+        if(CTextStack_equal(possible_division,target)){
+            CTextArray_append(self,acumulated);
+            acumulated = newCTextStack_string_empty();
+            CTextStack_free(possible_division);
+            continue;
+        }
+        CTextStack_free(possible_division);
+
+        CTextStack_format(acumulated,"%c",text->rendered_text[i]);
+    }
+
+    CTextArray_append(self,acumulated);
+    CTextStack_free(text);
+    return self;
+}
+
+
+
+void  CTextArray_free(CTextArray *self){
+    for(int i = 0; i < self->size; i++){
+            CTextStack_free(self->stacks[i]);
+    }
+    free(self->stacks);
+    free(self);
+}
+
+CTextArray * CTextArray_map(CTextArray *self, CTextStack *(caller)(CTextStack* element)){
+    CTextArray *new_array  = newCTextArray();
+    for(int i = 0; i < self->size; i++){
+        CTextStack *result = caller(self->stacks[i]);
+        CTextArray_append(new_array,result);
+    }
+    return new_array;
+}
+
+
+CTextArray * CTextArray_filter(CTextArray *self, bool (caller)(CTextStack* element)){
+    CTextArray *new_array  = newCTextArray();
+
+    for(int i = 0; i < self->size; i++){
+        if(caller(self->stacks[i])){
+
+            CTextArray_append(new_array, CTextStack_clone(self->stacks[i]));
+        }
+    }
+
+    return new_array;
+}
+
+void  CTextArray_foreach(CTextArray *self, void (*caller)(CTextStack* element)){
+    for(int i = 0; i < self->size; i++){
+        caller(self->stacks[i]);
+    }
+}
+
+bool CTextArray_includes(CTextArray *self,const char *element){
+    for(int i = 0 ; i < self->size;i++){
+        if(CTextStack_equal(self->stacks[i],element)){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+void CTextArray_represent(CTextArray *self){
+    for(int i =0; i < self->size; i++){
+        CTextStack_represent(self->stacks[i]);
+    }
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/definition.c
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTexStackModule/CTextStackModule.c
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTexStackModule/../unique.definition_requirements.h
+
+
+
+
+
+CTextStackModule newCTextStackModule(){
+    struct CTextStackModule self = {0};
+    self.newStack = newCTextStack;
+    self.newStack_string = newCTextStack_string;
+    self.newStack_string_format = newCTextStack_string_format;
+    self.newStack_string_empty = newCTextStack_string_empty;
+    self.newStack_string_getting_ownership = newCTextStack_string_getting_ownership;
+    self.text = CTextStack_text;
+    self.segment_text = CTextStack_segment_text;
+    self.format = CTextStack_format;
+    self.segment = CTextStack_segment;
+    self.segment_format = CTextStack_segment_format;
+    self.open_format = CTextStack_open_format;
+    self.only_open_format =CTextStack_only_open_format;
+    self.auto_close_format = CTextStack_auto_close_format;
+    self.open = ctext_open;
+    self.close = ctext_close;
+    self.free =  CTextStack_free;
+    self.clone = CTextStack_clone;
+    self.represent = CTextStack_represent;
+    self.self_transform_in_string_and_self_clear = CTextStack_self_transform_in_string_and_self_clear;
+    self.restart = CTextStack_restart;
+    self.substr = CTextStack_substr;
+    self.self_substr =CTextStack_self_substr;
+
+    self.pop = CTextStack_pop;
+    self.self_pop =CTextStack_self_pop;
+
+    self.replace = CTextStack_replace;
+    self.self_replace = CTextStack_self_replace;
+
+    self.replace_long = CTextStack_replace_long;
+    self.self_replace_long =CTextStack_self_replace_long;
+
+
+    self.replace_double = CTextStack_replace_double;
+    self.self_replace_double =CTextStack_self_replace_double;
+
+    self.insert_at = CTextStack_insert_at;
+    self.self_insert_at  = CTextStack_self_insert_at;
+
+
+    self.index_of = CTextStack_index_of;
+    self.index_of_char = CTextStack_index_of_char;
+
+    self.lower = CTextStack_lower;
+    self.self_lower = CTextStack_self_lower;
+
+    self.upper = CTextStack_upper;
+    self.self_upper = CTextStack_self_upper;
+
+    self.captalize = CTextStack_captalize;
+    self.self_captalize = CTextStack_self_captalize;
+
+    self.starts_with = CTextStack_starts_with;
+    self.ends_with = CTextStack_ends_with;
+
+    self.equal = CTextStack_equal;
+    self.reverse = CTextStack_reverse;
+    self.self_reverse = CTextStack_self_reverse;
+
+
+    self.typeof_element = CTextStack_typeof;
+    self.is_a_num = CTextStack_is_a_num;
+    self.typeof_in_str = CTextStack_typeof_in_str;
+    self.parse_to_bool = CTextStack_parse_to_bool;
+    self.parse_to_integer = CTextStack_parse_to_integer;
+    self.parse_to_double = CTextStack_parse_to_double;
+
+    self.trim = CTextStack_trim;
+    self.self_trim = CTextStack_self_trim;
+
+
+    return self;
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTextArrayModule/CTextArrayModule.c
+
+
+
+
+CTextArrayModule newCTextArrayModule(){
+    CTextArrayModule module = {0};
+    module.newArray = newCTextArray;
+    module.append = CTextArray_append;
+    module.append_string = CTextArray_append_string;
+    module.join = CTextArray_join;
+    module.map  = CTextArray_map;
+    module.filter = CTextArray_filter;
+    module.foreach = CTextArray_foreach;
+    module.represent = CTextArray_represent;
+    module.includes = CTextArray_includes;
+    module.free = CTextArray_free;
+    return module;
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTextNamespace/CTextNamespace.c
+
+
+
+
+CTextNamespace newCTextNamespace(){
+    CTextNamespace self  = {0};
+    self.stack = newCTextStackModule();
+    self.array = newCTextArrayModule();
+    return self;
+}
+
+
+
+//path: src/dependencies/CTextEngine/functions/extras/extras.c
+
+
 
 void private_ctext_generate_formated_text(
         struct CTextStack *stack,const char *format,va_list argptr){
@@ -2264,15 +3937,33 @@ void private_ctext_generate_formated_text(
 
         }
 
-        if(strcmp(single_test,"%d") == 0) {
+        if(strcmp(single_test,"%d") == 0 || strcmp(single_test,"%i") == 0) {
+            int value = va_arg(argptr,int);
             char result[20] ={0};
-            sprintf(result,"%ld", va_arg(argptr,long));
+            sprintf(result,"%d", value);
+
+
+
             CTextStack_text(stack,result);
+
             i+=1;
             continue;
         }
 
-        if(strcmp(single_test,"%f") == 0) {
+        else if(strcmp(double_test,"%ld") == 0 ) {
+
+            int value = va_arg(argptr,int);
+            char result[20] ={0};
+            sprintf(result,"%d", value);
+
+            CTextStack_text(stack,result);
+
+            i+=2;
+            continue;
+        }
+
+
+        else if(strcmp(single_test,"%f") == 0 ) {
             char result_text[20]= {0};
 
             sprintf(result_text,"%lf", va_arg(argptr,double ));
@@ -2296,6 +3987,29 @@ void private_ctext_generate_formated_text(
             continue;
         }
 
+        else if(strcmp(double_test,"%lf") == 0 ) {
+            char result_text[20]= {0};
+
+            sprintf(result_text,"%lf", va_arg(argptr,double ));
+
+            for(int t = 18; t > 0; t--){
+                char current_char = result_text[t];
+                if(current_char != '0' && current_char != '\0'){
+
+                    if(current_char == '.'){
+                        result_text[t+2]  = '\0';
+                    }
+                    else{
+                        result_text[t+1]  = '\0';
+                    }
+
+                    break;
+                }
+            }
+            CTextStack_text(stack,result_text);
+            i+=2;
+            continue;
+        }
         else if(strcmp(single_test,"%c") == 0){
             char result = va_arg(argptr,int);
             char element[2] = {result,'\0'};
@@ -2387,236 +4101,7 @@ long private_CText_transform_index(long size , long value){
     return formated_value;
 }
 
-//path: src/dependencies/CTextEngine/CTextArray/CTextArray.c
 
-CTextArray * newCTextArray(){
-    CTextArray  *self = (CTextArray*) malloc(sizeof (CTextArray));
-    self->size = 0;
-    self->stacks = (CTextStack**) malloc(0);
-    return self;
-}
-
-void CTextArray_append(CTextArray *self,CTextStack *element){
-    self->stacks =  (CTextStack**) realloc(
-            self->stacks,
-            (self->size+1)* sizeof (CTextStack*)
-            );
-
-    self->stacks[self->size] = element;
-    self->size+=1;
-}
-
-
-
-void CTextArray_append_string(CTextArray *self,const char *element){
-    CTextStack *new_element = newCTextStack_string(element);
-    CTextArray_append(self,new_element);
-}
-
-CTextStack * CTextArray_join(CTextArray *self,const char *separator){
-    CTextStack  *result  = newCTextStack_string_empty();
-    for(int i = 0; i < self->size; i++){
-        if(i < self->size -1){
-            CTextStack_format(result,"%t%s",self->stacks[i],separator);
-        }
-        else{
-            CTextStack_format(result,"%t",self->stacks[i]);
-
-        }
-
-    }
-    return result;
-}
-
-CTextArray *CTextArray_split(const char *element,const char *target){
-    CTextArray *self = newCTextArray();
-    CTextStack *text = newCTextStack_string(element);
-    long target_size = (long)strlen(target);
-    CTextStack  *acumulated = newCTextStack_string_empty();
-
-    for(int i = 0; i <text->size; i++){
-        CTextStack  *possible_division = CTextStack_substr(text,i,target_size + i);
-        if(CTextStack_equal(possible_division,target)){
-            CTextArray_append(self,acumulated);
-            acumulated = newCTextStack_string_empty();
-            CTextStack_free(possible_division);
-            continue;
-        }
-        CTextStack_free(possible_division);
-
-        CTextStack_format(acumulated,"%c",text->rendered_text[i]);
-    }
-
-    CTextArray_append(self,acumulated);
-    CTextStack_free(text);
-    return self;
-}
-
-bool CTextStack_equal(struct  CTextStack *self,const char *element){
-    return strcmp(self->rendered_text,element) == 0;
-}
-
-
-void  CTextArray_free(CTextArray *self){
-    for(int i = 0; i < self->size; i++){
-            CTextStack_free(self->stacks[i]);
-    }
-    free(self->stacks);
-    free(self);
-}
-
-CTextArray * CTextArray_map(CTextArray *self, CTextStack *(caller)(CTextStack* element)){
-    CTextArray *new_array  = newCTextArray();
-    for(int i = 0; i < self->size; i++){
-        CTextStack *result = caller(self->stacks[i]);
-        CTextArray_append(new_array,result);
-    }
-    return new_array;
-}
-
-
-CTextArray * CTextArray_filter(CTextArray *self, bool (caller)(CTextStack* element)){
-    CTextArray *new_array  = newCTextArray();
-
-    for(int i = 0; i < self->size; i++){
-        if(caller(self->stacks[i])){
-
-            CTextArray_append(new_array, CTextStack_clone(self->stacks[i]));
-        }
-    }
-
-    return new_array;
-}
-
-void  CTextArray_foreach(CTextArray *self, void (*caller)(CTextStack* element)){
-    for(int i = 0; i < self->size; i++){
-        caller(self->stacks[i]);
-    }
-}
-
-bool CTextArray_includes(CTextArray *self,const char *element){
-    for(int i = 0 ; i < self->size;i++){
-        if(CTextStack_equal(self->stacks[i],element)){
-            return true;
-        }
-    }
-    return false;
-}
-
-
-void CTextArray_represent(CTextArray *self){
-    for(int i =0; i < self->size; i++){
-        CTextStack_represent(self->stacks[i]);
-    }
-}
-
-//path: src/dependencies/CTextEngine/CTextNamespace/definition.h
-//path: src/dependencies/CTextEngine/CTextNamespace/CTexStackModule/CTextStackModule.c
-
-CTextStackModule newCTextStackModule(){
-    struct CTextStackModule self = {0};
-    self.newStack = newCTextStack;
-    self.newStack_string = newCTextStack_string;
-    self.newStack_string_format = newCTextStack_string_format;
-    self.newStack_string_empty = newCTextStack_string_empty;
-    self.newStack_string_getting_ownership = newCTextStack_string_getting_ownership;
-    self.text = CTextStack_text;
-    self.segment_text = CTextStack_segment_text;
-    self.format = CTextStack_format;
-    self.segment = CTextStack_segment;
-    self.segment_format = CTextStack_segment_format;
-    self.$open = CTextStack_$open;
-    self.only$open =CTextStack_only$open;
-    self.auto$close = CTextStack_auto$close;
-    self.open = ctext_open;
-    self.close = ctext_close;
-    self.free =  CTextStack_free;
-    self.clone = CTextStack_clone;
-    self.represent = CTextStack_represent;
-    self.self_transform_in_string_and_self_clear = CTextStack_self_transform_in_string_and_self_clear;
-    self.restart = CTextStack_restart;
-    self.substr = CTextStack_substr;
-    self.self_substr =CTextStack_self_substr;
-
-    self.pop = CTextStack_pop;
-    self.self_pop =CTextStack_self_pop;
-
-    self.replace = CTextStack_replace;
-    self.self_replace = CTextStack_self_replace;
-
-    self.replace_long = CTextStack_replace_long;
-    self.self_replace_long =CTextStack_self_replace_long;
-
-
-    self.replace_double = CTextStack_replace_double;
-    self.self_replace_double =CTextStack_self_replace_double;
-
-    self.insert_at = CTextStack_insert_at;
-    self.self_insert_at  = CTextStack_self_insert_at;
-
-
-    self.index_of = CTextStack_index_of;
-    self.index_of_char = CTextStack_index_of_char;
-
-    self.lower = CTextStack_lower;
-    self.self_lower = CTextStack_self_lower;
-
-    self.upper = CTextStack_upper;
-    self.self_upper = CTextStack_self_upper;
-
-    self.captalize = CTextStack_captalize;
-    self.self_captalize = CTextStack_self_captalize;
-
-    self.starts_with = CTextStack_starts_with;
-    self.ends_with = CTextStack_ends_with;
-
-    self.equal = CTextStack_equal;
-    self.reverse = CTextStack_reverse;
-    self.self_reverse = CTextStack_self_reverse;
-
-
-    self.typeof_element = CTextStack_typeof;
-    self.is_a_num = CTextStack_is_a_num;
-    self.typeof_in_str = CTextStack_typeof_in_str;
-    self.parse_to_bool = CTextStack_parse_to_bool;
-    self.parse_to_integer = CTextStack_parse_to_integer;
-    self.parse_to_double = CTextStack_parse_to_double;
-
-    self.trim = CTextStack_trim;
-    self.self_trim = CTextStack_self_trim;
-
-
-    return self;
-}
-
-//path: src/dependencies/CTextEngine/CTextNamespace/CTextArrayModule/CTextArrayModule.c
-
-
-CTextArrayModule newCTextArrayModule(){
-    CTextArrayModule module = {0};
-    module.newArray = newCTextArray;
-    module.append = CTextArray_append;
-    module.append_string = CTextArray_append_string;
-    module.join = CTextArray_join;
-    module.map  = CTextArray_map;
-    module.filter = CTextArray_filter;
-    module.foreach = CTextArray_foreach;
-    module.represent = CTextArray_represent;
-    module.includes = CTextArray_includes;
-    module.free = CTextArray_free;
-    return module;
-}
-
-
-//path: src/dependencies/CTextEngine/CTextNamespace/CTextNamespace/CTextNamespace.c
-
-
-CTextNamespace newCTextNamespace(){
-    CTextNamespace self  = {0};
-    self.stack = newCTextStackModule();
-    self.array = newCTextArrayModule();
-    return self;
-}
 
 
 
@@ -5718,6 +7203,233 @@ CJSON_PUBLIC(void) cJSON_free(void *object)
 
 
 
+#endif
+
+
+#ifndef UNIVERSAL_GARBAGE_H
+#define UNIVERSAL_GARBAGE_H
+//path: src/dependencies/UniversalGarbage/definition.c
+//Universal Garbage
+
+
+//path: src/dependencies/UniversalGarbage/functions/definition.c
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/garbage_element.c
+
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/../unique.definition_requirements.h
+
+
+
+
+
+
+
+privateUniversalGarbageElement * private_newUniversalGarbageSimpleElement(void (*dealocator_callback)(void *element), void **pointer){
+
+    privateUniversalGarbageElement * self = UniversalGarbage_create_empty_struct(
+        self,
+        privateUniversalGarbageElement
+    );
+    self->pointer = pointer;
+    self->deallocator_callback = dealocator_callback;
+    self->pointed_value = *pointer;
+    return  self;
+}
+void private_UniversalGarbageSimpleElement_free_pointed_value(privateUniversalGarbageElement *self){
+    if(self->pointed_value){
+        self->deallocator_callback(self->pointed_value);
+        self->pointed_value = NULL;
+    }
+}
+
+void private_UniversalGarbageSimpleElement_free(privateUniversalGarbageElement *self){
+    private_UniversalGarbageSimpleElement_free_pointed_value(self);
+    free(self);
+}
+
+
+//path: src/dependencies/UniversalGarbage/functions/garbage/garbage.c
+
+
+
+
+UniversalGarbage * private_new_MainUniversalGarbage(){
+    UniversalGarbage *self = UniversalGarbage_create_empty_struct(self,UniversalGarbage)
+    self->elements = (privateUniversalGarbageElement**)malloc(0);
+    self->is_the_root = false;
+    return self;
+}
+
+UniversalGarbage * newUniversalGarbage(){
+    UniversalGarbage *self = UniversalGarbage_create_empty_struct(self,UniversalGarbage)
+    self->is_the_root = true;
+    self->elements = (privateUniversalGarbageElement**)malloc(0);
+    self->return_values =private_new_MainUniversalGarbage();
+
+    return self;
+}
+
+
+
+
+bool  rawUniversalGarbage_reallocate(UniversalGarbage *self, void **pointer){
+
+    if(self->is_the_root){
+
+        if(rawUniversalGarbage_reallocate(self->return_values,pointer)){
+            return true;
+        }
+    }
+
+
+    for(int i = 0; i < self->elements_size; i++){
+
+        privateUniversalGarbageElement *current = self->elements[i];
+        bool reallocate = current->pointer == pointer;
+
+        if(reallocate){
+            current->pointed_value = *pointer;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool rawUniversalGarbage_resset(UniversalGarbage *self, void **pointer){
+
+    if(self->is_the_root){
+        if(rawUniversalGarbage_resset(self->return_values,pointer)){
+            return true;
+        }
+    }
+
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        bool resset = current->pointer == pointer;
+        if(resset){
+            private_UniversalGarbageSimpleElement_free_pointed_value(current);
+            current->pointed_value = *pointer;
+            return true;
+        }
+    }
+    return  false;
+
+}
+bool  rawUniversalGarbage_remove(UniversalGarbage *self, void **pointer){
+    if(self->is_the_root){
+        if(rawUniversalGarbage_remove(self->return_values,pointer)){
+            *pointer = NULL;
+            return true;
+        }
+    }
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        if(current->pointer == pointer){
+            private_UniversalGarbageSimpleElement_free(current);
+            self->elements_size-=1;
+            bool its_not_the_last = i < self->elements_size;
+            if(its_not_the_last){
+                self->elements[i] = self->elements[self->elements_size];
+
+            }
+            *pointer = NULL;
+            return  true;
+        }
+    }
+    return  false;
+}
+bool  rawUniversalGarbage_disconnect(UniversalGarbage *self, void **pointer){
+    if(self->is_the_root){
+        if(rawUniversalGarbage_disconnect(self->return_values,pointer)){
+            return true;
+        }
+    }
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        if(current->pointer == pointer){
+            free(current);
+            self->elements_size-=1;
+            bool its_not_the_last = i < self->elements_size;
+            if(its_not_the_last){
+                privateUniversalGarbageElement *last_element =  self->elements[self->elements_size];
+                self->elements[i] = last_element;
+            }
+            return true;
+        }
+    }
+    return  false;
+
+
+
+}
+bool  rawUniversalGarbage_add(UniversalGarbage *self,  void (*dealocator_callback)(void *element), void **pointer){
+
+    if(!pointer){
+        return false;
+    }
+
+    if(*pointer){
+        for(int i = 0; i < self->elements_size; i++){
+            privateUniversalGarbageElement *current = self->elements[i];
+            if(current->pointed_value == *pointer){
+                return false;
+            }
+        }
+    }
+
+
+    self->elements = (privateUniversalGarbageElement**)realloc(
+            self->elements,
+            (self->elements_size + 1) * sizeof(privateUniversalGarbageElement*)
+    );
+
+
+
+    self->elements[self->elements_size] = private_newUniversalGarbageSimpleElement(dealocator_callback, pointer);
+    self->elements_size+=1;
+    return  true;
+}
+
+
+
+void  private_UniversalGarbage_free_all_sub_elements(UniversalGarbage *self){
+    for(int i = 0; i < self->elements_size; i++){
+        private_UniversalGarbageSimpleElement_free(self->elements[i]);
+    }
+    free(self->elements);
+}
+
+void UniversalGarbage_free_including_return(UniversalGarbage *self){
+    private_UniversalGarbage_free_all_sub_elements(self);
+    if(self->is_the_root){
+        UniversalGarbage_free(self->return_values);
+    }
+    free(self);
+}
+
+void UniversalGarbage_free(UniversalGarbage *self){
+    private_UniversalGarbage_free_all_sub_elements(self);
+
+    if(self->is_the_root){
+
+        UniversalGarbage *return_garbage = self->return_values;
+        for(int i = 0; i < return_garbage->elements_size; i++){
+            free(return_garbage->elements[i]);
+        }
+
+        free(return_garbage->elements);
+        free(return_garbage);
+    }
+
+
+    free(self);
+}
+
+
+
+
 
 
 #endif
@@ -5827,6 +7539,7 @@ char* cweb_replace_string(const char *target, const char *old_element, const cha
 
 
 
+#include <string.h>
 
 
 
@@ -5988,10 +7701,51 @@ char *private_cweb_convert_url_encoded_text(const char *text){
 }
 
 
+ char * private_CWeb_format_vaarg(const char *expresion, va_list args){
+
+     va_list args_copy;
+     va_copy(args_copy, args);
+     long required_size = vsnprintf(NULL, 0,expresion,args_copy);
+     va_end(args_copy);
+     char *buffer = (char*)malloc(sizeof(char) * required_size + 2);
+     vsnprintf(buffer,sizeof (char) * required_size+1,expresion,args);
+     return buffer;
+ }
+
+ char * private_CWeb_format(const char *expresion, ...){
+     va_list  args;
+     va_start(args,expresion);
+     char *result = private_CWeb_format_vaarg(expresion,args);
+     va_end(args);
+     return  result;
+ }
+
+ char *private_cweb_convert_to_hexa(const char *data){
+     CTextStack *hexa_format = newCTextStack_string_empty();
+     int content_size = strlen(data);
+     for(int i = 0; i < content_size; i++){
+         char buffer[10] = {0};
+         sprintf(buffer,"\\x%x",data[i]);
+         CTextStack_format(hexa_format,"%s",buffer);
+     };
+     return CTextStack_self_transform_in_string_and_self_clear(hexa_format);
+ }
+
+
+ CTextStack  *private_cweb_create_assci_code(const char *msg){
+     CTextStack *data = newCTextStack_string("[");
+     long size = strlen(msg);
+     for(int i =0; i < size;i++){
+         CTextStack_format(data, "%d,", msg[i]);
+     }
+     CTextStack_text(data,"]");
+     return data;
+ }
+
+
 //path: src/functions/request/definitions.c
 //path: src/functions/request/request/request.c
 //path: src/functions/request/request/../uniq.definitions_requirements.h
-
 
 
 
@@ -6004,6 +7758,7 @@ char *private_cweb_convert_url_encoded_text(const char *text){
     self->socket = socket;
     self->params = newCwebDict();
     self->headers = newCwebDict();
+    self->garbage = newUniversalGarbage();
     return self;
 }
 
@@ -6143,6 +7898,17 @@ void CwebHttpRequest_represent( CwebHttpRequest *self){
     }
 
 }
+CTextStack *CwebHttpRequest_create_empty_stack(CwebHttpRequest *self){
+    CTextStack *created = newCTextStack(CTEXT_LINE_BREAKER, CTEXT_SEPARATOR);
+    UniversalGarbage_add(self->garbage, CTextStack_free, created);
+    return created;
+}
+
+CTextStack *CwebHttpRequest_create_stack(CwebHttpRequest *self){
+    CTextStack *created = newCTextStack_string_empty();
+    UniversalGarbage_add(self->garbage, CTextStack_free, created);
+    return created;
+}
 
 
 void CwebHttpRequest_free( CwebHttpRequest *self){
@@ -6168,6 +7934,11 @@ void CwebHttpRequest_free( CwebHttpRequest *self){
     if(self->method){
         free(self->method);
     }
+
+    if(self->hydratation){
+        private_CWebHyDration_free((CWebHyDration *)self->hydratation);
+    }
+    UniversalGarbage_free(self->garbage);
 
     CwebDict_free(self->params);
 
@@ -6541,6 +8312,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
 //path: src/functions/string_array/string_array.c
 
 
+#include <string.h>
 
 struct CwebStringArray * newCwebStringArray(){
     struct CwebStringArray *self = (struct CwebStringArray*)malloc(sizeof(struct CwebStringArray));
@@ -6566,12 +8338,17 @@ void CwebStringArray_set(struct CwebStringArray *self, int index, const char *va
         self->strings[index][size] = '\0';
         strcpy(self->strings[index], value);
     }
-}void CwebStringArray_add(struct CwebStringArray *self, const char *string){
-    self->size++;
-    self->strings =  (char**)realloc(self->strings, self->size * sizeof(char *));
-    self->strings[self->size - 1] = (char*)malloc(strlen(string) + 1);
-    self->strings[self->size - 1][strlen(string)] = '\0';
-    strcpy(self->strings[self->size - 1], string);
+}
+void CwebStringArray_add(struct CwebStringArray *self, const char *string){
+    self->strings =  (char**)realloc(self->strings, (self->size +1) * sizeof(char *));
+    self->strings[self->size] = strdup(string);
+    self->size+=1;
+}
+
+void CwebStringArray_add_getting_ownership(struct CwebStringArray *self,  char *string){
+    self->strings =  (char**)realloc(self->strings, (self->size +1) * sizeof(char *));
+    self->strings[self->size] = string;
+    self->size+=1;
 }
 
 
@@ -6598,6 +8375,9 @@ void CwebStringArray_free(struct CwebStringArray *self){
 
 //path: src/functions/dict/definition.h
 //path: src/functions/dict/keyval/key_val.c
+
+//path: src/functions/dict/keyval/../uniq.definitions_requirements.h
+
 
 
 
@@ -6688,6 +8468,9 @@ void CwebDict_free(CwebDict *self){
 
 //path: src/functions/response/definition.h
 //path: src/functions/response/response/response.c
+//path: src/functions/response/response/../uniq.definitions_requirements.h
+
+
 
 
 
@@ -6801,13 +8584,9 @@ CwebHttpResponse* cweb_send_any_cleaning_memory(const char *content_type,size_t 
 }
 
 
-CwebHttpResponse* cweb_send_rendered_CTextStack_cleaning_memory(struct CTextStack *stack,int status_code){
-
-     CwebHttpResponse *response = cweb_send_var_html(stack->rendered_text,status_code);
-    CTextStack_free(stack);
-    return response;
+CwebHttpResponse* cweb_send_rendered_CTextStack(struct CTextStack *stack,int status_code){
+    return cweb_send_var_html(stack->rendered_text,status_code);
 }
-
 
 
 CwebHttpResponse* cweb_send_text(const char *content,int status_code){
@@ -6881,6 +8660,9 @@ CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,
 
 //path: src/functions/static/definition.h
 //path: src/functions/static/smart_cache/smart_cache.c
+//path: src/functions/static/smart_cache/../uniq.definitions_requirements.h
+
+
 
 
 
@@ -6995,6 +8777,12 @@ CTextStack * private_cweb_change_smart_cache(CTextStack *content){
 //path: src/functions/static/inline_inclusion/definition.h
 //path: src/functions/static/inline_inclusion/recursion_protection/definition.h
 //path: src/functions/static/inline_inclusion/recursion_protection/recursion_element/recursion_element.c
+
+//path: src/functions/static/inline_inclusion/recursion_protection/recursion_element/../uniq.definitions_requirements.h
+
+//path: src/functions/static/inline_inclusion/recursion_protection/recursion_element/../../uniq.definitions_requirements.h
+
+
 
 
 
@@ -7376,6 +9164,9 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
 
 //path: src/functions/server/definitions.c
 //path: src/functions/server/server_functions/server_functions.c
+//path: src/functions/server/server_functions/../uniq.definitions_requirements.h
+
+
 
 
 
@@ -7414,7 +9205,7 @@ void private_cweb_treat_response(bool use_static,int new_socket){
         }
 
         if(send_text_menssage){
-            CwebHttpResponse  *response = cweb_send_text("Internal Sever Error",500);
+            CwebHttpResponse  *response = cweb_send_var_html( private_cweb_500,500);
             private_cweb_send_error_mensage(response,new_socket);
         }
 
@@ -7476,6 +9267,9 @@ long cweb_get_total_requests(){
 
 //path: src/functions/server/server/definitions.c
 //path: src/functions/server/server/constructors/constructors.c
+//path: src/functions/server/server/constructors/../uniq.definitions_requirements.h
+
+
 
 
 
@@ -7728,8 +9522,8 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
 
 
     if(!response){
+        //lambda que o usuario passa
         response = self->request_handler(request);
-
     }
 
     if(response && self->allow_cors){
@@ -7743,7 +9537,7 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
 
         if(self->use_static){
             char formated_404_path[1000]={0};
-            sprintf(formated_404_path,"%s/404.html",cweb_static_folder);
+            sprintf(formated_404_path,"%s/404.html", cweb_static_folder);
             char *formated_html = cweb_load_string_file_content(formated_404_path);
 
             if(formated_html != NULL){
@@ -7753,17 +9547,11 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
             }
 
             else{
-                response = cweb_send_text(
-                        "Error 404",
-                        404
-                );
+                response = cweb_send_var_html(private_cweb_404, 404);
             }
         }
         else{
-            response = cweb_send_text(
-                    "Error 404",
-                    404
-            );
+            response = cweb_send_var_html(private_cweb_404, 404);
 
         }
 
@@ -7778,9 +9566,6 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
 
 
     send(socket, response_str, strlen(response_str), MSG_NOSIGNAL);
-
-
-
 
     // Enviando conteúdo byte a byte
     if (response->exist_content)
@@ -7937,8 +9722,11 @@ void  private_cweb_generate_cors_response(struct CwebHttpResponse *response) {
 
 }
 
-//path: src/functions/namespace/definition.h
+//path: src/functions/namespace/definition.c
 //path: src/functions/namespace/string_array_module/string_array_module.c
+
+//path: src/functions/namespace/string_array_module/../uniq.definitions_requirements.h
+
 
 
 
@@ -7958,6 +9746,9 @@ CwebStringArrayModule newCwebStringArrayModule(){
 
 //path: src/functions/namespace/dict_module/definition.h
 //path: src/functions/namespace/dict_module/keyval_module/keyval_module.c
+
+//path: src/functions/namespace/dict_module/keyval_module/../uniq.definitions_requirements.h
+
 
 
 
@@ -8014,6 +9805,10 @@ CwebHttpRequestModule newCwebRequestModule(){
     self.get_header_by_normalized_key = CwebHttpRequest_get_header_by_normalized_key;
     self.get_param = CwebHttpRequest_get_param;
     self.represent = CwebHttpRequest_represent;
+    self.create_stack = CwebHttpRequest_create_empty_stack;
+    self.create_empty_stack =CwebHttpRequest_create_stack;
+
+
     self.free =CwebHttpRequest_free;
     return self;
 }
@@ -8036,7 +9831,7 @@ CwebHttpResponseModule newCwebHttpResponseModule(){
     self.send_var_html_cleaning_memory = cweb_send_json_string_cleaning_memory;
     self.send_text = cweb_send_text;
     self.send_text_cleaning_memory = cweb_send_text_cleaning_memory;
-    self.send_rendered_CTextStack_cleaning_memory = cweb_send_rendered_CTextStack_cleaning_memory;
+    self.send_rendered_CTextStack = cweb_send_rendered_CTextStack;
     self.send_var_html = cweb_send_var_html;
     self.send_var_html_cleaning_memory = cweb_send_var_html_cleaning_memory;
     self.send_file = cweb_send_file;
@@ -8072,10 +9867,1991 @@ CwebNamespace newCwebNamespace(){
     self.request = newCwebRequestModule();
     self.response = newCwebHttpResponseModule();
     self.server = newCwebServerModule();
-    self.string_array =newCwebStringArrayModule();
+    self.string_array = newCwebStringArrayModule();
+    self.hydration = newCWebHydrationNamespace();
     return self;
 }
 
+
+
+//path: src/functions/namespace/hydratation_module/definition.c
+//path: src/functions/namespace/hydratation_module/actions/actions.c
+//path: src/functions/namespace/hydratation_module/actions/../uniq.definitions_requirements.h
+
+
+
+
+
+CWebHydrationActionsNamespace newCWebHydrationActionsNamespace(){
+    CWebHydrationActionsNamespace self ={0};
+
+    self.replace_element_by_query_selector = CWebHyDrationBridge_replace_element_by_query_selector;
+    self.append_by_query_selector = CWebHyDrationBridge_append_by_query_selector;
+    self.destroy_by_query_selector =  CWebHyDrationBridge_destroy_by_query_selector;
+    self.hide_element_by_query_selector = CWebHyDrationBridge_hide_element_by_query_selector;
+    self.unhide_element_by_query_selector=  CWebHyDrationBridge_unhide_element_by_query_selector;
+    self.hide_element_by_id = CWebHyDrationBridge_hide_element_by_id;
+    self.unhide_element_by_id= CWebHyDrationBridge_unhide_element_by_id;
+    self.append_by_id = CWebHyDrationBridge_append_by_id;
+    self.set_session_storage_data = CWebHyDrationBridge_set_session_storage_data;
+    self.alert = CWebHyDrationBridge_alert;
+    self.execute_script = CWebHyDrationBridge_execute_script;
+    self.replace_element_by_id = CWebHyDrationBridge_replace_element_by_id;
+    self.destroy_by_id = CWebHyDrationBridge_destroy_by_id;
+    self.redirect = CWebHydration_redirect;
+    self.add_cookie_with_time = CWebHydrationBridge_creatCookie_with_time;
+    self.add_cookie = CWebHydrationBridge_creatCookie;
+    self.delet_cookie = CWebHyDrationBridge_deletCookie;
+    self.console_log = CWebHyDration_console_log;
+    self.console_warn = CWebHyDration_console_warn;
+    self.console_clear = CWebHyDration_console_clear;
+    self.console_error = CWebHyDration_console_error;
+    self.add_class_by_id = CWebHyDrationBridge_add_class_by_id;
+    self.remove_class_by_id = CWebHyDrationBridge_remove_class_by_id;
+    self.remove_class_by_query_selector = CWebHyDrationBridge_remove_class_by_query_selector;
+
+    return self;
+}
+
+
+//path: src/functions/namespace/hydratation_module/args/args.c
+
+
+
+CWebHydrationArgsNamespace newCWebHydrationArgsNamespace(){
+    CWebHydrationArgsNamespace self = {0};
+    self.get_args_size  = CWebHyDrationBridge_get_args_size;
+    self.is_arg_number = CWebHyDrationBridge_is_arg_number;
+    self.is_arg_bool = CWebHyDrationBridge_is_arg_bool;
+    self.is_arg_string  = CWebHyDrationBridge_is_arg_string;
+    self.is_arg_null = CWebHyDrationBridge_is_arg_null;
+    self.get_double_arg = CWebHyDrationBridge_get_double_arg;
+    self.get_long_arg = CWebHyDrationBridge_get_long_arg;
+    self.get_bool_arg = CWebHyDrationBridge_get_bool_arg;
+    self.get_str_arg = CWebHyDrationBridge_get_str_arg;
+    self.get_cJSON_arg  = CWebHyDrationBridge_get_cJSON_arg;
+    return self;
+}
+
+
+//path: src/functions/namespace/hydratation_module/bridge/bridge.c
+
+
+
+CWebHydrationBridgeNamespace newCWebHydrationBridgetNamespace(){
+    CWebHydrationBridgeNamespace self = {0};
+    self.call = CWebHyDrationBridge_call;
+    self.call_trigger = CWebHyDrationBridge_call_trigger;
+    self.onclick =CWebHyDrationBridge_onclick;
+    self.onfoccusout =CWebHyDrationBridge_onfoccusout;
+    self.has_errors = CWebHyDrationBridge_has_errors;
+    self.create_bridge = CWebHyDration_create_bridge;
+    self.get_child_bridge = CWebHyDration_get_child_bridge;
+    self.get_brother_bridge =CWebHyDrationBridge_get_brother_bridge;
+
+    self.create_stack = CWebHyDrationBridge_create_stack;
+    self.create_empty_stack = CWebHyDrationBridge_create_empty_stack;
+
+    return self;
+}
+
+
+//path: src/functions/namespace/hydratation_module/search_requirements/search_requirements.c
+
+
+
+
+CWebHydrationSearchRequirementsNamespace newCWebHydrationSearchRequirementsNamespace(){
+    CWebHydrationSearchRequirementsNamespace self = {0};
+
+
+    self.newSearchRequirements = CWebHyDrationBridge_newSearchRequirements;
+    self.add_function = CWebHyDrationSearchRequirements_add_function;
+    self.add_elements_by_query_selector = CWebHyDrationSearchRequirements_add_elements_by_query_selector;
+    self.add_elements_by_query_selector_not_auto_converting = CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting;
+    self.add_elements_by_attribute = CWebHyDrationSearchRequirements_add_elements_by_attribute;
+    self.add_elements_by_attribute_not_auto_converting = CWebHyDrationSearchRequirements_add_elements_by_attribute_not_auto_converting;
+    self.add_elements_by_class_name = CWebHyDrationSearchRequirements_add_elements_by_class_name;
+    self.add_elements_by_class_name_not_auto_converting =CWebHyDrationSearchRequirements_add_elements_by_class_name_not_auto_converting;
+    self.add_elements_by_id = CWebHyDrationSearchRequirements_add_elements_by_id;
+    self.add_elements_by_id_not_auto_converting = CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting;
+    self.add_session_storage_item_not_converting = CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting;
+    self.add_session_storage_item = CWebHyDrationSearchRequirements_add_session_storage_item;
+    self.add_value_cookie_by_key = CWebHyDrationSearchRequirements_add_cookie_item;
+    self.add_confirm = CWebHyDrationSearchRequirements_add_confirm;
+    self.add_prompt = CWebHyDrationSearchRequirements_add_prompt;
+
+    self.add_elements_by_id_setting_search_as_same_name =
+        CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name;
+
+    self.add_elements_by_id_setting_search_as_same_name_not_auto_converting =
+        CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name_not_auto_converting;
+
+    self.add_elements_by_class_name_setting_search_as_same_name =
+        CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name;
+
+    self.add_elements_by_class_name_setting_search_as_same_name_not_auto_converting =
+        CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name_not_auto_converting;
+
+
+    return self;
+}
+
+
+//path: src/functions/namespace/hydratation_module/search_result/search_result.c
+
+
+
+CWebHydrationSearchResultNamespace newCWebHydrationSearchResultNamespace(){
+    CWebHydrationSearchResultNamespace self = {0};
+    self.get_total_avaialible_searchs = CWebHyDrationBridge_get_total_avaialible_searchs;
+    self.get_search_by_index = CWebHyDrationBridge_get_search_by_index;
+    self.get_search_by_name =  CWebHyDrationBridge_get_search_by_name;
+    self.search_exist = CWebHyDrationBridge_search_exist;
+    self.get_double_from_first_element_of_search = CWebHyDrationBridge_get_double_from_first_element_of_search;
+    self.get_long_from_first_element_of_search = CWebHyDrationBridge_get_long_from_first_element_of_search;
+    self.get_bool_from_first_element_of_search = CWebHyDrationBridge_get_bool_from_first_element_of_search;
+    self.get_string_from_first_element_of_search = CWebHyDrationBridge_get_string_from_first_element_of_search;
+    self.get_cJSON_from_first_element_of_search = CWebHyDrationBridge_get_cJSON_from_first_element_of_search;
+    self.get_total_itens = CWebHyDrationSearchResult_get_total_itens;
+    self.search_item_exist = CWebHyDrationSearchResult_search_item_exist;
+    self.is_search_item_number = CWebHyDrationSearchResult_is_search_item_number;
+    self.is_search_item_bool =  CWebHyDrationSearchResult_is_search_item_bool;
+    self.is_search_item_string = CWebHyDrationSearchResult_is_search_item_string;
+    self.get_double = CWebHyDrationSearchResult_get_double;
+    self.get_long = CWebHyDrationSearchResult_get_long;
+    self.get_bool = CWebHyDrationSearchResult_get_bool;
+    self.get_string = CWebHyDrationSearchResult_get_string;
+    self.get_cJSON = CWebHyDrationSearchResult_get_cJSON;
+
+    return self;
+}
+
+
+//path: src/functions/namespace/hydratation_module/hydration/hydration.c
+
+
+
+
+CWebHydrationNamespace newCWebHydrationNamespace() {
+    CWebHydrationNamespace self = {0};
+    self.newCWebHyDration = newCWebHyDration;
+    self.is_the_trigger = CWebHyDration_is_the_trigger;
+    self.create_script = CWebHyDration_create_script;
+    self.create_stack = CWebHyDration_create_stack;
+    self.create_empty_stack = CWebHyDration_create_empty_stack;
+    self.generate_response = CWebHydration_generate_response;
+
+    self.bridge = newCWebHydrationBridgetNamespace();
+    self.actions =newCWebHydrationActionsNamespace();
+    self.search_requirements =newCWebHydrationSearchRequirementsNamespace();
+    self.search_result = newCWebHydrationSearchResultNamespace();
+    self.args = newCWebHydrationArgsNamespace();
+    return self;
+}
+
+
+
+
+
+
+//path: src/functions/hydratation/definition.c
+//path: src/functions/hydratation/bridge/definition.c
+//path: src/functions/hydratation/bridge/basic/basic.c
+
+//path: src/functions/hydratation/bridge/basic/../uniq.definitions_requirements.h
+
+//path: src/functions/hydratation/bridge/basic/../../uniq.definitions_requirements.h
+
+
+
+
+
+
+
+
+CWebHyDrationBridge * CWebHyDrationBridge_get_brother_bridge(CWebHyDrationBridge *self,const char *name){
+    CWebHyDration *hydration = (CWebHyDration *)self->hydration;
+    return CWebHyDration_get_child_bridge(hydration,name);
+}
+
+CWebHyDrationBridge *private_newCWebHyDrationBridge(
+    const char *name,
+    void (*callback)(CWebHyDrationBridge *),CWebHyDration *hydration
+) {
+    CWebHyDrationBridge *self = (CWebHyDrationBridge*)malloc(sizeof(CWebHyDrationBridge));
+    *self = (CWebHyDrationBridge){0};
+
+    self->name = strdup(name);
+    self->callback = callback;
+    self->hydration = (void*)hydration;
+    self->requirements_code =newCwebStringArray();
+    return  self;
+}
+
+
+
+CTextStack * CWebHyDrationBridge_create_stack(CWebHyDrationBridge *self){
+    return CWebHyDration_create_stack((CWebHyDration*)self->hydration);
+}
+
+CTextStack * CWebHyDrationBridge_create_empty_stack(CWebHyDrationBridge *self){
+    return CWebHyDration_create_empty_stack((CWebHyDration*)self->hydration);
+}
+
+CWebHyDrationSearchRequirements * CWebHyDrationBridge_newSearchRequirements(
+    CWebHyDrationBridge *self, const char *name,...)
+{
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements *created_search =
+    private_newCWebHyDrationSearchRequirements_getting_name_ownership(
+        self,
+        formmated_name
+    );
+
+    CWebHyDration *hydration =(CWebHyDration*)self->hydration;
+    UniversalGarbage *garbage = hydration->request->garbage;
+
+   UniversalGarbage_add(
+       garbage,
+        private_CWebHyDrationSearchRequirements_free,
+        created_search
+    );
+    return created_search;
+}
+
+
+
+CTextStack*  private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self) {
+
+    CTextStack *function = newCTextStack_string_empty();
+
+    CTextStack_format(
+        function,
+        "cweb_bridges['%s'] = async function (...args){ \n",
+        self->name
+    );
+
+    CTextStack_format(function,"\tlet content = {}\n");
+
+    for(int i= 0; i < self->requirements_code->size;i++) {
+        CTextStack_format(
+            function,
+            "%s\n",
+            self->requirements_code->strings[i]
+        );
+    }
+
+    CTextStack_format(
+        function,
+        "\tawait private_cweb_send_to_server('%s',args,content)\n",
+        self->name
+    );
+    CTextStack_format(function,"};\n");
+
+    return function;
+}
+bool CWebHyDrationBridge_has_errors(CWebHyDrationBridge *self){
+    if(self == NULL){
+        return  true;
+    }
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    if(hydration->error_code == 0){
+        return false;
+    }
+    return true;
+}
+
+
+
+void private_CWebHyDrationBridge_free(CWebHyDrationBridge *self) {
+free(self->name);
+    CwebStringArray_free(self->requirements_code);
+    free(self);
+}
+
+
+//path: src/functions/hydratation/bridge/args/args.c
+
+
+
+
+int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return 0;
+    }
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    return cJSON_GetArraySize(hydration->args);
+}
+
+
+bool private_cweb_hydration_type_verifier(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)(const cJSON * const item)){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    cJSON *item = cJSON_GetArrayItem(hydration->args, index);
+    if(item == NULL){
+        return false;
+    }
+    return (bool)callback_verifier(item);
+}
+
+bool   CWebHyDrationBridge_is_arg_number(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
+    return private_cweb_hydration_type_verifier(self,index,cJSON_IsNumber);
+}
+
+bool   CWebHyDrationBridge_is_arg_null(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
+    return private_cweb_hydration_type_verifier(self,index,cJSON_IsNull);
+}
+
+bool   CWebHyDrationBridge_is_arg_bool(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
+    return private_cweb_hydration_type_verifier(self,index,cJSON_IsBool);
+}
+bool   CWebHyDrationBridge_is_arg_string(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
+    return private_cweb_hydration_type_verifier(self,index,cJSON_IsString);
+}
+
+
+cJSON *privateCWebHyDration_get_arg_index(
+    CWebHyDrationBridge *self,
+    int index,
+    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    const char *expected_type
+){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+
+    cJSON *item = cJSON_GetArrayItem(hydration->args,index);
+
+    if(item == NULL){
+        privateCWebHydration_raise_error(
+            hydration,
+            self,
+            CWEB_HYDRATION_INDEX_ARGS_NOT_PROVIDED,
+            CWEB_HYDRATION_INDEX_ARGS_NOT_PROVIDED_MSG,
+            index);
+        return NULL;
+    }
+    if(!callback_verifier){
+        return  item;
+    }
+
+    if(!callback_verifier(item)){
+        privateCWebHydration_raise_error(
+            hydration,
+            self,
+            CWEB_HYDRATION_INDEX_ARGS_WRONG_TYPE,
+            CWEB_HYDRATION_INDEX_ARGS_WRONG_TYPE_MSG,
+            index,
+            expected_type
+        );
+        return NULL;
+    }
+    return item;
+}
+
+double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return -1;
+    }
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    if(item == NULL){
+        return -1;
+    }
+
+    return cJSON_GetNumberValue(item);
+}
+
+long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return -1;
+    }
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    if(item == NULL){
+        return -1;
+    }
+
+    return (long)cJSON_GetNumberValue(item);
+}
+
+
+
+bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_BOOL);
+        if(item == NULL){
+            return -1;
+        }
+
+    return (bool)item->valueint;
+}
+
+char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsString,CWEB_HYDRATION_STRING);
+        if(item == NULL){
+            return NULL;
+        }
+
+    return cJSON_GetStringValue(item);
+}
+cJSON * CWebHyDrationBridge_get_cJSON_arg(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
+    return  privateCWebHyDration_get_arg_index(self,index,NULL,NULL);
+}
+
+
+//path: src/functions/hydratation/bridge/calls/calls.c
+
+
+
+
+char *privateCWebHyDrationBridge_call_by_vaargss(CWebHyDrationBridge *self,const char *func_args,va_list  args){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
+
+    CTextStack *callback= CWebHyDrationBridge_create_empty_stack(self);
+    UniversalGarbage *garbage = newUniversalGarbage();
+
+    CTextStack *name_assci = private_cweb_create_assci_code(self->name);
+    UniversalGarbage_add(garbage, CTextStack_free, name_assci);
+
+
+    if(func_args == NULL) {
+            CTextStack_format(
+                callback,
+                "private_cweb_call_bridge_with_assic(%t,[]);",
+                name_assci);
+            UniversalGarbage_free(garbage);
+            return callback->rendered_text;
+    }
+
+    char *formmated_func_args = private_CWeb_format_vaarg(func_args,args);
+    UniversalGarbage_add_simple(garbage, formmated_func_args);
+    CTextStack * args_assci = private_cweb_create_assci_code(formmated_func_args);
+    UniversalGarbage_add(garbage, CTextStack_free, args_assci);
+
+
+    CTextStack_format(
+        callback,
+        "private_cweb_call_bridge_with_assic(%t,%t);",
+        name_assci,
+        args_assci
+    );
+
+    UniversalGarbage_free(garbage);
+
+    return callback->rendered_text;
+}
+
+char *CWebHyDrationBridge_call(CWebHyDrationBridge *self,const char *func_args,...){
+
+    va_list  args;
+    va_start(args,func_args);
+    char *result =privateCWebHyDrationBridge_call_by_vaargss(self,func_args,args);
+    va_end(args);
+    return result;
+
+}
+char *privateCWebHyDrationBridge_call_trigger_by_vaarg(
+    CWebHyDrationBridge *self,
+    const char *trigger,
+    const char *func_args,
+    va_list  args
+){
+
+    char *result =privateCWebHyDrationBridge_call_by_vaargss(self,func_args,args);
+
+    if(!result){
+        return NULL;
+    }
+
+    CTextStack * complete = CWebHyDrationBridge_create_empty_stack(self);
+    CTextStack_format(complete, "%s = '%s'", trigger,result);
+    return complete->rendered_text;
+}
+
+
+
+char *CWebHyDrationBridge_call_trigger(
+    CWebHyDrationBridge *self,
+    const char *trigger,
+    const char *func_args,
+    ...
+){
+    va_list  args;
+    va_start(args,func_args);
+    char *result =privateCWebHyDrationBridge_call_trigger_by_vaarg(self,trigger,func_args,args);
+    va_end(args);
+    return result;
+}
+
+
+char *CWebHyDrationBridge_onclick(CWebHyDrationBridge *self,const char *func_args,...){
+    va_list  args;
+    va_start(args,func_args);
+    char *result =privateCWebHyDrationBridge_call_trigger_by_vaarg(self,"onclick",func_args,args);
+    va_end(args);
+    return result;
+}
+
+
+char *CWebHyDrationBridge_onfoccusout(CWebHyDrationBridge *self,const char *func_args,...){
+    va_list  args;
+    va_start(args,func_args);
+    char *result =privateCWebHyDrationBridge_call_trigger_by_vaarg(self,"onfocusout",func_args,args);
+    va_end(args);
+    return result;
+
+}
+
+
+//path: src/functions/hydratation/bridge/search_result/search_result.c
+
+
+
+
+
+int  CWebHyDrationBridge_get_total_avaialible_searchs(CWebHyDrationBridge *self){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return 0;
+    }
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    return cJSON_GetArraySize(hydration->content);
+}
+
+
+CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_index(CWebHyDrationBridge *self,int index){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    cJSON *search =  cJSON_GetArrayItem(hydration->content, index);
+    if(search == NULL){
+        privateCWebHydration_raise_error(
+            hydration,
+            self,
+            CWEB_HYDRATION_CONTENT_SEARCH_NOT_EXIST,
+            CWEB_HYDRATION_CONTENT_SEARCH_NOT_EXIST_MSG,
+            index
+        );
+        return NULL;
+    }
+    CWebHyDrationSearchResult *result = private_newCWebHyDrationSearchResult(self, search);
+    UniversalGarbage *garbage = hydration->request->garbage;
+
+    UniversalGarbage_add(garbage,privateCWebHyDrationSearchResult_free,result);
+    return result;
+}
+
+CWebHyDrationSearchResult * CWebHyDrationBridge_get_search_by_name(CWebHyDrationBridge *self,const char *name,...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+    cJSON *search = cJSON_GetObjectItem(hydration->content,formmated_name);
+    if(search == NULL){
+        privateCWebHydration_raise_error(
+            hydration,
+            self,
+            CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED,
+            CWEB_HYDRATION_CONTENT_KEY_NOT_PROVIDED_MSG,
+            formmated_name
+        );
+        free(formmated_name);
+        return NULL;
+    }
+    free(formmated_name);
+
+    CWebHyDrationSearchResult *result = private_newCWebHyDrationSearchResult(self, search);
+    UniversalGarbage *garbage = hydration->request->garbage;
+    UniversalGarbage_add(garbage,privateCWebHyDrationSearchResult_free,result);
+    return result;
+}
+
+bool CWebHyDrationBridge_search_exist(CWebHyDrationBridge *self,const char *name,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
+    va_list  args;
+        va_start(args,name);
+        char *formmated_name = private_CWeb_format_vaarg(name,args);
+        va_end(args);
+
+        CWebHyDration *hydration = (CWebHyDration*)self->hydration;
+        cJSON *search = cJSON_GetObjectItem(hydration->content,formmated_name);
+        free(formmated_name);
+        return search != NULL;
+}
+
+double CWebHyDrationBridge_get_double_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return -1;
+    }
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  -1;
+    }
+    return CWebHyDrationSearchResult_get_double(search,0);
+}
+
+long CWebHyDrationBridge_get_long_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return -1;
+    }
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  -1;
+    }
+    return CWebHyDrationSearchResult_get_long(search,0);
+}
+
+
+bool CWebHyDrationBridge_get_bool_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  false;
+    }
+    return CWebHyDrationSearchResult_get_bool(search,0);
+}
+
+
+char* CWebHyDrationBridge_get_string_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  NULL;
+    }
+    return CWebHyDrationSearchResult_get_string(search,0);
+}
+
+cJSON* CWebHyDrationBridge_get_cJSON_from_first_element_of_search(CWebHyDrationBridge *self,const char *name,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return NULL;
+    }
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+    CWebHyDrationSearchResult *search = CWebHyDrationBridge_get_search_by_name(self,"%s",formmated_name);
+    free(formmated_name);
+    if(search == NULL){
+        return  NULL;
+    }
+    return CWebHyDrationSearchResult_get_cJSON(search,0);
+}
+
+
+//path: src/functions/hydratation/bridge/action/action.c
+
+
+
+
+void privateCWebHyDrationBridge_add_response(CWebHyDrationBridge *self,const char *name,cJSON *data){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+
+    CWebHyDration *hydraation = (CWebHyDration*)self->hydration;
+    cJSON *current_response = cJSON_CreateObject();
+    cJSON_AddStringToObject(current_response,CWEB_HYDRATON_JSON_NAME,name);
+    cJSON_AddItemToObject(current_response,CWEB_HYDRATON_JSON_DATA,data);
+    cJSON_AddItemToArray(hydraation->response,current_response);
+}
+
+void CWebHyDrationBridge_set_session_storage_data(
+
+    CWebHyDrationBridge *self,const char*key, const char *value,...){
+        if(CWebHyDrationBridge_has_errors(self)){
+            return ;
+        }
+        cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,value);
+    char *value_formmat = private_CWeb_format_vaarg(value,args);
+    va_end(args);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_KEY, key);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_VALUE,value_formmat);
+    free(value_formmat);
+    privateCWebHyDrationBridge_add_response(self,"set_session_storage",obj);
+}
+
+void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,menssage);
+    char *msg_format = private_CWeb_format_vaarg(menssage,args);
+    va_end(args);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_MSG, msg_format);
+    free(msg_format);
+    privateCWebHyDrationBridge_add_response(self,"alert",obj);
+
+}
+
+void CWebHydrationBridge_creatCookie_with_time(CWebHyDrationBridge *self, const char *key, long time, const char *value, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return;
+    }
+    cJSON *obj = cJSON_CreateObject();
+
+    va_list args;
+    va_start(args, value);
+    char *value_formated = private_CWeb_format_vaarg(value, args);
+    va_end(args);
+    cJSON_AddStringToObject(obj, "name", key);
+    cJSON_AddStringToObject(obj, "value", value_formated);
+    cJSON_AddNumberToObject(obj, "days", time);
+    free(value_formated);
+    privateCWebHyDrationBridge_add_response(self, "add_cookie_with_time", obj);
+}
+
+void CWebHydrationBridge_creatCookie(CWebHyDrationBridge *self, const char *key, const char *value, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return;
+    }
+    cJSON *obj = cJSON_CreateObject();
+
+    va_list args;
+    va_start(args, value);
+    char *value_formated = private_CWeb_format_vaarg(value, args);
+    va_end(args);
+    cJSON_AddStringToObject(obj, "name", key);
+    cJSON_AddStringToObject(obj, "value", value_formated);
+    free(value_formated);
+    privateCWebHyDrationBridge_add_response(self, "add_cookie", obj);
+}
+
+void CWebHyDrationBridge_deletCookie(CWebHyDrationBridge *self, const char *key){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return;
+    }
+    cJSON *obj = cJSON_CreateObject();
+
+    cJSON_AddStringToObject(obj, "name", key);
+    privateCWebHyDrationBridge_add_response(self, "delet_cookie", obj);
+}
+
+void CWebHyDrationBridge_execute_script(CWebHyDrationBridge *self,const char *code,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,code);
+    char *code_format = private_CWeb_format_vaarg(code,args);
+    va_end(args);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_CODE, code_format);
+    free(code_format);
+    privateCWebHyDrationBridge_add_response(self,"execute_script",obj);
+}
+
+void CWebHyDrationBridge_replace_element_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char *query_selector,
+    const char *code,
+    ...
+){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,code);
+    char *html_format = private_CWeb_format_vaarg(code,args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selector);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_HTML, html_format);
+    free(html_format);
+    privateCWebHyDrationBridge_add_response(self,"replace_element_by_query_selector",obj);
+}
+
+
+void CWebHyDrationBridge_append_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char *query_selector,
+    const char *code,
+    ...
+){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,code);
+    char *html_format = private_CWeb_format_vaarg(code,args);
+    va_end(args);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selector);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_HTML, html_format);
+    free(html_format);
+    privateCWebHyDrationBridge_add_response(self,"append_by_query_selector",obj);
+}
+
+
+
+void CWebHyDrationBridge_destroy_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char * query_selecor
+){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selecor);
+    privateCWebHyDrationBridge_add_response(self,"destroy_by_query_selector",obj);
+}
+
+
+void CWebHyDrationBridge_hide_element_by_query_selector(
+CWebHyDrationBridge *self,
+const char *query_selecor){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selecor);
+    privateCWebHyDrationBridge_add_response(self,"hide_element_by_query_selector",obj);
+}
+
+void CWebHyDrationBridge_unhide_element_by_query_selector(
+    CWebHyDrationBridge *self,
+    const char *query_selector
+){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, query_selector);
+    privateCWebHyDrationBridge_add_response(self,"unhide_element_by_id",obj);
+}
+
+
+
+
+void CWebHyDrationBridge_replace_element_by_id(CWebHyDrationBridge *self,const char *id, const char *code,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,code);
+    char *html_format = private_CWeb_format_vaarg(code,args);
+    va_end(args);
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_HTML, html_format);
+    free(html_format);
+    privateCWebHyDrationBridge_add_response(self,"replace_element_by_query_selector",obj);
+}
+
+void CWebHyDrationBridge_append_by_id(CWebHyDrationBridge *self,const char *id, const char *code,...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args,code);
+    char *html_format = private_CWeb_format_vaarg(code,args);
+    va_end(args);
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_HTML, html_format);
+    free(html_format);
+    privateCWebHyDrationBridge_add_response(self,"append_by_query_selector",obj);
+}
+
+
+void CWebHyDrationBridge_hide_element_by_id(CWebHyDrationBridge *self,const char *id){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
+
+    privateCWebHyDrationBridge_add_response(self,"hide_element_by_query_selector",obj);
+}
+
+void CWebHyDrationBridge_unhide_element_by_id(CWebHyDrationBridge *self,const char *id){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
+
+    privateCWebHyDrationBridge_add_response(self,"unhide_element_by_query_selector",obj);
+}
+
+
+void CWebHyDrationBridge_destroy_by_id(CWebHyDrationBridge *self,const char * id){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+
+    char *formatted_query_selecor = private_CWeb_format("[id='%s']",id);
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_QUERY_SELECTOR, formatted_query_selecor);
+    free(formatted_query_selecor);
+
+    privateCWebHyDrationBridge_add_response(self,"destroy_by_query_selector",obj);
+}
+
+void CWebHydration_redirect(CWebHyDrationBridge *self, const char *url){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj, CWEB_HYDRATION_JSON_URL, url);
+    privateCWebHyDrationBridge_add_response(self,"redirect",obj);
+}
+
+void CWebHyDration_console_log(CWebHyDrationBridge *self, const char *menssage, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, menssage);
+    char *menssage_formated = private_CWeb_format_vaarg(menssage, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "message", menssage_formated);
+    privateCWebHyDrationBridge_add_response(self, "log", obj);
+}
+void CWebHyDration_console_warn(CWebHyDrationBridge *self, const char *menssage, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, menssage);
+    char *menssage_formated = private_CWeb_format_vaarg(menssage, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "message", menssage_formated);
+    privateCWebHyDrationBridge_add_response(self, "warn", obj);
+    free(menssage_formated);
+}
+void CWebHyDration_console_error(CWebHyDrationBridge *self, const char *menssage, ...){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, menssage);
+    char *menssage_formated = private_CWeb_format_vaarg(menssage, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "message", menssage_formated);
+    privateCWebHyDrationBridge_add_response(self, "error", obj);
+    free(menssage_formated);
+}
+void CWebHyDration_console_clear(CWebHyDrationBridge *self){
+
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    privateCWebHyDrationBridge_add_response(self, "clear", obj);
+}
+
+void CWebHyDrationBridge_remove_class_by_id(CWebHyDrationBridge *self, const char *id, const char *class_name, ...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, class_name);
+    char *menssage_formated = private_CWeb_format_vaarg(class_name, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "class_name", menssage_formated);
+    cJSON_AddStringToObject(obj, "id", id);
+    privateCWebHyDrationBridge_add_response(self, "remove_class_by_id", obj);
+    free(menssage_formated);
+}
+
+void CWebHyDrationBridge_add_class_by_id(CWebHyDrationBridge *self, const char *id, const char *class_name, ...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, class_name);
+    char *menssage_formated = private_CWeb_format_vaarg(class_name, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "class_name", menssage_formated);
+    cJSON_AddStringToObject(obj, "id", id);
+    privateCWebHyDrationBridge_add_response(self, "add_class_by_id", obj);
+    free(menssage_formated);
+}
+
+void CWebHyDrationBridge_remove_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, class_name);
+    char *menssage_formated = private_CWeb_format_vaarg(class_name, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "class_name", menssage_formated);
+    cJSON_AddStringToObject(obj, "query_selector", element);
+    privateCWebHyDrationBridge_add_response(self, "remove_class_by_id", obj);
+    free(menssage_formated);
+}
+
+void CWebHyDrationBridge_add_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return ;
+    }
+    cJSON *obj = cJSON_CreateObject();
+    va_list  args;
+    va_start(args, class_name);
+    char *menssage_formated = private_CWeb_format_vaarg(class_name, args);
+    va_end(args);
+
+    cJSON_AddStringToObject(obj, "class_name", menssage_formated);
+    cJSON_AddStringToObject(obj, "query_selector", element);
+    privateCWebHyDrationBridge_add_response(self, "add_class_by_id", obj);
+    free(menssage_formated);
+}
+
+
+
+
+//path: src/functions/hydratation/bridge/search_requirements/search_requirements.c
+
+
+
+void CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name(
+    CWebHyDrationBridge *self, const char *id
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,id);
+    CWebHyDrationSearchRequirements_add_elements_by_id(search, id);
+
+}
+
+
+void CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name_not_auto_converting(
+    CWebHyDrationBridge *self, const char *id
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,id);
+    CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting(search, id);
+}
+
+void CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name(
+    CWebHyDrationBridge *self, const char *class_name
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,class_name);
+    CWebHyDrationSearchRequirements_add_elements_by_class_name(search, class_name);
+
+}
+
+
+void CWebHyDrationBridge_add_elements_by_class_name_setting_search_as_same_name_not_auto_converting(
+    CWebHyDrationBridge *self, const char *class_name
+){
+    CWebHyDrationSearchRequirements * search =
+    CWebHyDrationBridge_newSearchRequirements(self,class_name);
+    CWebHyDrationSearchRequirements_add_elements_by_class_name_not_auto_converting(search, class_name);
+}
+
+
+
+
+//path: src/functions/hydratation/bridge_array/bridge_array.c
+
+
+
+
+privateCWebHyDrationBridgeArray * private_new_privateCWebHyDrationBridgeArray() {
+    privateCWebHyDrationBridgeArray *self = (privateCWebHyDrationBridgeArray*)malloc(sizeof(privateCWebHyDrationBridgeArray));
+    *self = (privateCWebHyDrationBridgeArray){0};
+    self->elments = (CWebHyDrationBridge**)malloc(0);
+    return  self;
+}
+
+void privateCWebHyDrationBridgeArray_append(privateCWebHyDrationBridgeArray *self,CWebHyDrationBridge *element) {
+    self->elments = (CWebHyDrationBridge**)realloc(self->elments, (self->size +1 )* sizeof(CWebHyDrationBridge*));
+    self->elments[self->size] = element;
+    self->size+=1;
+}
+
+void privateCWebHyDrationBridgeArray_free(privateCWebHyDrationBridgeArray *self) {
+    for(int i = 0; i  < self->size;i++) {
+        private_CWebHyDrationBridge_free(self->elments[i]);
+    }
+    free(self->elments);
+    free(self);
+}
+
+
+
+//path: src/functions/hydratation/search_requirements/search_requirements.c
+
+
+
+
+
+
+CWebHyDrationSearchRequirements * private_newCWebHyDrationSearchRequirements_getting_name_ownership(
+    CWebHyDrationBridge *bridge, char *name
+){
+    CWebHyDrationSearchRequirements *self = (CWebHyDrationSearchRequirements*)malloc(sizeof(CWebHyDrationSearchRequirements));
+    self->bridge =bridge;
+    self->name =name;
+    return self;
+}
+
+
+void private_CWebHyDrationSearchRequirements_free(CWebHyDrationSearchRequirements *self){
+        free(self->name);
+        free(self);
+}
+
+
+void CWebHyDrationSearchRequirements_add_function(CWebHyDrationSearchRequirements *self,const char *function,...){
+    va_list  args;
+    va_start(args,function);
+    char *func_value = private_CWeb_format_vaarg(function,args);
+    va_end(args);
+
+
+    CTextStack *callback = newCTextStack_string_format(
+        "private_cweb_handle_required_data(%s,args,content,'%s');",
+        func_value,
+        self->name
+    );
+
+    free(func_value);
+    char *callback_str = CTextStack_self_transform_in_string_and_self_clear(callback);
+    CwebStringArray_add_getting_ownership(self->bridge->requirements_code, callback_str);
+}
+
+void private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,bool auto_convert
+){
+    const char *auto_convert_str = "false";
+    if(auto_convert){
+        auto_convert_str = "true";
+    }
+    CWebHyDrationSearchRequirements_add_function(self,
+        "function (args){\
+            return private_cweb_get_elements({\
+            query_selector:`%s`,\
+            auto_convert:%s\
+            })\
+        }",
+        query_selector,
+        auto_convert_str
+    );
+
+}
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+    CWebHyDrationSearchRequirements *self,
+    const char *query_selector,
+    ...
+){
+
+    va_list  args;
+    va_start(args,query_selector);
+    char *formmated_query_selector = private_CWeb_format_vaarg(query_selector,args);
+    va_end(args);
+
+    private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        formmated_query_selector,
+        true
+    );
+    free(formmated_query_selector);
+}
+
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,const char *query_selector,...){
+
+    va_list  args;
+    va_start(args,query_selector);
+    char *formmated_query_selector = private_CWeb_format_vaarg(query_selector,args);
+    va_end(args);
+
+    private_CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        formmated_query_selector,
+        false
+    );
+    free(formmated_query_selector);
+}
+
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute(
+    CWebHyDrationSearchRequirements *self,
+   const char *attribute,
+   const char*attribute_value,
+   ...
+){
+
+    va_list  args;
+    va_start(args,attribute_value);
+    char *formmated_attribute = private_CWeb_format_vaarg(attribute_value,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        "[%s='%s']",
+        attribute,
+        attribute_value
+    );
+    free(formmated_attribute);
+}
+
+void CWebHyDrationSearchRequirements_add_elements_by_attribute_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *attribute,
+    const char*attribute_value,
+    ...
+){
+
+    va_list  args;
+    va_start(args,attribute_value);
+    char *formmated_attribute = private_CWeb_format_vaarg(attribute_value,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+        self,
+        "[%s='%s']",
+        attribute,
+        attribute_value
+    );
+    free(formmated_attribute);
+}
+
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,
+    ...
+){
+
+    va_list  args;
+    va_start(args,class_value);
+    char *formmatted_class = private_CWeb_format_vaarg(class_value,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        "[class='%s']",
+        formmatted_class
+    );
+    free(formmatted_class);
+}
+
+void CWebHyDrationSearchRequirements_add_elements_by_class_name_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*class_value,...
+){
+    va_list  args;
+    va_start(args,class_value);
+    char *formmatted_class = private_CWeb_format_vaarg(class_value,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+        self,
+        "[class='%s']",
+        formmatted_class
+    );
+    free(formmatted_class);
+}
+
+
+void CWebHyDrationSearchRequirements_add_elements_by_id(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+){
+
+    va_list  args;
+    va_start(args,id_values);
+    char *formmated_id = private_CWeb_format_vaarg(id_values,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector(
+        self,
+        "[id='%s']",
+        formmated_id
+    );
+    free(formmated_id);
+}
+
+void CWebHyDrationSearchRequirements_add_elements_by_id_not_auto_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char*id_values,
+    ...
+){
+
+    va_list  args;
+    va_start(args,id_values);
+    char *formmated_id = private_CWeb_format_vaarg(id_values,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_elements_by_query_selector_not_auto_converting(
+        self,
+        "[id='%s']",
+        formmated_id
+    );
+    free(formmated_id);
+}
+
+void CWebHyDrationSearchRequirements_add_session_storage_item_not_converting(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_function(self,
+        "function (args){\
+            return private_cweb_get_session_storage_item({\
+            name:`%s`,\
+            auto_convert:false\
+            })\
+        }",
+        formmated_name
+    );
+    free(formmated_name);
+}
+
+
+void CWebHyDrationSearchRequirements_add_session_storage_item(
+    CWebHyDrationSearchRequirements *self,
+    const char *name,
+    ...
+){
+
+    va_list  args;
+    va_start(args,name);
+    char *formmated_name = private_CWeb_format_vaarg(name,args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_function(self,
+        "function (args){\
+            return private_cweb_get_session_storage_item({\
+            name:`%s`,\
+            auto_convert:true\
+            })\
+        }",
+        formmated_name
+    );
+    free(formmated_name);
+}
+
+void CWebHyDrationSearchRequirements_add_cookie_item(CWebHyDrationSearchRequirements *self, const char *name){
+
+    CWebHyDrationSearchRequirements_add_function(self,
+        "\
+        function(args){\
+            return private_cweb_get_value_cookie_by_key(\"%s\")\
+        }\
+        ",
+        name
+    );
+}
+
+void CWebHyDrationSearchRequirements_add_confirm(CWebHyDrationSearchRequirements *self, const char *message, ...){
+
+    va_list  args;
+    va_start(args, message);
+    char *formmated_name = private_CWeb_format_vaarg(message, args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_function(self,
+        "\
+        function(args){\
+            let userConfirmed = confirm(\"%s\");\
+            if (userConfirmed) {\
+                return true;\
+            } else {\
+                return false;\
+            }\
+        }\
+        ",
+        formmated_name);
+
+    free(formmated_name);
+}
+
+void CWebHyDrationSearchRequirements_add_prompt(CWebHyDrationSearchRequirements *self, const char *message, ...){
+
+    va_list  args;
+    va_start(args, message);
+    char *formmated_name = private_CWeb_format_vaarg(message, args);
+    va_end(args);
+
+    CWebHyDrationSearchRequirements_add_function(self,
+        "\
+        function(args){\
+            let userConfirmed = prompt(%s);\
+            if (userConfirmed) {\
+                return userConfirmed;\
+            } else {\
+                return '';\
+            }\
+        }\
+        ",
+        formmated_name);
+
+    free(formmated_name);
+}
+
+
+//path: src/functions/hydratation/search_result/search_result.c
+
+
+
+
+
+CWebHyDrationSearchResult * private_newCWebHyDrationSearchResult(CWebHyDrationBridge *bridge,cJSON *search){
+
+    CWebHyDrationSearchResult *self = (CWebHyDrationSearchResult*)malloc(sizeof(CWebHyDrationSearchResult));
+    self->bridge = bridge;
+    self->search = search;
+    self->name = search->string;
+    return  self;
+}
+
+void privateCWebHyDrationSearchResult_free(CWebHyDrationSearchResult *self){
+    free(self);
+}
+
+int  CWebHyDrationSearchResult_get_total_itens(CWebHyDrationSearchResult *self){
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return -1;
+    }
+
+    return cJSON_GetArraySize(self->search);
+}
+
+bool  privateCWebHyDrationSearchResult_has_erorrs(CWebHyDrationSearchResult *self){
+    if(self == NULL){
+        return true;
+    }
+    if(CWebHyDrationBridge_has_errors(self->bridge)){
+        return true;
+    }
+    return false;
+}
+
+bool  CWebHyDrationSearchResult_search_item_exist(CWebHyDrationSearchResult *self,int index){
+
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return false;
+    }
+
+    cJSON *item = cJSON_GetArrayItem(self->search, index);
+   return item != NULL;
+}
+
+
+
+bool  CWebHyDrationSearchResult_is_search_item_number(CWebHyDrationSearchResult *self,int index){
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return false;
+    }
+
+
+    cJSON *item = cJSON_GetArrayItem(self->search, index);
+    if(item == NULL){
+        return false;
+    }
+   return cJSON_IsNumber(item);
+}
+
+bool  CWebHyDrationSearchResult_is_search_item_bool(CWebHyDrationSearchResult *self,int index){
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return false;
+    }
+
+    cJSON *item = cJSON_GetArrayItem(self->search, index);
+    if(item == NULL){
+        return false;
+    }
+   return cJSON_IsBool(item);
+}
+
+
+
+
+bool  CWebHyDrationSearchResult_is_search_item_string(CWebHyDrationSearchResult *self,int index){
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return false;
+    }
+
+
+    cJSON *item = cJSON_GetArrayItem(self->search, index);
+    if(item == NULL){
+        return false;
+    }
+   return cJSON_IsString(item);
+}
+
+
+cJSON * private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+
+    CWebHyDrationSearchResult *self,
+    int index,
+    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    const char *expected_type
+){
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return NULL;
+    }
+
+
+    cJSON *item  = cJSON_GetArrayItem(self->search,index);
+    CWebHyDrationBridge *bridge = (CWebHyDrationBridge*)self->bridge;
+    CWebHyDration *hydration = (CWebHyDration*)bridge->hydration;
+    if(item == NULL){
+        privateCWebHydration_raise_error(
+            hydration,
+            bridge,
+            CWEB_HYDRATION_SEARCH_ITEM_NOT_EXIST,
+            CWEB_HYDRATION_SEARCH_ITEM_NOT_EXIST_MSG,
+            self->name,
+            index
+        );
+        return NULL;
+    }
+
+    if(!callback_verifier(item)){
+        privateCWebHydration_raise_error(
+            hydration,
+            bridge,
+            CWEB_HYDRATION_SEARCH_ITEM_WRONG_TYPE,
+            CWEB_HYDRATION_SEARCH_ITEM_WRONG_TYPE_MSG,
+            self->name,
+            index,
+            expected_type
+        );
+        return NULL;
+    }
+
+    return item;
+}
+
+double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int  index){
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return -1;
+    }
+
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    if(item == NULL){
+        return -1;
+    }
+    return cJSON_GetNumberValue(item);
+}
+
+long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  index){
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return -1;
+    }
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+        self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    if(item == NULL){
+        return -1;
+    }
+    return (long)cJSON_GetNumberValue(item);
+}
+
+bool CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  index){
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return false;
+    }
+
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+        self,index,cJSON_IsBool,CWEB_HYDRATION_BOOL);
+    if(item == NULL){
+        return -1;
+    }
+    return (bool)item->valueint;
+}
+
+
+char*  CWebHyDrationSearchResult_get_string(CWebHyDrationSearchResult *self,int  index){
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return NULL;
+    }
+
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+        self,index,cJSON_IsString,CWEB_HYDRATION_STRING);
+    if(item == NULL){
+        return NULL;
+    }
+    return cJSON_GetStringValue(item);
+}
+
+cJSON *  CWebHyDrationSearchResult_get_cJSON(CWebHyDrationSearchResult *self,int  index){
+    if(privateCWebHyDrationSearchResult_has_erorrs(self)){
+        return NULL;
+    }
+
+
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
+        self,index,NULL,NULL
+
+    );
+    return item;
+}
+
+
+//path: src/functions/hydratation/hydration/hydration.c
+
+
+
+
+CWebHyDration *newCWebHyDration(CwebHttpRequest *request) {
+
+    if(request->hydratation){
+        return (CWebHyDration*)request->hydratation;
+    }
+
+    CWebHyDration *self = (CWebHyDration*)malloc(sizeof(CWebHyDration));
+    *self = (CWebHyDration){0};
+    self->all_bridges = private_new_privateCWebHyDrationBridgeArray();
+    self->request =  request;
+    self->response = cJSON_CreateArray();
+    self->max_content_size = CWEB_HYDRATION_DEFAULT_BODY_SIZE;
+    request->hydratation = (void *)self;
+
+    return self;
+}
+
+CWebHyDrationBridge * CWebHyDration_get_child_bridge(CWebHyDration *self,const char *name){
+    for(int i = 0; i < self->all_bridges->size;i++){
+        CWebHyDrationBridge *current =  self->all_bridges->elments[i];
+        if(strcmp(current->name,name) == 0){
+            return  current;
+        }
+    }
+
+    return CWebHyDration_create_bridge(self,name,NULL);
+}
+
+
+CTextStack  * CWebHyDration_create_stack(CWebHyDration *self){
+    return CwebHttpRequest_create_stack(self->request);
+}
+
+CTextStack  * CWebHyDration_create_empty_stack(CWebHyDration *self){
+    return CwebHttpRequest_create_empty_stack(self->request);
+
+}
+
+
+CWebHyDrationBridge * CWebHyDration_create_bridge(CWebHyDration *self,const char *name,void (*callback)(CWebHyDrationBridge *)){
+    CWebHyDrationBridge *created = private_newCWebHyDrationBridge(name,callback,self);
+    privateCWebHyDrationBridgeArray_append(self->all_bridges,created);
+    return created;
+}
+
+bool CWebHyDration_is_the_trigger(CWebHyDration *self){
+    if(strcmp(self->request->route,CWEB_HYDRATION_CALBACK_HANDLER_ROUTE) == 0){
+        return true;
+    }
+    return false;
+}
+
+void privateCWebHydration_raise_error(CWebHyDration *self,CWebHyDrationBridge *bridge, int error_code, const char *format,...){
+    va_list  args;
+    va_start(args,format);
+    self->error_msg = private_CWeb_format_vaarg(format,args);
+    va_end(args);
+    self->error_code = error_code;
+    if(bridge){
+        self->error_bridge_name = bridge->name;
+    }
+}
+
+
+CwebHttpResponse *CWebHydration_generate_response(CWebHyDration *self){
+    if(!CWebHyDration_is_the_trigger(self)){
+        return NULL;
+    }
+    cJSON *body = CWebHttpRequest_read_cJSON(self->request, self->max_content_size);
+
+
+    if(body ==NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED,
+            CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG
+        );
+        return private_CWebHydration_formmat_error_response(self);
+    }
+
+    if(!cJSON_IsObject(body)){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT,
+            CWEB_HYDRATION_NOT_BODY_IS_NOT_OBJECT_MSG
+        );
+        return private_CWebHydration_formmat_error_response(self);
+    }
+
+    cJSON *name = cJSON_GetObjectItem(body, CWEB_HYDRATON_JSON_NAME);
+
+
+    if(name == NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_NAME_NOT_PROVIDED,
+            CWEB_HYDRATION_NAME_NOT_PROVIDED_MSG
+        );
+        return private_CWebHydration_formmat_error_response(self);
+    }
+
+
+    if(!cJSON_IsString(name)){
+            privateCWebHydration_raise_error(
+                self,
+                NULL,
+                CWEB_HYDRATION_NAME_NOT_STRING,
+                CWEB_HYDRATION_NAME_NOT_STRING_MSG
+            );
+            return private_CWebHydration_formmat_error_response(self);
+    }
+
+    cJSON *args = cJSON_GetObjectItem(body, CWEB_HYDRATON_JSON_ARGS);
+    if(args == NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_ARGS_NOT_PROVIDED,
+            CWEB_HYDRATION_ARGS_NOT_PROVIDED_MSG
+        );
+        return private_CWebHydration_formmat_error_response(self);
+    }
+
+    if(!cJSON_IsArray(args)){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_ARGS_NOT_ARRAY,
+            CWEB_HYDRATION_ARGS_NOT_ARRAY_MSG
+        );
+        return private_CWebHydration_formmat_error_response(self);
+    }
+
+    cJSON *content = cJSON_GetObjectItem(body, CWEB_HYDRATON_JSON_CONTENT);
+
+    if(content == NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_CONTENT_NOT_PROVIDED,
+            CWEB_HYDRATION_CONTENT_NOT_PROVIDED_MSG
+        );
+        return private_CWebHydration_formmat_error_response(self);
+    }
+    if(!cJSON_IsObject(content)){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_HYDRATION_CONTENT_NOT_OBJECT,
+            CWEB_HYDRATION_CONTENT_NOT_OBJECT_MSG
+        );
+        return private_CWebHydration_formmat_error_response(self);
+    }
+
+    int size =cJSON_GetArraySize(content);
+    for(int i = 0; i < size;i++){
+        cJSON *current_search  = cJSON_GetArrayItem(content, i);
+        if(!cJSON_IsArray(current_search)){
+            privateCWebHydration_raise_error(
+                self,
+                NULL,
+                CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY,
+                CWEB_HYDRATION_CONTENT_SEARCH_NOT_ARRAY_MSG,
+                current_search->string
+            );
+            return private_CWebHydration_formmat_error_response(self);
+        }
+    }
+
+
+    char *name_str = cJSON_GetStringValue(name);
+    CWebHyDrationBridge *target_bridge = NULL;
+    for(int i = 0; i < self->all_bridges->size;i++){
+        CWebHyDrationBridge *current = self->all_bridges->elments[i];
+        if(strcmp(current->name,name_str)==0){
+                target_bridge = current;
+                break;
+        }
+    }
+    if(target_bridge == NULL){
+        privateCWebHydration_raise_error(
+            self,
+            NULL,
+            CWEB_BRIDGE_NOT_FOUND,
+            CWEB_BRIDGE_NOT_FOUND_MSG,
+            name_str
+        );
+        return private_CWebHydration_formmat_error_response(self);
+    }
+
+    self->args =args;
+    self->content = content;
+    target_bridge->callback(target_bridge);
+    if(self->error_code){
+        return private_CWebHydration_formmat_error_response(self);
+
+    }
+    CwebHttpResponse *final_response = cweb_send_cJSON_cleaning_memory(self->response, 200);
+    self->response = NULL;
+    return final_response;
+
+}
+CwebHttpResponse *private_CWebHydration_formmat_error_response(CWebHyDration *self){
+    cJSON * response = cJSON_CreateObject();
+    cJSON_AddStringToObject(response, CWEB_HYDRATION_JSON_ERROR_MENSSAGE,self->error_msg);
+    cJSON_AddNumberToObject(response, CWEB_HYDRATION_JSON_ERROR_CODE_KEY,self->error_code);
+    return cweb_send_cJSON_cleaning_memory(response, 404);
+}
+
+
+char *CWebHyDration_create_script(CWebHyDration *self) {
+
+    if(self->script_text) {
+        CTextStack_free(self->script_text);
+    }
+
+    self->script_text = newCTextStack_string_empty();
+
+    CTextStack_format(self->script_text,"%s", private_cweb_hydration_js_content);
+
+    for(int i =0; i < self->all_bridges->size;i++) {
+        CWebHyDrationBridge *current = self->all_bridges->elments[i];
+        CTextStack* created_code =private_CWebHyDrationBridge_create_script(current);
+        CTextStack_format(self->script_text,"%tc",created_code);
+    }
+    return self->script_text->rendered_text;
+
+}
+
+void private_CWebHyDration_free(CWebHyDration *self) {
+    if(self->script_text) {
+        CTextStack_free(self->script_text);
+    }
+    if(self->error_msg){
+        free(self->error_msg);
+    }
+    if(self->response){
+        cJSON_Delete(self->response);
+    }
+
+
+    privateCWebHyDrationBridgeArray_free(self->all_bridges);
+    free(self);
+}
 
 
 

@@ -22,3 +22,5 @@ DtwTreeProps create_tree_props(LuaCEmbedTable *user_props);
 LuaCEmbedResponse * tree_delete(LuaCEmbedTable *self,LuaCEmbed *args);
 
 LuaCEmbedResponse * create_tree_fro_hardware(LuaCEmbed *args);
+
+LuaCEmbedResponse * add_tree_fro_hardware(LuaCEmbedTable *self,LuaCEmbed *args);

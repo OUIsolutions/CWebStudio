@@ -11,7 +11,7 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
     const char *lang = "en";
     const char *text = "text exemple";
-    CText$Scope(s, CTEXT_HTML,"lang=\"%s\"",lang){
+    CTextScope_format(s, CTEXT_HTML,"lang=\"%s\"",lang){
         CTextScope(s,CTEXT_HEAD){}
         CTextScope(s,CTEXT_BODY){
             CTextScope(s,CTEXT_H1){
@@ -23,7 +23,7 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
             }
         }
     }
-    return cweb_send_rendered_CTextStack_cleaning_memory(s,200);
+    return cweb_send_rendered_CTextStack(s,200);
 }
 
 

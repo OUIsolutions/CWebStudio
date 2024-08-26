@@ -8,19 +8,9 @@ LuaCEmbedResponse  * load_file(LuaCEmbed *args){
     }
 
     long  size;
-    bool is_binary;
-    unsigned  char *content = dtw_load_any_content(filename,&size,&is_binary);
-    if(!content){
-        if(dtw_entity_type(filename) == DTW_FILE_TYPE){
-             return LuaCEmbed_send_str("");
-        }
-        return NULL;
-    }
-    if(!is_binary){
-
-        LuaCEmbedResponse  * response = LuaCEmbed_send_str((const char*)content);
-        free(content);
-        return response;
+    unsigned  char *content = dtw_load_binary_content(filename,&size);
+    if(content == NULL) {
+        return  NULL;
     }
 
     LuaCEmbedResponse  *response  = LuaCEmbed_send_raw_string((char*)content,size);
@@ -40,13 +30,14 @@ LuaCEmbedResponse  * write_file(LuaCEmbed *args){
         writed  = dtw_write_string_file_content(filename,"");
         return LuaCEmbed_send_bool(writed);
     }
-
-    Writeble  write_obj = create_writeble(args,1);
-    if(write_obj.error){
-        return write_obj.error;
+    Writeble  *write_obj = create_writeble(args,1);
+    if(write_obj->error){
+        LuaCEmbedResponse *response =  write_obj->error;
+        Writeble_free(write_obj);
+        return  response;
     }
-    writed = dtw_write_any_content(filename,write_obj.content,write_obj.size);
-    Writeble_free(&write_obj);
+    writed = dtw_write_any_content(filename,write_obj->content,write_obj->size);
+    Writeble_free(write_obj);
     return  LuaCEmbed_send_bool(writed);
 
 
@@ -73,12 +64,14 @@ LuaCEmbedResponse  * exist(LuaCEmbed *args){
 
 LuaCEmbedResponse  * is_blob(LuaCEmbed *args){
 
-    Writeble  write_obj = create_writeble(args,1);
-    if(write_obj.error){
-        return write_obj.error;
+    Writeble  *write_obj = create_writeble(args,1);
+    if(write_obj->error){
+        LuaCEmbedResponse *response =  write_obj->error;
+        Writeble_free(write_obj);
+        return  response;
     }
-    bool is_binary = write_obj.is_binary;
-    Writeble_free(&write_obj);
+    bool is_binary = write_obj->is_binary;
+    Writeble_free(write_obj);
     return LuaCEmbed_send_bool(is_binary);
 
 }
@@ -126,7 +119,6 @@ LuaCEmbedResponse  * copy_any_merging(LuaCEmbed *args){
         char *error_message = LuaCEmbed_get_error_message(args);
         return  LuaCEmbed_send_error(error_message);
     }
-
     bool writed = dtw_copy_any(source,dest,DTW_MERGE);
     return LuaCEmbed_send_bool(writed);
 }

@@ -35,19 +35,29 @@ void start_lua_props(LuaCEmbed *l){
     LuaCEmbed_add_callback(l,GENERATE_SHA_FROM_FOLDER_BY_CONTENT,generate_sha_from_folder_by_content);
     LuaCEmbed_add_callback(l,GENERATE_SHA_FROM_FOLDER_BY_LAST_MODIFICATION,generate_sha_from_folder_by_last_modification);
     LuaCEmbed_add_callback(l, NEW_TRANSACTION, transaction_new_transaction);
-    LuaCEmbed_add_callback(l,NEW_TRANSACTION_FROM_JSON_STRING,create_empty_transaction_from_json_string);
-    LuaCEmbed_add_callback(l,NEW_TRANSACTION_FROM_JSON_FILE,create_empty_transaction_from_json_file);
+    LuaCEmbed_add_callback(l,NEW_TRANSACTION_FROM_JSON_STRING,create_transaction_from_json_string);
+    LuaCEmbed_add_callback(l,TRY_NEW_TRANSACTION_FROM_JSON_STRING,try_create_transaction_from_json_string);
+    LuaCEmbed_add_callback(l,NEW_TRANSACTION_FROM_JSON_FILE,create_transaction_from_json_file);
+    LuaCEmbed_add_callback(l,TRY_NEW_TRANSACTION_FROM_JSON_FILE,try_create_transaction_from_json_file);
     LuaCEmbed_add_callback(l,NEW_PATH,create_path);
-    LuaCEmbed_add_callback(l,NEW_TREE,create_empty_tree);
     LuaCEmbed_add_callback(l,CONCAT_PATH,concat_path);
+    LuaCEmbed_add_callback(l,NEW_TREE,create_empty_tree);
     LuaCEmbed_add_callback(l,NEW_TREE_FROM_HARWARE,create_tree_fro_hardware);
+    LuaCEmbed_add_callback(l,NEW_TREE_FROM_JSON_FILE,create_tree_from_json_tree_file);
+    LuaCEmbed_add_callback(l,NEW_TREE_FROM_JSON_STRING,create_tree_from_json_tree_string);
+    LuaCEmbed_add_callback(l,TRY_NEW_TREE_FROM_JSON_FILE,try_create_tree_from_json_tree_file);
+    LuaCEmbed_add_callback(l,TRY_NEW_TREE_FROM_JSON_STRING,try_create_tree_from_json_tree_string);
+
     LuaCEmbed_add_callback(l,STARTS_WITH,starts_with);
     LuaCEmbed_add_callback(l,ENDS_WITH,ends_with);
+    LuaCEmbed_add_callback(l,NEW_RANDONIZER,create_randonizer);
+    LuaCEmbed_add_callback(l,NEW_FORK,create_fork_process);
+    LuaCEmbed_add_callback(l,NEW_LOCKER,create_locker);
+    LuaCEmbed_add_callback(l,GET_ENTITY_LAST_MODIFICATION,lua_get_entity_last_modification);
+    LuaCEmbed_add_callback(l,GET_ENTITY_LAST_MODIFICATION_IN_UNIX,lua_get_entity_last_modification_in_unix);
 }
 
 int load_luaDoTheWorld(lua_State *state){
-    
-    
 
     LuaCEmbed * l  = newLuaCEmbedLib(state);
     start_lua_props(l);

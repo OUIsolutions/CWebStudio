@@ -28,6 +28,7 @@
 #define COUNT_METHOD "count"
 #define FIND_METHOD "find"
 #define LIST_METHOD "list"
+#define FILTER_METHOD "filter"
 #define GET_SIZE_METHOD "get_size"
 #define SET_EXTENSION_METHOD "set_extension"
 

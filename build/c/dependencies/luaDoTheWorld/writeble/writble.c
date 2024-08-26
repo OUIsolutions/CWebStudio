@@ -45,21 +45,22 @@ bool handle_table_writble(Writeble *self,LuaCEmbed *args,int index){
     return false;
 
 }
-Writeble  create_writeble(LuaCEmbed *args,int index){
-    Writeble self = {0};
+Writeble  * create_writeble(LuaCEmbed *args,int index){
+    Writeble *self =  (Writeble*)malloc(sizeof(Writeble));
+    *self = (Writeble){0};
     long total_args = LuaCEmbed_get_total_args(args);
     if(total_args == 0){
-        self.error = LuaCEmbed_send_error(ARGUMENT_NOT_PROVIDED);
+        self->error = LuaCEmbed_send_error(ARGUMENT_NOT_PROVIDED);
         return self;
     }
 
     int type_to_write = LuaCEmbed_get_arg_type(args,index);
     bool writeble = false;
     if(type_to_write == LUA_CEMBED_STRING){
-        self.content = (unsigned  char*)LuaCEmbed_get_raw_str_arg(args,&self.size,index);
-        for(long i = 0; i < self.size;i++){
-            if(self.content[i] == 0){
-                self.is_binary = true;
+        self->content = (unsigned  char*)LuaCEmbed_get_raw_str_arg(args,&self->size,index);
+        for(long i = 0; i < self->size;i++){
+            if(self->content[i] == 0){
+                self->is_binary = true;
                 break;
             }
         }
@@ -68,39 +69,39 @@ Writeble  create_writeble(LuaCEmbed *args,int index){
     }
 
     if(type_to_write == LUA_CEMBED_NUMBER){
-        self.clear_content = true;
+        self->clear_content = true;
         double content = LuaCEmbed_get_double_arg(args,index);
         double rest = content - (double)(long ) content;
         if(rest == 0){
             char formatted[20] = {0};
             sprintf(formatted,"%ld",(long)content);
-            self.content = (unsigned char*)strdup(formatted);
-            self.size = (long)strlen(formatted);
+            self->content = (unsigned char*)strdup(formatted);
+            self->size = (long)strlen(formatted);
         }
         else{
             char formatted[20] = {0};
             sprintf(formatted,"%lf",content);
-            self.content = (unsigned char*)strdup(formatted);
-            self.size = (long)strlen(formatted);
+            self->content = (unsigned char*)strdup(formatted);
+            self->size = (long)strlen(formatted);
         }
         writeble = true;
     }
     if(type_to_write == LUA_CEMBED_BOOL){
         bool content  = LuaCEmbed_get_bool_arg(args,index);
         const char *converted = content ? "true":"false";
-        self.content = (unsigned char*)converted;
-        self.size = (long)strlen(converted);
+        self->content = (unsigned char*)converted;
+        self->size = (long)strlen(converted);
         writeble = true;
     }
 
     if(type_to_write == LUA_CEMBED_TABLE){
-        writeble = handle_table_writble(&self,args,index);
+        writeble = handle_table_writble(self,args,index);
     }
 
-    bool its_not_writible_and_no_other_errors = !writeble && self.error == NULL;
+    bool its_not_writible_and_no_other_errors = !writeble && self->error == NULL;
     if(its_not_writible_and_no_other_errors){
         char *error = private_LuaCembed_format(NOT_WRITEBLE_ELEMENT,LuaCembed_convert_arg_code(type_to_write));
-        self.error = LuaCEmbed_send_error(error);
+        self->error = LuaCEmbed_send_error(error);
         free(error);
         return self;
     }
@@ -111,4 +112,5 @@ void Writeble_free(Writeble *self){
     if(self->clear_content){
         free(self->content);
     }
+    free(self);
 }

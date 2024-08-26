@@ -11,5 +11,6 @@
 #include "cors/cors.h"
 #include "server/declaration.h"
 #include "namespace/declaration.h"
+#include "hydratation/declaration.h"
 
 #endif

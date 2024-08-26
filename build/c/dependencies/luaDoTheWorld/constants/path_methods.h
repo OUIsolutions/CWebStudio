@@ -12,7 +12,7 @@
 #define PATH_REMOVE_SUB_DIR_AT_INDEX_METHOD "remove_sub_dir_at_index"
 #define PATH_INSERT_DIR_AFTER_METHOD "insert_dir_after"
 #define PATH_INSERT_DIR_BEFORE_METHOD "insert_dir_before"
-#define PATH_REMOVE_SUB_DIRS_AT_METHOD "remove_dir_at"
+#define PATH_REMOVE_SUB_DIRS_AT_METHOD "remove_sub_dirs_at"
 
 #define PATH_SET_NAME_METHOD "set_name"
 #define PATH_SET_DIR_METHOD "set_dir"

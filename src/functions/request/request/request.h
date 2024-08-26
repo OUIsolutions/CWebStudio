@@ -11,6 +11,9 @@ unsigned char * CwebHttpRequest_read_content( CwebHttpRequest *self, long max_co
 cJSON * CWebHttpRequest_read_cJSON(CwebHttpRequest *self, long max_content_size);
 
 
+CTextStack *CwebHttpRequest_create_empty_stack(CwebHttpRequest *self);
+
+CTextStack *CwebHttpRequest_create_stack(CwebHttpRequest *self);
 
 
 char * CwebHttpRequest_get_header( CwebHttpRequest *self, const char *key);

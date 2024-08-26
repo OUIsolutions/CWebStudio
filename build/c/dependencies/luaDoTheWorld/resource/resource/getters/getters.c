@@ -43,6 +43,7 @@ LuaCEmbedResponse * resource_value(LuaCEmbedTable  *self,LuaCEmbed *args){
     }
 
     if(type == DTW_COMPLEX_BINARY || type == DTW_COMPLEX_STRING_TYPE){
+
         long size;
         bool is_binary;
         unsigned  char *content =  DtwResource_get_any(resource,&size,&is_binary);
@@ -108,22 +109,19 @@ LuaCEmbedResponse * resource_value_from_sub_resource(LuaCEmbedTable  *self,LuaCE
         double value = DtwResource_get_double(sub);
         return LuaCEmbed_send_double(value);
     }
-    if(type == DTW_COMPLEX_STRING_TYPE){
-        char *value = DtwResource_get_string(sub);
-        return LuaCEmbed_send_str(value);
-    }
+
 
     if(type == DTW_COMPLEX_BOOL_TYPE){
         bool value= DtwResource_get_bool(sub);
         return LuaCEmbed_send_bool(value);
     }
 
-    if(type == DTW_COMPLEX_BINARY){
+    if(type == DTW_COMPLEX_BINARY || type == DTW_COMPLEX_STRING_TYPE ){
         long size;
-        bool is_binary;
-        unsigned  char *content =  DtwResource_get_any(sub,&size,&is_binary);
-        return LuaCEmbed_send_raw_string((char*)content,size);
+        unsigned  char *content =  DtwResource_get_binary(sub,&size);
+        return LuaCEmbed_send_raw_string_reference((char*)content,size);
     }
+
     return NULL;
 }
 

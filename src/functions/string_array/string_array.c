@@ -1,4 +1,5 @@
 #include "../uniq.definitions_requirements.h"
+#include <string.h>
 
 struct CwebStringArray * newCwebStringArray(){
     struct CwebStringArray *self = (struct CwebStringArray*)malloc(sizeof(struct CwebStringArray));
@@ -25,13 +26,18 @@ void CwebStringArray_set(struct CwebStringArray *self, int index, const char *va
         strcpy(self->strings[index], value);
     }
 }
+
 // Function prototypes
 void CwebStringArray_add(struct CwebStringArray *self, const char *string){
-    self->size++;
-    self->strings =  (char**)realloc(self->strings, self->size * sizeof(char *));
-    self->strings[self->size - 1] = (char*)malloc(strlen(string) + 1);
-    self->strings[self->size - 1][strlen(string)] = '\0';
-    strcpy(self->strings[self->size - 1], string);
+    self->strings =  (char**)realloc(self->strings, (self->size +1) * sizeof(char *));
+    self->strings[self->size] = strdup(string);
+    self->size+=1;
+}
+
+void CwebStringArray_add_getting_ownership(struct CwebStringArray *self,  char *string){
+    self->strings =  (char**)realloc(self->strings, (self->size +1) * sizeof(char *));
+    self->strings[self->size] = string;
+    self->size+=1;
 }
 
 

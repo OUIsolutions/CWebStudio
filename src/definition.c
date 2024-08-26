@@ -1,7 +1,5 @@
 
 #include "declaration.h"
-#include "globals.c"
-#include "dependencies/definitions.c"
+#include "globals/all.c"
+#include "dependencies/definition.c"
 #include "functions/definitions.c"
-
-

@@ -7,18 +7,16 @@ LuaCEmbedResponse * transaction_write(LuaCEmbedTable *self,LuaCEmbed *args){
     }
 
 
-    Writeble  write_obj = create_writeble(args,1);
-    if(write_obj.error){
-        return write_obj.error;
+    Writeble  *write_obj = create_writeble(args,1);
+    if(write_obj->error){
+        LuaCEmbedResponse *response =  write_obj->error;
+        Writeble_free(write_obj);
+        return  response;
     }
-    bool is_binary = false;
-    for(int i = 0; i < write_obj.size; i++){
-        if(write_obj.content[i] == '\0'){
-            is_binary = true;
-        }
-    }
+
     DtwTransaction *t = (DtwTransaction*)LuaCembedTable_get_long_prop(self,TRANSACTION_POINTER);
-    DtwTransaction_write_any(t,filename,write_obj.content,write_obj.size,is_binary);
+    DtwTransaction_write_any(t,filename,write_obj->content,write_obj->size,write_obj->is_binary);
+    Writeble_free(write_obj);
     return  LuaCEmbed_send_table(self);
 }
 
