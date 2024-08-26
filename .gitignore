@@ -2,10 +2,11 @@
 *.d
 out_folder
 CWebStudio_test.h
+CWebStudio.h
 *.pyc
 .cache
 lua_debug.ua
-# Object files
+# Object files//
 *.o
 *.ko
 *.obj
