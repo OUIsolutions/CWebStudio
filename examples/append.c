@@ -1,5 +1,5 @@
 
-#include "src/one.c"
+#include "CWebStudio.h"
 
 
 CwebNamespace cweb;
@@ -11,36 +11,30 @@ CWebHydrationSearchRequirementsNamespace requirements;
 CWebHydrationSearchResultNamespace result_module;
 CWebHydrationArgsNamespace hydration_args;
 
-#define ARGS_BRIDGE "args"
+#define NUM_MODIFIER "num modifier"
 
 
 //components
-
-void args_bridge_callback(CWebHyDrationBridge * bridge){
-
-    long size = hydration_args.get_args_size(bridge);
-    for(int i = 0; i < size;i++){
-
-        if(hydration_args.is_arg_number(bridge,i)){
-        long value = hydration_args.get_long_arg(bridge,i);
-            printf("arg %d: %ld\n",i,value);
-        }
-
-        if(hydration_args.is_arg_bool(bridge,i)){
-            bool value = hydration_args.get_bool_arg(bridge,i);
-            printf("arg %d: %s\n",i,value ? "true":"false");
-        }
-
-        if(hydration_args.is_arg_string(bridge,i)){
-            char *value = hydration_args.get_str_arg(bridge,i);
-            printf("arg %d: %s\n",i,value);
-        }
-        if(hydration_args.is_arg_null(bridge,i)){
-            printf("arg %d: NULL\n",i);
-        }
-
+void create_num_element(CTextStack *s, int value){
+    CTextScope_format(s,CTEXT_H1,"id='num'"){
+        stack.format(s,"%d",value);
     }
-    printf("====================================\n");
+}
+
+void num_modifier_bridge_callback(CWebHyDrationBridge * bridge){
+
+    long num = result_module.get_long_from_first_element_of_search(bridge,"num");
+    long num_to_increment = hydration_args.get_long_arg(bridge,0);
+    //means some information were not provided or its with the
+    //wrong type
+    if(bridge_module.has_errors(bridge)){
+        return;
+    }
+
+    long result = num + num_to_increment;
+    CTextStack * created = bridge_module.create_stack(bridge);
+    create_num_element(created, result);
+    actions.replace_element_by_id(bridge,"num",created->rendered_text);
 }
 
 
@@ -55,33 +49,23 @@ CTextStack *create_main_page(CWebHyDration *hydration){
         }
         CTextScope(main_html, CTEXT_BODY){
 
-            CWebHyDrationBridge *args_bridge = bridge_module.get_child_bridge(
-                hydration,ARGS_BRIDGE
+            CWebHyDrationBridge *num_modifier = bridge_module.get_child_bridge(
+                hydration,NUM_MODIFIER
             );
+            create_num_element(main_html, 0);
 
             CTextScope(main_html, CTEXT_BR){}
 
             CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(args_bridge,"10,'second argument'")
+                bridge_module.onclick(num_modifier,"%d",-1)
             ){
-                stack.text(main_html,"number and string");
-            }
-            CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(args_bridge,"10")
-            ){
-                stack.text(main_html,"number ");
+                stack.text(main_html,"decrement");
             }
 
             CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(args_bridge,"true")
+                bridge_module.onclick(num_modifier,"%d",1)
             ){
-                stack.text(main_html,"boolean");
-            }
-
-            CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(args_bridge,"null,'second argument'")
-            ){
-                stack.text(main_html,"null and string");
+                stack.text(main_html,"increment");
             }
 
             //always ut the script on booton of  html
@@ -98,11 +82,13 @@ CwebHttpResponse *main_server(CwebHttpRequest *request){
 
 
     CWebHyDration *hydration = hydration_module.newCWebHyDration(request);
-    CWebHyDrationBridge * args_brige = bridge_module.create_bridge(
+    CWebHyDrationBridge * num_bridge = bridge_module.create_bridge(
         hydration,
-        ARGS_BRIDGE,
-        args_bridge_callback
+        NUM_MODIFIER,
+        num_modifier_bridge_callback
     );
+
+    requirements.add_elements_by_id_setting_search_as_same_name(num_bridge,"num");
 
     //if is
     if(hydration_module.is_the_trigger(hydration)){
@@ -124,6 +110,6 @@ int main(){
     result_module  = hydration_module.search_result;
     hydration_args = hydration_module.args;
     actions = hydration_module.actions;
-    CwebServer server = newCwebSever(3001, main_server);
+    CwebServer server = newCwebSever(3000, main_server);
     cweb.server.start(&server);
 }

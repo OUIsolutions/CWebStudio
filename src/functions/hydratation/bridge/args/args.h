@@ -9,6 +9,7 @@ bool   CWebHyDrationBridge_is_arg_number(CWebHyDrationBridge *self,int index);
 
 bool   CWebHyDrationBridge_is_arg_bool(CWebHyDrationBridge *self,int index);
 
+bool   CWebHyDrationBridge_is_arg_null(CWebHyDrationBridge *self,int index);
 
 bool   CWebHyDrationBridge_is_arg_string(CWebHyDrationBridge *self,int index);
 

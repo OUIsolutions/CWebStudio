@@ -6,6 +6,7 @@ CWebHydrationArgsNamespace newCWebHydrationArgsNamespace(){
     self.is_arg_number = CWebHyDrationBridge_is_arg_number;
     self.is_arg_bool = CWebHyDrationBridge_is_arg_bool;
     self.is_arg_string  = CWebHyDrationBridge_is_arg_string;
+    self.is_arg_null = CWebHyDrationBridge_is_arg_null;
     self.get_double_arg = CWebHyDrationBridge_get_double_arg;
     self.get_long_arg = CWebHyDrationBridge_get_long_arg;
     self.get_bool_arg = CWebHyDrationBridge_get_bool_arg;

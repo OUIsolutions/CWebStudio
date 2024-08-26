@@ -29,6 +29,13 @@ bool   CWebHyDrationBridge_is_arg_number(CWebHyDrationBridge *self,int index){
     return private_cweb_hydration_type_verifier(self,index,cJSON_IsNumber);
 }
 
+bool   CWebHyDrationBridge_is_arg_null(CWebHyDrationBridge *self,int index){
+    if(CWebHyDrationBridge_has_errors(self)){
+        return false;
+    }
+    return private_cweb_hydration_type_verifier(self,index,cJSON_IsNull);
+}
+
 bool   CWebHyDrationBridge_is_arg_bool(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return false;
