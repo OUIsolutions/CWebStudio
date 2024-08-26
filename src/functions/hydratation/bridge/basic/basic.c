@@ -14,11 +14,7 @@ CWebHyDrationBridge *private_newCWebHyDrationBridge(
 ) {
     CWebHyDrationBridge *self = (CWebHyDrationBridge*)malloc(sizeof(CWebHyDrationBridge));
     *self = (CWebHyDrationBridge){0};
-    /*
-    CTextStack * name_formmated = newCTextStack_string(name);
-    CTextStack_self_replace(name_formmated," ","");
-    CTextStack_self_replace(name_formmated,"-","");
-    */
+
     self->name = strdup(name);
     self->callback = callback;
     self->hydration = (void*)hydration;
@@ -69,7 +65,7 @@ CTextStack*  private_CWebHyDrationBridge_create_script(CWebHyDrationBridge *self
 
     CTextStack_format(
         function,
-        "private_cweb_bridges['%s'] = async function (args){ \n",
+        "cweb_bridges['%s'] = async function (...args){ \n",
         self->name
     );
 

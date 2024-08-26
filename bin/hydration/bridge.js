@@ -1,4 +1,4 @@
-let private_cweb_bridges = {};
+let cweb_bridges = {};
 
 function private_cweb_convert_assci(asciiList) {
   return asciiList.map((code) => String.fromCharCode(code)).join("");
@@ -10,10 +10,13 @@ async function private_cweb_call_bridge_with_assic(
 ) {
   let bridgename_converted = private_cweb_convert_assci(bridge_name_assci);
   let bridge_args_converted = private_cweb_convert_assci(bridge_args_assci);
-  let current_bridge = private_cweb_bridges[bridgename_converted];
-  let code = "current_bridge([" + bridge_args_converted + "])";
-
-  eval(code);
+  let current_bridge = cweb_bridges[bridgename_converted];
+  let code = "current_bridge(" + bridge_args_converted + ")";
+  try {
+    eval(code);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function private_cweb_send_to_server(name, args, content) {
