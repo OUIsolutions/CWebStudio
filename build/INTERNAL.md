@@ -277,10 +277,12 @@ element
 ```c
 requirements.add_elements_by_id_setting_search_as_same_name(alert_bridge,"name");
 ```
+codeof:  examples/append.c
 
 ## Handling Numbers
 you also can handle numbers, because the system will autoconvert all elements , unless you specify with the **not_auto_convert**
 sulfix in functions requirements
+
 
 
 # Used Dependencies And Atributions
