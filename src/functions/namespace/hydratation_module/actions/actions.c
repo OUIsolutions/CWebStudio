@@ -3,9 +3,11 @@
 CWebHydrationActionsNamespace newCWebHydrationActionsNamespace(){
     CWebHydrationActionsNamespace self ={0};
 
+
     self.replace_element_by_query_selector = CWebHyDrationBridge_replace_element_by_query_selector;
     self.append_by_query_selector = CWebHyDrationBridge_append_by_query_selector;
     self.destroy_by_query_selector =  CWebHyDrationBridge_destroy_by_query_selector;
+    self.remove_session_storage_data =  CWebHyDrationBridge_remove_session_storage_data;
     self.hide_element_by_query_selector = CWebHyDrationBridge_hide_element_by_query_selector;
     self.unhide_element_by_query_selector=  CWebHyDrationBridge_unhide_element_by_query_selector;
     self.hide_element_by_id = CWebHyDrationBridge_hide_element_by_id;

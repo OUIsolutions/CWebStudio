@@ -5,6 +5,8 @@ void privateCWebHyDrationBridge_add_response(CWebHyDrationBridge *self,const cha
 
 void CWebHyDrationBridge_set_session_storage_data(CWebHyDrationBridge *self,const char*key, const char *value,...);
 
+void CWebHyDrationBridge_remove_session_storage_data(CWebHyDrationBridge *self,const char*key);
+
 void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,...);
 
 void CWebHyDrationBridge_execute_script(CWebHyDrationBridge *self,const char *code,...);
@@ -78,7 +80,3 @@ void CWebHyDrationBridge_remove_class_by_id(CWebHyDrationBridge *self, const cha
 void CWebHyDrationBridge_add_class_by_id(CWebHyDrationBridge *self, const char *id, const char *class_name, ...);
 void CWebHyDrationBridge_remove_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
 void CWebHyDrationBridge_add_class_by_query_selector(CWebHyDrationBridge *self, const char *element, const char *class_name, ...);
-
-
-
-

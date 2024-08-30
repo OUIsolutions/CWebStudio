@@ -30,6 +30,13 @@ void CWebHyDrationBridge_set_session_storage_data(
     privateCWebHyDrationBridge_add_response(self,"set_session_storage",obj);
 }
 
+void CWebHyDrationBridge_remove_session_storage_data(CWebHyDrationBridge *self,const char*key){
+    cJSON *obj = cJSON_CreateObject();
+    cJSON_AddStringToObject(obj,CWEB_HYDRATON_JSON_KEY, key);
+    privateCWebHyDrationBridge_add_response(self,"remove_session_storage_data",obj);
+}
+
+
 void CWebHyDrationBridge_alert(CWebHyDrationBridge *self,const char *menssage,...){
     if(CWebHyDrationBridge_has_errors(self)){
         return ;
@@ -387,5 +394,3 @@ void CWebHyDrationBridge_add_class_by_query_selector(CWebHyDrationBridge *self, 
     privateCWebHyDrationBridge_add_response(self, "add_class_by_id", obj);
     free(menssage_formated);
 }
-
-

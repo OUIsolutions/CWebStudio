@@ -13,6 +13,7 @@ typedef struct CWebHydrationResponseNamespace {
         const char *code,
         ...
     );
+    void (*remove_session_storage_data)(CWebHyDrationBridge *self,const char*key);
 
     void (*append_by_query_selector)(
         CWebHyDrationBridge *self,

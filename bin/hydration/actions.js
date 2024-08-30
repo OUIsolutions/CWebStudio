@@ -11,6 +11,9 @@ let private_cweb_actions_handlers = {
   set_session_storage: function (data) {
     sessionStorage.setItem(data["key"], data["value"]);
   },
+  remove_session_storage_data: function (data) {
+    sessionStorage.removeItem(data["key"]);
+  },
   add_cookie_with_time: function (data) {
     let expires = "";
     if (data.days) {
@@ -85,7 +88,7 @@ let private_cweb_actions_handlers = {
   add_class_by_query_selector: function (data) {
     let element = document.querySelector(data.query_selector);
     if (!element) {
-        return;
+      return;
     }
     element.classList.add(data.class_name);
   },
@@ -93,32 +96,24 @@ let private_cweb_actions_handlers = {
   remove_class_by_query_selector: function (data) {
     let element = document.querySelector(data.query_selector);
     if (!element) {
-        return;
+      return;
     }
     element.classList.remove(data.class_name);
   },
 
-
   add_class_by_id: function (data) {
-      let element = document.getElementById(data.id);
-      if (!element) {
-          return;
-      }
-      element.classList.add(data.class_name);
+    let element = document.getElementById(data.id);
+    if (!element) {
+      return;
+    }
+    element.classList.add(data.class_name);
   },
 
   remove_class_by_id: function (data) {
-      let element = document.getElementById(data.id);
-      if (!element) {
-          return;
-      }
-      element.classList.remove(data.class_name);
-  }
-
+    let element = document.getElementById(data.id);
+    if (!element) {
+      return;
+    }
+    element.classList.remove(data.class_name);
+  },
 };
-
-
-
-
-
-
