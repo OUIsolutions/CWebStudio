@@ -287,16 +287,9 @@ void CWebHyDrationSearchRequirements_add_confirm(CWebHyDrationSearchRequirements
     va_end(args);
 
     CWebHyDrationSearchRequirements_add_function(self,
-        "\
-        function(args){\
-            let userConfirmed = confirm(\"%s\");\
-            if (userConfirmed) {\
-                return true;\
-            } else {\
-                return false;\
-            }\
-        }\
-        ",
+        "function(args){\
+            return confirm('%s');\
+        }",
         formmated_name);
 
     free(formmated_name);
@@ -310,17 +303,9 @@ void CWebHyDrationSearchRequirements_add_prompt(CWebHyDrationSearchRequirements 
     va_end(args);
 
     CWebHyDrationSearchRequirements_add_function(self,
-        "\
-        function(args){\
-            let userConfirmed = prompt(%s);\
-            if (userConfirmed) {\
-                return userConfirmed;\
-            } else {\
-                return '';\
-            }\
-        }\
-        ",
+        "function(args){\
+            return prompt('%s');\
+        }",
         formmated_name);
-
     free(formmated_name);
 }
