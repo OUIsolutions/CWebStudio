@@ -270,11 +270,9 @@ void CWebHyDrationSearchRequirements_add_session_storage_item(
 void CWebHyDrationSearchRequirements_add_cookie_item(CWebHyDrationSearchRequirements *self, const char *name){
 
     CWebHyDrationSearchRequirements_add_function(self,
-        "\
-        function(args){\
+        "function(args){\
             return private_cweb_get_value_cookie_by_key(\"%s\")\
-        }\
-        ",
+        }",
         name
     );
 }
