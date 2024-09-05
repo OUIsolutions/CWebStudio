@@ -1,17 +1,19 @@
 
 
-#ifndef CTEXTENGINE_H
-#define CTEXTENGINE_H
+#ifdef CTEXTENGINE_DEFINED_IN_CWEB_STUDIO
 #include "CTextEngine/definition.c"
 #endif
 
-#ifndef cJSON__h
-#define cJSON__h
+
+#ifdef cJSON_DEFINED_IN_CWEB_STUDIO
 #include "cJson/cJSON.c"
+#undef false 
+#undef true
+#define false 0
+#define true 1
 #endif
 
 
-#ifndef UNIVERSAL_GARBAGE_H
-#define UNIVERSAL_GARBAGE_H
+#ifdef  UNIVERSAL_GARBAGE_DEFINED_IN_CWEB_STUDIO
 #include "UniversalGarbage/definition.c"
 #endif
