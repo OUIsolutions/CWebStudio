@@ -30,5 +30,6 @@ SOFTWARE.
 
 
 #include "definition.c"
+#include "dependencies/definition.c"
 
 #endif
