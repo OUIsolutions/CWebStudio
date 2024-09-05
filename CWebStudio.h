@@ -4,12 +4,15 @@
 
 
 #ifndef __CWEBSTUDIO_H
-#define __CWEBSTUDIO_H
-
 
 //path: src/definition.c
 
 //path: src/declaration.h
+#ifndef __CWEBSTUDIO_H
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //path: src/imports.h
 #ifndef PRIVATE_CWEB_HTTP_IMPORTS_H
 #define PRIVATE_CWEB_HTTP_IMPORTS_H
@@ -30,11 +33,17 @@
 #endif //PRIVATE_CWEB_HTTP_IMPORTS_H
 
 //path: src/dependencies/declaration.h
+
 #ifndef PRIVATE_CWEB_HTTP_DEPENDENCIES
 #define PRIVATE_CWEB_HTTP_DEPENDENCIES
 
 #ifndef CTEXTENGINE_H
 //path: src/dependencies/CTextEngine/declaration.h
+#ifndef  CTEXTENGINE_H
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //path: src/dependencies/CTextEngine/imports.h
 #include <string.h>
 #include <stdlib.h>
@@ -345,6 +354,7 @@ typedef struct CTextNamespace{
 
 
 
+
 //path: src/dependencies/CTextEngine/functions/declaration.h
 
 #ifndef PRIVATE_CTEXT_FUNCTION_DECLARATION
@@ -613,9 +623,16 @@ void private_ctext_generate_formated_text(
 #endif
 
 
-
-
+#define  CTEXTENGINE_H
+#ifdef __cplusplus
+}
 #endif
+#endif
+
+
+#define CTEXTENGINE_DEFINED_IN_CWEB_STUDIO
+#endif
+
 #ifndef cJSON__h
 //path: src/dependencies/cJson/cJSON.h
 
@@ -871,20 +888,21 @@ CJSON_PUBLIC(void) cJSON_free(void *object);
 
 #endif
 
-#undef cJSON__h
+#define cJSON_DEFINED_IN_CWEB_STUDIO
 #endif
 
 
 #ifndef  UNIVERSAL_GARBAGE_H
 //path: src/dependencies/UniversalGarbage/declaration.h
+#ifndef UNIVERSAL_GARBAGE_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-
-
-
 //path: src/dependencies/UniversalGarbage/macros.h
 
 #define UniversalGarbage_create_empty_struct(name,element_type) \
@@ -1014,7 +1032,15 @@ void UniversalGarbage_free(UniversalGarbage *self);
 
 
 
+#ifdef __cplusplus
+}
+#endif
 
+#define UNIVERSAL_GARBAGE_H
+#endif
+
+
+#define UNIVERSAL_GARBAGE_DEFINED_IN_CWEB_STUDIO
 #endif
 
 
@@ -2954,6 +2980,13 @@ void private_CWebHyDration_free(CWebHyDration *self);
 
 
 
+#ifdef __cplusplus
+}
+#endif
+
+#define __CWEBSTUDIO_H
+#endif
+
 
 //path: src/globals/all.c
 
@@ -2981,4454 +3014,6 @@ const char private_cweb_hydration_js_content[] = {108,101,116,32,112,114,105,118
 const char private_cweb_404[] = {60,33,68,79,67,84,89,80,69,32,104,116,109,108,62,10,60,104,116,109,108,32,108,97,110,103,61,34,112,116,45,66,82,34,62,10,60,104,101,97,100,62,10,32,32,32,32,60,109,101,116,97,32,99,104,97,114,115,101,116,61,34,85,84,70,45,56,34,62,10,32,32,32,32,60,109,101,116,97,32,110,97,109,101,61,34,118,105,101,119,112,111,114,116,34,32,99,111,110,116,101,110,116,61,34,119,105,100,116,104,61,100,101,118,105,99,101,45,119,105,100,116,104,44,32,105,110,105,116,105,97,108,45,115,99,97,108,101,61,49,46,48,34,62,10,32,32,32,32,60,116,105,116,108,101,62,69,114,114,111,60,47,116,105,116,108,101,62,10,32,32,32,32,60,115,116,121,108,101,62,10,32,32,32,32,32,32,32,32,98,111,100,121,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,100,105,115,112,108,97,121,58,32,102,108,101,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,106,117,115,116,105,102,121,45,99,111,110,116,101,110,116,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,97,108,105,103,110,45,105,116,101,109,115,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,104,101,105,103,104,116,58,32,49,48,48,118,104,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,50,56,50,99,51,52,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,102,102,102,102,102,102,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,102,97,109,105,108,121,58,32,39,65,114,105,97,108,39,44,32,115,97,110,115,45,115,101,114,105,102,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,110,116,97,105,110,101,114,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,116,101,120,116,45,97,108,105,103,110,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,120,45,119,105,100,116,104,58,32,57,48,37,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,50,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,114,100,101,114,45,114,97,100,105,117,115,58,32,49,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,58,32,35,51,97,51,102,52,55,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,120,45,115,104,97,100,111,119,58,32,48,32,52,112,120,32,56,112,120,32,114,103,98,97,40,48,44,32,48,44,32,48,44,32,48,46,51,41,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,100,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,48,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,119,101,105,103,104,116,58,32,98,111,108,100,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,102,102,54,98,54,98,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,109,101,115,115,97,103,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,50,52,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,49,48,112,120,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,100,51,100,51,100,51,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,56,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,45,98,111,116,116,111,109,58,32,51,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,97,57,97,57,97,57,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,100,105,115,112,108,97,121,58,32,105,110,108,105,110,101,45,98,108,111,99,107,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,49,50,112,120,32,50,52,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,56,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,50,56,50,99,51,52,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,102,102,54,98,54,98,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,114,100,101,114,45,114,97,100,105,117,115,58,32,53,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,116,101,120,116,45,100,101,99,111,114,97,116,105,111,110,58,32,110,111,110,101,59,10,32,32,32,32,32,32,32,32,32,32,32,32,116,114,97,110,115,105,116,105,111,110,58,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,32,48,46,51,115,32,101,97,115,101,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,58,104,111,118,101,114,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,102,102,52,99,52,99,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,64,109,101,100,105,97,32,40,109,97,120,45,119,105,100,116,104,58,32,54,48,48,112,120,41,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,100,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,54,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,109,101,115,115,97,103,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,50,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,54,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,54,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,125,10,32,32,32,32,60,47,115,116,121,108,101,62,10,60,47,104,101,97,100,62,10,60,98,111,100,121,62,10,32,32,32,32,60,100,105,118,32,99,108,97,115,115,61,34,101,114,114,111,114,45,99,111,110,116,97,105,110,101,114,34,62,10,32,32,32,32,32,32,32,32,60,104,49,32,99,108,97,115,115,61,34,101,114,114,111,114,45,99,111,100,101,34,62,52,48,52,60,47,104,49,62,10,32,32,32,32,32,32,32,32,60,112,32,99,108,97,115,115,61,34,101,114,114,111,114,45,109,101,115,115,97,103,101,34,62,80,97,103,101,32,110,111,116,45,102,111,117,110,100,60,47,112,62,10,32,32,32,32,32,32,32,32,60,112,32,99,108,97,115,115,61,34,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,34,62,83,111,114,114,121,44,32,116,104,105,115,32,112,97,103,101,32,110,111,116,32,102,111,117,110,100,46,60,47,112,62,10,32,32,32,32,32,32,32,32,60,97,32,104,114,101,102,61,34,47,34,32,99,108,97,115,115,61,34,101,114,114,111,114,45,108,105,110,107,34,62,98,97,99,107,60,47,97,62,10,32,32,32,32,60,47,100,105,118,62,10,60,47,98,111,100,121,62,10,60,47,104,116,109,108,62,0 };
 
 const char private_cweb_500[] = {60,33,68,79,67,84,89,80,69,32,104,116,109,108,62,10,60,104,116,109,108,32,108,97,110,103,61,34,112,116,45,66,82,34,62,10,60,104,101,97,100,62,10,32,32,32,32,60,109,101,116,97,32,99,104,97,114,115,101,116,61,34,85,84,70,45,56,34,62,10,32,32,32,32,60,109,101,116,97,32,110,97,109,101,61,34,118,105,101,119,112,111,114,116,34,32,99,111,110,116,101,110,116,61,34,119,105,100,116,104,61,100,101,118,105,99,101,45,119,105,100,116,104,44,32,105,110,105,116,105,97,108,45,115,99,97,108,101,61,49,46,48,34,62,10,32,32,32,32,60,116,105,116,108,101,62,69,114,114,111,60,47,116,105,116,108,101,62,10,32,32,32,32,60,115,116,121,108,101,62,10,32,32,32,32,32,32,32,32,98,111,100,121,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,100,105,115,112,108,97,121,58,32,102,108,101,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,106,117,115,116,105,102,121,45,99,111,110,116,101,110,116,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,97,108,105,103,110,45,105,116,101,109,115,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,104,101,105,103,104,116,58,32,49,48,48,118,104,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,50,56,50,99,51,52,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,102,102,102,102,102,102,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,102,97,109,105,108,121,58,32,39,65,114,105,97,108,39,44,32,115,97,110,115,45,115,101,114,105,102,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,110,116,97,105,110,101,114,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,116,101,120,116,45,97,108,105,103,110,58,32,99,101,110,116,101,114,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,120,45,119,105,100,116,104,58,32,57,48,37,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,50,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,114,100,101,114,45,114,97,100,105,117,115,58,32,49,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,58,32,35,51,97,51,102,52,55,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,120,45,115,104,97,100,111,119,58,32,48,32,52,112,120,32,56,112,120,32,114,103,98,97,40,48,44,32,48,44,32,48,44,32,48,46,51,41,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,100,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,48,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,119,101,105,103,104,116,58,32,98,111,108,100,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,102,102,54,98,54,98,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,109,101,115,115,97,103,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,50,52,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,58,32,49,48,112,120,32,48,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,100,51,100,51,100,51,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,56,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,109,97,114,103,105,110,45,98,111,116,116,111,109,58,32,51,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,97,57,97,57,97,57,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,100,105,115,112,108,97,121,58,32,105,110,108,105,110,101,45,98,108,111,99,107,59,10,32,32,32,32,32,32,32,32,32,32,32,32,112,97,100,100,105,110,103,58,32,49,50,112,120,32,50,52,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,56,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,99,111,108,111,114,58,32,35,50,56,50,99,51,52,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,102,102,54,98,54,98,59,10,32,32,32,32,32,32,32,32,32,32,32,32,98,111,114,100,101,114,45,114,97,100,105,117,115,58,32,53,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,116,101,120,116,45,100,101,99,111,114,97,116,105,111,110,58,32,110,111,110,101,59,10,32,32,32,32,32,32,32,32,32,32,32,32,116,114,97,110,115,105,116,105,111,110,58,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,32,48,46,51,115,32,101,97,115,101,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,58,104,111,118,101,114,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,98,97,99,107,103,114,111,117,110,100,45,99,111,108,111,114,58,32,35,102,102,52,99,52,99,59,10,32,32,32,32,32,32,32,32,125,10,10,32,32,32,32,32,32,32,32,64,109,101,100,105,97,32,40,109,97,120,45,119,105,100,116,104,58,32,54,48,48,112,120,41,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,99,111,100,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,54,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,109,101,115,115,97,103,101,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,50,48,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,54,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,32,32,32,32,46,101,114,114,111,114,45,108,105,110,107,32,123,10,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,102,111,110,116,45,115,105,122,101,58,32,49,54,112,120,59,10,32,32,32,32,32,32,32,32,32,32,32,32,125,10,32,32,32,32,32,32,32,32,125,10,32,32,32,32,60,47,115,116,121,108,101,62,10,60,47,104,101,97,100,62,10,60,98,111,100,121,62,10,32,32,32,32,60,100,105,118,32,99,108,97,115,115,61,34,101,114,114,111,114,45,99,111,110,116,97,105,110,101,114,34,62,10,32,32,32,32,32,32,32,32,60,104,49,32,99,108,97,115,115,61,34,101,114,114,111,114,45,99,111,100,101,34,62,53,48,48,60,47,104,49,62,10,32,32,32,32,32,32,32,32,60,112,32,99,108,97,115,115,61,34,101,114,114,111,114,45,109,101,115,115,97,103,101,34,62,69,114,114,111,114,32,105,110,116,101,114,110,60,47,112,62,10,32,32,32,32,32,32,32,32,60,112,32,99,108,97,115,115,61,34,101,114,114,111,114,45,100,101,115,99,114,105,112,116,105,111,110,34,62,69,114,114,111,114,32,105,110,32,115,101,114,118,101,114,60,47,112,62,10,32,32,32,32,32,32,32,32,60,97,32,104,114,101,102,61,34,47,34,32,99,108,97,115,115,61,34,101,114,114,111,114,45,108,105,110,107,34,62,98,97,99,107,60,47,97,62,10,32,32,32,32,60,47,100,105,118,62,10,60,47,98,111,100,121,62,10,60,47,104,116,109,108,62,0 };
-
-
-
-#endif
-
-
-//path: src/dependencies/definition.c
-
-
-#ifndef CTEXTENGINE_H
-#define CTEXTENGINE_H
-//path: src/dependencies/CTextEngine/definition.c
-//CTextEngine
-
-
-//path: src/dependencies/CTextEngine/functions/definition.c
-
-//path: src/dependencies/CTextEngine/functions/CTextStack/definition.c
-//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/admnistrative_methods.c
-
-
-
-
-//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/../unique.definition_requirements.h
-//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/../../unique.definition_requirements.h
-
-
-
-
-
-
-
-
-
-char * CTextStack_self_transform_in_string_and_self_clear(struct CTextStack *self){
-    free(self->line_breaker);
-    free(self->separator);
-    char *result = self->rendered_text;
-    free(self);
-    return result;
-}
-
-void private_CTextStack_parse_ownership(struct CTextStack *self, struct CTextStack *new_stack){
-
-    free(self->line_breaker);
-    free(self->separator);
-    free(self->rendered_text);
-
-    self->rendered_text_alocation_size = new_stack->rendered_text_alocation_size;
-    self->size = new_stack->size;
-    self->ident_level = new_stack->ident_level;
-
-
-    self->line_breaker = new_stack->line_breaker;
-    self->separator = new_stack->separator;
-    self->rendered_text = new_stack->rendered_text;
-    free(new_stack);
-
-}
-void CTextStack_restart(struct CTextStack *self){
-    free(self->rendered_text);
-    self->rendered_text = (char*)malloc(2);
-    strcpy(self->rendered_text,"\0");
-    self->rendered_text_alocation_size = 2;
-    self->size = 0;
-    self->ident_level = 0;
-}
-
-void CTextStack_represent(struct CTextStack *self){
-    printf("%s\n",self->rendered_text);
-}
-
-
-void CTextStack_free(struct CTextStack *self){
-    free(self->line_breaker);
-    free(self->separator);
-    free(self->rendered_text);
-    free(self);
-}
-
- CTextStack * CTextStack_clone(struct CTextStack *self){
-    CTextStack *new_stack = newCTextStack(self->line_breaker,self->separator);
-    new_stack->ident_level = self->ident_level;
-    CTextStack_text(new_stack,self->rendered_text);
-    return new_stack;
-}
-
-
-//path: src/dependencies/CTextEngine/functions/CTextStack/algo_methods/algo_methods.c
-
-
-
-
-
- CTextStack * CTextStack_substr(struct CTextStack *self, long starter, long end){
-
-    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
-    new_element->ident_level = self->ident_level;
-    long formated_starter = private_CText_transform_index(self->size, starter);
-    long formated_end = private_CText_transform_index(self->size, end);
-
-    if(formated_starter == formated_end){
-        CTextStack_format(new_element,"%c",self->rendered_text[formated_starter]);
-        return new_element;
-    }
-
-    for(long i =formated_starter; i < formated_end; i++){
-        CTextStack_format(new_element,"%c",self->rendered_text[i]);
-    }
-
-    return new_element;
-
-}
-
-void CTextStack_self_substr(struct CTextStack *self, long starter, long end){
-    CTextStack *new_stack = CTextStack_substr(self,starter,end);
-    private_CTextStack_parse_ownership(self,new_stack);
-
-}
-
-
- CTextStack *CTextStack_replace(struct CTextStack *self,const char *element, const char *element_to_replace){
-
-    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
-    new_element->ident_level = self->ident_level;
-
-    long element_size = (long)strlen(element);
-    for(long i = 0; i < self->size;i++){
-        CTextStack  *possible_ocurrence  = CTextStack_substr(self,i,i+element_size);
-
-        if(strcmp(possible_ocurrence->rendered_text,element)== 0){
-            CTextStack_text(new_element,element_to_replace);
-            i+=element_size -1;
-        }
-
-        else{
-            CTextStack_format(new_element,"%c",self->rendered_text[i]);
-        }
-
-        CTextStack_free(possible_ocurrence);
-
-    }
-    return new_element;
-}
-
-void CTextStack_self_replace(struct CTextStack *self,const char *element, const char *element_to_replace){
-    CTextStack  *new_stack = CTextStack_replace(self,element,element_to_replace);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-
- CTextStack *CTextStack_replace_long(struct CTextStack *self,const char *element, long element_to_replace){
-    char num_conversion[20] = {0};
-    sprintf(num_conversion,"%ld",element_to_replace);
-    return CTextStack_replace(self,element,num_conversion);
-}
-
-
-void CTextStack_self_replace_long(struct CTextStack *self,const char *element, long element_to_replace){
-    CTextStack  *new_stack = CTextStack_replace_long(self,element,element_to_replace);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-
- CTextStack *CTextStack_replace_double(struct CTextStack *self,const char *element, double element_to_replace){
-    CTextStack  *num_formated = newCTextStack_string_empty();
-    CTextStack_format(num_formated,"%f",element_to_replace);
-    CTextStack  *result = CTextStack_replace(self,element,num_formated->rendered_text);
-    CTextStack_free(num_formated);
-    return result;
-}
-
-
-void CTextStack_self_replace_double(struct CTextStack *self,const char *element, double element_to_replace){
-    CTextStack  *new_stack = CTextStack_replace_double(self,element,element_to_replace);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-
-
-long CTextStack_index_of(struct  CTextStack *self, const char *element){
-    long element_size = (long)strlen(element);
-    for(int i = 0; i < self->size; i++){
-        CTextStack  *possible_element = CTextStack_substr(self,i,i+element_size);
-        if(strcmp(possible_element->rendered_text,element) == 0){
-            CTextStack_free(possible_element);
-            return i;
-        }
-        CTextStack_free(possible_element);
-
-    }
-    return -1;
-}
-
-
-long CTextStack_index_of_char(struct  CTextStack *self, char element){
-    for(int i = 0; i < self->size; i++) {
-        if(self->rendered_text[i] == element){
-            return i;
-        }
-    }
-    return -1;
-}
-bool CTextStack_starts_with(struct  CTextStack *self, const char *element){
-    long element_size = strlen(element);
-    CTextStack  *separated = CTextStack_substr(self,0,element_size);
-    if(strcmp(separated->rendered_text,element) == 0){
-        CTextStack_free(separated);
-        return true;
-    }
-    CTextStack_free(separated);
-    return false;
-}
-
-bool CTextStack_ends_with(struct  CTextStack *self, const char *element){
-    long element_size = strlen(element);
-    CTextStack  *separated = CTextStack_substr(self,self->size -element_size,-1);
-
-    if(strcmp(separated->rendered_text,element) == 0){
-        CTextStack_free(separated);
-        return true;
-    }
-    CTextStack_free(separated);
-    return false;
-}
-
-
-
-struct CTextStack *CTextStack_lower(struct CTextStack *self){
-    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
-    new_element->ident_level = self->ident_level;
-    for(long i =0; i < self->size; i++){
-        char current = self->rendered_text[i];
-        CTextStack_format(new_element,"%c",tolower(current));
-    }
-    return new_element;
-}
-
-void CTextStack_self_lower(struct CTextStack *self){
-    CTextStack *new_stack = CTextStack_lower(self);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-struct CTextStack *CTextStack_upper(struct CTextStack *self){
-    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
-    new_element->ident_level = self->ident_level;
-    for(long i =0; i < self->size; i++){
-        char current = self->rendered_text[i];
-        CTextStack_format(new_element,"%c",toupper(current));
-    }
-    return new_element;
-}
-
-struct CTextStack *CTextStack_captalize(struct CTextStack *self){
-    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
-    new_element->ident_level = self->ident_level;
-    if(self->size  ==0){
-        return  new_element;
-    }
-
-    CTextStack_format(new_element,"%c", toupper(self->rendered_text[0]));
-
-    for(long i =1; i < self->size; i++){
-        char  last = self->rendered_text[i-1];
-        char current = self->rendered_text[i];
-
-
-        if(last == ' '){
-            CTextStack_format(new_element,"%c",toupper(current));
-        }
-        else{
-            CTextStack_format(new_element,"%c", tolower(current));
-
-        }
-
-    }
-    return new_element;
-}
-
-void CTextStack_self_captalize(struct CTextStack *self){
-    CTextStack *new_stack = CTextStack_captalize(self);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-
-void CTextStack_self_upper(struct CTextStack *self){
-    CTextStack *new_stack = CTextStack_upper(self);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-
-struct CTextStack *CTextStack_reverse(struct CTextStack *self){
-    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
-    new_element->ident_level = self->ident_level;
-    for(long i = (long)self->size; i >= 0 ; i--){
-        CTextStack_format(new_element,"%c",self->rendered_text[i]);
-    }
-    return new_element;
-
-}
-
-void CTextStack_self_reverse(struct CTextStack *self){
-    CTextStack *new_stack = CTextStack_reverse(self);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-
-
-struct CTextStack *CTextStack_pop(struct CTextStack *self, long starter, long end){
-    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
-    new_element->ident_level = self->ident_level;
-    long formated_starter = private_CText_transform_index(self->size, starter);
-    long formated_end = private_CText_transform_index(self->size, end);
-
-    for(int i =0; i < self->size; i ++){
-        if(i >= formated_starter && i <= formated_end){
-            continue;
-        }
-        CTextStack_format(new_element,"%c",self->rendered_text[i]);
-    }
-    return new_element;
-}
-
-
-void  CTextStack_self_pop(struct CTextStack *self, long starter, long end){
-    CTextStack  *new_stack = CTextStack_pop(self, starter, end);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-
-struct CTextStack *CTextStack_insert_at(struct CTextStack *self,long point, const char *element){
-
-    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
-    new_element->ident_level = self->ident_level;
-
-    long converted_point = private_CText_transform_index(self->size, point);
-    for(long i = 0; i < converted_point; i++){
-        CTextStack_format(new_element,"%c",self->rendered_text[i]);
-    }
-    CTextStack_text(new_element,element);
-    for(long i = converted_point; i < self->size; i++){
-        CTextStack_format(new_element,"%c",self->rendered_text[i]);
-    }
-    return new_element;
-}
-
-void CTextStack_self_insert_at(struct CTextStack *self,long point, const char *element){
-    CTextStack  *new_stack = CTextStack_insert_at(self, point,element);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-
-struct CTextStack *CTextStack_trim(struct CTextStack *self){
-
-    CTextStack  *invalid_elements = newCTextStack_string("\t\r\n ");
-    long start_point = 0;
-    for(int i = 0; i < self->size; i ++){
-        char current_char =self->rendered_text[i];
-        long invalid_point = CTextStack_index_of_char(invalid_elements, current_char);
-        bool is_invalid = invalid_point != -1;
-        if(!is_invalid){
-            start_point = i;
-            break;
-        }
-    }
-    long end_point = -1;
-    for(long i = (long)self->size -1; i >= 0; i--){
-
-        char current_char =self->rendered_text[i];
-        long invalid_point = CTextStack_index_of_char(invalid_elements, current_char);
-        bool is_invalid = invalid_point != -1;
-        if(!is_invalid){
-            end_point = i+1;
-            break;
-        }
-    }
-    CTextStack_free(invalid_elements);
-    return CTextStack_substr(self,start_point,end_point);
-
-}
-
-
-void CTextStack_self_trim(struct CTextStack *self){
-    CTextStack  *new_stack = CTextStack_trim(self);
-    private_CTextStack_parse_ownership(self,new_stack);
-}
-
-
-bool CTextStack_equal(  CTextStack *self,const char *element){
-    return strcmp(self->rendered_text,element) == 0;
-}
-
-
-//path: src/dependencies/CTextEngine/functions/CTextStack/constructors/constructors.c
-
-
-
- CTextStack * newCTextStack(const char *line_breaker, const char *separator){
-    struct CTextStack *self = (struct CTextStack*)malloc(sizeof(struct CTextStack));
-    *self = (CTextStack){0};
-    self->rendered_text = (char*)malloc(2);
-    strcpy(self->rendered_text,"\0");
-    self->rendered_text_alocation_size = 2;
-
-    self->line_breaker = strdup(line_breaker);
-    self->separator = strdup(separator);
-
-
-    return self;
-}
-
- CTextStack *newCTextStack_string(const char *starter){
-    CTextStack *self = newCTextStack("","");
-    if(starter){
-        CTextStack_format(self,"%s", starter);
-    }
-    return self;
-}
-
- CTextStack *newCTextStack_string_format(const char *format, ...){
-    CTextStack *self = newCTextStack("","");
-    va_list  argptr;
-    va_start(argptr, format);
-    private_ctext_generate_formated_text(self,format,argptr);
-     va_end(argptr);
-
-    return self;
-}
-
- CTextStack *newCTextStack_string_getting_ownership(const char *starter){
-    CTextStack *self = newCTextStack("","");
-    free(self->rendered_text);
-    self->rendered_text = (char*)starter;
-    self->size = strlen(starter);
-    self->rendered_text_alocation_size = self->size;
-    return self;
-}
- CTextStack *newCTextStack_string_empty(){
-    return  newCTextStack("","");
-}
-
-
-//path: src/dependencies/CTextEngine/functions/CTextStack/parsers/parsers.c
-
-
-
-int CTextStack_typeof(struct CTextStack *self){
-    if(self->size == 0){
-        return CTEXT_STRING;
-    }
-
-    if(CTextStack_equal(self,"true") ||CTextStack_equal(self,"false") ){
-        return CTEXT_BOOL;
-    }
-
-    double data;
-    int result = sscanf(self->rendered_text,"%lf",&data);
-    if(!result){
-        return CTEXT_STRING;
-    }
-    if(CTextStack_index_of(self,".") == -1){
-        return CTEXT_LONG;
-    }
-    return CTEXT_DOUBLE;
-
-
-}
-bool CTextStack_is_a_num(struct CTextStack *self){
-    int type = CTextStack_typeof(self);
-    if(type == CTEXT_DOUBLE || type == CTEXT_LONG){
-        return true;
-    }
-    return false;
-}
-
-
-const char * CTextStack_typeof_in_str(struct CTextStack *self){
-    int current_type = CTextStack_typeof(self);
-
-    if(current_type == CTEXT_BOOL){
-        return "bool";
-    }
-
-    else if(current_type == CTEXT_STRING){
-        return "string";
-    }
-
-    else if(current_type == CTEXT_LONG){
-        return "long";
-    }
-
-    else if(current_type == CTEXT_DOUBLE){
-        return "double";
-    }
-
-    else{
-        return "invalid";
-    }
-}
-
-bool  CTextStack_parse_to_bool(struct CTextStack *self){
-    if(CTextStack_equal(self,"true")){
-        return true;
-    }
-    return false;
-}
-
-long  CTextStack_parse_to_integer(struct CTextStack *self){
-    long value;
-    int result = sscanf(self->rendered_text,"%ld",&value);
-    if(!result){
-        return -1;
-    }
-    return value;
-}
-
-double  CTextStack_parse_to_double(struct CTextStack *self){
-    double value;
-    int result = sscanf(self->rendered_text,"%lf",&value);
-    if(!result){
-        return -1;
-    }
-    return value;
-}
-
-
-//path: src/dependencies/CTextEngine/functions/CTextStack/render_methods/render_methods.c
-
-
-
-void private_ctext_text_double_size_if_reachs(struct CTextStack *self){
-
-    while(self->size >= (self->rendered_text_alocation_size - 2)){
-        self->rendered_text_alocation_size  =  (self->rendered_text_alocation_size  * 2)+2;
-        self->rendered_text = (char*)(realloc(
-            self->rendered_text,self->rendered_text_alocation_size
-        ));
-    }
-}
-
-void CTextStack_text(struct CTextStack *self, const char *text){
-
-    if (!text || !text[0]) {
-        // Tratar caso de ponteiro nulo ou string vazia
-        return;
-    }
-
-    size_t text_size = strlen(text);
-
-    self->size += text_size;
-    private_ctext_text_double_size_if_reachs(self);
-
-    memcpy(
-            self->rendered_text + self->size - text_size,
-        text,
-        text_size
-    );
-    self->rendered_text[self->size] = '\0';
-}
-
-
-
-void CTextStack_segment_text(struct CTextStack *self, const char *text){
-    CTextStack_segment(self);
-    CTextStack_text(self,text);
-}
-
-
-void CTextStack_format(struct CTextStack *self, const char *format, ...){
-    va_list  argptr;
-    va_start(argptr, format);
-    private_ctext_generate_formated_text(self,format,argptr);
-    va_end(argptr);
-
-}
-
-void CTextStack_segment_format(struct CTextStack *self, const char *format, ...){
-    CTextStack_segment(self);
-    va_list  argptr;
-    va_start(argptr, format);
-    private_ctext_generate_formated_text(self,format,argptr);
-    va_end(argptr);
-
-}
-
-
-void CTextStack_segment(struct CTextStack *self){
-
-    CTextStack_text(self,self->line_breaker);
-
-    for(int i=0;i<self->ident_level;i++){
-        CTextStack_text(self,self->separator);
-
-    }
-
-
-}
-
-void CTextStack_open_format(struct CTextStack *self, const char *tag, const char *format, ...){
-    CTextStack_segment(self);
-    CTextStack_format(self, "%c",'<');
-    CTextStack_text(self,tag);
-
-
-    if(format!=NULL){
-        CTextStack_format(self, "%c",' ');
-
-        va_list  argptr;
-        va_start(argptr, format);
-        private_ctext_generate_formated_text(self,format,argptr);
-        va_end(argptr);
-
-    }
-    CTextStack_format(self, "%c",'>');
-
-
-    self->ident_level += 1;
-}
-
-
-
-void CTextStack_only_open_format(struct CTextStack *self, const char *tag, const char *format, ...){
-    CTextStack_segment(self);
-    CTextStack_format(self, "%c",'<');
-
-    CTextStack_text(self,tag);
-
-
-    if(format!=NULL){
-        CTextStack_format(self, "%c",' ');
-        va_list  argptr;
-        va_start(argptr, format);
-        private_ctext_generate_formated_text(self,format,argptr);
-        va_end(argptr);
-
-    }
-    CTextStack_format(self, "%c",'>');
-
-
-}
-
-void CTextStack_auto_close_format(struct CTextStack *self, const char *tag, const char *format, ...){
-    CTextStack_segment(self);
-    CTextStack_format(self, "%c",'<');
-
-    CTextStack_text(self,tag);
-
-
-    if(format!=NULL){
-        CTextStack_format(self, "%c",' ');
-
-        va_list  argptr;
-        va_start(argptr, format);
-        private_ctext_generate_formated_text(self,format,argptr);
-        va_end(argptr);
-    }
-    CTextStack_text(self,"/>");
-
-}
-
-void ctext_open(struct CTextStack *self, const char *tag){
-    if(tag ==  NULL){
-
-        self->ident_level += 1;
-        return;
-    }
-    CTextStack_open_format(self, tag, NULL);
-}
-
-
-
-void ctext_close(struct CTextStack *self, const char *tag){
-
-    if(tag==NULL){
-        self->ident_level -= 1;
-
-        return;
-    }
-    self->ident_level -= 1;
-    CTextStack_segment(self);
-
-
-    CTextStack_text(self,"</");
-    CTextStack_text(self,tag);
-    CTextStack_format(self, "%c",'>');
-
-}
-
-
-
-
-//path: src/dependencies/CTextEngine/functions/CTextArray/CTextArray.c
-
-
-
-CTextArray * newCTextArray(){
-    CTextArray  *self = (CTextArray*) malloc(sizeof (CTextArray));
-    self->size = 0;
-    self->stacks = (CTextStack**) malloc(0);
-    return self;
-}
-
-void CTextArray_append(CTextArray *self,CTextStack *element){
-    self->stacks =  (CTextStack**) realloc(
-            self->stacks,
-            (self->size+1)* sizeof (CTextStack*)
-            );
-
-    self->stacks[self->size] = element;
-    self->size+=1;
-}
-
-
-
-void CTextArray_append_string(CTextArray *self,const char *element){
-    CTextStack *new_element = newCTextStack_string(element);
-    CTextArray_append(self,new_element);
-}
-
-CTextStack * CTextArray_join(CTextArray *self,const char *separator){
-    CTextStack  *result  = newCTextStack_string_empty();
-    for(int i = 0; i < self->size; i++){
-        if(i < self->size -1){
-            CTextStack_format(result,"%t%s",self->stacks[i],separator);
-        }
-        else{
-            CTextStack_format(result,"%t",self->stacks[i]);
-
-        }
-
-    }
-    return result;
-}
-
-CTextArray *CTextArray_split(const char *element,const char *target){
-    CTextArray *self = newCTextArray();
-    CTextStack *text = newCTextStack_string(element);
-    long target_size = (long)strlen(target);
-    CTextStack  *acumulated = newCTextStack_string_empty();
-
-    for(int i = 0; i <text->size; i++){
-        CTextStack  *possible_division = CTextStack_substr(text,i,target_size + i);
-        if(CTextStack_equal(possible_division,target)){
-            CTextArray_append(self,acumulated);
-            acumulated = newCTextStack_string_empty();
-            CTextStack_free(possible_division);
-            continue;
-        }
-        CTextStack_free(possible_division);
-
-        CTextStack_format(acumulated,"%c",text->rendered_text[i]);
-    }
-
-    CTextArray_append(self,acumulated);
-    CTextStack_free(text);
-    return self;
-}
-
-
-
-void  CTextArray_free(CTextArray *self){
-    for(int i = 0; i < self->size; i++){
-            CTextStack_free(self->stacks[i]);
-    }
-    free(self->stacks);
-    free(self);
-}
-
-CTextArray * CTextArray_map(CTextArray *self, CTextStack *(caller)(CTextStack* element)){
-    CTextArray *new_array  = newCTextArray();
-    for(int i = 0; i < self->size; i++){
-        CTextStack *result = caller(self->stacks[i]);
-        CTextArray_append(new_array,result);
-    }
-    return new_array;
-}
-
-
-CTextArray * CTextArray_filter(CTextArray *self, bool (caller)(CTextStack* element)){
-    CTextArray *new_array  = newCTextArray();
-
-    for(int i = 0; i < self->size; i++){
-        if(caller(self->stacks[i])){
-
-            CTextArray_append(new_array, CTextStack_clone(self->stacks[i]));
-        }
-    }
-
-    return new_array;
-}
-
-void  CTextArray_foreach(CTextArray *self, void (*caller)(CTextStack* element)){
-    for(int i = 0; i < self->size; i++){
-        caller(self->stacks[i]);
-    }
-}
-
-bool CTextArray_includes(CTextArray *self,const char *element){
-    for(int i = 0 ; i < self->size;i++){
-        if(CTextStack_equal(self->stacks[i],element)){
-            return true;
-        }
-    }
-    return false;
-}
-
-
-void CTextArray_represent(CTextArray *self){
-    for(int i =0; i < self->size; i++){
-        CTextStack_represent(self->stacks[i]);
-    }
-}
-
-
-//path: src/dependencies/CTextEngine/functions/CTextNamespace/definition.c
-//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTexStackModule/CTextStackModule.c
-//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTexStackModule/../unique.definition_requirements.h
-
-
-
-
-
-CTextStackModule newCTextStackModule(){
-    struct CTextStackModule self = {0};
-    self.newStack = newCTextStack;
-    self.newStack_string = newCTextStack_string;
-    self.newStack_string_format = newCTextStack_string_format;
-    self.newStack_string_empty = newCTextStack_string_empty;
-    self.newStack_string_getting_ownership = newCTextStack_string_getting_ownership;
-    self.text = CTextStack_text;
-    self.segment_text = CTextStack_segment_text;
-    self.format = CTextStack_format;
-    self.segment = CTextStack_segment;
-    self.segment_format = CTextStack_segment_format;
-    self.open_format = CTextStack_open_format;
-    self.only_open_format =CTextStack_only_open_format;
-    self.auto_close_format = CTextStack_auto_close_format;
-    self.open = ctext_open;
-    self.close = ctext_close;
-    self.free =  CTextStack_free;
-    self.clone = CTextStack_clone;
-    self.represent = CTextStack_represent;
-    self.self_transform_in_string_and_self_clear = CTextStack_self_transform_in_string_and_self_clear;
-    self.restart = CTextStack_restart;
-    self.substr = CTextStack_substr;
-    self.self_substr =CTextStack_self_substr;
-
-    self.pop = CTextStack_pop;
-    self.self_pop =CTextStack_self_pop;
-
-    self.replace = CTextStack_replace;
-    self.self_replace = CTextStack_self_replace;
-
-    self.replace_long = CTextStack_replace_long;
-    self.self_replace_long =CTextStack_self_replace_long;
-
-
-    self.replace_double = CTextStack_replace_double;
-    self.self_replace_double =CTextStack_self_replace_double;
-
-    self.insert_at = CTextStack_insert_at;
-    self.self_insert_at  = CTextStack_self_insert_at;
-
-
-    self.index_of = CTextStack_index_of;
-    self.index_of_char = CTextStack_index_of_char;
-
-    self.lower = CTextStack_lower;
-    self.self_lower = CTextStack_self_lower;
-
-    self.upper = CTextStack_upper;
-    self.self_upper = CTextStack_self_upper;
-
-    self.captalize = CTextStack_captalize;
-    self.self_captalize = CTextStack_self_captalize;
-
-    self.starts_with = CTextStack_starts_with;
-    self.ends_with = CTextStack_ends_with;
-
-    self.equal = CTextStack_equal;
-    self.reverse = CTextStack_reverse;
-    self.self_reverse = CTextStack_self_reverse;
-
-
-    self.typeof_element = CTextStack_typeof;
-    self.is_a_num = CTextStack_is_a_num;
-    self.typeof_in_str = CTextStack_typeof_in_str;
-    self.parse_to_bool = CTextStack_parse_to_bool;
-    self.parse_to_integer = CTextStack_parse_to_integer;
-    self.parse_to_double = CTextStack_parse_to_double;
-
-    self.trim = CTextStack_trim;
-    self.self_trim = CTextStack_self_trim;
-
-
-    return self;
-}
-
-
-//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTextArrayModule/CTextArrayModule.c
-
-
-
-
-CTextArrayModule newCTextArrayModule(){
-    CTextArrayModule module = {0};
-    module.newArray = newCTextArray;
-    module.append = CTextArray_append;
-    module.append_string = CTextArray_append_string;
-    module.join = CTextArray_join;
-    module.map  = CTextArray_map;
-    module.filter = CTextArray_filter;
-    module.foreach = CTextArray_foreach;
-    module.represent = CTextArray_represent;
-    module.includes = CTextArray_includes;
-    module.free = CTextArray_free;
-    return module;
-}
-
-
-//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTextNamespace/CTextNamespace.c
-
-
-
-
-CTextNamespace newCTextNamespace(){
-    CTextNamespace self  = {0};
-    self.stack = newCTextStackModule();
-    self.array = newCTextArrayModule();
-    return self;
-}
-
-
-
-//path: src/dependencies/CTextEngine/functions/extras/extras.c
-
-
-
-void private_ctext_generate_formated_text(
-        struct CTextStack *stack,const char *format,va_list argptr){
-    long  text_size = strlen(format);
-
-    int i;
-    for(i =0;i < text_size -1 ;i++){
-
-        char single_test[3] = {format[i],format[i+1],'\0'};
-        char double_test[4] = {0};
-
-
-        if(i < text_size -2){
-            strcpy(double_test,single_test);
-            double_test[2] = format[i+2];
-            double_test[3] = '\0';
-
-        }
-
-        if(strcmp(single_test,"%d") == 0 || strcmp(single_test,"%i") == 0) {
-            int value = va_arg(argptr,int);
-            char result[20] ={0};
-            sprintf(result,"%d", value);
-
-
-
-            CTextStack_text(stack,result);
-
-            i+=1;
-            continue;
-        }
-
-        else if(strcmp(double_test,"%ld") == 0 ) {
-
-            int value = va_arg(argptr,int);
-            char result[20] ={0};
-            sprintf(result,"%d", value);
-
-            CTextStack_text(stack,result);
-
-            i+=2;
-            continue;
-        }
-
-
-        else if(strcmp(single_test,"%f") == 0 ) {
-            char result_text[20]= {0};
-
-            sprintf(result_text,"%lf", va_arg(argptr,double ));
-
-            for(int t = 18; t > 0; t--){
-                char current_char = result_text[t];
-                if(current_char != '0' && current_char != '\0'){
-
-                    if(current_char == '.'){
-                        result_text[t+2]  = '\0';
-                    }
-                    else{
-                        result_text[t+1]  = '\0';
-                    }
-
-                    break;
-                }
-            }
-            CTextStack_text(stack,result_text);
-            i+=1;
-            continue;
-        }
-
-        else if(strcmp(double_test,"%lf") == 0 ) {
-            char result_text[20]= {0};
-
-            sprintf(result_text,"%lf", va_arg(argptr,double ));
-
-            for(int t = 18; t > 0; t--){
-                char current_char = result_text[t];
-                if(current_char != '0' && current_char != '\0'){
-
-                    if(current_char == '.'){
-                        result_text[t+2]  = '\0';
-                    }
-                    else{
-                        result_text[t+1]  = '\0';
-                    }
-
-                    break;
-                }
-            }
-            CTextStack_text(stack,result_text);
-            i+=2;
-            continue;
-        }
-        else if(strcmp(single_test,"%c") == 0){
-            char result = va_arg(argptr,int);
-            char element[2] = {result,'\0'};
-            CTextStack_text(stack,element);
-            i+=1;
-            continue;
-        }
-
-
-        else if(strcmp(single_test,"%b") == 0){
-            bool value = va_arg(argptr,int);
-            if(value){
-                CTextStack_text(stack,"true");
-            }else{
-                CTextStack_text(stack,"false");
-            }
-            i+=1;
-            continue;
-        }
-
-        else if(strcmp(double_test,"%sc") == 0){
-            char *value = va_arg(argptr,char*);
-            if(value){
-                CTextStack_text(stack,value);
-                free(value);
-            }
-            i+=2;
-            continue;
-        }
-
-        else if(strcmp(single_test,"%s") == 0){
-            const char *value = va_arg(argptr,const char*);
-            if(value){
-                CTextStack_text(stack,value);
-            }
-
-            i+=1;
-            continue;
-        }
-        else if(strcmp(double_test,"%tc") == 0){
-            struct CTextStack *new_stack = (struct  CTextStack*)va_arg(argptr,void *);
-            if(new_stack){
-                char *result = CTextStack_self_transform_in_string_and_self_clear(new_stack);
-                CTextStack_text(stack,result);
-                free(result);
-            }
-            i+=2;
-            continue;
-        }
-
-        else if(strcmp(single_test,"%t") == 0){
-            struct CTextStack *new_stack = (struct  CTextStack*)va_arg(argptr,void *);
-            if(new_stack){
-                CTextStack_text(stack,new_stack->rendered_text);
-            }
-            i+=1;
-            continue;
-        }
-
-        char element[2] = {format[i],'\0'};
-        CTextStack_text(stack,element);
-
-        }
-
-
-
-    if(text_size > 0 && text_size> i){
-        char element[2] = {format[text_size-1],'\0'};
-        CTextStack_text(stack,element);
-    }
-
-    va_end(argptr);
-}
-
-
-long private_CText_transform_index(long size , long value){
-    long formated_value = value;
-
-    if(formated_value >= size){
-        formated_value = size;
-    }
-
-    if(formated_value  < 0){
-        formated_value = size + (formated_value +1);
-    }
-    if(formated_value <0){
-        formated_value = 0;
-    }
-    return formated_value;
-}
-
-
-
-
-
-
-#endif
-
-#ifndef cJSON__h
-#define cJSON__h
-//path: src/dependencies/cJson/cJSON.c
-
-
-
-
-
-
-#if !defined(_CRT_SECURE_NO_DEPRECATE) && defined(_MSC_VER)
-#define _CRT_SECURE_NO_DEPRECATE
-#endif
-
-#ifdef __GNUC__
-#pragma GCC visibility push(default)
-#endif
-#if defined(_MSC_VER)
-#pragma warning (push)
-
-#pragma warning (disable : 4001)
-#endif
-
-#include <string.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <ctype.h>
-#include <float.h>
-
-#ifdef ENABLE_LOCALES
-#include <locale.h>
-#endif
-
-#if defined(_MSC_VER)
-#pragma warning (pop)
-#endif
-#ifdef __GNUC__
-#pragma GCC visibility pop
-#endif
-
-
-
-#ifdef true
-#undef true
-#endif
-#define true ((cJSON_bool)1)
-
-#ifdef false
-#undef false
-#endif
-#define false ((cJSON_bool)0)
-
-
-#ifndef isinf
-#define isinf(d) (isnan((d - d)) && !isnan(d))
-#endif
-#ifndef isnan
-#define isnan(d) (d != d)
-#endif
-
-#ifndef NAN
-#ifdef _WIN32
-#define NAN sqrt(-1.0)
-#else
-#define NAN 0.0/0.0
-#endif
-#endif
-
-typedef struct {
-    const unsigned char *json;
-    size_t position;
-} error;
-static error global_error = { NULL, 0 };
-
-CJSON_PUBLIC(const char *) cJSON_GetErrorPtr(void)
-{
-    return (const char*) (global_error.json + global_error.position);
-}
-
-CJSON_PUBLIC(char *) cJSON_GetStringValue(const cJSON * const item)
-{
-    if (!cJSON_IsString(item))
-    {
-        return NULL;
-    }
-
-    return item->valuestring;
-}
-
-CJSON_PUBLIC(double) cJSON_GetNumberValue(const cJSON * const item)
-{
-    if (!cJSON_IsNumber(item))
-    {
-        return (double) NAN;
-    }
-
-    return item->valuedouble;
-}
-
-
-#if (CJSON_VERSION_MAJOR != 1) || (CJSON_VERSION_MINOR != 7) || (CJSON_VERSION_PATCH != 15)
-    #error cJSON.h and cJSON.c have different versions. Make sure that both have the same.
-#endif
-
-CJSON_PUBLIC(const char*) cJSON_Version(void)
-{
-    static char version[15];
-    sprintf(version, "%i.%i.%i", CJSON_VERSION_MAJOR, CJSON_VERSION_MINOR, CJSON_VERSION_PATCH);
-
-    return version;
-}
-
-
-static int case_insensitive_strcmp(const unsigned char *string1, const unsigned char *string2)
-{
-    if ((string1 == NULL) || (string2 == NULL))
-    {
-        return 1;
-    }
-
-    if (string1 == string2)
-    {
-        return 0;
-    }
-
-    for(; tolower(*string1) == tolower(*string2); (void)string1++, string2++)
-    {
-        if (*string1 == '\0')
-        {
-            return 0;
-        }
-    }
-
-    return tolower(*string1) - tolower(*string2);
-}
-
-typedef struct internal_hooks
-{
-    void *(CJSON_CDECL *allocate)(size_t size);
-    void (CJSON_CDECL *deallocate)(void *pointer);
-    void *(CJSON_CDECL *reallocate)(void *pointer, size_t size);
-} internal_hooks;
-
-#if defined(_MSC_VER)
-
-static void * CJSON_CDECL internal_malloc(size_t size)
-{
-    return malloc(size);
-}
-static void CJSON_CDECL internal_free(void *pointer)
-{
-    free(pointer);
-}
-static void * CJSON_CDECL internal_realloc(void *pointer, size_t size)
-{
-    return realloc(pointer, size);
-}
-#else
-#define internal_malloc malloc
-#define internal_free free
-#define internal_realloc realloc
-#endif
-
-
-#define static_strlen(string_literal) (sizeof(string_literal) - sizeof(""))
-
-static internal_hooks global_hooks = { internal_malloc, internal_free, internal_realloc };
-
-static unsigned char* cJSON_strdup(const unsigned char* string, const internal_hooks * const hooks)
-{
-    size_t length = 0;
-    unsigned char *copy = NULL;
-
-    if (string == NULL)
-    {
-        return NULL;
-    }
-
-    length = strlen((const char*)string) + sizeof("");
-    copy = (unsigned char*)hooks->allocate(length);
-    if (copy == NULL)
-    {
-        return NULL;
-    }
-    memcpy(copy, string, length);
-
-    return copy;
-}
-
-CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks)
-{
-    if (hooks == NULL)
-    {
-        
-        global_hooks.allocate = malloc;
-        global_hooks.deallocate = free;
-        global_hooks.reallocate = realloc;
-        return;
-    }
-
-    global_hooks.allocate = malloc;
-    if (hooks->malloc_fn != NULL)
-    {
-        global_hooks.allocate = hooks->malloc_fn;
-    }
-
-    global_hooks.deallocate = free;
-    if (hooks->free_fn != NULL)
-    {
-        global_hooks.deallocate = hooks->free_fn;
-    }
-
-    
-    global_hooks.reallocate = NULL;
-    if ((global_hooks.allocate == malloc) && (global_hooks.deallocate == free))
-    {
-        global_hooks.reallocate = realloc;
-    }
-}
-
-
-static cJSON *cJSON_New_Item(const internal_hooks * const hooks)
-{
-    cJSON* node = (cJSON*)hooks->allocate(sizeof(cJSON));
-    if (node)
-    {
-        memset(node, '\0', sizeof(cJSON));
-    }
-
-    return node;
-}
-
-
-CJSON_PUBLIC(void) cJSON_Delete(cJSON *item)
-{
-    cJSON *next = NULL;
-    while (item != NULL)
-    {
-        next = item->next;
-        if (!(item->type & cJSON_IsReference) && (item->child != NULL))
-        {
-            cJSON_Delete(item->child);
-        }
-        if (!(item->type & cJSON_IsReference) && (item->valuestring != NULL))
-        {
-            global_hooks.deallocate(item->valuestring);
-        }
-        if (!(item->type & cJSON_StringIsConst) && (item->string != NULL))
-        {
-            global_hooks.deallocate(item->string);
-        }
-        global_hooks.deallocate(item);
-        item = next;
-    }
-}
-
-
-static unsigned char get_decimal_point(void)
-{
-#ifdef ENABLE_LOCALES
-    struct lconv *lconv = localeconv();
-    return (unsigned char) lconv->decimal_point[0];
-#else
-    return '.';
-#endif
-}
-
-typedef struct
-{
-    const unsigned char *content;
-    size_t length;
-    size_t offset;
-    size_t depth; 
-    internal_hooks hooks;
-} parse_buffer;
-
-
-#define can_read(buffer, size) ((buffer != NULL) && (((buffer)->offset + size) <= (buffer)->length))
-
-#define can_access_at_index(buffer, index) ((buffer != NULL) && (((buffer)->offset + index) < (buffer)->length))
-#define cannot_access_at_index(buffer, index) (!can_access_at_index(buffer, index))
-
-#define buffer_at_offset(buffer) ((buffer)->content + (buffer)->offset)
-
-
-static cJSON_bool parse_number(cJSON * const item, parse_buffer * const input_buffer)
-{
-    double number = 0;
-    unsigned char *after_end = NULL;
-    unsigned char number_c_string[64];
-    unsigned char decimal_point = get_decimal_point();
-    size_t i = 0;
-
-    if ((input_buffer == NULL) || (input_buffer->content == NULL))
-    {
-        return false;
-    }
-
-    
-    for (i = 0; (i < (sizeof(number_c_string) - 1)) && can_access_at_index(input_buffer, i); i++)
-    {
-        switch (buffer_at_offset(input_buffer)[i])
-        {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case '+':
-            case '-':
-            case 'e':
-            case 'E':
-                number_c_string[i] = buffer_at_offset(input_buffer)[i];
-                break;
-
-            case '.':
-                number_c_string[i] = decimal_point;
-                break;
-
-            default:
-                goto loop_end;
-        }
-    }
-loop_end:
-    number_c_string[i] = '\0';
-
-    number = strtod((const char*)number_c_string, (char**)&after_end);
-    if (number_c_string == after_end)
-    {
-        return false; 
-    }
-
-    item->valuedouble = number;
-
-    
-    if (number >= INT_MAX)
-    {
-        item->valueint = INT_MAX;
-    }
-    else if (number <= (double)INT_MIN)
-    {
-        item->valueint = INT_MIN;
-    }
-    else
-    {
-        item->valueint = (int)number;
-    }
-
-    item->type = cJSON_Number;
-
-    input_buffer->offset += (size_t)(after_end - number_c_string);
-    return true;
-}
-
-
-CJSON_PUBLIC(double) cJSON_SetNumberHelper(cJSON *object, double number)
-{
-    if (number >= INT_MAX)
-    {
-        object->valueint = INT_MAX;
-    }
-    else if (number <= (double)INT_MIN)
-    {
-        object->valueint = INT_MIN;
-    }
-    else
-    {
-        object->valueint = (int)number;
-    }
-
-    return object->valuedouble = number;
-}
-
-CJSON_PUBLIC(char*) cJSON_SetValuestring(cJSON *object, const char *valuestring)
-{
-    char *copy = NULL;
-    
-    if (!(object->type & cJSON_String) || (object->type & cJSON_IsReference))
-    {
-        return NULL;
-    }
-    if (strlen(valuestring) <= strlen(object->valuestring))
-    {
-        strcpy(object->valuestring, valuestring);
-        return object->valuestring;
-    }
-    copy = (char*) cJSON_strdup((const unsigned char*)valuestring, &global_hooks);
-    if (copy == NULL)
-    {
-        return NULL;
-    }
-    if (object->valuestring != NULL)
-    {
-        cJSON_free(object->valuestring);
-    }
-    object->valuestring = copy;
-
-    return copy;
-}
-
-typedef struct
-{
-    unsigned char *buffer;
-    size_t length;
-    size_t offset;
-    size_t depth; 
-    cJSON_bool noalloc;
-    cJSON_bool format; 
-    internal_hooks hooks;
-} printbuffer;
-
-
-static unsigned char* ensure(printbuffer * const p, size_t needed)
-{
-    unsigned char *newbuffer = NULL;
-    size_t newsize = 0;
-
-    if ((p == NULL) || (p->buffer == NULL))
-    {
-        return NULL;
-    }
-
-    if ((p->length > 0) && (p->offset >= p->length))
-    {
-        
-        return NULL;
-    }
-
-    if (needed > INT_MAX)
-    {
-        
-        return NULL;
-    }
-
-    needed += p->offset + 1;
-    if (needed <= p->length)
-    {
-        return p->buffer + p->offset;
-    }
-
-    if (p->noalloc) {
-        return NULL;
-    }
-
-    
-    if (needed > (INT_MAX / 2))
-    {
-        
-        if (needed <= INT_MAX)
-        {
-            newsize = INT_MAX;
-        }
-        else
-        {
-            return NULL;
-        }
-    }
-    else
-    {
-        newsize = needed * 2;
-    }
-
-    if (p->hooks.reallocate != NULL)
-    {
-        
-        newbuffer = (unsigned char*)p->hooks.reallocate(p->buffer, newsize);
-        if (newbuffer == NULL)
-        {
-            p->hooks.deallocate(p->buffer);
-            p->length = 0;
-            p->buffer = NULL;
-
-            return NULL;
-        }
-    }
-    else
-    {
-        
-        newbuffer = (unsigned char*)p->hooks.allocate(newsize);
-        if (!newbuffer)
-        {
-            p->hooks.deallocate(p->buffer);
-            p->length = 0;
-            p->buffer = NULL;
-
-            return NULL;
-        }
-
-        memcpy(newbuffer, p->buffer, p->offset + 1);
-        p->hooks.deallocate(p->buffer);
-    }
-    p->length = newsize;
-    p->buffer = newbuffer;
-
-    return newbuffer + p->offset;
-}
-
-
-static void update_offset(printbuffer * const buffer)
-{
-    const unsigned char *buffer_pointer = NULL;
-    if ((buffer == NULL) || (buffer->buffer == NULL))
-    {
-        return;
-    }
-    buffer_pointer = buffer->buffer + buffer->offset;
-
-    buffer->offset += strlen((const char*)buffer_pointer);
-}
-
-
-static cJSON_bool compare_double(double a, double b)
-{
-    double maxVal = fabs(a) > fabs(b) ? fabs(a) : fabs(b);
-    return (fabs(a - b) <= maxVal * DBL_EPSILON);
-}
-
-
-static cJSON_bool print_number(const cJSON * const item, printbuffer * const output_buffer)
-{
-    unsigned char *output_pointer = NULL;
-    double d = item->valuedouble;
-    int length = 0;
-    size_t i = 0;
-    unsigned char number_buffer[26] = {0}; 
-    unsigned char decimal_point = get_decimal_point();
-    double test = 0.0;
-
-    if (output_buffer == NULL)
-    {
-        return false;
-    }
-
-    
-    if (isnan(d) || isinf(d))
-    {
-        length = sprintf((char*)number_buffer, "null");
-    }
-	else if(d == (double)item->valueint)
-	{
-		length = sprintf((char*)number_buffer, "%d", item->valueint);
-	}
-    else
-    {
-        
-        length = sprintf((char*)number_buffer, "%1.15g", d);
-
-        
-        if ((sscanf((char*)number_buffer, "%lg", &test) != 1) || !compare_double((double)test, d))
-        {
-            
-            length = sprintf((char*)number_buffer, "%1.17g", d);
-        }
-    }
-
-    
-    if ((length < 0) || (length > (int)(sizeof(number_buffer) - 1)))
-    {
-        return false;
-    }
-
-    
-    output_pointer = ensure(output_buffer, (size_t)length + sizeof(""));
-    if (output_pointer == NULL)
-    {
-        return false;
-    }
-
-    
-    for (i = 0; i < ((size_t)length); i++)
-    {
-        if (number_buffer[i] == decimal_point)
-        {
-            output_pointer[i] = '.';
-            continue;
-        }
-
-        output_pointer[i] = number_buffer[i];
-    }
-    output_pointer[i] = '\0';
-
-    output_buffer->offset += (size_t)length;
-
-    return true;
-}
-
-
-static unsigned parse_hex4(const unsigned char * const input)
-{
-    unsigned int h = 0;
-    size_t i = 0;
-
-    for (i = 0; i < 4; i++)
-    {
-        
-        if ((input[i] >= '0') && (input[i] <= '9'))
-        {
-            h += (unsigned int) input[i] - '0';
-        }
-        else if ((input[i] >= 'A') && (input[i] <= 'F'))
-        {
-            h += (unsigned int) 10 + input[i] - 'A';
-        }
-        else if ((input[i] >= 'a') && (input[i] <= 'f'))
-        {
-            h += (unsigned int) 10 + input[i] - 'a';
-        }
-        else 
-        {
-            return 0;
-        }
-
-        if (i < 3)
-        {
-            
-            h = h << 4;
-        }
-    }
-
-    return h;
-}
-
-
-static unsigned char utf16_literal_to_utf8(const unsigned char * const input_pointer, const unsigned char * const input_end, unsigned char **output_pointer)
-{
-    long unsigned int codepoint = 0;
-    unsigned int first_code = 0;
-    const unsigned char *first_sequence = input_pointer;
-    unsigned char utf8_length = 0;
-    unsigned char utf8_position = 0;
-    unsigned char sequence_length = 0;
-    unsigned char first_byte_mark = 0;
-
-    if ((input_end - first_sequence) < 6)
-    {
-        
-        goto fail;
-    }
-
-    
-    first_code = parse_hex4(first_sequence + 2);
-
-    
-    if (((first_code >= 0xDC00) && (first_code <= 0xDFFF)))
-    {
-        goto fail;
-    }
-
-    
-    if ((first_code >= 0xD800) && (first_code <= 0xDBFF))
-    {
-        const unsigned char *second_sequence = first_sequence + 6;
-        unsigned int second_code = 0;
-        sequence_length = 12; 
-
-        if ((input_end - second_sequence) < 6)
-        {
-            
-            goto fail;
-        }
-
-        if ((second_sequence[0] != '\\') || (second_sequence[1] != 'u'))
-        {
-            
-            goto fail;
-        }
-
-        
-        second_code = parse_hex4(second_sequence + 2);
-        
-        if ((second_code < 0xDC00) || (second_code > 0xDFFF))
-        {
-            
-            goto fail;
-        }
-
-
-        
-        codepoint = 0x10000 + (((first_code & 0x3FF) << 10) | (second_code & 0x3FF));
-    }
-    else
-    {
-        sequence_length = 6; 
-        codepoint = first_code;
-    }
-
-    
-    if (codepoint < 0x80)
-    {
-        
-        utf8_length = 1;
-    }
-    else if (codepoint < 0x800)
-    {
-        
-        utf8_length = 2;
-        first_byte_mark = 0xC0; 
-    }
-    else if (codepoint < 0x10000)
-    {
-        
-        utf8_length = 3;
-        first_byte_mark = 0xE0; 
-    }
-    else if (codepoint <= 0x10FFFF)
-    {
-        
-        utf8_length = 4;
-        first_byte_mark = 0xF0; 
-    }
-    else
-    {
-        
-        goto fail;
-    }
-
-    
-    for (utf8_position = (unsigned char)(utf8_length - 1); utf8_position > 0; utf8_position--)
-    {
-        
-        (*output_pointer)[utf8_position] = (unsigned char)((codepoint | 0x80) & 0xBF);
-        codepoint >>= 6;
-    }
-    
-    if (utf8_length > 1)
-    {
-        (*output_pointer)[0] = (unsigned char)((codepoint | first_byte_mark) & 0xFF);
-    }
-    else
-    {
-        (*output_pointer)[0] = (unsigned char)(codepoint & 0x7F);
-    }
-
-    *output_pointer += utf8_length;
-
-    return sequence_length;
-
-fail:
-    return 0;
-}
-
-
-static cJSON_bool parse_string(cJSON * const item, parse_buffer * const input_buffer)
-{
-    const unsigned char *input_pointer = buffer_at_offset(input_buffer) + 1;
-    const unsigned char *input_end = buffer_at_offset(input_buffer) + 1;
-    unsigned char *output_pointer = NULL;
-    unsigned char *output = NULL;
-
-    
-    if (buffer_at_offset(input_buffer)[0] != '\"')
-    {
-        goto fail;
-    }
-
-    {
-        
-        size_t allocation_length = 0;
-        size_t skipped_bytes = 0;
-        while (((size_t)(input_end - input_buffer->content) < input_buffer->length) && (*input_end != '\"'))
-        {
-            
-            if (input_end[0] == '\\')
-            {
-                if ((size_t)(input_end + 1 - input_buffer->content) >= input_buffer->length)
-                {
-                    
-                    goto fail;
-                }
-                skipped_bytes++;
-                input_end++;
-            }
-            input_end++;
-        }
-        if (((size_t)(input_end - input_buffer->content) >= input_buffer->length) || (*input_end != '\"'))
-        {
-            goto fail; 
-        }
-
-        
-        allocation_length = (size_t) (input_end - buffer_at_offset(input_buffer)) - skipped_bytes;
-        output = (unsigned char*)input_buffer->hooks.allocate(allocation_length + sizeof(""));
-        if (output == NULL)
-        {
-            goto fail; 
-        }
-    }
-
-    output_pointer = output;
-    
-    while (input_pointer < input_end)
-    {
-        if (*input_pointer != '\\')
-        {
-            *output_pointer++ = *input_pointer++;
-        }
-        
-        else
-        {
-            unsigned char sequence_length = 2;
-            if ((input_end - input_pointer) < 1)
-            {
-                goto fail;
-            }
-
-            switch (input_pointer[1])
-            {
-                case 'b':
-                    *output_pointer++ = '\b';
-                    break;
-                case 'f':
-                    *output_pointer++ = '\f';
-                    break;
-                case 'n':
-                    *output_pointer++ = '\n';
-                    break;
-                case 'r':
-                    *output_pointer++ = '\r';
-                    break;
-                case 't':
-                    *output_pointer++ = '\t';
-                    break;
-                case '\"':
-                case '\\':
-                case '/':
-                    *output_pointer++ = input_pointer[1];
-                    break;
-
-                
-                case 'u':
-                    sequence_length = utf16_literal_to_utf8(input_pointer, input_end, &output_pointer);
-                    if (sequence_length == 0)
-                    {
-                        
-                        goto fail;
-                    }
-                    break;
-
-                default:
-                    goto fail;
-            }
-            input_pointer += sequence_length;
-        }
-    }
-
-    
-    *output_pointer = '\0';
-
-    item->type = cJSON_String;
-    item->valuestring = (char*)output;
-
-    input_buffer->offset = (size_t) (input_end - input_buffer->content);
-    input_buffer->offset++;
-
-    return true;
-
-fail:
-    if (output != NULL)
-    {
-        input_buffer->hooks.deallocate(output);
-    }
-
-    if (input_pointer != NULL)
-    {
-        input_buffer->offset = (size_t)(input_pointer - input_buffer->content);
-    }
-
-    return false;
-}
-
-
-static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffer * const output_buffer)
-{
-    const unsigned char *input_pointer = NULL;
-    unsigned char *output = NULL;
-    unsigned char *output_pointer = NULL;
-    size_t output_length = 0;
-    
-    size_t escape_characters = 0;
-
-    if (output_buffer == NULL)
-    {
-        return false;
-    }
-
-    
-    if (input == NULL)
-    {
-        output = ensure(output_buffer, sizeof("\"\""));
-        if (output == NULL)
-        {
-            return false;
-        }
-        strcpy((char*)output, "\"\"");
-
-        return true;
-    }
-
-    
-    for (input_pointer = input; *input_pointer; input_pointer++)
-    {
-        switch (*input_pointer)
-        {
-            case '\"':
-            case '\\':
-            case '\b':
-            case '\f':
-            case '\n':
-            case '\r':
-            case '\t':
-                
-                escape_characters++;
-                break;
-            default:
-                if (*input_pointer < 32)
-                {
-                    
-                    escape_characters += 5;
-                }
-                break;
-        }
-    }
-    output_length = (size_t)(input_pointer - input) + escape_characters;
-
-    output = ensure(output_buffer, output_length + sizeof("\"\""));
-    if (output == NULL)
-    {
-        return false;
-    }
-
-    
-    if (escape_characters == 0)
-    {
-        output[0] = '\"';
-        memcpy(output + 1, input, output_length);
-        output[output_length + 1] = '\"';
-        output[output_length + 2] = '\0';
-
-        return true;
-    }
-
-    output[0] = '\"';
-    output_pointer = output + 1;
-    
-    for (input_pointer = input; *input_pointer != '\0'; (void)input_pointer++, output_pointer++)
-    {
-        if ((*input_pointer > 31) && (*input_pointer != '\"') && (*input_pointer != '\\'))
-        {
-            
-            *output_pointer = *input_pointer;
-        }
-        else
-        {
-            
-            *output_pointer++ = '\\';
-            switch (*input_pointer)
-            {
-                case '\\':
-                    *output_pointer = '\\';
-                    break;
-                case '\"':
-                    *output_pointer = '\"';
-                    break;
-                case '\b':
-                    *output_pointer = 'b';
-                    break;
-                case '\f':
-                    *output_pointer = 'f';
-                    break;
-                case '\n':
-                    *output_pointer = 'n';
-                    break;
-                case '\r':
-                    *output_pointer = 'r';
-                    break;
-                case '\t':
-                    *output_pointer = 't';
-                    break;
-                default:
-                    
-                    sprintf((char*)output_pointer, "u%04x", *input_pointer);
-                    output_pointer += 4;
-                    break;
-            }
-        }
-    }
-    output[output_length + 1] = '\"';
-    output[output_length + 2] = '\0';
-
-    return true;
-}
-
-
-static cJSON_bool print_string(const cJSON * const item, printbuffer * const p)
-{
-    return print_string_ptr((unsigned char*)item->valuestring, p);
-}
-
-
-static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buffer);
-static cJSON_bool print_value(const cJSON * const item, printbuffer * const output_buffer);
-static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buffer);
-static cJSON_bool print_array(const cJSON * const item, printbuffer * const output_buffer);
-static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_buffer);
-static cJSON_bool print_object(const cJSON * const item, printbuffer * const output_buffer);
-
-
-static parse_buffer *buffer_skip_whitespace(parse_buffer * const buffer)
-{
-    if ((buffer == NULL) || (buffer->content == NULL))
-    {
-        return NULL;
-    }
-
-    if (cannot_access_at_index(buffer, 0))
-    {
-        return buffer;
-    }
-
-    while (can_access_at_index(buffer, 0) && (buffer_at_offset(buffer)[0] <= 32))
-    {
-       buffer->offset++;
-    }
-
-    if (buffer->offset == buffer->length)
-    {
-        buffer->offset--;
-    }
-
-    return buffer;
-}
-
-
-static parse_buffer *skip_utf8_bom(parse_buffer * const buffer)
-{
-    if ((buffer == NULL) || (buffer->content == NULL) || (buffer->offset != 0))
-    {
-        return NULL;
-    }
-
-    if (can_access_at_index(buffer, 4) && (strncmp((const char*)buffer_at_offset(buffer), "\xEF\xBB\xBF", 3) == 0))
-    {
-        buffer->offset += 3;
-    }
-
-    return buffer;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_ParseWithOpts(const char *value, const char **return_parse_end, cJSON_bool require_null_terminated)
-{
-    size_t buffer_length;
-
-    if (NULL == value)
-    {
-        return NULL;
-    }
-
-    
-    buffer_length = strlen(value) + sizeof("");
-
-    return cJSON_ParseWithLengthOpts(value, buffer_length, return_parse_end, require_null_terminated);
-}
-
-
-CJSON_PUBLIC(cJSON *) cJSON_ParseWithLengthOpts(const char *value, size_t buffer_length, const char **return_parse_end, cJSON_bool require_null_terminated)
-{
-    parse_buffer buffer = { 0, 0, 0, 0, { 0, 0, 0 } };
-    cJSON *item = NULL;
-
-    
-    global_error.json = NULL;
-    global_error.position = 0;
-
-    if (value == NULL || 0 == buffer_length)
-    {
-        goto fail;
-    }
-
-    buffer.content = (const unsigned char*)value;
-    buffer.length = buffer_length;
-    buffer.offset = 0;
-    buffer.hooks = global_hooks;
-
-    item = cJSON_New_Item(&global_hooks);
-    if (item == NULL) 
-    {
-        goto fail;
-    }
-
-    if (!parse_value(item, buffer_skip_whitespace(skip_utf8_bom(&buffer))))
-    {
-        
-        goto fail;
-    }
-
-    
-    if (require_null_terminated)
-    {
-        buffer_skip_whitespace(&buffer);
-        if ((buffer.offset >= buffer.length) || buffer_at_offset(&buffer)[0] != '\0')
-        {
-            goto fail;
-        }
-    }
-    if (return_parse_end)
-    {
-        *return_parse_end = (const char*)buffer_at_offset(&buffer);
-    }
-
-    return item;
-
-fail:
-    if (item != NULL)
-    {
-        cJSON_Delete(item);
-    }
-
-    if (value != NULL)
-    {
-        error local_error;
-        local_error.json = (const unsigned char*)value;
-        local_error.position = 0;
-
-        if (buffer.offset < buffer.length)
-        {
-            local_error.position = buffer.offset;
-        }
-        else if (buffer.length > 0)
-        {
-            local_error.position = buffer.length - 1;
-        }
-
-        if (return_parse_end != NULL)
-        {
-            *return_parse_end = (const char*)local_error.json + local_error.position;
-        }
-
-        global_error = local_error;
-    }
-
-    return NULL;
-}
-
-
-CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value)
-{
-    return cJSON_ParseWithOpts(value, 0, 0);
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_ParseWithLength(const char *value, size_t buffer_length)
-{
-    return cJSON_ParseWithLengthOpts(value, buffer_length, 0, 0);
-}
-
-#define cjson_min(a, b) (((a) < (b)) ? (a) : (b))
-
-static unsigned char *print(const cJSON * const item, cJSON_bool format, const internal_hooks * const hooks)
-{
-    static const size_t default_buffer_size = 256;
-    printbuffer buffer[1];
-    unsigned char *printed = NULL;
-
-    memset(buffer, 0, sizeof(buffer));
-
-    
-    buffer->buffer = (unsigned char*) hooks->allocate(default_buffer_size);
-    buffer->length = default_buffer_size;
-    buffer->format = format;
-    buffer->hooks = *hooks;
-    if (buffer->buffer == NULL)
-    {
-        goto fail;
-    }
-
-    
-    if (!print_value(item, buffer))
-    {
-        goto fail;
-    }
-    update_offset(buffer);
-
-    
-    if (hooks->reallocate != NULL)
-    {
-        printed = (unsigned char*) hooks->reallocate(buffer->buffer, buffer->offset + 1);
-        if (printed == NULL) {
-            goto fail;
-        }
-        buffer->buffer = NULL;
-    }
-    else 
-    {
-        printed = (unsigned char*) hooks->allocate(buffer->offset + 1);
-        if (printed == NULL)
-        {
-            goto fail;
-        }
-        memcpy(printed, buffer->buffer, cjson_min(buffer->length, buffer->offset + 1));
-        printed[buffer->offset] = '\0'; 
-
-        
-        hooks->deallocate(buffer->buffer);
-    }
-
-    return printed;
-
-fail:
-    if (buffer->buffer != NULL)
-    {
-        hooks->deallocate(buffer->buffer);
-    }
-
-    if (printed != NULL)
-    {
-        hooks->deallocate(printed);
-    }
-
-    return NULL;
-}
-
-
-CJSON_PUBLIC(char *) cJSON_Print(const cJSON *item)
-{
-    return (char*)print(item, true, &global_hooks);
-}
-
-CJSON_PUBLIC(char *) cJSON_PrintUnformatted(const cJSON *item)
-{
-    return (char*)print(item, false, &global_hooks);
-}
-
-CJSON_PUBLIC(char *) cJSON_PrintBuffered(const cJSON *item, int prebuffer, cJSON_bool fmt)
-{
-    printbuffer p = { 0, 0, 0, 0, 0, 0, { 0, 0, 0 } };
-
-    if (prebuffer < 0)
-    {
-        return NULL;
-    }
-
-    p.buffer = (unsigned char*)global_hooks.allocate((size_t)prebuffer);
-    if (!p.buffer)
-    {
-        return NULL;
-    }
-
-    p.length = (size_t)prebuffer;
-    p.offset = 0;
-    p.noalloc = false;
-    p.format = fmt;
-    p.hooks = global_hooks;
-
-    if (!print_value(item, &p))
-    {
-        global_hooks.deallocate(p.buffer);
-        return NULL;
-    }
-
-    return (char*)p.buffer;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_PrintPreallocated(cJSON *item, char *buffer, const int length, const cJSON_bool format)
-{
-    printbuffer p = { 0, 0, 0, 0, 0, 0, { 0, 0, 0 } };
-
-    if ((length < 0) || (buffer == NULL))
-    {
-        return false;
-    }
-
-    p.buffer = (unsigned char*)buffer;
-    p.length = (size_t)length;
-    p.offset = 0;
-    p.noalloc = true;
-    p.format = format;
-    p.hooks = global_hooks;
-
-    return print_value(item, &p);
-}
-
-
-static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buffer)
-{
-    if ((input_buffer == NULL) || (input_buffer->content == NULL))
-    {
-        return false; 
-    }
-
-    
-    
-    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "null", 4) == 0))
-    {
-        item->type = cJSON_NULL;
-        input_buffer->offset += 4;
-        return true;
-    }
-    
-    if (can_read(input_buffer, 5) && (strncmp((const char*)buffer_at_offset(input_buffer), "false", 5) == 0))
-    {
-        item->type = cJSON_False;
-        input_buffer->offset += 5;
-        return true;
-    }
-    
-    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "true", 4) == 0))
-    {
-        item->type = cJSON_True;
-        item->valueint = 1;
-        input_buffer->offset += 4;
-        return true;
-    }
-    
-    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '\"'))
-    {
-        return parse_string(item, input_buffer);
-    }
-    
-    if (can_access_at_index(input_buffer, 0) && ((buffer_at_offset(input_buffer)[0] == '-') || ((buffer_at_offset(input_buffer)[0] >= '0') && (buffer_at_offset(input_buffer)[0] <= '9'))))
-    {
-        return parse_number(item, input_buffer);
-    }
-    
-    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '['))
-    {
-        return parse_array(item, input_buffer);
-    }
-    
-    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '{'))
-    {
-        return parse_object(item, input_buffer);
-    }
-
-    return false;
-}
-
-
-static cJSON_bool print_value(const cJSON * const item, printbuffer * const output_buffer)
-{
-    unsigned char *output = NULL;
-
-    if ((item == NULL) || (output_buffer == NULL))
-    {
-        return false;
-    }
-
-    switch ((item->type) & 0xFF)
-    {
-        case cJSON_NULL:
-            output = ensure(output_buffer, 5);
-            if (output == NULL)
-            {
-                return false;
-            }
-            strcpy((char*)output, "null");
-            return true;
-
-        case cJSON_False:
-            output = ensure(output_buffer, 6);
-            if (output == NULL)
-            {
-                return false;
-            }
-            strcpy((char*)output, "false");
-            return true;
-
-        case cJSON_True:
-            output = ensure(output_buffer, 5);
-            if (output == NULL)
-            {
-                return false;
-            }
-            strcpy((char*)output, "true");
-            return true;
-
-        case cJSON_Number:
-            return print_number(item, output_buffer);
-
-        case cJSON_Raw:
-        {
-            size_t raw_length = 0;
-            if (item->valuestring == NULL)
-            {
-                return false;
-            }
-
-            raw_length = strlen(item->valuestring) + sizeof("");
-            output = ensure(output_buffer, raw_length);
-            if (output == NULL)
-            {
-                return false;
-            }
-            memcpy(output, item->valuestring, raw_length);
-            return true;
-        }
-
-        case cJSON_String:
-            return print_string(item, output_buffer);
-
-        case cJSON_Array:
-            return print_array(item, output_buffer);
-
-        case cJSON_Object:
-            return print_object(item, output_buffer);
-
-        default:
-            return false;
-    }
-}
-
-
-static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buffer)
-{
-    cJSON *head = NULL; 
-    cJSON *current_item = NULL;
-
-    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
-    {
-        return false; 
-    }
-    input_buffer->depth++;
-
-    if (buffer_at_offset(input_buffer)[0] != '[')
-    {
-        
-        goto fail;
-    }
-
-    input_buffer->offset++;
-    buffer_skip_whitespace(input_buffer);
-    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ']'))
-    {
-        
-        goto success;
-    }
-
-    
-    if (cannot_access_at_index(input_buffer, 0))
-    {
-        input_buffer->offset--;
-        goto fail;
-    }
-
-    
-    input_buffer->offset--;
-    
-    do
-    {
-        
-        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
-        if (new_item == NULL)
-        {
-            goto fail; 
-        }
-
-        
-        if (head == NULL)
-        {
-            
-            current_item = head = new_item;
-        }
-        else
-        {
-            
-            current_item->next = new_item;
-            new_item->prev = current_item;
-            current_item = new_item;
-        }
-
-        
-        input_buffer->offset++;
-        buffer_skip_whitespace(input_buffer);
-        if (!parse_value(current_item, input_buffer))
-        {
-            goto fail; 
-        }
-        buffer_skip_whitespace(input_buffer);
-    }
-    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
-
-    if (cannot_access_at_index(input_buffer, 0) || buffer_at_offset(input_buffer)[0] != ']')
-    {
-        goto fail; 
-    }
-
-success:
-    input_buffer->depth--;
-
-    if (head != NULL) {
-        head->prev = current_item;
-    }
-
-    item->type = cJSON_Array;
-    item->child = head;
-
-    input_buffer->offset++;
-
-    return true;
-
-fail:
-    if (head != NULL)
-    {
-        cJSON_Delete(head);
-    }
-
-    return false;
-}
-
-
-static cJSON_bool print_array(const cJSON * const item, printbuffer * const output_buffer)
-{
-    unsigned char *output_pointer = NULL;
-    size_t length = 0;
-    cJSON *current_element = item->child;
-
-    if (output_buffer == NULL)
-    {
-        return false;
-    }
-
-    
-    
-    output_pointer = ensure(output_buffer, 1);
-    if (output_pointer == NULL)
-    {
-        return false;
-    }
-
-    *output_pointer = '[';
-    output_buffer->offset++;
-    output_buffer->depth++;
-
-    while (current_element != NULL)
-    {
-        if (!print_value(current_element, output_buffer))
-        {
-            return false;
-        }
-        update_offset(output_buffer);
-        if (current_element->next)
-        {
-            length = (size_t) (output_buffer->format ? 2 : 1);
-            output_pointer = ensure(output_buffer, length + 1);
-            if (output_pointer == NULL)
-            {
-                return false;
-            }
-            *output_pointer++ = ',';
-            if(output_buffer->format)
-            {
-                *output_pointer++ = ' ';
-            }
-            *output_pointer = '\0';
-            output_buffer->offset += length;
-        }
-        current_element = current_element->next;
-    }
-
-    output_pointer = ensure(output_buffer, 2);
-    if (output_pointer == NULL)
-    {
-        return false;
-    }
-    *output_pointer++ = ']';
-    *output_pointer = '\0';
-    output_buffer->depth--;
-
-    return true;
-}
-
-
-static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_buffer)
-{
-    cJSON *head = NULL; 
-    cJSON *current_item = NULL;
-
-    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
-    {
-        return false; 
-    }
-    input_buffer->depth++;
-
-    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '{'))
-    {
-        goto fail; 
-    }
-
-    input_buffer->offset++;
-    buffer_skip_whitespace(input_buffer);
-    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '}'))
-    {
-        goto success; 
-    }
-
-    
-    if (cannot_access_at_index(input_buffer, 0))
-    {
-        input_buffer->offset--;
-        goto fail;
-    }
-
-    
-    input_buffer->offset--;
-    
-    do
-    {
-        
-        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
-        if (new_item == NULL)
-        {
-            goto fail; 
-        }
-
-        
-        if (head == NULL)
-        {
-            
-            current_item = head = new_item;
-        }
-        else
-        {
-            
-            current_item->next = new_item;
-            new_item->prev = current_item;
-            current_item = new_item;
-        }
-
-        
-        input_buffer->offset++;
-        buffer_skip_whitespace(input_buffer);
-        if (!parse_string(current_item, input_buffer))
-        {
-            goto fail; 
-        }
-        buffer_skip_whitespace(input_buffer);
-
-        
-        current_item->string = current_item->valuestring;
-        current_item->valuestring = NULL;
-
-        if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != ':'))
-        {
-            goto fail; 
-        }
-
-        
-        input_buffer->offset++;
-        buffer_skip_whitespace(input_buffer);
-        if (!parse_value(current_item, input_buffer))
-        {
-            goto fail; 
-        }
-        buffer_skip_whitespace(input_buffer);
-    }
-    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
-
-    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '}'))
-    {
-        goto fail; 
-    }
-
-success:
-    input_buffer->depth--;
-
-    if (head != NULL) {
-        head->prev = current_item;
-    }
-
-    item->type = cJSON_Object;
-    item->child = head;
-
-    input_buffer->offset++;
-    return true;
-
-fail:
-    if (head != NULL)
-    {
-        cJSON_Delete(head);
-    }
-
-    return false;
-}
-
-
-static cJSON_bool print_object(const cJSON * const item, printbuffer * const output_buffer)
-{
-    unsigned char *output_pointer = NULL;
-    size_t length = 0;
-    cJSON *current_item = item->child;
-
-    if (output_buffer == NULL)
-    {
-        return false;
-    }
-
-    
-    length = (size_t) (output_buffer->format ? 2 : 1); 
-    output_pointer = ensure(output_buffer, length + 1);
-    if (output_pointer == NULL)
-    {
-        return false;
-    }
-
-    *output_pointer++ = '{';
-    output_buffer->depth++;
-    if (output_buffer->format)
-    {
-        *output_pointer++ = '\n';
-    }
-    output_buffer->offset += length;
-
-    while (current_item)
-    {
-        if (output_buffer->format)
-        {
-            size_t i;
-            output_pointer = ensure(output_buffer, output_buffer->depth);
-            if (output_pointer == NULL)
-            {
-                return false;
-            }
-            for (i = 0; i < output_buffer->depth; i++)
-            {
-                *output_pointer++ = '\t';
-            }
-            output_buffer->offset += output_buffer->depth;
-        }
-
-        
-        if (!print_string_ptr((unsigned char*)current_item->string, output_buffer))
-        {
-            return false;
-        }
-        update_offset(output_buffer);
-
-        length = (size_t) (output_buffer->format ? 2 : 1);
-        output_pointer = ensure(output_buffer, length);
-        if (output_pointer == NULL)
-        {
-            return false;
-        }
-        *output_pointer++ = ':';
-        if (output_buffer->format)
-        {
-            *output_pointer++ = '\t';
-        }
-        output_buffer->offset += length;
-
-        
-        if (!print_value(current_item, output_buffer))
-        {
-            return false;
-        }
-        update_offset(output_buffer);
-
-        
-        length = ((size_t)(output_buffer->format ? 1 : 0) + (size_t)(current_item->next ? 1 : 0));
-        output_pointer = ensure(output_buffer, length + 1);
-        if (output_pointer == NULL)
-        {
-            return false;
-        }
-        if (current_item->next)
-        {
-            *output_pointer++ = ',';
-        }
-
-        if (output_buffer->format)
-        {
-            *output_pointer++ = '\n';
-        }
-        *output_pointer = '\0';
-        output_buffer->offset += length;
-
-        current_item = current_item->next;
-    }
-
-    output_pointer = ensure(output_buffer, output_buffer->format ? (output_buffer->depth + 1) : 2);
-    if (output_pointer == NULL)
-    {
-        return false;
-    }
-    if (output_buffer->format)
-    {
-        size_t i;
-        for (i = 0; i < (output_buffer->depth - 1); i++)
-        {
-            *output_pointer++ = '\t';
-        }
-    }
-    *output_pointer++ = '}';
-    *output_pointer = '\0';
-    output_buffer->depth--;
-
-    return true;
-}
-
-
-CJSON_PUBLIC(int) cJSON_GetArraySize(const cJSON *array)
-{
-    cJSON *child = NULL;
-    size_t size = 0;
-
-    if (array == NULL)
-    {
-        return 0;
-    }
-
-    child = array->child;
-
-    while(child != NULL)
-    {
-        size++;
-        child = child->next;
-    }
-
-    
-
-    return (int)size;
-}
-
-static cJSON* get_array_item(const cJSON *array, size_t index)
-{
-    cJSON *current_child = NULL;
-
-    if (array == NULL)
-    {
-        return NULL;
-    }
-
-    current_child = array->child;
-    while ((current_child != NULL) && (index > 0))
-    {
-        index--;
-        current_child = current_child->next;
-    }
-
-    return current_child;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_GetArrayItem(const cJSON *array, int index)
-{
-    if (index < 0)
-    {
-        return NULL;
-    }
-
-    return get_array_item(array, (size_t)index);
-}
-
-static cJSON *get_object_item(const cJSON * const object, const char * const name, const cJSON_bool case_sensitive)
-{
-    cJSON *current_element = NULL;
-
-    if ((object == NULL) || (name == NULL))
-    {
-        return NULL;
-    }
-
-    current_element = object->child;
-    if (case_sensitive)
-    {
-        while ((current_element != NULL) && (current_element->string != NULL) && (strcmp(name, current_element->string) != 0))
-        {
-            current_element = current_element->next;
-        }
-    }
-    else
-    {
-        while ((current_element != NULL) && (case_insensitive_strcmp((const unsigned char*)name, (const unsigned char*)(current_element->string)) != 0))
-        {
-            current_element = current_element->next;
-        }
-    }
-
-    if ((current_element == NULL) || (current_element->string == NULL)) {
-        return NULL;
-    }
-
-    return current_element;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_GetObjectItem(const cJSON * const object, const char * const string)
-{
-    return get_object_item(object, string, false);
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_GetObjectItemCaseSensitive(const cJSON * const object, const char * const string)
-{
-    return get_object_item(object, string, true);
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_HasObjectItem(const cJSON *object, const char *string)
-{
-    return cJSON_GetObjectItem(object, string) ? 1 : 0;
-}
-
-
-static void suffix_object(cJSON *prev, cJSON *item)
-{
-    prev->next = item;
-    item->prev = prev;
-}
-
-
-static cJSON *create_reference(const cJSON *item, const internal_hooks * const hooks)
-{
-    cJSON *reference = NULL;
-    if (item == NULL)
-    {
-        return NULL;
-    }
-
-    reference = cJSON_New_Item(hooks);
-    if (reference == NULL)
-    {
-        return NULL;
-    }
-
-    memcpy(reference, item, sizeof(cJSON));
-    reference->string = NULL;
-    reference->type |= cJSON_IsReference;
-    reference->next = reference->prev = NULL;
-    return reference;
-}
-
-static cJSON_bool add_item_to_array(cJSON *array, cJSON *item)
-{
-    cJSON *child = NULL;
-
-    if ((item == NULL) || (array == NULL) || (array == item))
-    {
-        return false;
-    }
-
-    child = array->child;
-    
-    if (child == NULL)
-    {
-        
-        array->child = item;
-        item->prev = item;
-        item->next = NULL;
-    }
-    else
-    {
-        
-        if (child->prev)
-        {
-            suffix_object(child->prev, item);
-            array->child->prev = item;
-        }
-    }
-
-    return true;
-}
-
-
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToArray(cJSON *array, cJSON *item)
-{
-    return add_item_to_array(array, item);
-}
-
-#if defined(__clang__) || (defined(__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
-    #pragma GCC diagnostic push
-#endif
-#ifdef __GNUC__
-#pragma GCC diagnostic ignored "-Wcast-qual"
-#endif
-
-static void* cast_away_const(const void* string)
-{
-    return (void*)string;
-}
-#if defined(__clang__) || (defined(__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
-    #pragma GCC diagnostic pop
-#endif
-
-
-static cJSON_bool add_item_to_object(cJSON * const object, const char * const string, cJSON * const item, const internal_hooks * const hooks, const cJSON_bool constant_key)
-{
-    char *new_key = NULL;
-    int new_type = cJSON_Invalid;
-
-    if ((object == NULL) || (string == NULL) || (item == NULL) || (object == item))
-    {
-        return false;
-    }
-
-    if (constant_key)
-    {
-        new_key = (char*)cast_away_const(string);
-        new_type = item->type | cJSON_StringIsConst;
-    }
-    else
-    {
-        new_key = (char*)cJSON_strdup((const unsigned char*)string, hooks);
-        if (new_key == NULL)
-        {
-            return false;
-        }
-
-        new_type = item->type & ~cJSON_StringIsConst;
-    }
-
-    if (!(item->type & cJSON_StringIsConst) && (item->string != NULL))
-    {
-        hooks->deallocate(item->string);
-    }
-
-    item->string = new_key;
-    item->type = new_type;
-
-    return add_item_to_array(object, item);
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObject(cJSON *object, const char *string, cJSON *item)
-{
-    return add_item_to_object(object, string, item, &global_hooks, false);
-}
-
-
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObjectCS(cJSON *object, const char *string, cJSON *item)
-{
-    return add_item_to_object(object, string, item, &global_hooks, true);
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToArray(cJSON *array, cJSON *item)
-{
-    if (array == NULL)
-    {
-        return false;
-    }
-
-    return add_item_to_array(array, create_reference(item, &global_hooks));
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToObject(cJSON *object, const char *string, cJSON *item)
-{
-    if ((object == NULL) || (string == NULL))
-    {
-        return false;
-    }
-
-    return add_item_to_object(object, string, create_reference(item, &global_hooks), &global_hooks, false);
-}
-
-CJSON_PUBLIC(cJSON*) cJSON_AddNullToObject(cJSON * const object, const char * const name)
-{
-    cJSON *null = cJSON_CreateNull();
-    if (add_item_to_object(object, name, null, &global_hooks, false))
-    {
-        return null;
-    }
-
-    cJSON_Delete(null);
-    return NULL;
-}
-
-CJSON_PUBLIC(cJSON*) cJSON_AddTrueToObject(cJSON * const object, const char * const name)
-{
-    cJSON *true_item = cJSON_CreateTrue();
-    if (add_item_to_object(object, name, true_item, &global_hooks, false))
-    {
-        return true_item;
-    }
-
-    cJSON_Delete(true_item);
-    return NULL;
-}
-
-CJSON_PUBLIC(cJSON*) cJSON_AddFalseToObject(cJSON * const object, const char * const name)
-{
-    cJSON *false_item = cJSON_CreateFalse();
-    if (add_item_to_object(object, name, false_item, &global_hooks, false))
-    {
-        return false_item;
-    }
-
-    cJSON_Delete(false_item);
-    return NULL;
-}
-
-CJSON_PUBLIC(cJSON*) cJSON_AddBoolToObject(cJSON * const object, const char * const name, const cJSON_bool boolean)
-{
-    cJSON *bool_item = cJSON_CreateBool(boolean);
-    if (add_item_to_object(object, name, bool_item, &global_hooks, false))
-    {
-        return bool_item;
-    }
-
-    cJSON_Delete(bool_item);
-    return NULL;
-}
-
-CJSON_PUBLIC(cJSON*) cJSON_AddNumberToObject(cJSON * const object, const char * const name, const double number)
-{
-    cJSON *number_item = cJSON_CreateNumber(number);
-    if (add_item_to_object(object, name, number_item, &global_hooks, false))
-    {
-        return number_item;
-    }
-
-    cJSON_Delete(number_item);
-    return NULL;
-}
-
-CJSON_PUBLIC(cJSON*) cJSON_AddStringToObject(cJSON * const object, const char * const name, const char * const string)
-{
-    cJSON *string_item = cJSON_CreateString(string);
-    if (add_item_to_object(object, name, string_item, &global_hooks, false))
-    {
-        return string_item;
-    }
-
-    cJSON_Delete(string_item);
-    return NULL;
-}
-
-CJSON_PUBLIC(cJSON*) cJSON_AddRawToObject(cJSON * const object, const char * const name, const char * const raw)
-{
-    cJSON *raw_item = cJSON_CreateRaw(raw);
-    if (add_item_to_object(object, name, raw_item, &global_hooks, false))
-    {
-        return raw_item;
-    }
-
-    cJSON_Delete(raw_item);
-    return NULL;
-}
-
-CJSON_PUBLIC(cJSON*) cJSON_AddObjectToObject(cJSON * const object, const char * const name)
-{
-    cJSON *object_item = cJSON_CreateObject();
-    if (add_item_to_object(object, name, object_item, &global_hooks, false))
-    {
-        return object_item;
-    }
-
-    cJSON_Delete(object_item);
-    return NULL;
-}
-
-CJSON_PUBLIC(cJSON*) cJSON_AddArrayToObject(cJSON * const object, const char * const name)
-{
-    cJSON *array = cJSON_CreateArray();
-    if (add_item_to_object(object, name, array, &global_hooks, false))
-    {
-        return array;
-    }
-
-    cJSON_Delete(array);
-    return NULL;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_DetachItemViaPointer(cJSON *parent, cJSON * const item)
-{
-    if ((parent == NULL) || (item == NULL))
-    {
-        return NULL;
-    }
-
-    if (item != parent->child)
-    {
-        
-        item->prev->next = item->next;
-    }
-    if (item->next != NULL)
-    {
-        
-        item->next->prev = item->prev;
-    }
-
-    if (item == parent->child)
-    {
-        
-        parent->child = item->next;
-    }
-    else if (item->next == NULL)
-    {
-        
-        parent->child->prev = item->prev;
-    }
-
-    
-    item->prev = NULL;
-    item->next = NULL;
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromArray(cJSON *array, int which)
-{
-    if (which < 0)
-    {
-        return NULL;
-    }
-
-    return cJSON_DetachItemViaPointer(array, get_array_item(array, (size_t)which));
-}
-
-CJSON_PUBLIC(void) cJSON_DeleteItemFromArray(cJSON *array, int which)
-{
-    cJSON_Delete(cJSON_DetachItemFromArray(array, which));
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObject(cJSON *object, const char *string)
-{
-    cJSON *to_detach = cJSON_GetObjectItem(object, string);
-
-    return cJSON_DetachItemViaPointer(object, to_detach);
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObjectCaseSensitive(cJSON *object, const char *string)
-{
-    cJSON *to_detach = cJSON_GetObjectItemCaseSensitive(object, string);
-
-    return cJSON_DetachItemViaPointer(object, to_detach);
-}
-
-CJSON_PUBLIC(void) cJSON_DeleteItemFromObject(cJSON *object, const char *string)
-{
-    cJSON_Delete(cJSON_DetachItemFromObject(object, string));
-}
-
-CJSON_PUBLIC(void) cJSON_DeleteItemFromObjectCaseSensitive(cJSON *object, const char *string)
-{
-    cJSON_Delete(cJSON_DetachItemFromObjectCaseSensitive(object, string));
-}
-
-
-CJSON_PUBLIC(cJSON_bool) cJSON_InsertItemInArray(cJSON *array, int which, cJSON *newitem)
-{
-    cJSON *after_inserted = NULL;
-
-    if (which < 0)
-    {
-        return false;
-    }
-
-    after_inserted = get_array_item(array, (size_t)which);
-    if (after_inserted == NULL)
-    {
-        return add_item_to_array(array, newitem);
-    }
-
-    newitem->next = after_inserted;
-    newitem->prev = after_inserted->prev;
-    after_inserted->prev = newitem;
-    if (after_inserted == array->child)
-    {
-        array->child = newitem;
-    }
-    else
-    {
-        newitem->prev->next = newitem;
-    }
-    return true;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemViaPointer(cJSON * const parent, cJSON * const item, cJSON * replacement)
-{
-    if ((parent == NULL) || (replacement == NULL) || (item == NULL))
-    {
-        return false;
-    }
-
-    if (replacement == item)
-    {
-        return true;
-    }
-
-    replacement->next = item->next;
-    replacement->prev = item->prev;
-
-    if (replacement->next != NULL)
-    {
-        replacement->next->prev = replacement;
-    }
-    if (parent->child == item)
-    {
-        if (parent->child->prev == parent->child)
-        {
-            replacement->prev = replacement;
-        }
-        parent->child = replacement;
-    }
-    else
-    {   
-        if (replacement->prev != NULL)
-        {
-            replacement->prev->next = replacement;
-        }
-        if (replacement->next == NULL)
-        {
-            parent->child->prev = replacement;
-        }
-    }
-
-    item->next = NULL;
-    item->prev = NULL;
-    cJSON_Delete(item);
-
-    return true;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInArray(cJSON *array, int which, cJSON *newitem)
-{
-    if (which < 0)
-    {
-        return false;
-    }
-
-    return cJSON_ReplaceItemViaPointer(array, get_array_item(array, (size_t)which), newitem);
-}
-
-static cJSON_bool replace_item_in_object(cJSON *object, const char *string, cJSON *replacement, cJSON_bool case_sensitive)
-{
-    if ((replacement == NULL) || (string == NULL))
-    {
-        return false;
-    }
-
-    
-    if (!(replacement->type & cJSON_StringIsConst) && (replacement->string != NULL))
-    {
-        cJSON_free(replacement->string);
-    }
-    replacement->string = (char*)cJSON_strdup((const unsigned char*)string, &global_hooks);
-    if (replacement->string == NULL)
-    {
-        return false;
-    }
-
-    replacement->type &= ~cJSON_StringIsConst;
-
-    return cJSON_ReplaceItemViaPointer(object, get_object_item(object, string, case_sensitive), replacement);
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObject(cJSON *object, const char *string, cJSON *newitem)
-{
-    return replace_item_in_object(object, string, newitem, false);
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObjectCaseSensitive(cJSON *object, const char *string, cJSON *newitem)
-{
-    return replace_item_in_object(object, string, newitem, true);
-}
-
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateNull(void)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if(item)
-    {
-        item->type = cJSON_NULL;
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateTrue(void)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if(item)
-    {
-        item->type = cJSON_True;
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateFalse(void)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if(item)
-    {
-        item->type = cJSON_False;
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateBool(cJSON_bool boolean)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if(item)
-    {
-        item->type = boolean ? cJSON_True : cJSON_False;
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateNumber(double num)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if(item)
-    {
-        item->type = cJSON_Number;
-        item->valuedouble = num;
-
-        
-        if (num >= INT_MAX)
-        {
-            item->valueint = INT_MAX;
-        }
-        else if (num <= (double)INT_MIN)
-        {
-            item->valueint = INT_MIN;
-        }
-        else
-        {
-            item->valueint = (int)num;
-        }
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateString(const char *string)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if(item)
-    {
-        item->type = cJSON_String;
-        item->valuestring = (char*)cJSON_strdup((const unsigned char*)string, &global_hooks);
-        if(!item->valuestring)
-        {
-            cJSON_Delete(item);
-            return NULL;
-        }
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateStringReference(const char *string)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if (item != NULL)
-    {
-        item->type = cJSON_String | cJSON_IsReference;
-        item->valuestring = (char*)cast_away_const(string);
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateObjectReference(const cJSON *child)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if (item != NULL) {
-        item->type = cJSON_Object | cJSON_IsReference;
-        item->child = (cJSON*)cast_away_const(child);
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateArrayReference(const cJSON *child) {
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if (item != NULL) {
-        item->type = cJSON_Array | cJSON_IsReference;
-        item->child = (cJSON*)cast_away_const(child);
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateRaw(const char *raw)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if(item)
-    {
-        item->type = cJSON_Raw;
-        item->valuestring = (char*)cJSON_strdup((const unsigned char*)raw, &global_hooks);
-        if(!item->valuestring)
-        {
-            cJSON_Delete(item);
-            return NULL;
-        }
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateArray(void)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if(item)
-    {
-        item->type=cJSON_Array;
-    }
-
-    return item;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateObject(void)
-{
-    cJSON *item = cJSON_New_Item(&global_hooks);
-    if (item)
-    {
-        item->type = cJSON_Object;
-    }
-
-    return item;
-}
-
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateIntArray(const int *numbers, int count)
-{
-    size_t i = 0;
-    cJSON *n = NULL;
-    cJSON *p = NULL;
-    cJSON *a = NULL;
-
-    if ((count < 0) || (numbers == NULL))
-    {
-        return NULL;
-    }
-
-    a = cJSON_CreateArray();
-
-    for(i = 0; a && (i < (size_t)count); i++)
-    {
-        n = cJSON_CreateNumber(numbers[i]);
-        if (!n)
-        {
-            cJSON_Delete(a);
-            return NULL;
-        }
-        if(!i)
-        {
-            a->child = n;
-        }
-        else
-        {
-            suffix_object(p, n);
-        }
-        p = n;
-    }
-
-    if (a && a->child) {
-        a->child->prev = n;
-    }
-
-    return a;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateFloatArray(const float *numbers, int count)
-{
-    size_t i = 0;
-    cJSON *n = NULL;
-    cJSON *p = NULL;
-    cJSON *a = NULL;
-
-    if ((count < 0) || (numbers == NULL))
-    {
-        return NULL;
-    }
-
-    a = cJSON_CreateArray();
-
-    for(i = 0; a && (i < (size_t)count); i++)
-    {
-        n = cJSON_CreateNumber((double)numbers[i]);
-        if(!n)
-        {
-            cJSON_Delete(a);
-            return NULL;
-        }
-        if(!i)
-        {
-            a->child = n;
-        }
-        else
-        {
-            suffix_object(p, n);
-        }
-        p = n;
-    }
-
-    if (a && a->child) {
-        a->child->prev = n;
-    }
-
-    return a;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateDoubleArray(const double *numbers, int count)
-{
-    size_t i = 0;
-    cJSON *n = NULL;
-    cJSON *p = NULL;
-    cJSON *a = NULL;
-
-    if ((count < 0) || (numbers == NULL))
-    {
-        return NULL;
-    }
-
-    a = cJSON_CreateArray();
-
-    for(i = 0; a && (i < (size_t)count); i++)
-    {
-        n = cJSON_CreateNumber(numbers[i]);
-        if(!n)
-        {
-            cJSON_Delete(a);
-            return NULL;
-        }
-        if(!i)
-        {
-            a->child = n;
-        }
-        else
-        {
-            suffix_object(p, n);
-        }
-        p = n;
-    }
-
-    if (a && a->child) {
-        a->child->prev = n;
-    }
-
-    return a;
-}
-
-CJSON_PUBLIC(cJSON *) cJSON_CreateStringArray(const char *const *strings, int count)
-{
-    size_t i = 0;
-    cJSON *n = NULL;
-    cJSON *p = NULL;
-    cJSON *a = NULL;
-
-    if ((count < 0) || (strings == NULL))
-    {
-        return NULL;
-    }
-
-    a = cJSON_CreateArray();
-
-    for (i = 0; a && (i < (size_t)count); i++)
-    {
-        n = cJSON_CreateString(strings[i]);
-        if(!n)
-        {
-            cJSON_Delete(a);
-            return NULL;
-        }
-        if(!i)
-        {
-            a->child = n;
-        }
-        else
-        {
-            suffix_object(p,n);
-        }
-        p = n;
-    }
-
-    if (a && a->child) {
-        a->child->prev = n;
-    }
-
-    return a;
-}
-
-
-CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse)
-{
-    cJSON *newitem = NULL;
-    cJSON *child = NULL;
-    cJSON *next = NULL;
-    cJSON *newchild = NULL;
-
-    
-    if (!item)
-    {
-        goto fail;
-    }
-    
-    newitem = cJSON_New_Item(&global_hooks);
-    if (!newitem)
-    {
-        goto fail;
-    }
-    
-    newitem->type = item->type & (~cJSON_IsReference);
-    newitem->valueint = item->valueint;
-    newitem->valuedouble = item->valuedouble;
-    if (item->valuestring)
-    {
-        newitem->valuestring = (char*)cJSON_strdup((unsigned char*)item->valuestring, &global_hooks);
-        if (!newitem->valuestring)
-        {
-            goto fail;
-        }
-    }
-    if (item->string)
-    {
-        newitem->string = (item->type&cJSON_StringIsConst) ? item->string : (char*)cJSON_strdup((unsigned char*)item->string, &global_hooks);
-        if (!newitem->string)
-        {
-            goto fail;
-        }
-    }
-    
-    if (!recurse)
-    {
-        return newitem;
-    }
-    
-    child = item->child;
-    while (child != NULL)
-    {
-        newchild = cJSON_Duplicate(child, true); 
-        if (!newchild)
-        {
-            goto fail;
-        }
-        if (next != NULL)
-        {
-            
-            next->next = newchild;
-            newchild->prev = next;
-            next = newchild;
-        }
-        else
-        {
-            
-            newitem->child = newchild;
-            next = newchild;
-        }
-        child = child->next;
-    }
-    if (newitem && newitem->child)
-    {
-        newitem->child->prev = newchild;
-    }
-
-    return newitem;
-
-fail:
-    if (newitem != NULL)
-    {
-        cJSON_Delete(newitem);
-    }
-
-    return NULL;
-}
-
-static void skip_oneline_comment(char **input)
-{
-    *input += static_strlen("//");
-
-    for (; (*input)[0] != '\0'; ++(*input))
-    {
-        if ((*input)[0] == '\n') {
-            *input += static_strlen("\n");
-            return;
-        }
-    }
-}
-
-static void skip_multiline_comment(char **input)
-{
-    *input += static_strlen("/*");
-
-    for (; (*input)[0] != '\0'; ++(*input))
-    {
-        if (((*input)[0] == '*') && ((*input)[1] == '/'))
-        {
-            *input += static_strlen("*/");
-            return;
-        }
-    }
-}
-
-static void minify_string(char **input, char **output) {
-    (*output)[0] = (*input)[0];
-    *input += static_strlen("\"");
-    *output += static_strlen("\"");
-
-
-    for (; (*input)[0] != '\0'; (void)++(*input), ++(*output)) {
-        (*output)[0] = (*input)[0];
-
-        if ((*input)[0] == '\"') {
-            (*output)[0] = '\"';
-            *input += static_strlen("\"");
-            *output += static_strlen("\"");
-            return;
-        } else if (((*input)[0] == '\\') && ((*input)[1] == '\"')) {
-            (*output)[1] = (*input)[1];
-            *input += static_strlen("\"");
-            *output += static_strlen("\"");
-        }
-    }
-}
-
-CJSON_PUBLIC(void) cJSON_Minify(char *json)
-{
-    char *into = json;
-
-    if (json == NULL)
-    {
-        return;
-    }
-
-    while (json[0] != '\0')
-    {
-        switch (json[0])
-        {
-            case ' ':
-            case '\t':
-            case '\r':
-            case '\n':
-                json++;
-                break;
-
-            case '/':
-                if (json[1] == '/')
-                {
-                    skip_oneline_comment(&json);
-                }
-                else if (json[1] == '*')
-                {
-                    skip_multiline_comment(&json);
-                } else {
-                    json++;
-                }
-                break;
-
-            case '\"':
-                minify_string(&json, (char**)&into);
-                break;
-
-            default:
-                into[0] = json[0];
-                json++;
-                into++;
-        }
-    }
-
-    
-    *into = '\0';
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_IsInvalid(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & 0xFF) == cJSON_Invalid;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_IsFalse(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & 0xFF) == cJSON_False;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_IsTrue(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & 0xff) == cJSON_True;
-}
-
-
-CJSON_PUBLIC(cJSON_bool) cJSON_IsBool(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & (cJSON_True | cJSON_False)) != 0;
-}
-CJSON_PUBLIC(cJSON_bool) cJSON_IsNull(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & 0xFF) == cJSON_NULL;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_IsNumber(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & 0xFF) == cJSON_Number;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_IsString(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & 0xFF) == cJSON_String;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_IsArray(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & 0xFF) == cJSON_Array;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_IsObject(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & 0xFF) == cJSON_Object;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_IsRaw(const cJSON * const item)
-{
-    if (item == NULL)
-    {
-        return false;
-    }
-
-    return (item->type & 0xFF) == cJSON_Raw;
-}
-
-CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * const b, const cJSON_bool case_sensitive)
-{
-    if ((a == NULL) || (b == NULL) || ((a->type & 0xFF) != (b->type & 0xFF)))
-    {
-        return false;
-    }
-
-    
-    switch (a->type & 0xFF)
-    {
-        case cJSON_False:
-        case cJSON_True:
-        case cJSON_NULL:
-        case cJSON_Number:
-        case cJSON_String:
-        case cJSON_Raw:
-        case cJSON_Array:
-        case cJSON_Object:
-            break;
-
-        default:
-            return false;
-    }
-
-    
-    if (a == b)
-    {
-        return true;
-    }
-
-    switch (a->type & 0xFF)
-    {
-        
-        case cJSON_False:
-        case cJSON_True:
-        case cJSON_NULL:
-            return true;
-
-        case cJSON_Number:
-            if (compare_double(a->valuedouble, b->valuedouble))
-            {
-                return true;
-            }
-            return false;
-
-        case cJSON_String:
-        case cJSON_Raw:
-            if ((a->valuestring == NULL) || (b->valuestring == NULL))
-            {
-                return false;
-            }
-            if (strcmp(a->valuestring, b->valuestring) == 0)
-            {
-                return true;
-            }
-
-            return false;
-
-        case cJSON_Array:
-        {
-            cJSON *a_element = a->child;
-            cJSON *b_element = b->child;
-
-            for (; (a_element != NULL) && (b_element != NULL);)
-            {
-                if (!cJSON_Compare(a_element, b_element, case_sensitive))
-                {
-                    return false;
-                }
-
-                a_element = a_element->next;
-                b_element = b_element->next;
-            }
-
-            
-            if (a_element != b_element) {
-                return false;
-            }
-
-            return true;
-        }
-
-        case cJSON_Object:
-        {
-            cJSON *a_element = NULL;
-            cJSON *b_element = NULL;
-            cJSON_ArrayForEach(a_element, a)
-            {
-                
-                b_element = get_object_item(b, a_element->string, case_sensitive);
-                if (b_element == NULL)
-                {
-                    return false;
-                }
-
-                if (!cJSON_Compare(a_element, b_element, case_sensitive))
-                {
-                    return false;
-                }
-            }
-
-            
-            cJSON_ArrayForEach(b_element, b)
-            {
-                a_element = get_object_item(a, b_element->string, case_sensitive);
-                if (a_element == NULL)
-                {
-                    return false;
-                }
-
-                if (!cJSON_Compare(b_element, a_element, case_sensitive))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        default:
-            return false;
-    }
-}
-
-CJSON_PUBLIC(void *) cJSON_malloc(size_t size)
-{
-    return global_hooks.allocate(size);
-}
-
-CJSON_PUBLIC(void) cJSON_free(void *object)
-{
-    global_hooks.deallocate(object);
-}
-
-
-
-
-
-
-#endif
-
-
-#ifndef UNIVERSAL_GARBAGE_H
-#define UNIVERSAL_GARBAGE_H
-//path: src/dependencies/UniversalGarbage/definition.c
-//Universal Garbage
-
-
-//path: src/dependencies/UniversalGarbage/functions/definition.c
-//path: src/dependencies/UniversalGarbage/functions/garbage_element/garbage_element.c
-
-//path: src/dependencies/UniversalGarbage/functions/garbage_element/../unique.definition_requirements.h
-
-
-
-
-
-
-
-privateUniversalGarbageElement * private_newUniversalGarbageSimpleElement(void (*dealocator_callback)(void *element), void **pointer){
-
-    privateUniversalGarbageElement * self = UniversalGarbage_create_empty_struct(
-        self,
-        privateUniversalGarbageElement
-    );
-    self->pointer = pointer;
-    self->deallocator_callback = dealocator_callback;
-    self->pointed_value = *pointer;
-    return  self;
-}
-void private_UniversalGarbageSimpleElement_free_pointed_value(privateUniversalGarbageElement *self){
-    if(self->pointed_value){
-        self->deallocator_callback(self->pointed_value);
-        self->pointed_value = NULL;
-    }
-}
-
-void private_UniversalGarbageSimpleElement_free(privateUniversalGarbageElement *self){
-    private_UniversalGarbageSimpleElement_free_pointed_value(self);
-    free(self);
-}
-
-
-//path: src/dependencies/UniversalGarbage/functions/garbage/garbage.c
-
-
-
-
-UniversalGarbage * private_new_MainUniversalGarbage(){
-    UniversalGarbage *self = UniversalGarbage_create_empty_struct(self,UniversalGarbage)
-    self->elements = (privateUniversalGarbageElement**)malloc(0);
-    self->is_the_root = false;
-    return self;
-}
-
-UniversalGarbage * newUniversalGarbage(){
-    UniversalGarbage *self = UniversalGarbage_create_empty_struct(self,UniversalGarbage)
-    self->is_the_root = true;
-    self->elements = (privateUniversalGarbageElement**)malloc(0);
-    self->return_values =private_new_MainUniversalGarbage();
-
-    return self;
-}
-
-
-
-
-bool  rawUniversalGarbage_reallocate(UniversalGarbage *self, void **pointer){
-
-    if(self->is_the_root){
-
-        if(rawUniversalGarbage_reallocate(self->return_values,pointer)){
-            return true;
-        }
-    }
-
-
-    for(int i = 0; i < self->elements_size; i++){
-
-        privateUniversalGarbageElement *current = self->elements[i];
-        bool reallocate = current->pointer == pointer;
-
-        if(reallocate){
-            current->pointed_value = *pointer;
-            return true;
-        }
-    }
-    return false;
-}
-
-bool rawUniversalGarbage_resset(UniversalGarbage *self, void **pointer){
-
-    if(self->is_the_root){
-        if(rawUniversalGarbage_resset(self->return_values,pointer)){
-            return true;
-        }
-    }
-
-
-    for(int i = 0; i < self->elements_size; i++){
-        privateUniversalGarbageElement *current = self->elements[i];
-        bool resset = current->pointer == pointer;
-        if(resset){
-            private_UniversalGarbageSimpleElement_free_pointed_value(current);
-            current->pointed_value = *pointer;
-            return true;
-        }
-    }
-    return  false;
-
-}
-bool  rawUniversalGarbage_remove(UniversalGarbage *self, void **pointer){
-    if(self->is_the_root){
-        if(rawUniversalGarbage_remove(self->return_values,pointer)){
-            *pointer = NULL;
-            return true;
-        }
-    }
-
-    for(int i = 0; i < self->elements_size; i++){
-        privateUniversalGarbageElement *current = self->elements[i];
-        if(current->pointer == pointer){
-            private_UniversalGarbageSimpleElement_free(current);
-            self->elements_size-=1;
-            bool its_not_the_last = i < self->elements_size;
-            if(its_not_the_last){
-                self->elements[i] = self->elements[self->elements_size];
-
-            }
-            *pointer = NULL;
-            return  true;
-        }
-    }
-    return  false;
-}
-bool  rawUniversalGarbage_disconnect(UniversalGarbage *self, void **pointer){
-    if(self->is_the_root){
-        if(rawUniversalGarbage_disconnect(self->return_values,pointer)){
-            return true;
-        }
-    }
-
-    for(int i = 0; i < self->elements_size; i++){
-        privateUniversalGarbageElement *current = self->elements[i];
-        if(current->pointer == pointer){
-            free(current);
-            self->elements_size-=1;
-            bool its_not_the_last = i < self->elements_size;
-            if(its_not_the_last){
-                privateUniversalGarbageElement *last_element =  self->elements[self->elements_size];
-                self->elements[i] = last_element;
-            }
-            return true;
-        }
-    }
-    return  false;
-
-
-
-}
-bool  rawUniversalGarbage_add(UniversalGarbage *self,  void (*dealocator_callback)(void *element), void **pointer){
-
-    if(!pointer){
-        return false;
-    }
-
-    if(*pointer){
-        for(int i = 0; i < self->elements_size; i++){
-            privateUniversalGarbageElement *current = self->elements[i];
-            if(current->pointed_value == *pointer){
-                return false;
-            }
-        }
-    }
-
-
-    self->elements = (privateUniversalGarbageElement**)realloc(
-            self->elements,
-            (self->elements_size + 1) * sizeof(privateUniversalGarbageElement*)
-    );
-
-
-
-    self->elements[self->elements_size] = private_newUniversalGarbageSimpleElement(dealocator_callback, pointer);
-    self->elements_size+=1;
-    return  true;
-}
-
-
-
-void  private_UniversalGarbage_free_all_sub_elements(UniversalGarbage *self){
-    for(int i = 0; i < self->elements_size; i++){
-        private_UniversalGarbageSimpleElement_free(self->elements[i]);
-    }
-    free(self->elements);
-}
-
-void UniversalGarbage_free_including_return(UniversalGarbage *self){
-    private_UniversalGarbage_free_all_sub_elements(self);
-    if(self->is_the_root){
-        UniversalGarbage_free(self->return_values);
-    }
-    free(self);
-}
-
-void UniversalGarbage_free(UniversalGarbage *self){
-    private_UniversalGarbage_free_all_sub_elements(self);
-
-    if(self->is_the_root){
-
-        UniversalGarbage *return_garbage = self->return_values;
-        for(int i = 0; i < return_garbage->elements_size; i++){
-            free(return_garbage->elements[i]);
-        }
-
-        free(return_garbage->elements);
-        free(return_garbage);
-    }
-
-
-    free(self);
-}
-
-
-
 
 
 
@@ -11860,5 +7445,4454 @@ void private_CWebHyDration_free(CWebHyDration *self) {
 
 
 
+//path: src/dependencies/definition.c
+
+
+#ifdef CTEXTENGINE_DEFINED_IN_CWEB_STUDIO
+//path: src/dependencies/CTextEngine/definition.c
+
+
+//path: src/dependencies/CTextEngine/functions/definition.c
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/definition.c
+//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/admnistrative_methods.c
+
+
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/../unique.definition_requirements.h
+//path: src/dependencies/CTextEngine/functions/CTextStack/admnistrative_methods/../../unique.definition_requirements.h
+
+
+
+
+
+
+
+
+
+char * CTextStack_self_transform_in_string_and_self_clear(struct CTextStack *self){
+    free(self->line_breaker);
+    free(self->separator);
+    char *result = self->rendered_text;
+    free(self);
+    return result;
+}
+
+void private_CTextStack_parse_ownership(struct CTextStack *self, struct CTextStack *new_stack){
+
+    free(self->line_breaker);
+    free(self->separator);
+    free(self->rendered_text);
+
+    self->rendered_text_alocation_size = new_stack->rendered_text_alocation_size;
+    self->size = new_stack->size;
+    self->ident_level = new_stack->ident_level;
+
+
+    self->line_breaker = new_stack->line_breaker;
+    self->separator = new_stack->separator;
+    self->rendered_text = new_stack->rendered_text;
+    free(new_stack);
+
+}
+void CTextStack_restart(struct CTextStack *self){
+    free(self->rendered_text);
+    self->rendered_text = (char*)malloc(2);
+    strcpy(self->rendered_text,"\0");
+    self->rendered_text_alocation_size = 2;
+    self->size = 0;
+    self->ident_level = 0;
+}
+
+void CTextStack_represent(struct CTextStack *self){
+    printf("%s\n",self->rendered_text);
+}
+
+
+void CTextStack_free(struct CTextStack *self){
+    free(self->line_breaker);
+    free(self->separator);
+    free(self->rendered_text);
+    free(self);
+}
+
+ CTextStack * CTextStack_clone(struct CTextStack *self){
+    CTextStack *new_stack = newCTextStack(self->line_breaker,self->separator);
+    new_stack->ident_level = self->ident_level;
+    CTextStack_text(new_stack,self->rendered_text);
+    return new_stack;
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/algo_methods/algo_methods.c
+
+
+
+
+
+ CTextStack * CTextStack_substr(struct CTextStack *self, long starter, long end){
+
+    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
+    new_element->ident_level = self->ident_level;
+    long formated_starter = private_CText_transform_index(self->size, starter);
+    long formated_end = private_CText_transform_index(self->size, end);
+
+    if(formated_starter == formated_end){
+        CTextStack_format(new_element,"%c",self->rendered_text[formated_starter]);
+        return new_element;
+    }
+
+    for(long i =formated_starter; i < formated_end; i++){
+        CTextStack_format(new_element,"%c",self->rendered_text[i]);
+    }
+
+    return new_element;
+
+}
+
+void CTextStack_self_substr(struct CTextStack *self, long starter, long end){
+    CTextStack *new_stack = CTextStack_substr(self,starter,end);
+    private_CTextStack_parse_ownership(self,new_stack);
+
+}
+
+
+ CTextStack *CTextStack_replace(struct CTextStack *self,const char *element, const char *element_to_replace){
+
+    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
+    new_element->ident_level = self->ident_level;
+
+    long element_size = (long)strlen(element);
+    for(long i = 0; i < self->size;i++){
+        CTextStack  *possible_ocurrence  = CTextStack_substr(self,i,i+element_size);
+
+        if(strcmp(possible_ocurrence->rendered_text,element)== 0){
+            CTextStack_text(new_element,element_to_replace);
+            i+=element_size -1;
+        }
+
+        else{
+            CTextStack_format(new_element,"%c",self->rendered_text[i]);
+        }
+
+        CTextStack_free(possible_ocurrence);
+
+    }
+    return new_element;
+}
+
+void CTextStack_self_replace(struct CTextStack *self,const char *element, const char *element_to_replace){
+    CTextStack  *new_stack = CTextStack_replace(self,element,element_to_replace);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+
+ CTextStack *CTextStack_replace_long(struct CTextStack *self,const char *element, long element_to_replace){
+    char num_conversion[20] = {0};
+    sprintf(num_conversion,"%ld",element_to_replace);
+    return CTextStack_replace(self,element,num_conversion);
+}
+
+
+void CTextStack_self_replace_long(struct CTextStack *self,const char *element, long element_to_replace){
+    CTextStack  *new_stack = CTextStack_replace_long(self,element,element_to_replace);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+
+ CTextStack *CTextStack_replace_double(struct CTextStack *self,const char *element, double element_to_replace){
+    CTextStack  *num_formated = newCTextStack_string_empty();
+    CTextStack_format(num_formated,"%f",element_to_replace);
+    CTextStack  *result = CTextStack_replace(self,element,num_formated->rendered_text);
+    CTextStack_free(num_formated);
+    return result;
+}
+
+
+void CTextStack_self_replace_double(struct CTextStack *self,const char *element, double element_to_replace){
+    CTextStack  *new_stack = CTextStack_replace_double(self,element,element_to_replace);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+
+
+long CTextStack_index_of(struct  CTextStack *self, const char *element){
+    long element_size = (long)strlen(element);
+    for(int i = 0; i < self->size; i++){
+        CTextStack  *possible_element = CTextStack_substr(self,i,i+element_size);
+        if(strcmp(possible_element->rendered_text,element) == 0){
+            CTextStack_free(possible_element);
+            return i;
+        }
+        CTextStack_free(possible_element);
+
+    }
+    return -1;
+}
+
+
+long CTextStack_index_of_char(struct  CTextStack *self, char element){
+    for(int i = 0; i < self->size; i++) {
+        if(self->rendered_text[i] == element){
+            return i;
+        }
+    }
+    return -1;
+}
+bool CTextStack_starts_with(struct  CTextStack *self, const char *element){
+    long element_size = strlen(element);
+    CTextStack  *separated = CTextStack_substr(self,0,element_size);
+    if(strcmp(separated->rendered_text,element) == 0){
+        CTextStack_free(separated);
+        return true;
+    }
+    CTextStack_free(separated);
+    return false;
+}
+
+bool CTextStack_ends_with(struct  CTextStack *self, const char *element){
+    long element_size = strlen(element);
+    CTextStack  *separated = CTextStack_substr(self,self->size -element_size,-1);
+
+    if(strcmp(separated->rendered_text,element) == 0){
+        CTextStack_free(separated);
+        return true;
+    }
+    CTextStack_free(separated);
+    return false;
+}
+
+
+
+struct CTextStack *CTextStack_lower(struct CTextStack *self){
+    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
+    new_element->ident_level = self->ident_level;
+    for(long i =0; i < self->size; i++){
+        char current = self->rendered_text[i];
+        CTextStack_format(new_element,"%c",tolower(current));
+    }
+    return new_element;
+}
+
+void CTextStack_self_lower(struct CTextStack *self){
+    CTextStack *new_stack = CTextStack_lower(self);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+struct CTextStack *CTextStack_upper(struct CTextStack *self){
+    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
+    new_element->ident_level = self->ident_level;
+    for(long i =0; i < self->size; i++){
+        char current = self->rendered_text[i];
+        CTextStack_format(new_element,"%c",toupper(current));
+    }
+    return new_element;
+}
+
+struct CTextStack *CTextStack_captalize(struct CTextStack *self){
+    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
+    new_element->ident_level = self->ident_level;
+    if(self->size  ==0){
+        return  new_element;
+    }
+
+    CTextStack_format(new_element,"%c", toupper(self->rendered_text[0]));
+
+    for(long i =1; i < self->size; i++){
+        char  last = self->rendered_text[i-1];
+        char current = self->rendered_text[i];
+
+
+        if(last == ' '){
+            CTextStack_format(new_element,"%c",toupper(current));
+        }
+        else{
+            CTextStack_format(new_element,"%c", tolower(current));
+
+        }
+
+    }
+    return new_element;
+}
+
+void CTextStack_self_captalize(struct CTextStack *self){
+    CTextStack *new_stack = CTextStack_captalize(self);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+
+void CTextStack_self_upper(struct CTextStack *self){
+    CTextStack *new_stack = CTextStack_upper(self);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+
+struct CTextStack *CTextStack_reverse(struct CTextStack *self){
+    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
+    new_element->ident_level = self->ident_level;
+    for(long i = (long)self->size; i >= 0 ; i--){
+        CTextStack_format(new_element,"%c",self->rendered_text[i]);
+    }
+    return new_element;
+
+}
+
+void CTextStack_self_reverse(struct CTextStack *self){
+    CTextStack *new_stack = CTextStack_reverse(self);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+
+
+struct CTextStack *CTextStack_pop(struct CTextStack *self, long starter, long end){
+    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
+    new_element->ident_level = self->ident_level;
+    long formated_starter = private_CText_transform_index(self->size, starter);
+    long formated_end = private_CText_transform_index(self->size, end);
+
+    for(int i =0; i < self->size; i ++){
+        if(i >= formated_starter && i <= formated_end){
+            continue;
+        }
+        CTextStack_format(new_element,"%c",self->rendered_text[i]);
+    }
+    return new_element;
+}
+
+
+void  CTextStack_self_pop(struct CTextStack *self, long starter, long end){
+    CTextStack  *new_stack = CTextStack_pop(self, starter, end);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+
+struct CTextStack *CTextStack_insert_at(struct CTextStack *self,long point, const char *element){
+
+    CTextStack *new_element = newCTextStack(self->line_breaker,self->separator);
+    new_element->ident_level = self->ident_level;
+
+    long converted_point = private_CText_transform_index(self->size, point);
+    for(long i = 0; i < converted_point; i++){
+        CTextStack_format(new_element,"%c",self->rendered_text[i]);
+    }
+    CTextStack_text(new_element,element);
+    for(long i = converted_point; i < self->size; i++){
+        CTextStack_format(new_element,"%c",self->rendered_text[i]);
+    }
+    return new_element;
+}
+
+void CTextStack_self_insert_at(struct CTextStack *self,long point, const char *element){
+    CTextStack  *new_stack = CTextStack_insert_at(self, point,element);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+
+struct CTextStack *CTextStack_trim(struct CTextStack *self){
+
+    CTextStack  *invalid_elements = newCTextStack_string("\t\r\n ");
+    long start_point = 0;
+    for(int i = 0; i < self->size; i ++){
+        char current_char =self->rendered_text[i];
+        long invalid_point = CTextStack_index_of_char(invalid_elements, current_char);
+        bool is_invalid = invalid_point != -1;
+        if(!is_invalid){
+            start_point = i;
+            break;
+        }
+    }
+    long end_point = -1;
+    for(long i = (long)self->size -1; i >= 0; i--){
+
+        char current_char =self->rendered_text[i];
+        long invalid_point = CTextStack_index_of_char(invalid_elements, current_char);
+        bool is_invalid = invalid_point != -1;
+        if(!is_invalid){
+            end_point = i+1;
+            break;
+        }
+    }
+    CTextStack_free(invalid_elements);
+    return CTextStack_substr(self,start_point,end_point);
+
+}
+
+
+void CTextStack_self_trim(struct CTextStack *self){
+    CTextStack  *new_stack = CTextStack_trim(self);
+    private_CTextStack_parse_ownership(self,new_stack);
+}
+
+
+bool CTextStack_equal(  CTextStack *self,const char *element){
+    return strcmp(self->rendered_text,element) == 0;
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/constructors/constructors.c
+
+
+
+ CTextStack * newCTextStack(const char *line_breaker, const char *separator){
+    struct CTextStack *self = (struct CTextStack*)malloc(sizeof(struct CTextStack));
+    *self = (CTextStack){0};
+    self->rendered_text = (char*)malloc(2);
+    strcpy(self->rendered_text,"\0");
+    self->rendered_text_alocation_size = 2;
+
+    self->line_breaker = strdup(line_breaker);
+    self->separator = strdup(separator);
+
+
+    return self;
+}
+
+ CTextStack *newCTextStack_string(const char *starter){
+    CTextStack *self = newCTextStack("","");
+    if(starter){
+        CTextStack_format(self,"%s", starter);
+    }
+    return self;
+}
+
+ CTextStack *newCTextStack_string_format(const char *format, ...){
+    CTextStack *self = newCTextStack("","");
+    va_list  argptr;
+    va_start(argptr, format);
+    private_ctext_generate_formated_text(self,format,argptr);
+     va_end(argptr);
+
+    return self;
+}
+
+ CTextStack *newCTextStack_string_getting_ownership(const char *starter){
+    CTextStack *self = newCTextStack("","");
+    free(self->rendered_text);
+    self->rendered_text = (char*)starter;
+    self->size = strlen(starter);
+    self->rendered_text_alocation_size = self->size;
+    return self;
+}
+ CTextStack *newCTextStack_string_empty(){
+    return  newCTextStack("","");
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/parsers/parsers.c
+
+
+
+int CTextStack_typeof(struct CTextStack *self){
+    if(self->size == 0){
+        return CTEXT_STRING;
+    }
+
+    if(CTextStack_equal(self,"true") ||CTextStack_equal(self,"false") ){
+        return CTEXT_BOOL;
+    }
+
+    double data;
+    int result = sscanf(self->rendered_text,"%lf",&data);
+    if(!result){
+        return CTEXT_STRING;
+    }
+    if(CTextStack_index_of(self,".") == -1){
+        return CTEXT_LONG;
+    }
+    return CTEXT_DOUBLE;
+
+
+}
+bool CTextStack_is_a_num(struct CTextStack *self){
+    int type = CTextStack_typeof(self);
+    if(type == CTEXT_DOUBLE || type == CTEXT_LONG){
+        return true;
+    }
+    return false;
+}
+
+
+const char * CTextStack_typeof_in_str(struct CTextStack *self){
+    int current_type = CTextStack_typeof(self);
+
+    if(current_type == CTEXT_BOOL){
+        return "bool";
+    }
+
+    else if(current_type == CTEXT_STRING){
+        return "string";
+    }
+
+    else if(current_type == CTEXT_LONG){
+        return "long";
+    }
+
+    else if(current_type == CTEXT_DOUBLE){
+        return "double";
+    }
+
+    else{
+        return "invalid";
+    }
+}
+
+bool  CTextStack_parse_to_bool(struct CTextStack *self){
+    if(CTextStack_equal(self,"true")){
+        return true;
+    }
+    return false;
+}
+
+long  CTextStack_parse_to_integer(struct CTextStack *self){
+    long value;
+    int result = sscanf(self->rendered_text,"%ld",&value);
+    if(!result){
+        return -1;
+    }
+    return value;
+}
+
+double  CTextStack_parse_to_double(struct CTextStack *self){
+    double value;
+    int result = sscanf(self->rendered_text,"%lf",&value);
+    if(!result){
+        return -1;
+    }
+    return value;
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextStack/render_methods/render_methods.c
+
+
+
+void private_ctext_text_double_size_if_reachs(struct CTextStack *self){
+
+    while(self->size >= (self->rendered_text_alocation_size - 2)){
+        self->rendered_text_alocation_size  =  (self->rendered_text_alocation_size  * 2)+2;
+        self->rendered_text = (char*)(realloc(
+            self->rendered_text,self->rendered_text_alocation_size
+        ));
+    }
+}
+
+void CTextStack_text(struct CTextStack *self, const char *text){
+
+    if (!text || !text[0]) {
+        // Tratar caso de ponteiro nulo ou string vazia
+        return;
+    }
+
+    size_t text_size = strlen(text);
+
+    self->size += text_size;
+    private_ctext_text_double_size_if_reachs(self);
+
+    memcpy(
+            self->rendered_text + self->size - text_size,
+        text,
+        text_size
+    );
+    self->rendered_text[self->size] = '\0';
+}
+
+
+
+void CTextStack_segment_text(struct CTextStack *self, const char *text){
+    CTextStack_segment(self);
+    CTextStack_text(self,text);
+}
+
+
+void CTextStack_format(struct CTextStack *self, const char *format, ...){
+    va_list  argptr;
+    va_start(argptr, format);
+    private_ctext_generate_formated_text(self,format,argptr);
+    va_end(argptr);
+
+}
+
+void CTextStack_segment_format(struct CTextStack *self, const char *format, ...){
+    CTextStack_segment(self);
+    va_list  argptr;
+    va_start(argptr, format);
+    private_ctext_generate_formated_text(self,format,argptr);
+    va_end(argptr);
+
+}
+
+
+void CTextStack_segment(struct CTextStack *self){
+
+    CTextStack_text(self,self->line_breaker);
+
+    for(int i=0;i<self->ident_level;i++){
+        CTextStack_text(self,self->separator);
+
+    }
+
+
+}
+
+void CTextStack_open_format(struct CTextStack *self, const char *tag, const char *format, ...){
+    CTextStack_segment(self);
+    CTextStack_format(self, "%c",'<');
+    CTextStack_text(self,tag);
+
+
+    if(format!=NULL){
+        CTextStack_format(self, "%c",' ');
+
+        va_list  argptr;
+        va_start(argptr, format);
+        private_ctext_generate_formated_text(self,format,argptr);
+        va_end(argptr);
+
+    }
+    CTextStack_format(self, "%c",'>');
+
+
+    self->ident_level += 1;
+}
+
+
+
+void CTextStack_only_open_format(struct CTextStack *self, const char *tag, const char *format, ...){
+    CTextStack_segment(self);
+    CTextStack_format(self, "%c",'<');
+
+    CTextStack_text(self,tag);
+
+
+    if(format!=NULL){
+        CTextStack_format(self, "%c",' ');
+        va_list  argptr;
+        va_start(argptr, format);
+        private_ctext_generate_formated_text(self,format,argptr);
+        va_end(argptr);
+
+    }
+    CTextStack_format(self, "%c",'>');
+
+
+}
+
+void CTextStack_auto_close_format(struct CTextStack *self, const char *tag, const char *format, ...){
+    CTextStack_segment(self);
+    CTextStack_format(self, "%c",'<');
+
+    CTextStack_text(self,tag);
+
+
+    if(format!=NULL){
+        CTextStack_format(self, "%c",' ');
+
+        va_list  argptr;
+        va_start(argptr, format);
+        private_ctext_generate_formated_text(self,format,argptr);
+        va_end(argptr);
+    }
+    CTextStack_text(self,"/>");
+
+}
+
+void ctext_open(struct CTextStack *self, const char *tag){
+    if(tag ==  NULL){
+
+        self->ident_level += 1;
+        return;
+    }
+    CTextStack_open_format(self, tag, NULL);
+}
+
+
+
+void ctext_close(struct CTextStack *self, const char *tag){
+
+    if(tag==NULL){
+        self->ident_level -= 1;
+
+        return;
+    }
+    self->ident_level -= 1;
+    CTextStack_segment(self);
+
+
+    CTextStack_text(self,"</");
+    CTextStack_text(self,tag);
+    CTextStack_format(self, "%c",'>');
+
+}
+
+
+
+
+//path: src/dependencies/CTextEngine/functions/CTextArray/CTextArray.c
+
+
+
+CTextArray * newCTextArray(){
+    CTextArray  *self = (CTextArray*) malloc(sizeof (CTextArray));
+    self->size = 0;
+    self->stacks = (CTextStack**) malloc(0);
+    return self;
+}
+
+void CTextArray_append(CTextArray *self,CTextStack *element){
+    self->stacks =  (CTextStack**) realloc(
+            self->stacks,
+            (self->size+1)* sizeof (CTextStack*)
+            );
+
+    self->stacks[self->size] = element;
+    self->size+=1;
+}
+
+
+
+void CTextArray_append_string(CTextArray *self,const char *element){
+    CTextStack *new_element = newCTextStack_string(element);
+    CTextArray_append(self,new_element);
+}
+
+CTextStack * CTextArray_join(CTextArray *self,const char *separator){
+    CTextStack  *result  = newCTextStack_string_empty();
+    for(int i = 0; i < self->size; i++){
+        if(i < self->size -1){
+            CTextStack_format(result,"%t%s",self->stacks[i],separator);
+        }
+        else{
+            CTextStack_format(result,"%t",self->stacks[i]);
+
+        }
+
+    }
+    return result;
+}
+
+CTextArray *CTextArray_split(const char *element,const char *target){
+    CTextArray *self = newCTextArray();
+    CTextStack *text = newCTextStack_string(element);
+    long target_size = (long)strlen(target);
+    CTextStack  *acumulated = newCTextStack_string_empty();
+
+    for(int i = 0; i <text->size; i++){
+        CTextStack  *possible_division = CTextStack_substr(text,i,target_size + i);
+        if(CTextStack_equal(possible_division,target)){
+            CTextArray_append(self,acumulated);
+            acumulated = newCTextStack_string_empty();
+            CTextStack_free(possible_division);
+            continue;
+        }
+        CTextStack_free(possible_division);
+
+        CTextStack_format(acumulated,"%c",text->rendered_text[i]);
+    }
+
+    CTextArray_append(self,acumulated);
+    CTextStack_free(text);
+    return self;
+}
+
+
+
+void  CTextArray_free(CTextArray *self){
+    for(int i = 0; i < self->size; i++){
+            CTextStack_free(self->stacks[i]);
+    }
+    free(self->stacks);
+    free(self);
+}
+
+CTextArray * CTextArray_map(CTextArray *self, CTextStack *(caller)(CTextStack* element)){
+    CTextArray *new_array  = newCTextArray();
+    for(int i = 0; i < self->size; i++){
+        CTextStack *result = caller(self->stacks[i]);
+        CTextArray_append(new_array,result);
+    }
+    return new_array;
+}
+
+
+CTextArray * CTextArray_filter(CTextArray *self, bool (caller)(CTextStack* element)){
+    CTextArray *new_array  = newCTextArray();
+
+    for(int i = 0; i < self->size; i++){
+        if(caller(self->stacks[i])){
+
+            CTextArray_append(new_array, CTextStack_clone(self->stacks[i]));
+        }
+    }
+
+    return new_array;
+}
+
+void  CTextArray_foreach(CTextArray *self, void (*caller)(CTextStack* element)){
+    for(int i = 0; i < self->size; i++){
+        caller(self->stacks[i]);
+    }
+}
+
+bool CTextArray_includes(CTextArray *self,const char *element){
+    for(int i = 0 ; i < self->size;i++){
+        if(CTextStack_equal(self->stacks[i],element)){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+void CTextArray_represent(CTextArray *self){
+    for(int i =0; i < self->size; i++){
+        CTextStack_represent(self->stacks[i]);
+    }
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/definition.c
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTexStackModule/CTextStackModule.c
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTexStackModule/../unique.definition_requirements.h
+
+
+
+
+
+CTextStackModule newCTextStackModule(){
+    struct CTextStackModule self = {0};
+    self.newStack = newCTextStack;
+    self.newStack_string = newCTextStack_string;
+    self.newStack_string_format = newCTextStack_string_format;
+    self.newStack_string_empty = newCTextStack_string_empty;
+    self.newStack_string_getting_ownership = newCTextStack_string_getting_ownership;
+    self.text = CTextStack_text;
+    self.segment_text = CTextStack_segment_text;
+    self.format = CTextStack_format;
+    self.segment = CTextStack_segment;
+    self.segment_format = CTextStack_segment_format;
+    self.open_format = CTextStack_open_format;
+    self.only_open_format =CTextStack_only_open_format;
+    self.auto_close_format = CTextStack_auto_close_format;
+    self.open = ctext_open;
+    self.close = ctext_close;
+    self.free =  CTextStack_free;
+    self.clone = CTextStack_clone;
+    self.represent = CTextStack_represent;
+    self.self_transform_in_string_and_self_clear = CTextStack_self_transform_in_string_and_self_clear;
+    self.restart = CTextStack_restart;
+    self.substr = CTextStack_substr;
+    self.self_substr =CTextStack_self_substr;
+
+    self.pop = CTextStack_pop;
+    self.self_pop =CTextStack_self_pop;
+
+    self.replace = CTextStack_replace;
+    self.self_replace = CTextStack_self_replace;
+
+    self.replace_long = CTextStack_replace_long;
+    self.self_replace_long =CTextStack_self_replace_long;
+
+
+    self.replace_double = CTextStack_replace_double;
+    self.self_replace_double =CTextStack_self_replace_double;
+
+    self.insert_at = CTextStack_insert_at;
+    self.self_insert_at  = CTextStack_self_insert_at;
+
+
+    self.index_of = CTextStack_index_of;
+    self.index_of_char = CTextStack_index_of_char;
+
+    self.lower = CTextStack_lower;
+    self.self_lower = CTextStack_self_lower;
+
+    self.upper = CTextStack_upper;
+    self.self_upper = CTextStack_self_upper;
+
+    self.captalize = CTextStack_captalize;
+    self.self_captalize = CTextStack_self_captalize;
+
+    self.starts_with = CTextStack_starts_with;
+    self.ends_with = CTextStack_ends_with;
+
+    self.equal = CTextStack_equal;
+    self.reverse = CTextStack_reverse;
+    self.self_reverse = CTextStack_self_reverse;
+
+
+    self.typeof_element = CTextStack_typeof;
+    self.is_a_num = CTextStack_is_a_num;
+    self.typeof_in_str = CTextStack_typeof_in_str;
+    self.parse_to_bool = CTextStack_parse_to_bool;
+    self.parse_to_integer = CTextStack_parse_to_integer;
+    self.parse_to_double = CTextStack_parse_to_double;
+
+    self.trim = CTextStack_trim;
+    self.self_trim = CTextStack_self_trim;
+
+
+    return self;
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTextArrayModule/CTextArrayModule.c
+
+
+
+
+CTextArrayModule newCTextArrayModule(){
+    CTextArrayModule module = {0};
+    module.newArray = newCTextArray;
+    module.append = CTextArray_append;
+    module.append_string = CTextArray_append_string;
+    module.join = CTextArray_join;
+    module.map  = CTextArray_map;
+    module.filter = CTextArray_filter;
+    module.foreach = CTextArray_foreach;
+    module.represent = CTextArray_represent;
+    module.includes = CTextArray_includes;
+    module.free = CTextArray_free;
+    return module;
+}
+
+
+//path: src/dependencies/CTextEngine/functions/CTextNamespace/CTextNamespace/CTextNamespace.c
+
+
+
+
+CTextNamespace newCTextNamespace(){
+    CTextNamespace self  = {0};
+    self.stack = newCTextStackModule();
+    self.array = newCTextArrayModule();
+    return self;
+}
+
+
+
+//path: src/dependencies/CTextEngine/functions/extras/extras.c
+
+
+
+void private_ctext_generate_formated_text(
+        struct CTextStack *stack,const char *format,va_list argptr){
+    long  text_size = strlen(format);
+
+    int i;
+    for(i =0;i < text_size -1 ;i++){
+
+        char single_test[3] = {format[i],format[i+1],'\0'};
+        char double_test[4] = {0};
+
+
+        if(i < text_size -2){
+            strcpy(double_test,single_test);
+            double_test[2] = format[i+2];
+            double_test[3] = '\0';
+
+        }
+
+        if(strcmp(single_test,"%d") == 0 || strcmp(single_test,"%i") == 0) {
+            int value = va_arg(argptr,int);
+            char result[20] ={0};
+            sprintf(result,"%d", value);
+
+
+
+            CTextStack_text(stack,result);
+
+            i+=1;
+            continue;
+        }
+
+        else if(strcmp(double_test,"%ld") == 0 ) {
+
+            int value = va_arg(argptr,int);
+            char result[20] ={0};
+            sprintf(result,"%d", value);
+
+            CTextStack_text(stack,result);
+
+            i+=2;
+            continue;
+        }
+
+
+        else if(strcmp(single_test,"%f") == 0 ) {
+            char result_text[20]= {0};
+
+            sprintf(result_text,"%lf", va_arg(argptr,double ));
+
+            for(int t = 18; t > 0; t--){
+                char current_char = result_text[t];
+                if(current_char != '0' && current_char != '\0'){
+
+                    if(current_char == '.'){
+                        result_text[t+2]  = '\0';
+                    }
+                    else{
+                        result_text[t+1]  = '\0';
+                    }
+
+                    break;
+                }
+            }
+            CTextStack_text(stack,result_text);
+            i+=1;
+            continue;
+        }
+
+        else if(strcmp(double_test,"%lf") == 0 ) {
+            char result_text[20]= {0};
+
+            sprintf(result_text,"%lf", va_arg(argptr,double ));
+
+            for(int t = 18; t > 0; t--){
+                char current_char = result_text[t];
+                if(current_char != '0' && current_char != '\0'){
+
+                    if(current_char == '.'){
+                        result_text[t+2]  = '\0';
+                    }
+                    else{
+                        result_text[t+1]  = '\0';
+                    }
+
+                    break;
+                }
+            }
+            CTextStack_text(stack,result_text);
+            i+=2;
+            continue;
+        }
+        else if(strcmp(single_test,"%c") == 0){
+            char result = va_arg(argptr,int);
+            char element[2] = {result,'\0'};
+            CTextStack_text(stack,element);
+            i+=1;
+            continue;
+        }
+
+
+        else if(strcmp(single_test,"%b") == 0){
+            bool value = va_arg(argptr,int);
+            if(value){
+                CTextStack_text(stack,"true");
+            }else{
+                CTextStack_text(stack,"false");
+            }
+            i+=1;
+            continue;
+        }
+
+        else if(strcmp(double_test,"%sc") == 0){
+            char *value = va_arg(argptr,char*);
+            if(value){
+                CTextStack_text(stack,value);
+                free(value);
+            }
+            i+=2;
+            continue;
+        }
+
+        else if(strcmp(single_test,"%s") == 0){
+            const char *value = va_arg(argptr,const char*);
+            if(value){
+                CTextStack_text(stack,value);
+            }
+
+            i+=1;
+            continue;
+        }
+        else if(strcmp(double_test,"%tc") == 0){
+            struct CTextStack *new_stack = (struct  CTextStack*)va_arg(argptr,void *);
+            if(new_stack){
+                char *result = CTextStack_self_transform_in_string_and_self_clear(new_stack);
+                CTextStack_text(stack,result);
+                free(result);
+            }
+            i+=2;
+            continue;
+        }
+
+        else if(strcmp(single_test,"%t") == 0){
+            struct CTextStack *new_stack = (struct  CTextStack*)va_arg(argptr,void *);
+            if(new_stack){
+                CTextStack_text(stack,new_stack->rendered_text);
+            }
+            i+=1;
+            continue;
+        }
+
+        char element[2] = {format[i],'\0'};
+        CTextStack_text(stack,element);
+
+        }
+
+
+
+    if(text_size > 0 && text_size> i){
+        char element[2] = {format[text_size-1],'\0'};
+        CTextStack_text(stack,element);
+    }
+
+    va_end(argptr);
+}
+
+
+long private_CText_transform_index(long size , long value){
+    long formated_value = value;
+
+    if(formated_value >= size){
+        formated_value = size;
+    }
+
+    if(formated_value  < 0){
+        formated_value = size + (formated_value +1);
+    }
+    if(formated_value <0){
+        formated_value = 0;
+    }
+    return formated_value;
+}
+
+
+
+
+
+
+#endif
+
+
+#ifdef cJSON_DEFINED_IN_CWEB_STUDIO
+//path: src/dependencies/cJson/cJSON.c
+
+
+
+
+
+
+#if !defined(_CRT_SECURE_NO_DEPRECATE) && defined(_MSC_VER)
+#define _CRT_SECURE_NO_DEPRECATE
+#endif
+
+#ifdef __GNUC__
+#pragma GCC visibility push(default)
+#endif
+#if defined(_MSC_VER)
+#pragma warning (push)
+
+#pragma warning (disable : 4001)
+#endif
+
+#include <string.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <ctype.h>
+#include <float.h>
+
+#ifdef ENABLE_LOCALES
+#include <locale.h>
+#endif
+
+#if defined(_MSC_VER)
+#pragma warning (pop)
+#endif
+#ifdef __GNUC__
+#pragma GCC visibility pop
+#endif
+
+
+
+#ifdef true
+#undef true
+#endif
+#define true ((cJSON_bool)1)
+
+#ifdef false
+#undef false
+#endif
+#define false ((cJSON_bool)0)
+
+
+#ifndef isinf
+#define isinf(d) (isnan((d - d)) && !isnan(d))
+#endif
+#ifndef isnan
+#define isnan(d) (d != d)
+#endif
+
+#ifndef NAN
+#ifdef _WIN32
+#define NAN sqrt(-1.0)
+#else
+#define NAN 0.0/0.0
+#endif
+#endif
+
+typedef struct {
+    const unsigned char *json;
+    size_t position;
+} error;
+static error global_error = { NULL, 0 };
+
+CJSON_PUBLIC(const char *) cJSON_GetErrorPtr(void)
+{
+    return (const char*) (global_error.json + global_error.position);
+}
+
+CJSON_PUBLIC(char *) cJSON_GetStringValue(const cJSON * const item)
+{
+    if (!cJSON_IsString(item))
+    {
+        return NULL;
+    }
+
+    return item->valuestring;
+}
+
+CJSON_PUBLIC(double) cJSON_GetNumberValue(const cJSON * const item)
+{
+    if (!cJSON_IsNumber(item))
+    {
+        return (double) NAN;
+    }
+
+    return item->valuedouble;
+}
+
+
+#if (CJSON_VERSION_MAJOR != 1) || (CJSON_VERSION_MINOR != 7) || (CJSON_VERSION_PATCH != 15)
+    #error cJSON.h and cJSON.c have different versions. Make sure that both have the same.
+#endif
+
+CJSON_PUBLIC(const char*) cJSON_Version(void)
+{
+    static char version[15];
+    sprintf(version, "%i.%i.%i", CJSON_VERSION_MAJOR, CJSON_VERSION_MINOR, CJSON_VERSION_PATCH);
+
+    return version;
+}
+
+
+static int case_insensitive_strcmp(const unsigned char *string1, const unsigned char *string2)
+{
+    if ((string1 == NULL) || (string2 == NULL))
+    {
+        return 1;
+    }
+
+    if (string1 == string2)
+    {
+        return 0;
+    }
+
+    for(; tolower(*string1) == tolower(*string2); (void)string1++, string2++)
+    {
+        if (*string1 == '\0')
+        {
+            return 0;
+        }
+    }
+
+    return tolower(*string1) - tolower(*string2);
+}
+
+typedef struct internal_hooks
+{
+    void *(CJSON_CDECL *allocate)(size_t size);
+    void (CJSON_CDECL *deallocate)(void *pointer);
+    void *(CJSON_CDECL *reallocate)(void *pointer, size_t size);
+} internal_hooks;
+
+#if defined(_MSC_VER)
+
+static void * CJSON_CDECL internal_malloc(size_t size)
+{
+    return malloc(size);
+}
+static void CJSON_CDECL internal_free(void *pointer)
+{
+    free(pointer);
+}
+static void * CJSON_CDECL internal_realloc(void *pointer, size_t size)
+{
+    return realloc(pointer, size);
+}
+#else
+#define internal_malloc malloc
+#define internal_free free
+#define internal_realloc realloc
+#endif
+
+
+#define static_strlen(string_literal) (sizeof(string_literal) - sizeof(""))
+
+static internal_hooks global_hooks = { internal_malloc, internal_free, internal_realloc };
+
+static unsigned char* cJSON_strdup(const unsigned char* string, const internal_hooks * const hooks)
+{
+    size_t length = 0;
+    unsigned char *copy = NULL;
+
+    if (string == NULL)
+    {
+        return NULL;
+    }
+
+    length = strlen((const char*)string) + sizeof("");
+    copy = (unsigned char*)hooks->allocate(length);
+    if (copy == NULL)
+    {
+        return NULL;
+    }
+    memcpy(copy, string, length);
+
+    return copy;
+}
+
+CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks)
+{
+    if (hooks == NULL)
+    {
+        
+        global_hooks.allocate = malloc;
+        global_hooks.deallocate = free;
+        global_hooks.reallocate = realloc;
+        return;
+    }
+
+    global_hooks.allocate = malloc;
+    if (hooks->malloc_fn != NULL)
+    {
+        global_hooks.allocate = hooks->malloc_fn;
+    }
+
+    global_hooks.deallocate = free;
+    if (hooks->free_fn != NULL)
+    {
+        global_hooks.deallocate = hooks->free_fn;
+    }
+
+    
+    global_hooks.reallocate = NULL;
+    if ((global_hooks.allocate == malloc) && (global_hooks.deallocate == free))
+    {
+        global_hooks.reallocate = realloc;
+    }
+}
+
+
+static cJSON *cJSON_New_Item(const internal_hooks * const hooks)
+{
+    cJSON* node = (cJSON*)hooks->allocate(sizeof(cJSON));
+    if (node)
+    {
+        memset(node, '\0', sizeof(cJSON));
+    }
+
+    return node;
+}
+
+
+CJSON_PUBLIC(void) cJSON_Delete(cJSON *item)
+{
+    cJSON *next = NULL;
+    while (item != NULL)
+    {
+        next = item->next;
+        if (!(item->type & cJSON_IsReference) && (item->child != NULL))
+        {
+            cJSON_Delete(item->child);
+        }
+        if (!(item->type & cJSON_IsReference) && (item->valuestring != NULL))
+        {
+            global_hooks.deallocate(item->valuestring);
+        }
+        if (!(item->type & cJSON_StringIsConst) && (item->string != NULL))
+        {
+            global_hooks.deallocate(item->string);
+        }
+        global_hooks.deallocate(item);
+        item = next;
+    }
+}
+
+
+static unsigned char get_decimal_point(void)
+{
+#ifdef ENABLE_LOCALES
+    struct lconv *lconv = localeconv();
+    return (unsigned char) lconv->decimal_point[0];
+#else
+    return '.';
+#endif
+}
+
+typedef struct
+{
+    const unsigned char *content;
+    size_t length;
+    size_t offset;
+    size_t depth; 
+    internal_hooks hooks;
+} parse_buffer;
+
+
+#define can_read(buffer, size) ((buffer != NULL) && (((buffer)->offset + size) <= (buffer)->length))
+
+#define can_access_at_index(buffer, index) ((buffer != NULL) && (((buffer)->offset + index) < (buffer)->length))
+#define cannot_access_at_index(buffer, index) (!can_access_at_index(buffer, index))
+
+#define buffer_at_offset(buffer) ((buffer)->content + (buffer)->offset)
+
+
+static cJSON_bool parse_number(cJSON * const item, parse_buffer * const input_buffer)
+{
+    double number = 0;
+    unsigned char *after_end = NULL;
+    unsigned char number_c_string[64];
+    unsigned char decimal_point = get_decimal_point();
+    size_t i = 0;
+
+    if ((input_buffer == NULL) || (input_buffer->content == NULL))
+    {
+        return false;
+    }
+
+    
+    for (i = 0; (i < (sizeof(number_c_string) - 1)) && can_access_at_index(input_buffer, i); i++)
+    {
+        switch (buffer_at_offset(input_buffer)[i])
+        {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '+':
+            case '-':
+            case 'e':
+            case 'E':
+                number_c_string[i] = buffer_at_offset(input_buffer)[i];
+                break;
+
+            case '.':
+                number_c_string[i] = decimal_point;
+                break;
+
+            default:
+                goto loop_end;
+        }
+    }
+loop_end:
+    number_c_string[i] = '\0';
+
+    number = strtod((const char*)number_c_string, (char**)&after_end);
+    if (number_c_string == after_end)
+    {
+        return false; 
+    }
+
+    item->valuedouble = number;
+
+    
+    if (number >= INT_MAX)
+    {
+        item->valueint = INT_MAX;
+    }
+    else if (number <= (double)INT_MIN)
+    {
+        item->valueint = INT_MIN;
+    }
+    else
+    {
+        item->valueint = (int)number;
+    }
+
+    item->type = cJSON_Number;
+
+    input_buffer->offset += (size_t)(after_end - number_c_string);
+    return true;
+}
+
+
+CJSON_PUBLIC(double) cJSON_SetNumberHelper(cJSON *object, double number)
+{
+    if (number >= INT_MAX)
+    {
+        object->valueint = INT_MAX;
+    }
+    else if (number <= (double)INT_MIN)
+    {
+        object->valueint = INT_MIN;
+    }
+    else
+    {
+        object->valueint = (int)number;
+    }
+
+    return object->valuedouble = number;
+}
+
+CJSON_PUBLIC(char*) cJSON_SetValuestring(cJSON *object, const char *valuestring)
+{
+    char *copy = NULL;
+    
+    if (!(object->type & cJSON_String) || (object->type & cJSON_IsReference))
+    {
+        return NULL;
+    }
+    if (strlen(valuestring) <= strlen(object->valuestring))
+    {
+        strcpy(object->valuestring, valuestring);
+        return object->valuestring;
+    }
+    copy = (char*) cJSON_strdup((const unsigned char*)valuestring, &global_hooks);
+    if (copy == NULL)
+    {
+        return NULL;
+    }
+    if (object->valuestring != NULL)
+    {
+        cJSON_free(object->valuestring);
+    }
+    object->valuestring = copy;
+
+    return copy;
+}
+
+typedef struct
+{
+    unsigned char *buffer;
+    size_t length;
+    size_t offset;
+    size_t depth; 
+    cJSON_bool noalloc;
+    cJSON_bool format; 
+    internal_hooks hooks;
+} printbuffer;
+
+
+static unsigned char* ensure(printbuffer * const p, size_t needed)
+{
+    unsigned char *newbuffer = NULL;
+    size_t newsize = 0;
+
+    if ((p == NULL) || (p->buffer == NULL))
+    {
+        return NULL;
+    }
+
+    if ((p->length > 0) && (p->offset >= p->length))
+    {
+        
+        return NULL;
+    }
+
+    if (needed > INT_MAX)
+    {
+        
+        return NULL;
+    }
+
+    needed += p->offset + 1;
+    if (needed <= p->length)
+    {
+        return p->buffer + p->offset;
+    }
+
+    if (p->noalloc) {
+        return NULL;
+    }
+
+    
+    if (needed > (INT_MAX / 2))
+    {
+        
+        if (needed <= INT_MAX)
+        {
+            newsize = INT_MAX;
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+    else
+    {
+        newsize = needed * 2;
+    }
+
+    if (p->hooks.reallocate != NULL)
+    {
+        
+        newbuffer = (unsigned char*)p->hooks.reallocate(p->buffer, newsize);
+        if (newbuffer == NULL)
+        {
+            p->hooks.deallocate(p->buffer);
+            p->length = 0;
+            p->buffer = NULL;
+
+            return NULL;
+        }
+    }
+    else
+    {
+        
+        newbuffer = (unsigned char*)p->hooks.allocate(newsize);
+        if (!newbuffer)
+        {
+            p->hooks.deallocate(p->buffer);
+            p->length = 0;
+            p->buffer = NULL;
+
+            return NULL;
+        }
+
+        memcpy(newbuffer, p->buffer, p->offset + 1);
+        p->hooks.deallocate(p->buffer);
+    }
+    p->length = newsize;
+    p->buffer = newbuffer;
+
+    return newbuffer + p->offset;
+}
+
+
+static void update_offset(printbuffer * const buffer)
+{
+    const unsigned char *buffer_pointer = NULL;
+    if ((buffer == NULL) || (buffer->buffer == NULL))
+    {
+        return;
+    }
+    buffer_pointer = buffer->buffer + buffer->offset;
+
+    buffer->offset += strlen((const char*)buffer_pointer);
+}
+
+
+static cJSON_bool compare_double(double a, double b)
+{
+    double maxVal = fabs(a) > fabs(b) ? fabs(a) : fabs(b);
+    return (fabs(a - b) <= maxVal * DBL_EPSILON);
+}
+
+
+static cJSON_bool print_number(const cJSON * const item, printbuffer * const output_buffer)
+{
+    unsigned char *output_pointer = NULL;
+    double d = item->valuedouble;
+    int length = 0;
+    size_t i = 0;
+    unsigned char number_buffer[26] = {0}; 
+    unsigned char decimal_point = get_decimal_point();
+    double test = 0.0;
+
+    if (output_buffer == NULL)
+    {
+        return false;
+    }
+
+    
+    if (isnan(d) || isinf(d))
+    {
+        length = sprintf((char*)number_buffer, "null");
+    }
+	else if(d == (double)item->valueint)
+	{
+		length = sprintf((char*)number_buffer, "%d", item->valueint);
+	}
+    else
+    {
+        
+        length = sprintf((char*)number_buffer, "%1.15g", d);
+
+        
+        if ((sscanf((char*)number_buffer, "%lg", &test) != 1) || !compare_double((double)test, d))
+        {
+            
+            length = sprintf((char*)number_buffer, "%1.17g", d);
+        }
+    }
+
+    
+    if ((length < 0) || (length > (int)(sizeof(number_buffer) - 1)))
+    {
+        return false;
+    }
+
+    
+    output_pointer = ensure(output_buffer, (size_t)length + sizeof(""));
+    if (output_pointer == NULL)
+    {
+        return false;
+    }
+
+    
+    for (i = 0; i < ((size_t)length); i++)
+    {
+        if (number_buffer[i] == decimal_point)
+        {
+            output_pointer[i] = '.';
+            continue;
+        }
+
+        output_pointer[i] = number_buffer[i];
+    }
+    output_pointer[i] = '\0';
+
+    output_buffer->offset += (size_t)length;
+
+    return true;
+}
+
+
+static unsigned parse_hex4(const unsigned char * const input)
+{
+    unsigned int h = 0;
+    size_t i = 0;
+
+    for (i = 0; i < 4; i++)
+    {
+        
+        if ((input[i] >= '0') && (input[i] <= '9'))
+        {
+            h += (unsigned int) input[i] - '0';
+        }
+        else if ((input[i] >= 'A') && (input[i] <= 'F'))
+        {
+            h += (unsigned int) 10 + input[i] - 'A';
+        }
+        else if ((input[i] >= 'a') && (input[i] <= 'f'))
+        {
+            h += (unsigned int) 10 + input[i] - 'a';
+        }
+        else 
+        {
+            return 0;
+        }
+
+        if (i < 3)
+        {
+            
+            h = h << 4;
+        }
+    }
+
+    return h;
+}
+
+
+static unsigned char utf16_literal_to_utf8(const unsigned char * const input_pointer, const unsigned char * const input_end, unsigned char **output_pointer)
+{
+    long unsigned int codepoint = 0;
+    unsigned int first_code = 0;
+    const unsigned char *first_sequence = input_pointer;
+    unsigned char utf8_length = 0;
+    unsigned char utf8_position = 0;
+    unsigned char sequence_length = 0;
+    unsigned char first_byte_mark = 0;
+
+    if ((input_end - first_sequence) < 6)
+    {
+        
+        goto fail;
+    }
+
+    
+    first_code = parse_hex4(first_sequence + 2);
+
+    
+    if (((first_code >= 0xDC00) && (first_code <= 0xDFFF)))
+    {
+        goto fail;
+    }
+
+    
+    if ((first_code >= 0xD800) && (first_code <= 0xDBFF))
+    {
+        const unsigned char *second_sequence = first_sequence + 6;
+        unsigned int second_code = 0;
+        sequence_length = 12; 
+
+        if ((input_end - second_sequence) < 6)
+        {
+            
+            goto fail;
+        }
+
+        if ((second_sequence[0] != '\\') || (second_sequence[1] != 'u'))
+        {
+            
+            goto fail;
+        }
+
+        
+        second_code = parse_hex4(second_sequence + 2);
+        
+        if ((second_code < 0xDC00) || (second_code > 0xDFFF))
+        {
+            
+            goto fail;
+        }
+
+
+        
+        codepoint = 0x10000 + (((first_code & 0x3FF) << 10) | (second_code & 0x3FF));
+    }
+    else
+    {
+        sequence_length = 6; 
+        codepoint = first_code;
+    }
+
+    
+    if (codepoint < 0x80)
+    {
+        
+        utf8_length = 1;
+    }
+    else if (codepoint < 0x800)
+    {
+        
+        utf8_length = 2;
+        first_byte_mark = 0xC0; 
+    }
+    else if (codepoint < 0x10000)
+    {
+        
+        utf8_length = 3;
+        first_byte_mark = 0xE0; 
+    }
+    else if (codepoint <= 0x10FFFF)
+    {
+        
+        utf8_length = 4;
+        first_byte_mark = 0xF0; 
+    }
+    else
+    {
+        
+        goto fail;
+    }
+
+    
+    for (utf8_position = (unsigned char)(utf8_length - 1); utf8_position > 0; utf8_position--)
+    {
+        
+        (*output_pointer)[utf8_position] = (unsigned char)((codepoint | 0x80) & 0xBF);
+        codepoint >>= 6;
+    }
+    
+    if (utf8_length > 1)
+    {
+        (*output_pointer)[0] = (unsigned char)((codepoint | first_byte_mark) & 0xFF);
+    }
+    else
+    {
+        (*output_pointer)[0] = (unsigned char)(codepoint & 0x7F);
+    }
+
+    *output_pointer += utf8_length;
+
+    return sequence_length;
+
+fail:
+    return 0;
+}
+
+
+static cJSON_bool parse_string(cJSON * const item, parse_buffer * const input_buffer)
+{
+    const unsigned char *input_pointer = buffer_at_offset(input_buffer) + 1;
+    const unsigned char *input_end = buffer_at_offset(input_buffer) + 1;
+    unsigned char *output_pointer = NULL;
+    unsigned char *output = NULL;
+
+    
+    if (buffer_at_offset(input_buffer)[0] != '\"')
+    {
+        goto fail;
+    }
+
+    {
+        
+        size_t allocation_length = 0;
+        size_t skipped_bytes = 0;
+        while (((size_t)(input_end - input_buffer->content) < input_buffer->length) && (*input_end != '\"'))
+        {
+            
+            if (input_end[0] == '\\')
+            {
+                if ((size_t)(input_end + 1 - input_buffer->content) >= input_buffer->length)
+                {
+                    
+                    goto fail;
+                }
+                skipped_bytes++;
+                input_end++;
+            }
+            input_end++;
+        }
+        if (((size_t)(input_end - input_buffer->content) >= input_buffer->length) || (*input_end != '\"'))
+        {
+            goto fail; 
+        }
+
+        
+        allocation_length = (size_t) (input_end - buffer_at_offset(input_buffer)) - skipped_bytes;
+        output = (unsigned char*)input_buffer->hooks.allocate(allocation_length + sizeof(""));
+        if (output == NULL)
+        {
+            goto fail; 
+        }
+    }
+
+    output_pointer = output;
+    
+    while (input_pointer < input_end)
+    {
+        if (*input_pointer != '\\')
+        {
+            *output_pointer++ = *input_pointer++;
+        }
+        
+        else
+        {
+            unsigned char sequence_length = 2;
+            if ((input_end - input_pointer) < 1)
+            {
+                goto fail;
+            }
+
+            switch (input_pointer[1])
+            {
+                case 'b':
+                    *output_pointer++ = '\b';
+                    break;
+                case 'f':
+                    *output_pointer++ = '\f';
+                    break;
+                case 'n':
+                    *output_pointer++ = '\n';
+                    break;
+                case 'r':
+                    *output_pointer++ = '\r';
+                    break;
+                case 't':
+                    *output_pointer++ = '\t';
+                    break;
+                case '\"':
+                case '\\':
+                case '/':
+                    *output_pointer++ = input_pointer[1];
+                    break;
+
+                
+                case 'u':
+                    sequence_length = utf16_literal_to_utf8(input_pointer, input_end, &output_pointer);
+                    if (sequence_length == 0)
+                    {
+                        
+                        goto fail;
+                    }
+                    break;
+
+                default:
+                    goto fail;
+            }
+            input_pointer += sequence_length;
+        }
+    }
+
+    
+    *output_pointer = '\0';
+
+    item->type = cJSON_String;
+    item->valuestring = (char*)output;
+
+    input_buffer->offset = (size_t) (input_end - input_buffer->content);
+    input_buffer->offset++;
+
+    return true;
+
+fail:
+    if (output != NULL)
+    {
+        input_buffer->hooks.deallocate(output);
+    }
+
+    if (input_pointer != NULL)
+    {
+        input_buffer->offset = (size_t)(input_pointer - input_buffer->content);
+    }
+
+    return false;
+}
+
+
+static cJSON_bool print_string_ptr(const unsigned char * const input, printbuffer * const output_buffer)
+{
+    const unsigned char *input_pointer = NULL;
+    unsigned char *output = NULL;
+    unsigned char *output_pointer = NULL;
+    size_t output_length = 0;
+    
+    size_t escape_characters = 0;
+
+    if (output_buffer == NULL)
+    {
+        return false;
+    }
+
+    
+    if (input == NULL)
+    {
+        output = ensure(output_buffer, sizeof("\"\""));
+        if (output == NULL)
+        {
+            return false;
+        }
+        strcpy((char*)output, "\"\"");
+
+        return true;
+    }
+
+    
+    for (input_pointer = input; *input_pointer; input_pointer++)
+    {
+        switch (*input_pointer)
+        {
+            case '\"':
+            case '\\':
+            case '\b':
+            case '\f':
+            case '\n':
+            case '\r':
+            case '\t':
+                
+                escape_characters++;
+                break;
+            default:
+                if (*input_pointer < 32)
+                {
+                    
+                    escape_characters += 5;
+                }
+                break;
+        }
+    }
+    output_length = (size_t)(input_pointer - input) + escape_characters;
+
+    output = ensure(output_buffer, output_length + sizeof("\"\""));
+    if (output == NULL)
+    {
+        return false;
+    }
+
+    
+    if (escape_characters == 0)
+    {
+        output[0] = '\"';
+        memcpy(output + 1, input, output_length);
+        output[output_length + 1] = '\"';
+        output[output_length + 2] = '\0';
+
+        return true;
+    }
+
+    output[0] = '\"';
+    output_pointer = output + 1;
+    
+    for (input_pointer = input; *input_pointer != '\0'; (void)input_pointer++, output_pointer++)
+    {
+        if ((*input_pointer > 31) && (*input_pointer != '\"') && (*input_pointer != '\\'))
+        {
+            
+            *output_pointer = *input_pointer;
+        }
+        else
+        {
+            
+            *output_pointer++ = '\\';
+            switch (*input_pointer)
+            {
+                case '\\':
+                    *output_pointer = '\\';
+                    break;
+                case '\"':
+                    *output_pointer = '\"';
+                    break;
+                case '\b':
+                    *output_pointer = 'b';
+                    break;
+                case '\f':
+                    *output_pointer = 'f';
+                    break;
+                case '\n':
+                    *output_pointer = 'n';
+                    break;
+                case '\r':
+                    *output_pointer = 'r';
+                    break;
+                case '\t':
+                    *output_pointer = 't';
+                    break;
+                default:
+                    
+                    sprintf((char*)output_pointer, "u%04x", *input_pointer);
+                    output_pointer += 4;
+                    break;
+            }
+        }
+    }
+    output[output_length + 1] = '\"';
+    output[output_length + 2] = '\0';
+
+    return true;
+}
+
+
+static cJSON_bool print_string(const cJSON * const item, printbuffer * const p)
+{
+    return print_string_ptr((unsigned char*)item->valuestring, p);
+}
+
+
+static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buffer);
+static cJSON_bool print_value(const cJSON * const item, printbuffer * const output_buffer);
+static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buffer);
+static cJSON_bool print_array(const cJSON * const item, printbuffer * const output_buffer);
+static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_buffer);
+static cJSON_bool print_object(const cJSON * const item, printbuffer * const output_buffer);
+
+
+static parse_buffer *buffer_skip_whitespace(parse_buffer * const buffer)
+{
+    if ((buffer == NULL) || (buffer->content == NULL))
+    {
+        return NULL;
+    }
+
+    if (cannot_access_at_index(buffer, 0))
+    {
+        return buffer;
+    }
+
+    while (can_access_at_index(buffer, 0) && (buffer_at_offset(buffer)[0] <= 32))
+    {
+       buffer->offset++;
+    }
+
+    if (buffer->offset == buffer->length)
+    {
+        buffer->offset--;
+    }
+
+    return buffer;
+}
+
+
+static parse_buffer *skip_utf8_bom(parse_buffer * const buffer)
+{
+    if ((buffer == NULL) || (buffer->content == NULL) || (buffer->offset != 0))
+    {
+        return NULL;
+    }
+
+    if (can_access_at_index(buffer, 4) && (strncmp((const char*)buffer_at_offset(buffer), "\xEF\xBB\xBF", 3) == 0))
+    {
+        buffer->offset += 3;
+    }
+
+    return buffer;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_ParseWithOpts(const char *value, const char **return_parse_end, cJSON_bool require_null_terminated)
+{
+    size_t buffer_length;
+
+    if (NULL == value)
+    {
+        return NULL;
+    }
+
+    
+    buffer_length = strlen(value) + sizeof("");
+
+    return cJSON_ParseWithLengthOpts(value, buffer_length, return_parse_end, require_null_terminated);
+}
+
+
+CJSON_PUBLIC(cJSON *) cJSON_ParseWithLengthOpts(const char *value, size_t buffer_length, const char **return_parse_end, cJSON_bool require_null_terminated)
+{
+    parse_buffer buffer = { 0, 0, 0, 0, { 0, 0, 0 } };
+    cJSON *item = NULL;
+
+    
+    global_error.json = NULL;
+    global_error.position = 0;
+
+    if (value == NULL || 0 == buffer_length)
+    {
+        goto fail;
+    }
+
+    buffer.content = (const unsigned char*)value;
+    buffer.length = buffer_length;
+    buffer.offset = 0;
+    buffer.hooks = global_hooks;
+
+    item = cJSON_New_Item(&global_hooks);
+    if (item == NULL) 
+    {
+        goto fail;
+    }
+
+    if (!parse_value(item, buffer_skip_whitespace(skip_utf8_bom(&buffer))))
+    {
+        
+        goto fail;
+    }
+
+    
+    if (require_null_terminated)
+    {
+        buffer_skip_whitespace(&buffer);
+        if ((buffer.offset >= buffer.length) || buffer_at_offset(&buffer)[0] != '\0')
+        {
+            goto fail;
+        }
+    }
+    if (return_parse_end)
+    {
+        *return_parse_end = (const char*)buffer_at_offset(&buffer);
+    }
+
+    return item;
+
+fail:
+    if (item != NULL)
+    {
+        cJSON_Delete(item);
+    }
+
+    if (value != NULL)
+    {
+        error local_error;
+        local_error.json = (const unsigned char*)value;
+        local_error.position = 0;
+
+        if (buffer.offset < buffer.length)
+        {
+            local_error.position = buffer.offset;
+        }
+        else if (buffer.length > 0)
+        {
+            local_error.position = buffer.length - 1;
+        }
+
+        if (return_parse_end != NULL)
+        {
+            *return_parse_end = (const char*)local_error.json + local_error.position;
+        }
+
+        global_error = local_error;
+    }
+
+    return NULL;
+}
+
+
+CJSON_PUBLIC(cJSON *) cJSON_Parse(const char *value)
+{
+    return cJSON_ParseWithOpts(value, 0, 0);
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_ParseWithLength(const char *value, size_t buffer_length)
+{
+    return cJSON_ParseWithLengthOpts(value, buffer_length, 0, 0);
+}
+
+#define cjson_min(a, b) (((a) < (b)) ? (a) : (b))
+
+static unsigned char *print(const cJSON * const item, cJSON_bool format, const internal_hooks * const hooks)
+{
+    static const size_t default_buffer_size = 256;
+    printbuffer buffer[1];
+    unsigned char *printed = NULL;
+
+    memset(buffer, 0, sizeof(buffer));
+
+    
+    buffer->buffer = (unsigned char*) hooks->allocate(default_buffer_size);
+    buffer->length = default_buffer_size;
+    buffer->format = format;
+    buffer->hooks = *hooks;
+    if (buffer->buffer == NULL)
+    {
+        goto fail;
+    }
+
+    
+    if (!print_value(item, buffer))
+    {
+        goto fail;
+    }
+    update_offset(buffer);
+
+    
+    if (hooks->reallocate != NULL)
+    {
+        printed = (unsigned char*) hooks->reallocate(buffer->buffer, buffer->offset + 1);
+        if (printed == NULL) {
+            goto fail;
+        }
+        buffer->buffer = NULL;
+    }
+    else 
+    {
+        printed = (unsigned char*) hooks->allocate(buffer->offset + 1);
+        if (printed == NULL)
+        {
+            goto fail;
+        }
+        memcpy(printed, buffer->buffer, cjson_min(buffer->length, buffer->offset + 1));
+        printed[buffer->offset] = '\0'; 
+
+        
+        hooks->deallocate(buffer->buffer);
+    }
+
+    return printed;
+
+fail:
+    if (buffer->buffer != NULL)
+    {
+        hooks->deallocate(buffer->buffer);
+    }
+
+    if (printed != NULL)
+    {
+        hooks->deallocate(printed);
+    }
+
+    return NULL;
+}
+
+
+CJSON_PUBLIC(char *) cJSON_Print(const cJSON *item)
+{
+    return (char*)print(item, true, &global_hooks);
+}
+
+CJSON_PUBLIC(char *) cJSON_PrintUnformatted(const cJSON *item)
+{
+    return (char*)print(item, false, &global_hooks);
+}
+
+CJSON_PUBLIC(char *) cJSON_PrintBuffered(const cJSON *item, int prebuffer, cJSON_bool fmt)
+{
+    printbuffer p = { 0, 0, 0, 0, 0, 0, { 0, 0, 0 } };
+
+    if (prebuffer < 0)
+    {
+        return NULL;
+    }
+
+    p.buffer = (unsigned char*)global_hooks.allocate((size_t)prebuffer);
+    if (!p.buffer)
+    {
+        return NULL;
+    }
+
+    p.length = (size_t)prebuffer;
+    p.offset = 0;
+    p.noalloc = false;
+    p.format = fmt;
+    p.hooks = global_hooks;
+
+    if (!print_value(item, &p))
+    {
+        global_hooks.deallocate(p.buffer);
+        return NULL;
+    }
+
+    return (char*)p.buffer;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_PrintPreallocated(cJSON *item, char *buffer, const int length, const cJSON_bool format)
+{
+    printbuffer p = { 0, 0, 0, 0, 0, 0, { 0, 0, 0 } };
+
+    if ((length < 0) || (buffer == NULL))
+    {
+        return false;
+    }
+
+    p.buffer = (unsigned char*)buffer;
+    p.length = (size_t)length;
+    p.offset = 0;
+    p.noalloc = true;
+    p.format = format;
+    p.hooks = global_hooks;
+
+    return print_value(item, &p);
+}
+
+
+static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buffer)
+{
+    if ((input_buffer == NULL) || (input_buffer->content == NULL))
+    {
+        return false; 
+    }
+
+    
+    
+    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "null", 4) == 0))
+    {
+        item->type = cJSON_NULL;
+        input_buffer->offset += 4;
+        return true;
+    }
+    
+    if (can_read(input_buffer, 5) && (strncmp((const char*)buffer_at_offset(input_buffer), "false", 5) == 0))
+    {
+        item->type = cJSON_False;
+        input_buffer->offset += 5;
+        return true;
+    }
+    
+    if (can_read(input_buffer, 4) && (strncmp((const char*)buffer_at_offset(input_buffer), "true", 4) == 0))
+    {
+        item->type = cJSON_True;
+        item->valueint = 1;
+        input_buffer->offset += 4;
+        return true;
+    }
+    
+    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '\"'))
+    {
+        return parse_string(item, input_buffer);
+    }
+    
+    if (can_access_at_index(input_buffer, 0) && ((buffer_at_offset(input_buffer)[0] == '-') || ((buffer_at_offset(input_buffer)[0] >= '0') && (buffer_at_offset(input_buffer)[0] <= '9'))))
+    {
+        return parse_number(item, input_buffer);
+    }
+    
+    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '['))
+    {
+        return parse_array(item, input_buffer);
+    }
+    
+    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '{'))
+    {
+        return parse_object(item, input_buffer);
+    }
+
+    return false;
+}
+
+
+static cJSON_bool print_value(const cJSON * const item, printbuffer * const output_buffer)
+{
+    unsigned char *output = NULL;
+
+    if ((item == NULL) || (output_buffer == NULL))
+    {
+        return false;
+    }
+
+    switch ((item->type) & 0xFF)
+    {
+        case cJSON_NULL:
+            output = ensure(output_buffer, 5);
+            if (output == NULL)
+            {
+                return false;
+            }
+            strcpy((char*)output, "null");
+            return true;
+
+        case cJSON_False:
+            output = ensure(output_buffer, 6);
+            if (output == NULL)
+            {
+                return false;
+            }
+            strcpy((char*)output, "false");
+            return true;
+
+        case cJSON_True:
+            output = ensure(output_buffer, 5);
+            if (output == NULL)
+            {
+                return false;
+            }
+            strcpy((char*)output, "true");
+            return true;
+
+        case cJSON_Number:
+            return print_number(item, output_buffer);
+
+        case cJSON_Raw:
+        {
+            size_t raw_length = 0;
+            if (item->valuestring == NULL)
+            {
+                return false;
+            }
+
+            raw_length = strlen(item->valuestring) + sizeof("");
+            output = ensure(output_buffer, raw_length);
+            if (output == NULL)
+            {
+                return false;
+            }
+            memcpy(output, item->valuestring, raw_length);
+            return true;
+        }
+
+        case cJSON_String:
+            return print_string(item, output_buffer);
+
+        case cJSON_Array:
+            return print_array(item, output_buffer);
+
+        case cJSON_Object:
+            return print_object(item, output_buffer);
+
+        default:
+            return false;
+    }
+}
+
+
+static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buffer)
+{
+    cJSON *head = NULL; 
+    cJSON *current_item = NULL;
+
+    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
+    {
+        return false; 
+    }
+    input_buffer->depth++;
+
+    if (buffer_at_offset(input_buffer)[0] != '[')
+    {
+        
+        goto fail;
+    }
+
+    input_buffer->offset++;
+    buffer_skip_whitespace(input_buffer);
+    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ']'))
+    {
+        
+        goto success;
+    }
+
+    
+    if (cannot_access_at_index(input_buffer, 0))
+    {
+        input_buffer->offset--;
+        goto fail;
+    }
+
+    
+    input_buffer->offset--;
+    
+    do
+    {
+        
+        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
+        if (new_item == NULL)
+        {
+            goto fail; 
+        }
+
+        
+        if (head == NULL)
+        {
+            
+            current_item = head = new_item;
+        }
+        else
+        {
+            
+            current_item->next = new_item;
+            new_item->prev = current_item;
+            current_item = new_item;
+        }
+
+        
+        input_buffer->offset++;
+        buffer_skip_whitespace(input_buffer);
+        if (!parse_value(current_item, input_buffer))
+        {
+            goto fail; 
+        }
+        buffer_skip_whitespace(input_buffer);
+    }
+    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
+
+    if (cannot_access_at_index(input_buffer, 0) || buffer_at_offset(input_buffer)[0] != ']')
+    {
+        goto fail; 
+    }
+
+success:
+    input_buffer->depth--;
+
+    if (head != NULL) {
+        head->prev = current_item;
+    }
+
+    item->type = cJSON_Array;
+    item->child = head;
+
+    input_buffer->offset++;
+
+    return true;
+
+fail:
+    if (head != NULL)
+    {
+        cJSON_Delete(head);
+    }
+
+    return false;
+}
+
+
+static cJSON_bool print_array(const cJSON * const item, printbuffer * const output_buffer)
+{
+    unsigned char *output_pointer = NULL;
+    size_t length = 0;
+    cJSON *current_element = item->child;
+
+    if (output_buffer == NULL)
+    {
+        return false;
+    }
+
+    
+    
+    output_pointer = ensure(output_buffer, 1);
+    if (output_pointer == NULL)
+    {
+        return false;
+    }
+
+    *output_pointer = '[';
+    output_buffer->offset++;
+    output_buffer->depth++;
+
+    while (current_element != NULL)
+    {
+        if (!print_value(current_element, output_buffer))
+        {
+            return false;
+        }
+        update_offset(output_buffer);
+        if (current_element->next)
+        {
+            length = (size_t) (output_buffer->format ? 2 : 1);
+            output_pointer = ensure(output_buffer, length + 1);
+            if (output_pointer == NULL)
+            {
+                return false;
+            }
+            *output_pointer++ = ',';
+            if(output_buffer->format)
+            {
+                *output_pointer++ = ' ';
+            }
+            *output_pointer = '\0';
+            output_buffer->offset += length;
+        }
+        current_element = current_element->next;
+    }
+
+    output_pointer = ensure(output_buffer, 2);
+    if (output_pointer == NULL)
+    {
+        return false;
+    }
+    *output_pointer++ = ']';
+    *output_pointer = '\0';
+    output_buffer->depth--;
+
+    return true;
+}
+
+
+static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_buffer)
+{
+    cJSON *head = NULL; 
+    cJSON *current_item = NULL;
+
+    if (input_buffer->depth >= CJSON_NESTING_LIMIT)
+    {
+        return false; 
+    }
+    input_buffer->depth++;
+
+    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '{'))
+    {
+        goto fail; 
+    }
+
+    input_buffer->offset++;
+    buffer_skip_whitespace(input_buffer);
+    if (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == '}'))
+    {
+        goto success; 
+    }
+
+    
+    if (cannot_access_at_index(input_buffer, 0))
+    {
+        input_buffer->offset--;
+        goto fail;
+    }
+
+    
+    input_buffer->offset--;
+    
+    do
+    {
+        
+        cJSON *new_item = cJSON_New_Item(&(input_buffer->hooks));
+        if (new_item == NULL)
+        {
+            goto fail; 
+        }
+
+        
+        if (head == NULL)
+        {
+            
+            current_item = head = new_item;
+        }
+        else
+        {
+            
+            current_item->next = new_item;
+            new_item->prev = current_item;
+            current_item = new_item;
+        }
+
+        
+        input_buffer->offset++;
+        buffer_skip_whitespace(input_buffer);
+        if (!parse_string(current_item, input_buffer))
+        {
+            goto fail; 
+        }
+        buffer_skip_whitespace(input_buffer);
+
+        
+        current_item->string = current_item->valuestring;
+        current_item->valuestring = NULL;
+
+        if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != ':'))
+        {
+            goto fail; 
+        }
+
+        
+        input_buffer->offset++;
+        buffer_skip_whitespace(input_buffer);
+        if (!parse_value(current_item, input_buffer))
+        {
+            goto fail; 
+        }
+        buffer_skip_whitespace(input_buffer);
+    }
+    while (can_access_at_index(input_buffer, 0) && (buffer_at_offset(input_buffer)[0] == ','));
+
+    if (cannot_access_at_index(input_buffer, 0) || (buffer_at_offset(input_buffer)[0] != '}'))
+    {
+        goto fail; 
+    }
+
+success:
+    input_buffer->depth--;
+
+    if (head != NULL) {
+        head->prev = current_item;
+    }
+
+    item->type = cJSON_Object;
+    item->child = head;
+
+    input_buffer->offset++;
+    return true;
+
+fail:
+    if (head != NULL)
+    {
+        cJSON_Delete(head);
+    }
+
+    return false;
+}
+
+
+static cJSON_bool print_object(const cJSON * const item, printbuffer * const output_buffer)
+{
+    unsigned char *output_pointer = NULL;
+    size_t length = 0;
+    cJSON *current_item = item->child;
+
+    if (output_buffer == NULL)
+    {
+        return false;
+    }
+
+    
+    length = (size_t) (output_buffer->format ? 2 : 1); 
+    output_pointer = ensure(output_buffer, length + 1);
+    if (output_pointer == NULL)
+    {
+        return false;
+    }
+
+    *output_pointer++ = '{';
+    output_buffer->depth++;
+    if (output_buffer->format)
+    {
+        *output_pointer++ = '\n';
+    }
+    output_buffer->offset += length;
+
+    while (current_item)
+    {
+        if (output_buffer->format)
+        {
+            size_t i;
+            output_pointer = ensure(output_buffer, output_buffer->depth);
+            if (output_pointer == NULL)
+            {
+                return false;
+            }
+            for (i = 0; i < output_buffer->depth; i++)
+            {
+                *output_pointer++ = '\t';
+            }
+            output_buffer->offset += output_buffer->depth;
+        }
+
+        
+        if (!print_string_ptr((unsigned char*)current_item->string, output_buffer))
+        {
+            return false;
+        }
+        update_offset(output_buffer);
+
+        length = (size_t) (output_buffer->format ? 2 : 1);
+        output_pointer = ensure(output_buffer, length);
+        if (output_pointer == NULL)
+        {
+            return false;
+        }
+        *output_pointer++ = ':';
+        if (output_buffer->format)
+        {
+            *output_pointer++ = '\t';
+        }
+        output_buffer->offset += length;
+
+        
+        if (!print_value(current_item, output_buffer))
+        {
+            return false;
+        }
+        update_offset(output_buffer);
+
+        
+        length = ((size_t)(output_buffer->format ? 1 : 0) + (size_t)(current_item->next ? 1 : 0));
+        output_pointer = ensure(output_buffer, length + 1);
+        if (output_pointer == NULL)
+        {
+            return false;
+        }
+        if (current_item->next)
+        {
+            *output_pointer++ = ',';
+        }
+
+        if (output_buffer->format)
+        {
+            *output_pointer++ = '\n';
+        }
+        *output_pointer = '\0';
+        output_buffer->offset += length;
+
+        current_item = current_item->next;
+    }
+
+    output_pointer = ensure(output_buffer, output_buffer->format ? (output_buffer->depth + 1) : 2);
+    if (output_pointer == NULL)
+    {
+        return false;
+    }
+    if (output_buffer->format)
+    {
+        size_t i;
+        for (i = 0; i < (output_buffer->depth - 1); i++)
+        {
+            *output_pointer++ = '\t';
+        }
+    }
+    *output_pointer++ = '}';
+    *output_pointer = '\0';
+    output_buffer->depth--;
+
+    return true;
+}
+
+
+CJSON_PUBLIC(int) cJSON_GetArraySize(const cJSON *array)
+{
+    cJSON *child = NULL;
+    size_t size = 0;
+
+    if (array == NULL)
+    {
+        return 0;
+    }
+
+    child = array->child;
+
+    while(child != NULL)
+    {
+        size++;
+        child = child->next;
+    }
+
+    
+
+    return (int)size;
+}
+
+static cJSON* get_array_item(const cJSON *array, size_t index)
+{
+    cJSON *current_child = NULL;
+
+    if (array == NULL)
+    {
+        return NULL;
+    }
+
+    current_child = array->child;
+    while ((current_child != NULL) && (index > 0))
+    {
+        index--;
+        current_child = current_child->next;
+    }
+
+    return current_child;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_GetArrayItem(const cJSON *array, int index)
+{
+    if (index < 0)
+    {
+        return NULL;
+    }
+
+    return get_array_item(array, (size_t)index);
+}
+
+static cJSON *get_object_item(const cJSON * const object, const char * const name, const cJSON_bool case_sensitive)
+{
+    cJSON *current_element = NULL;
+
+    if ((object == NULL) || (name == NULL))
+    {
+        return NULL;
+    }
+
+    current_element = object->child;
+    if (case_sensitive)
+    {
+        while ((current_element != NULL) && (current_element->string != NULL) && (strcmp(name, current_element->string) != 0))
+        {
+            current_element = current_element->next;
+        }
+    }
+    else
+    {
+        while ((current_element != NULL) && (case_insensitive_strcmp((const unsigned char*)name, (const unsigned char*)(current_element->string)) != 0))
+        {
+            current_element = current_element->next;
+        }
+    }
+
+    if ((current_element == NULL) || (current_element->string == NULL)) {
+        return NULL;
+    }
+
+    return current_element;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_GetObjectItem(const cJSON * const object, const char * const string)
+{
+    return get_object_item(object, string, false);
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_GetObjectItemCaseSensitive(const cJSON * const object, const char * const string)
+{
+    return get_object_item(object, string, true);
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_HasObjectItem(const cJSON *object, const char *string)
+{
+    return cJSON_GetObjectItem(object, string) ? 1 : 0;
+}
+
+
+static void suffix_object(cJSON *prev, cJSON *item)
+{
+    prev->next = item;
+    item->prev = prev;
+}
+
+
+static cJSON *create_reference(const cJSON *item, const internal_hooks * const hooks)
+{
+    cJSON *reference = NULL;
+    if (item == NULL)
+    {
+        return NULL;
+    }
+
+    reference = cJSON_New_Item(hooks);
+    if (reference == NULL)
+    {
+        return NULL;
+    }
+
+    memcpy(reference, item, sizeof(cJSON));
+    reference->string = NULL;
+    reference->type |= cJSON_IsReference;
+    reference->next = reference->prev = NULL;
+    return reference;
+}
+
+static cJSON_bool add_item_to_array(cJSON *array, cJSON *item)
+{
+    cJSON *child = NULL;
+
+    if ((item == NULL) || (array == NULL) || (array == item))
+    {
+        return false;
+    }
+
+    child = array->child;
+    
+    if (child == NULL)
+    {
+        
+        array->child = item;
+        item->prev = item;
+        item->next = NULL;
+    }
+    else
+    {
+        
+        if (child->prev)
+        {
+            suffix_object(child->prev, item);
+            array->child->prev = item;
+        }
+    }
+
+    return true;
+}
+
+
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToArray(cJSON *array, cJSON *item)
+{
+    return add_item_to_array(array, item);
+}
+
+#if defined(__clang__) || (defined(__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
+    #pragma GCC diagnostic push
+#endif
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wcast-qual"
+#endif
+
+static void* cast_away_const(const void* string)
+{
+    return (void*)string;
+}
+#if defined(__clang__) || (defined(__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
+    #pragma GCC diagnostic pop
+#endif
+
+
+static cJSON_bool add_item_to_object(cJSON * const object, const char * const string, cJSON * const item, const internal_hooks * const hooks, const cJSON_bool constant_key)
+{
+    char *new_key = NULL;
+    int new_type = cJSON_Invalid;
+
+    if ((object == NULL) || (string == NULL) || (item == NULL) || (object == item))
+    {
+        return false;
+    }
+
+    if (constant_key)
+    {
+        new_key = (char*)cast_away_const(string);
+        new_type = item->type | cJSON_StringIsConst;
+    }
+    else
+    {
+        new_key = (char*)cJSON_strdup((const unsigned char*)string, hooks);
+        if (new_key == NULL)
+        {
+            return false;
+        }
+
+        new_type = item->type & ~cJSON_StringIsConst;
+    }
+
+    if (!(item->type & cJSON_StringIsConst) && (item->string != NULL))
+    {
+        hooks->deallocate(item->string);
+    }
+
+    item->string = new_key;
+    item->type = new_type;
+
+    return add_item_to_array(object, item);
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObject(cJSON *object, const char *string, cJSON *item)
+{
+    return add_item_to_object(object, string, item, &global_hooks, false);
+}
+
+
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObjectCS(cJSON *object, const char *string, cJSON *item)
+{
+    return add_item_to_object(object, string, item, &global_hooks, true);
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToArray(cJSON *array, cJSON *item)
+{
+    if (array == NULL)
+    {
+        return false;
+    }
+
+    return add_item_to_array(array, create_reference(item, &global_hooks));
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_AddItemReferenceToObject(cJSON *object, const char *string, cJSON *item)
+{
+    if ((object == NULL) || (string == NULL))
+    {
+        return false;
+    }
+
+    return add_item_to_object(object, string, create_reference(item, &global_hooks), &global_hooks, false);
+}
+
+CJSON_PUBLIC(cJSON*) cJSON_AddNullToObject(cJSON * const object, const char * const name)
+{
+    cJSON *null = cJSON_CreateNull();
+    if (add_item_to_object(object, name, null, &global_hooks, false))
+    {
+        return null;
+    }
+
+    cJSON_Delete(null);
+    return NULL;
+}
+
+CJSON_PUBLIC(cJSON*) cJSON_AddTrueToObject(cJSON * const object, const char * const name)
+{
+    cJSON *true_item = cJSON_CreateTrue();
+    if (add_item_to_object(object, name, true_item, &global_hooks, false))
+    {
+        return true_item;
+    }
+
+    cJSON_Delete(true_item);
+    return NULL;
+}
+
+CJSON_PUBLIC(cJSON*) cJSON_AddFalseToObject(cJSON * const object, const char * const name)
+{
+    cJSON *false_item = cJSON_CreateFalse();
+    if (add_item_to_object(object, name, false_item, &global_hooks, false))
+    {
+        return false_item;
+    }
+
+    cJSON_Delete(false_item);
+    return NULL;
+}
+
+CJSON_PUBLIC(cJSON*) cJSON_AddBoolToObject(cJSON * const object, const char * const name, const cJSON_bool boolean)
+{
+    cJSON *bool_item = cJSON_CreateBool(boolean);
+    if (add_item_to_object(object, name, bool_item, &global_hooks, false))
+    {
+        return bool_item;
+    }
+
+    cJSON_Delete(bool_item);
+    return NULL;
+}
+
+CJSON_PUBLIC(cJSON*) cJSON_AddNumberToObject(cJSON * const object, const char * const name, const double number)
+{
+    cJSON *number_item = cJSON_CreateNumber(number);
+    if (add_item_to_object(object, name, number_item, &global_hooks, false))
+    {
+        return number_item;
+    }
+
+    cJSON_Delete(number_item);
+    return NULL;
+}
+
+CJSON_PUBLIC(cJSON*) cJSON_AddStringToObject(cJSON * const object, const char * const name, const char * const string)
+{
+    cJSON *string_item = cJSON_CreateString(string);
+    if (add_item_to_object(object, name, string_item, &global_hooks, false))
+    {
+        return string_item;
+    }
+
+    cJSON_Delete(string_item);
+    return NULL;
+}
+
+CJSON_PUBLIC(cJSON*) cJSON_AddRawToObject(cJSON * const object, const char * const name, const char * const raw)
+{
+    cJSON *raw_item = cJSON_CreateRaw(raw);
+    if (add_item_to_object(object, name, raw_item, &global_hooks, false))
+    {
+        return raw_item;
+    }
+
+    cJSON_Delete(raw_item);
+    return NULL;
+}
+
+CJSON_PUBLIC(cJSON*) cJSON_AddObjectToObject(cJSON * const object, const char * const name)
+{
+    cJSON *object_item = cJSON_CreateObject();
+    if (add_item_to_object(object, name, object_item, &global_hooks, false))
+    {
+        return object_item;
+    }
+
+    cJSON_Delete(object_item);
+    return NULL;
+}
+
+CJSON_PUBLIC(cJSON*) cJSON_AddArrayToObject(cJSON * const object, const char * const name)
+{
+    cJSON *array = cJSON_CreateArray();
+    if (add_item_to_object(object, name, array, &global_hooks, false))
+    {
+        return array;
+    }
+
+    cJSON_Delete(array);
+    return NULL;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_DetachItemViaPointer(cJSON *parent, cJSON * const item)
+{
+    if ((parent == NULL) || (item == NULL))
+    {
+        return NULL;
+    }
+
+    if (item != parent->child)
+    {
+        
+        item->prev->next = item->next;
+    }
+    if (item->next != NULL)
+    {
+        
+        item->next->prev = item->prev;
+    }
+
+    if (item == parent->child)
+    {
+        
+        parent->child = item->next;
+    }
+    else if (item->next == NULL)
+    {
+        
+        parent->child->prev = item->prev;
+    }
+
+    
+    item->prev = NULL;
+    item->next = NULL;
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromArray(cJSON *array, int which)
+{
+    if (which < 0)
+    {
+        return NULL;
+    }
+
+    return cJSON_DetachItemViaPointer(array, get_array_item(array, (size_t)which));
+}
+
+CJSON_PUBLIC(void) cJSON_DeleteItemFromArray(cJSON *array, int which)
+{
+    cJSON_Delete(cJSON_DetachItemFromArray(array, which));
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObject(cJSON *object, const char *string)
+{
+    cJSON *to_detach = cJSON_GetObjectItem(object, string);
+
+    return cJSON_DetachItemViaPointer(object, to_detach);
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_DetachItemFromObjectCaseSensitive(cJSON *object, const char *string)
+{
+    cJSON *to_detach = cJSON_GetObjectItemCaseSensitive(object, string);
+
+    return cJSON_DetachItemViaPointer(object, to_detach);
+}
+
+CJSON_PUBLIC(void) cJSON_DeleteItemFromObject(cJSON *object, const char *string)
+{
+    cJSON_Delete(cJSON_DetachItemFromObject(object, string));
+}
+
+CJSON_PUBLIC(void) cJSON_DeleteItemFromObjectCaseSensitive(cJSON *object, const char *string)
+{
+    cJSON_Delete(cJSON_DetachItemFromObjectCaseSensitive(object, string));
+}
+
+
+CJSON_PUBLIC(cJSON_bool) cJSON_InsertItemInArray(cJSON *array, int which, cJSON *newitem)
+{
+    cJSON *after_inserted = NULL;
+
+    if (which < 0)
+    {
+        return false;
+    }
+
+    after_inserted = get_array_item(array, (size_t)which);
+    if (after_inserted == NULL)
+    {
+        return add_item_to_array(array, newitem);
+    }
+
+    newitem->next = after_inserted;
+    newitem->prev = after_inserted->prev;
+    after_inserted->prev = newitem;
+    if (after_inserted == array->child)
+    {
+        array->child = newitem;
+    }
+    else
+    {
+        newitem->prev->next = newitem;
+    }
+    return true;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemViaPointer(cJSON * const parent, cJSON * const item, cJSON * replacement)
+{
+    if ((parent == NULL) || (replacement == NULL) || (item == NULL))
+    {
+        return false;
+    }
+
+    if (replacement == item)
+    {
+        return true;
+    }
+
+    replacement->next = item->next;
+    replacement->prev = item->prev;
+
+    if (replacement->next != NULL)
+    {
+        replacement->next->prev = replacement;
+    }
+    if (parent->child == item)
+    {
+        if (parent->child->prev == parent->child)
+        {
+            replacement->prev = replacement;
+        }
+        parent->child = replacement;
+    }
+    else
+    {   
+        if (replacement->prev != NULL)
+        {
+            replacement->prev->next = replacement;
+        }
+        if (replacement->next == NULL)
+        {
+            parent->child->prev = replacement;
+        }
+    }
+
+    item->next = NULL;
+    item->prev = NULL;
+    cJSON_Delete(item);
+
+    return true;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInArray(cJSON *array, int which, cJSON *newitem)
+{
+    if (which < 0)
+    {
+        return false;
+    }
+
+    return cJSON_ReplaceItemViaPointer(array, get_array_item(array, (size_t)which), newitem);
+}
+
+static cJSON_bool replace_item_in_object(cJSON *object, const char *string, cJSON *replacement, cJSON_bool case_sensitive)
+{
+    if ((replacement == NULL) || (string == NULL))
+    {
+        return false;
+    }
+
+    
+    if (!(replacement->type & cJSON_StringIsConst) && (replacement->string != NULL))
+    {
+        cJSON_free(replacement->string);
+    }
+    replacement->string = (char*)cJSON_strdup((const unsigned char*)string, &global_hooks);
+    if (replacement->string == NULL)
+    {
+        return false;
+    }
+
+    replacement->type &= ~cJSON_StringIsConst;
+
+    return cJSON_ReplaceItemViaPointer(object, get_object_item(object, string, case_sensitive), replacement);
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObject(cJSON *object, const char *string, cJSON *newitem)
+{
+    return replace_item_in_object(object, string, newitem, false);
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_ReplaceItemInObjectCaseSensitive(cJSON *object, const char *string, cJSON *newitem)
+{
+    return replace_item_in_object(object, string, newitem, true);
+}
+
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateNull(void)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if(item)
+    {
+        item->type = cJSON_NULL;
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateTrue(void)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if(item)
+    {
+        item->type = cJSON_True;
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateFalse(void)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if(item)
+    {
+        item->type = cJSON_False;
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateBool(cJSON_bool boolean)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if(item)
+    {
+        item->type = boolean ? cJSON_True : cJSON_False;
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateNumber(double num)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if(item)
+    {
+        item->type = cJSON_Number;
+        item->valuedouble = num;
+
+        
+        if (num >= INT_MAX)
+        {
+            item->valueint = INT_MAX;
+        }
+        else if (num <= (double)INT_MIN)
+        {
+            item->valueint = INT_MIN;
+        }
+        else
+        {
+            item->valueint = (int)num;
+        }
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateString(const char *string)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if(item)
+    {
+        item->type = cJSON_String;
+        item->valuestring = (char*)cJSON_strdup((const unsigned char*)string, &global_hooks);
+        if(!item->valuestring)
+        {
+            cJSON_Delete(item);
+            return NULL;
+        }
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateStringReference(const char *string)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if (item != NULL)
+    {
+        item->type = cJSON_String | cJSON_IsReference;
+        item->valuestring = (char*)cast_away_const(string);
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateObjectReference(const cJSON *child)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if (item != NULL) {
+        item->type = cJSON_Object | cJSON_IsReference;
+        item->child = (cJSON*)cast_away_const(child);
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateArrayReference(const cJSON *child) {
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if (item != NULL) {
+        item->type = cJSON_Array | cJSON_IsReference;
+        item->child = (cJSON*)cast_away_const(child);
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateRaw(const char *raw)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if(item)
+    {
+        item->type = cJSON_Raw;
+        item->valuestring = (char*)cJSON_strdup((const unsigned char*)raw, &global_hooks);
+        if(!item->valuestring)
+        {
+            cJSON_Delete(item);
+            return NULL;
+        }
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateArray(void)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if(item)
+    {
+        item->type=cJSON_Array;
+    }
+
+    return item;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateObject(void)
+{
+    cJSON *item = cJSON_New_Item(&global_hooks);
+    if (item)
+    {
+        item->type = cJSON_Object;
+    }
+
+    return item;
+}
+
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateIntArray(const int *numbers, int count)
+{
+    size_t i = 0;
+    cJSON *n = NULL;
+    cJSON *p = NULL;
+    cJSON *a = NULL;
+
+    if ((count < 0) || (numbers == NULL))
+    {
+        return NULL;
+    }
+
+    a = cJSON_CreateArray();
+
+    for(i = 0; a && (i < (size_t)count); i++)
+    {
+        n = cJSON_CreateNumber(numbers[i]);
+        if (!n)
+        {
+            cJSON_Delete(a);
+            return NULL;
+        }
+        if(!i)
+        {
+            a->child = n;
+        }
+        else
+        {
+            suffix_object(p, n);
+        }
+        p = n;
+    }
+
+    if (a && a->child) {
+        a->child->prev = n;
+    }
+
+    return a;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateFloatArray(const float *numbers, int count)
+{
+    size_t i = 0;
+    cJSON *n = NULL;
+    cJSON *p = NULL;
+    cJSON *a = NULL;
+
+    if ((count < 0) || (numbers == NULL))
+    {
+        return NULL;
+    }
+
+    a = cJSON_CreateArray();
+
+    for(i = 0; a && (i < (size_t)count); i++)
+    {
+        n = cJSON_CreateNumber((double)numbers[i]);
+        if(!n)
+        {
+            cJSON_Delete(a);
+            return NULL;
+        }
+        if(!i)
+        {
+            a->child = n;
+        }
+        else
+        {
+            suffix_object(p, n);
+        }
+        p = n;
+    }
+
+    if (a && a->child) {
+        a->child->prev = n;
+    }
+
+    return a;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateDoubleArray(const double *numbers, int count)
+{
+    size_t i = 0;
+    cJSON *n = NULL;
+    cJSON *p = NULL;
+    cJSON *a = NULL;
+
+    if ((count < 0) || (numbers == NULL))
+    {
+        return NULL;
+    }
+
+    a = cJSON_CreateArray();
+
+    for(i = 0; a && (i < (size_t)count); i++)
+    {
+        n = cJSON_CreateNumber(numbers[i]);
+        if(!n)
+        {
+            cJSON_Delete(a);
+            return NULL;
+        }
+        if(!i)
+        {
+            a->child = n;
+        }
+        else
+        {
+            suffix_object(p, n);
+        }
+        p = n;
+    }
+
+    if (a && a->child) {
+        a->child->prev = n;
+    }
+
+    return a;
+}
+
+CJSON_PUBLIC(cJSON *) cJSON_CreateStringArray(const char *const *strings, int count)
+{
+    size_t i = 0;
+    cJSON *n = NULL;
+    cJSON *p = NULL;
+    cJSON *a = NULL;
+
+    if ((count < 0) || (strings == NULL))
+    {
+        return NULL;
+    }
+
+    a = cJSON_CreateArray();
+
+    for (i = 0; a && (i < (size_t)count); i++)
+    {
+        n = cJSON_CreateString(strings[i]);
+        if(!n)
+        {
+            cJSON_Delete(a);
+            return NULL;
+        }
+        if(!i)
+        {
+            a->child = n;
+        }
+        else
+        {
+            suffix_object(p,n);
+        }
+        p = n;
+    }
+
+    if (a && a->child) {
+        a->child->prev = n;
+    }
+
+    return a;
+}
+
+
+CJSON_PUBLIC(cJSON *) cJSON_Duplicate(const cJSON *item, cJSON_bool recurse)
+{
+    cJSON *newitem = NULL;
+    cJSON *child = NULL;
+    cJSON *next = NULL;
+    cJSON *newchild = NULL;
+
+    
+    if (!item)
+    {
+        goto fail;
+    }
+    
+    newitem = cJSON_New_Item(&global_hooks);
+    if (!newitem)
+    {
+        goto fail;
+    }
+    
+    newitem->type = item->type & (~cJSON_IsReference);
+    newitem->valueint = item->valueint;
+    newitem->valuedouble = item->valuedouble;
+    if (item->valuestring)
+    {
+        newitem->valuestring = (char*)cJSON_strdup((unsigned char*)item->valuestring, &global_hooks);
+        if (!newitem->valuestring)
+        {
+            goto fail;
+        }
+    }
+    if (item->string)
+    {
+        newitem->string = (item->type&cJSON_StringIsConst) ? item->string : (char*)cJSON_strdup((unsigned char*)item->string, &global_hooks);
+        if (!newitem->string)
+        {
+            goto fail;
+        }
+    }
+    
+    if (!recurse)
+    {
+        return newitem;
+    }
+    
+    child = item->child;
+    while (child != NULL)
+    {
+        newchild = cJSON_Duplicate(child, true); 
+        if (!newchild)
+        {
+            goto fail;
+        }
+        if (next != NULL)
+        {
+            
+            next->next = newchild;
+            newchild->prev = next;
+            next = newchild;
+        }
+        else
+        {
+            
+            newitem->child = newchild;
+            next = newchild;
+        }
+        child = child->next;
+    }
+    if (newitem && newitem->child)
+    {
+        newitem->child->prev = newchild;
+    }
+
+    return newitem;
+
+fail:
+    if (newitem != NULL)
+    {
+        cJSON_Delete(newitem);
+    }
+
+    return NULL;
+}
+
+static void skip_oneline_comment(char **input)
+{
+    *input += static_strlen("//");
+
+    for (; (*input)[0] != '\0'; ++(*input))
+    {
+        if ((*input)[0] == '\n') {
+            *input += static_strlen("\n");
+            return;
+        }
+    }
+}
+
+static void skip_multiline_comment(char **input)
+{
+    *input += static_strlen("/*");
+
+    for (; (*input)[0] != '\0'; ++(*input))
+    {
+        if (((*input)[0] == '*') && ((*input)[1] == '/'))
+        {
+            *input += static_strlen("*/");
+            return;
+        }
+    }
+}
+
+static void minify_string(char **input, char **output) {
+    (*output)[0] = (*input)[0];
+    *input += static_strlen("\"");
+    *output += static_strlen("\"");
+
+
+    for (; (*input)[0] != '\0'; (void)++(*input), ++(*output)) {
+        (*output)[0] = (*input)[0];
+
+        if ((*input)[0] == '\"') {
+            (*output)[0] = '\"';
+            *input += static_strlen("\"");
+            *output += static_strlen("\"");
+            return;
+        } else if (((*input)[0] == '\\') && ((*input)[1] == '\"')) {
+            (*output)[1] = (*input)[1];
+            *input += static_strlen("\"");
+            *output += static_strlen("\"");
+        }
+    }
+}
+
+CJSON_PUBLIC(void) cJSON_Minify(char *json)
+{
+    char *into = json;
+
+    if (json == NULL)
+    {
+        return;
+    }
+
+    while (json[0] != '\0')
+    {
+        switch (json[0])
+        {
+            case ' ':
+            case '\t':
+            case '\r':
+            case '\n':
+                json++;
+                break;
+
+            case '/':
+                if (json[1] == '/')
+                {
+                    skip_oneline_comment(&json);
+                }
+                else if (json[1] == '*')
+                {
+                    skip_multiline_comment(&json);
+                } else {
+                    json++;
+                }
+                break;
+
+            case '\"':
+                minify_string(&json, (char**)&into);
+                break;
+
+            default:
+                into[0] = json[0];
+                json++;
+                into++;
+        }
+    }
+
+    
+    *into = '\0';
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_IsInvalid(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & 0xFF) == cJSON_Invalid;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_IsFalse(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & 0xFF) == cJSON_False;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_IsTrue(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & 0xff) == cJSON_True;
+}
+
+
+CJSON_PUBLIC(cJSON_bool) cJSON_IsBool(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & (cJSON_True | cJSON_False)) != 0;
+}
+CJSON_PUBLIC(cJSON_bool) cJSON_IsNull(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & 0xFF) == cJSON_NULL;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_IsNumber(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & 0xFF) == cJSON_Number;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_IsString(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & 0xFF) == cJSON_String;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_IsArray(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & 0xFF) == cJSON_Array;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_IsObject(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & 0xFF) == cJSON_Object;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_IsRaw(const cJSON * const item)
+{
+    if (item == NULL)
+    {
+        return false;
+    }
+
+    return (item->type & 0xFF) == cJSON_Raw;
+}
+
+CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * const b, const cJSON_bool case_sensitive)
+{
+    if ((a == NULL) || (b == NULL) || ((a->type & 0xFF) != (b->type & 0xFF)))
+    {
+        return false;
+    }
+
+    
+    switch (a->type & 0xFF)
+    {
+        case cJSON_False:
+        case cJSON_True:
+        case cJSON_NULL:
+        case cJSON_Number:
+        case cJSON_String:
+        case cJSON_Raw:
+        case cJSON_Array:
+        case cJSON_Object:
+            break;
+
+        default:
+            return false;
+    }
+
+    
+    if (a == b)
+    {
+        return true;
+    }
+
+    switch (a->type & 0xFF)
+    {
+        
+        case cJSON_False:
+        case cJSON_True:
+        case cJSON_NULL:
+            return true;
+
+        case cJSON_Number:
+            if (compare_double(a->valuedouble, b->valuedouble))
+            {
+                return true;
+            }
+            return false;
+
+        case cJSON_String:
+        case cJSON_Raw:
+            if ((a->valuestring == NULL) || (b->valuestring == NULL))
+            {
+                return false;
+            }
+            if (strcmp(a->valuestring, b->valuestring) == 0)
+            {
+                return true;
+            }
+
+            return false;
+
+        case cJSON_Array:
+        {
+            cJSON *a_element = a->child;
+            cJSON *b_element = b->child;
+
+            for (; (a_element != NULL) && (b_element != NULL);)
+            {
+                if (!cJSON_Compare(a_element, b_element, case_sensitive))
+                {
+                    return false;
+                }
+
+                a_element = a_element->next;
+                b_element = b_element->next;
+            }
+
+            
+            if (a_element != b_element) {
+                return false;
+            }
+
+            return true;
+        }
+
+        case cJSON_Object:
+        {
+            cJSON *a_element = NULL;
+            cJSON *b_element = NULL;
+            cJSON_ArrayForEach(a_element, a)
+            {
+                
+                b_element = get_object_item(b, a_element->string, case_sensitive);
+                if (b_element == NULL)
+                {
+                    return false;
+                }
+
+                if (!cJSON_Compare(a_element, b_element, case_sensitive))
+                {
+                    return false;
+                }
+            }
+
+            
+            cJSON_ArrayForEach(b_element, b)
+            {
+                a_element = get_object_item(a, b_element->string, case_sensitive);
+                if (a_element == NULL)
+                {
+                    return false;
+                }
+
+                if (!cJSON_Compare(b_element, a_element, case_sensitive))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        default:
+            return false;
+    }
+}
+
+CJSON_PUBLIC(void *) cJSON_malloc(size_t size)
+{
+    return global_hooks.allocate(size);
+}
+
+CJSON_PUBLIC(void) cJSON_free(void *object)
+{
+    global_hooks.deallocate(object);
+}
+
+
+
+
+
+
+#undef false 
+#undef true
+#define false 0
+#define true 1
+#endif
+
+
+#ifdef  UNIVERSAL_GARBAGE_DEFINED_IN_CWEB_STUDIO
+//path: src/dependencies/UniversalGarbage/definition.c
+
+
+//path: src/dependencies/UniversalGarbage/functions/definition.c
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/garbage_element.c
+
+//path: src/dependencies/UniversalGarbage/functions/garbage_element/../unique.definition_requirements.h
+
+
+
+
+
+
+
+privateUniversalGarbageElement * private_newUniversalGarbageSimpleElement(void (*dealocator_callback)(void *element), void **pointer){
+
+    privateUniversalGarbageElement * self = UniversalGarbage_create_empty_struct(
+        self,
+        privateUniversalGarbageElement
+    );
+    self->pointer = pointer;
+    self->deallocator_callback = dealocator_callback;
+    self->pointed_value = *pointer;
+    return  self;
+}
+void private_UniversalGarbageSimpleElement_free_pointed_value(privateUniversalGarbageElement *self){
+    if(self->pointed_value){
+        self->deallocator_callback(self->pointed_value);
+        self->pointed_value = NULL;
+    }
+}
+
+void private_UniversalGarbageSimpleElement_free(privateUniversalGarbageElement *self){
+    private_UniversalGarbageSimpleElement_free_pointed_value(self);
+    free(self);
+}
+
+
+//path: src/dependencies/UniversalGarbage/functions/garbage/garbage.c
+
+
+
+
+UniversalGarbage * private_new_MainUniversalGarbage(){
+    UniversalGarbage *self = UniversalGarbage_create_empty_struct(self,UniversalGarbage)
+    self->elements = (privateUniversalGarbageElement**)malloc(0);
+    self->is_the_root = false;
+    return self;
+}
+
+UniversalGarbage * newUniversalGarbage(){
+    UniversalGarbage *self = UniversalGarbage_create_empty_struct(self,UniversalGarbage)
+    self->is_the_root = true;
+    self->elements = (privateUniversalGarbageElement**)malloc(0);
+    self->return_values =private_new_MainUniversalGarbage();
+
+    return self;
+}
+
+
+
+
+bool  rawUniversalGarbage_reallocate(UniversalGarbage *self, void **pointer){
+
+    if(self->is_the_root){
+
+        if(rawUniversalGarbage_reallocate(self->return_values,pointer)){
+            return true;
+        }
+    }
+
+
+    for(int i = 0; i < self->elements_size; i++){
+
+        privateUniversalGarbageElement *current = self->elements[i];
+        bool reallocate = current->pointer == pointer;
+
+        if(reallocate){
+            current->pointed_value = *pointer;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool rawUniversalGarbage_resset(UniversalGarbage *self, void **pointer){
+
+    if(self->is_the_root){
+        if(rawUniversalGarbage_resset(self->return_values,pointer)){
+            return true;
+        }
+    }
+
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        bool resset = current->pointer == pointer;
+        if(resset){
+            private_UniversalGarbageSimpleElement_free_pointed_value(current);
+            current->pointed_value = *pointer;
+            return true;
+        }
+    }
+    return  false;
+
+}
+bool  rawUniversalGarbage_remove(UniversalGarbage *self, void **pointer){
+    if(self->is_the_root){
+        if(rawUniversalGarbage_remove(self->return_values,pointer)){
+            *pointer = NULL;
+            return true;
+        }
+    }
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        if(current->pointer == pointer){
+            private_UniversalGarbageSimpleElement_free(current);
+            self->elements_size-=1;
+            bool its_not_the_last = i < self->elements_size;
+            if(its_not_the_last){
+                self->elements[i] = self->elements[self->elements_size];
+
+            }
+            *pointer = NULL;
+            return  true;
+        }
+    }
+    return  false;
+}
+bool  rawUniversalGarbage_disconnect(UniversalGarbage *self, void **pointer){
+    if(self->is_the_root){
+        if(rawUniversalGarbage_disconnect(self->return_values,pointer)){
+            return true;
+        }
+    }
+
+    for(int i = 0; i < self->elements_size; i++){
+        privateUniversalGarbageElement *current = self->elements[i];
+        if(current->pointer == pointer){
+            free(current);
+            self->elements_size-=1;
+            bool its_not_the_last = i < self->elements_size;
+            if(its_not_the_last){
+                privateUniversalGarbageElement *last_element =  self->elements[self->elements_size];
+                self->elements[i] = last_element;
+            }
+            return true;
+        }
+    }
+    return  false;
+
+
+
+}
+bool  rawUniversalGarbage_add(UniversalGarbage *self,  void (*dealocator_callback)(void *element), void **pointer){
+
+    if(!pointer){
+        return false;
+    }
+
+    if(*pointer){
+        for(int i = 0; i < self->elements_size; i++){
+            privateUniversalGarbageElement *current = self->elements[i];
+            if(current->pointed_value == *pointer){
+                return false;
+            }
+        }
+    }
+
+
+    self->elements = (privateUniversalGarbageElement**)realloc(
+            self->elements,
+            (self->elements_size + 1) * sizeof(privateUniversalGarbageElement*)
+    );
+
+
+
+    self->elements[self->elements_size] = private_newUniversalGarbageSimpleElement(dealocator_callback, pointer);
+    self->elements_size+=1;
+    return  true;
+}
+
+
+
+void  private_UniversalGarbage_free_all_sub_elements(UniversalGarbage *self){
+    for(int i = 0; i < self->elements_size; i++){
+        private_UniversalGarbageSimpleElement_free(self->elements[i]);
+    }
+    free(self->elements);
+}
+
+void UniversalGarbage_free_including_return(UniversalGarbage *self){
+    private_UniversalGarbage_free_all_sub_elements(self);
+    if(self->is_the_root){
+        UniversalGarbage_free(self->return_values);
+    }
+    free(self);
+}
+
+void UniversalGarbage_free(UniversalGarbage *self){
+    private_UniversalGarbage_free_all_sub_elements(self);
+
+    if(self->is_the_root){
+
+        UniversalGarbage *return_garbage = self->return_values;
+        for(int i = 0; i < return_garbage->elements_size; i++){
+            free(return_garbage->elements[i]);
+        }
+
+        free(return_garbage->elements);
+        free(return_garbage);
+    }
+
+
+    free(self);
+}
+
+
+
+
+
+
+#endif
+
+
+#define __CWEBSTUDIO_H
 
 #endif
