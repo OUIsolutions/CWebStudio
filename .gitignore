@@ -2,6 +2,7 @@
 *.d
 out_folder
 CWebStudio_test.h
+current_teste.c
 *.pyc
 .cache
 lua_debug.ua
