@@ -16,7 +16,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
     struct CwebServer server = newCwebSever(5010, main_sever);
-    //server.single_process = true;
+    server.single_process = true;
     cweb.server.start(&server);
     return 0;
 }
