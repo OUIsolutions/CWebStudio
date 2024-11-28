@@ -29,6 +29,15 @@ int main(int argc, char *argv[]){
     return 0;
 }
 ~~~
+and you can compile with:
+### Linux:
+```shel
+gcc main.c
+```
+### Windows:
+```shel
+gcc main.c -lws2_32
+```
 
 The Source Code its available here:
 [Source](https://github.com/OUIsolutions/CWebStudio)
