@@ -89,7 +89,7 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
         if (peek_result <= 0) {
             cweb_print("peek: %li\n",peek_result)
             cweb_print("Conection closed By the  Client\n")
-            close(client_socket);  // Fechar o socket do cliente
+            Universal_close(client_socket);  // Fechar o socket do cliente
             continue;
         }
 
