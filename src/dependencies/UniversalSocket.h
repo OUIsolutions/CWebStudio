@@ -28,7 +28,6 @@
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <windows.h>
 
 #endif
 
@@ -349,11 +348,11 @@ extern ssize_t Universal_send (int fd, const void *buf, size_t n, int flags){
 }
 
 extern const char *Universal_inet_ntop(int af, const void *src, char *dst, Universal_socket_len size){
-    return inet_ntop(af, src, dst, size);
+    return 0;//inet_ntop(af, src, dst, size);
 }
 
 extern int Universal_inet_pton(int af, const char *src, void *dst){
-    return inet_pton(af, src, dst);
+    return 0;// inet_pton(af, src, dst);
 }
 
 extern uint32_t Universal_ntohl(uint32_t netlong){
@@ -428,12 +427,12 @@ int Universal_ZeroMemory(void *ptr, size_t num){
 }
 
 int Universal_getaddrinfo(const char *node, const char *service, const Universal_addrinfo *hints, Universal_addrinfo **res){
-    return getaddrinfo(node, service, hints, res);
+    return 0;//getaddrinfo(node, service, hints, res);
 }
 
 
 void Universal_freeaddrinfo(Universal_addrinfo *addrinfo_ptr){
-    freeaddrinfo(addrinfo_ptr);
+    //freeaddrinfo(addrinfo_ptr);
 }
 
 int Universal_setsockopt(

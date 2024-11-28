@@ -91,7 +91,7 @@ cJSON * private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
 
     CWebHyDrationSearchResult *self,
     int index,
-    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    cJSON_bool  (*callback_verifier)( cJSON *  item),
     const char *expected_type
 ){
     if(privateCWebHyDrationSearchResult_has_erorrs(self)){
@@ -136,7 +136,7 @@ double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int 
     }
 
 
-    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
         return -1;
     }
@@ -149,7 +149,7 @@ long CWebHyDrationSearchResult_get_long(CWebHyDrationSearchResult *self,int  ind
     }
 
     cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
-        self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+        self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
         return -1;
     }
@@ -163,7 +163,7 @@ bool CWebHyDrationSearchResult_get_bool(CWebHyDrationSearchResult *self,int  ind
 
 
     cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
-        self,index,cJSON_IsBool,CWEB_HYDRATION_BOOL);
+        self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsBool,CWEB_HYDRATION_BOOL);
     if(item == NULL){
         return -1;
     }
@@ -178,7 +178,7 @@ char*  CWebHyDrationSearchResult_get_string(CWebHyDrationSearchResult *self,int 
 
 
     cJSON *item = private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
-        self,index,cJSON_IsString,CWEB_HYDRATION_STRING);
+        self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsString,CWEB_HYDRATION_STRING);
     if(item == NULL){
         return NULL;
     }

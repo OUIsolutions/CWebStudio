@@ -25,7 +25,7 @@ bool  CWebHyDrationSearchResult_is_search_item_string(CWebHyDrationSearchResult 
 cJSON * private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
     CWebHyDrationSearchResult *self,
     int index,
-    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    cJSON_bool (*callback_verifier)( cJSON *  item),
     const char *expected_type
 );
 

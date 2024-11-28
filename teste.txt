@@ -1,0 +1,1 @@
+C:\MinGW\bin>gcc.exe C:\Users\samuca\Documents\CWebStudio\teste.c C:\Users\samuca\Documents\CWebStudio\libws2_32.a -o C:\Users\samuca\Documents\CWebStudio\a.exe
