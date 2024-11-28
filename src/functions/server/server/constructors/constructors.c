@@ -6,7 +6,11 @@
     self.function_timeout = 30;
     self.client_timeout = 5;
     self.max_queue = 100;
-    self.single_process = false;
+
+    #if defined(__linux__)
+        self.single_process = false;
+    #endif
+
     self.allow_cors = true;
     self.max_requests = 1000;
     self.static_folder = "static";
@@ -18,15 +22,21 @@
     return self;
 }
 
+#if defined(__linux__)
 
 int CwebServer_start(CwebServer *self){
     cweb_static_folder = self->static_folder;
-
     if (self->single_process){
        return  private_CWebServer_run_server_in_single_process(self);
     }
-
-      return  private_CWebServer_run_server_in_multiprocess(self);
-
-
+    return  private_CWebServer_run_server_in_multiprocess(self);
 }
+#endif
+
+
+#if defined(_WIN32)
+int CwebServer_start(CwebServer *self){
+    cweb_static_folder = self->static_folder;
+    return  private_CWebServer_run_server_in_single_process(self);
+}
+#endif

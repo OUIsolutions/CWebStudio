@@ -9,7 +9,11 @@
     int function_timeout;
     double client_timeout;
     int max_queue;
-    bool single_process;
+
+    #if defined(__linux__)
+        bool single_process;
+    #endif
+
     long max_requests;
     bool allow_cors;
     bool use_static;

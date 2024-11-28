@@ -18,5 +18,9 @@
 #define UNIVERSAL_GARBAGE_DEFINED_IN_CWEB_STUDIO
 #endif
 
+#ifndef UNIVERSAL_SOCKET_H
+#include "UniversalSocket.h"
+#define UNIVERSAL_SOCKET_H
+#endif
 
 #endif
