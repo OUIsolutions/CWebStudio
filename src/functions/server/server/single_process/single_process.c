@@ -64,13 +64,9 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
         );
 
         char client_ip[INET_ADDRSTRLEN] ={0};
-        #if defined(__linux__)
-            inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
-        #endif
-        #if defined(_WIN32)
-            InetNtop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
+        Universal_inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
-        #endif
+
 
         cweb_print("----------------------------------------\n")
         cweb_print("Executing request:%lld\n", cweb_actual_request)
