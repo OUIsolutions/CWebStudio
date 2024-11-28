@@ -10,7 +10,7 @@ int   CWebHyDrationBridge_get_args_size(CWebHyDrationBridge *self){
 }
 
 
-bool private_cweb_hydration_type_verifier(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)(const cJSON * const item)){
+bool private_cweb_hydration_type_verifier(CWebHyDrationBridge *self,int index,cJSON_bool (*callback_verifier)( cJSON *item)){
     if(CWebHyDrationBridge_has_errors(self)){
         return false;
     }
@@ -26,34 +26,34 @@ bool   CWebHyDrationBridge_is_arg_number(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return false;
     }
-    return private_cweb_hydration_type_verifier(self,index,cJSON_IsNumber);
+    return private_cweb_hydration_type_verifier(self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsNumber);
 }
 
 bool   CWebHyDrationBridge_is_arg_null(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return false;
     }
-    return private_cweb_hydration_type_verifier(self,index,cJSON_IsNull);
+    return private_cweb_hydration_type_verifier(self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsNull);
 }
 
 bool   CWebHyDrationBridge_is_arg_bool(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return false;
     }
-    return private_cweb_hydration_type_verifier(self,index,cJSON_IsBool);
+    return private_cweb_hydration_type_verifier(self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsBool);
 }
 bool   CWebHyDrationBridge_is_arg_string(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return false;
     }
-    return private_cweb_hydration_type_verifier(self,index,cJSON_IsString);
+    return private_cweb_hydration_type_verifier(self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsString);
 }
 
 
 cJSON *privateCWebHyDration_get_arg_index(
     CWebHyDrationBridge *self,
     int index,
-    cJSON_bool (*callback_verifier)(const cJSON * const item),
+    cJSON_bool (*callback_verifier)( cJSON *  item),
     const char *expected_type
 ){
 
@@ -95,7 +95,7 @@ double  CWebHyDrationBridge_get_double_arg(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return -1;
     }
-    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
         return -1;
     }
@@ -107,7 +107,7 @@ long  CWebHyDrationBridge_get_long_arg(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return -1;
     }
-    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsNumber,CWEB_HYDRATION_NUMBER);
     if(item == NULL){
         return -1;
     }
@@ -121,7 +121,7 @@ bool  CWebHyDrationBridge_get_bool_arg(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return false;
     }
-    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsNumber,CWEB_HYDRATION_BOOL);
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsNumber,CWEB_HYDRATION_BOOL);
         if(item == NULL){
             return -1;
         }
@@ -133,7 +133,7 @@ char* CWebHyDrationBridge_get_str_arg(CWebHyDrationBridge *self,int index){
     if(CWebHyDrationBridge_has_errors(self)){
         return NULL;
     }
-    cJSON *item = privateCWebHyDration_get_arg_index(self,index,cJSON_IsString,CWEB_HYDRATION_STRING);
+    cJSON *item = privateCWebHyDration_get_arg_index(self,index,(cJSON_bool  (*)( cJSON *  item))cJSON_IsString,CWEB_HYDRATION_STRING);
         if(item == NULL){
             return NULL;
         }
