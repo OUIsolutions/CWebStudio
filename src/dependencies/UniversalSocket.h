@@ -346,10 +346,19 @@ extern ssize_t Universal_recv (int fd, void *buf, size_t n, int flags){
 extern ssize_t Universal_send (int fd, const void *buf, size_t n, int flags){
     return send(fd,buf,n,flags);
 }
-
+#if defined (__linux__)
 extern const char *Universal_inet_ntop(int af, const void *src, char *dst, Universal_socket_len size){
-    return 0;//inet_ntop(af, src, dst, size);
+    return inet_ntop(af, src, dst, size);
 }
+#endif
+
+#if defined (_WIN32)
+extern const char *Universal_inet_ntop(int af, const void *src, char *dst, Universal_socket_len size){
+    return NULL;
+}
+#endif
+
+
 
 extern int Universal_inet_pton(int af, const char *src, void *dst){
     return 0;// inet_pton(af, src, dst);

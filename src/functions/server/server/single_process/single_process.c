@@ -64,8 +64,13 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
         );
 
         char client_ip[INET_ADDRSTRLEN] ={0};
+        #if defined(__linux__)
         Universal_inet_ntop(UNI_AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
-
+        #endif
+        #if defined(_WIN32)
+        const char *buff_client_ip =Universal_inet_ntoa(address.sin_addr);
+        strcpy(client_ip,buff_client_ip);
+        #endif
 
 
         cweb_print("----------------------------------------\n")
