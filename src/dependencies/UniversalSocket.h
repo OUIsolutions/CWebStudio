@@ -488,6 +488,8 @@ void Universal_freeaddrinfo(Universal_addrinfo *addrinfo_ptr){
 #if defined (_WIN32)
 
 void Universal_freeaddrinfo(Universal_addrinfo *addrinfo_ptr){
+    free(addrinfo_ptr->ai_addr);
+    free(addrinfo_ptr->ai_canonname);
     free(addrinfo_ptr);
 }
 #endif
