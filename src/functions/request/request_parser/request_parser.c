@@ -250,14 +250,18 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         if (i >= MAX_HEADER_LEN) {
             return MAX_HEADER_SIZE_CODE;
         }
-
-        ssize_t res = recv(self->socket, &raw_entries[i], 1, MSG_WAITALL);
+        int flag = 0;
+        #if defined(__linux__)
+            flag = UNI_MSG_WAITALL;
+        #endif
+        ssize_t res = Universal_recv(self->socket, &raw_entries[i], 1, flag);
         //ssize_t res = read(self->socket, &raw_entries[i],1);
         //printf("v:%d|char:%c\n",raw_entries[i],raw_entries[i]);
 
         if (res <= 0) {
             return READ_ERROR;
         }
+
         //line break is \r\n\r\n
         if (i >= 3 &&
             raw_entries[i - 3] == '\r' &&

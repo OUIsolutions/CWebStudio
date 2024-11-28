@@ -1,2 +1,3 @@
 MSG_WOHANG não implementada
-InetNtop faltando para Universal_inet_ntop
+macros:
+INET_ADDRSTRLEN
