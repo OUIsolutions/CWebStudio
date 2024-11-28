@@ -10,7 +10,7 @@ query parameters, returning files, and text.
 CWebSudio is made to be as dumb as possible and adopt the idea of single file library.
 For installation, simply copy the **CWebStudio.h** into your project and compile with gcc/g++ or clang.
 
-[Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v2.003/CWebStudio.h)
+[Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v3.001/CWebStudio.h)
 
 ~~~c
 #include "CWebStudio.h"
@@ -439,7 +439,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 
     return cweb.response.send_text("Exemple of Return", 200);
-    
+
 }
 
 int main(int argc, char *argv[]){
@@ -704,7 +704,7 @@ CwebNamespace cweb;
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     return cweb.response.send_text("Hello World", 200);
-    
+
 }
 
 int main(int argc, char *argv[]){
