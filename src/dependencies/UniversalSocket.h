@@ -425,15 +425,73 @@ int Universal_ZeroMemory(void *ptr, size_t num){
     memset(ptr, 0, (unsigned long long)num);
     return 0;
 }
+#if defined (_WIN32)
+int Universal_getaddrinfo(const char *node, const char *service, const Universal_addrinfo *hints, Universal_addrinfo **res){
+
+
+    struct hostent *he;
+
+    he = gethostbyname(node);
+
+    if(he == NULL){
+        return 1;
+    }
+
+    *res = (struct addrinfo *)malloc(sizeof(struct addrinfo));
+    if (*res == NULL) {
+        return 1; // Falha na alocação de memória
+    }
+
+    (*res)->ai_flags = 0;
+    (*res)->ai_family = AF_INET;  // IPv4
+    (*res)->ai_socktype = SOCK_STREAM; // TCP
+    (*res)->ai_protocol = IPPROTO_TCP;
+    (*res)->ai_addrlen = sizeof(struct sockaddr_in);
+
+
+    struct sockaddr_in *sa_in = (struct sockaddr_in *)malloc(sizeof(struct sockaddr_in));
+    if (sa_in == NULL) {
+        free(*res);
+        return 1; // Falha na alocação de memória
+    }
+    Universal_in_addr **addr_list;
+    sa_in->sin_family = AF_INET;
+    addr_list = (struct in_addr **)he->h_addr_list;
+    sa_in->sin_addr = *addr_list[0]; // Usa o primeiro endereço IP
+
+    (*res)->ai_addr = (struct sockaddr *)sa_in;
+    (*res)->ai_canonname = strdup(he->h_name); // Nome canônico
+
+    // Não há outros endereços no Windows, então terminamos aqui
+    (*res)->ai_next = NULL;
+
+
+    return 0;
+}
+#endif
+
+#if defined (__linux__)
 
 int Universal_getaddrinfo(const char *node, const char *service, const Universal_addrinfo *hints, Universal_addrinfo **res){
-    return 0;//getaddrinfo(node, service, hints, res);
+    return getaddrinfo(node,service,hints,res);
 }
+#endif
 
+
+#if defined (__linux__)
 
 void Universal_freeaddrinfo(Universal_addrinfo *addrinfo_ptr){
-    //freeaddrinfo(addrinfo_ptr);
+    freeaddrinfo(addrinfo_ptr);
 }
+#endif
+
+#if defined (_WIN32)
+
+void Universal_freeaddrinfo(Universal_addrinfo *addrinfo_ptr){
+    free(addrinfo_ptr);
+}
+#endif
+
 
 int Universal_setsockopt(
     Universal_socket_int sockfd,
