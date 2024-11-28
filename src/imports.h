@@ -4,12 +4,19 @@
 #include <sys/wait.h>
 #endif
 
+#if defined(_WIN32)
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+    #pragma comment(lib, "ws2_32.lib") // Linka a biblioteca Winsock
+
+#endif
+
 #include <stdio.h>
 #include <sys/stat.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
-
+#include <stdio.h>
 
 #endif //PRIVATE_CWEB_HTTP_IMPORTS_H

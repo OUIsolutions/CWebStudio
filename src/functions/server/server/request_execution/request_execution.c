@@ -82,11 +82,14 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
     char *response_str = CwebHttpResponse_generate_response(response);
     cweb_print("Response created\n");
 
+    int flag = 0;
+    #if defined(__linux__)
+        flag = MSG_NOSIGNAL;
+    #endif
 
 
 
-
-    send(socket, response_str, strlen(response_str), MSG_NOSIGNAL);
+    Universal_send(socket, response_str, strlen(response_str), flag);
 
     // Enviando conteúdo byte a byte
     if (response->exist_content)
@@ -96,7 +99,7 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
         {
             size_t chunk_size = response->content_length - sent;
 
-            ssize_t res = send(socket, response->content + sent, chunk_size, MSG_NOSIGNAL);
+            ssize_t res = Universal_send(socket, response->content + sent, chunk_size, flag);
             if (res < 0)
             {
                 break;

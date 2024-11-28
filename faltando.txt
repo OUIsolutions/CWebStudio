@@ -1,0 +1,2 @@
+MSG_WOHANG não implementada
+InetNtop faltando para Universal_inet_ntop

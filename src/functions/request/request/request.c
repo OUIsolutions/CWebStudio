@@ -37,7 +37,7 @@ unsigned char * CwebHttpRequest_read_content( CwebHttpRequest *self, long max_co
     timer.tv_sec = 5;  // tempo em segundos
     timer.tv_usec = 0;  //
 
-    setsockopt(self->socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
+    Universal_setsockopt(self->socket, SOL_SOCKET, SO_RCVTIMEO, &timer, sizeof(timer));
 
     self->content = (unsigned char*) malloc(self->content_length + 2);
 

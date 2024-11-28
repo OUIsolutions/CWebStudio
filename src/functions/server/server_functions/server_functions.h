@@ -10,7 +10,10 @@ void cweb_set_static_folder(const char *folder);
 const char * cweb_get_static_folder();
 
 long cweb_get_total_requests();
+#if defined(__linux__)
+
 void private_cweb_treat_response(bool use_static,int new_socket);
-
-
 void private_cweb_handle_child_termination(int signal);
+
+
+#endif

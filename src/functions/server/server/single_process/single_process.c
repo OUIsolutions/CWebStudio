@@ -2,15 +2,20 @@
 #include "../uniq.definitions_requirements.h"
 int private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
-    int port_socket;
+    if(Universal_start_all() != 0){
+      fprintf(stderr, "Failed to initialize Winsock.\n");
+      return 1;
+    }
+    Universal_socket_int port_socket;
 
     // Creating socket file descriptor
-    if ((port_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0){
+    if ((port_socket = Universal_socket(AF_INET, SOCK_STREAM, 0)) == 0){
         perror("Faluire to create socket");
-        exit(EXIT_FAILURE);
+        Universal_end();
+        return 1;
     }
 
-    struct sockaddr_in address;
+    Universal_sockaddr_in address;
     int addrlen = sizeof(address);
 
     // Configurando a estrutura de endereço do servidor
@@ -20,18 +25,19 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
 
 
     // Vinculando o socket à porta especificada
-    if (bind(port_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
+    if (Universal_bind(port_socket,&address, sizeof(address)) < 0)
     {
         printf("Faluire to bind socket to port %d\n", self->port);
+        Universal_end();
         return 1;
-
     }
 
     // Waiting for connections
-    if (listen(port_socket, self->max_queue) < 0)
+    if (Universal_listen(port_socket, self->max_queue) < 0)
     {
         perror("Faluire to listen connections");
-        exit(EXIT_FAILURE);
+        Universal_end();
+        return 1;
     }
 
     // Main loop
@@ -51,15 +57,20 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
         //clear every trash
 
         // Accepting a new connection in every socket
-        int client_socket = accept(
+        int client_socket = Universal_accept(
             port_socket,
-            (struct sockaddr *)&address,
+            &address,
             (socklen_t *)&addrlen
         );
 
         char client_ip[INET_ADDRSTRLEN] ={0};
-        inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
+        #if defined(__linux__)
+            inet_ntop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
+        #endif
+        #if defined(_WIN32)
+            InetNtop(AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
 
+        #endif
 
         cweb_print("----------------------------------------\n")
         cweb_print("Executing request:%lld\n", cweb_actual_request)
@@ -74,11 +85,10 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
         struct timeval timer1;
         timer1.tv_sec =  0;
         timer1.tv_usec =  0100000;
-        setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer1, sizeof(timer1));
-
+        Universal_setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer1, sizeof(timer1));
 
         char buffer[1];
-        ssize_t peek_result = recv(client_socket, buffer, 1, MSG_PEEK);
+        ssize_t peek_result = Universal_recv(client_socket, buffer, 1, MSG_PEEK);
 
         if (peek_result <= 0) {
             cweb_print("peek: %li\n",peek_result)
@@ -92,18 +102,19 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
         long seconds =  (long)self->client_timeout;
         timer2.tv_sec =  seconds ;  // tempo em segundos
         timer2.tv_usec =(long)((self->client_timeout - (double )seconds) * 1000000);
-        setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
+        Universal_setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, &timer2, sizeof(timer2));
 
 
         private_CWebServer_execute_request(self,client_socket, client_ip);
 
 
-        close(client_socket);
+        Universal_close(client_socket);
 
 
         cweb_print("Closed Conection with socket %d\n", client_socket)
 
 
     }
+    Universal_end();
     return 0;
 }
