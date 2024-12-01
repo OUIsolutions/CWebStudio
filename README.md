@@ -3,6 +3,9 @@
 CWebSudio is a micro framework to deal with web aplications in C/C++. It's a
 single header library that provides a lot of functionality such as reading headers,
 query parameters, returning files, and text.
+# Try it online
+if you want to try it online , you can do it by using cloning the [Code Sandbox Template](https://codesandbox.io/p/devbox/dmy7xm)
+
 
 # Installation
 
