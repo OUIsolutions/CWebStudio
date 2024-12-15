@@ -13,7 +13,6 @@ int private_CwebHttpRequest_interpret_first_line(struct CwebHttpRequest *self, c
 int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, struct CwebStringArray *line_headers);
 
 
-bool privateCwebHttpRequest_is_correct_encoded(const char *bytes_sec,int size);
 
 
 int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self);
