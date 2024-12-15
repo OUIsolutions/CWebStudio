@@ -3,16 +3,19 @@ CwebNamespace cweb;
 
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
-     unsigned char*testage = (unsigned char*)cweb.request.get_header(request,"Custom-Header");
+    unsigned char*testage = (unsigned char *)cweb.request.get_header(request,"Custom-Header");
     printf("%s\n",testage);
-    unsigned char real[] = "OlÃ  é mundo";
+
+    unsigned char real[] = "OlÃ á mundo";
     printf("testage size: %ld\n",strlen(testage));
     printf("real size: %ld\n",sizeof(real)/sizeof(char));
+    printf("real:    ");
 
     for(int i = 0; i < strlen(real);i++){
         printf("%c  %d|",real[i],real[i]);
     }
-    printf("\n==============\n");
+    printf("\n");
+    printf("testage: ");
 
     for(int i = 0; i < strlen(testage);i++){
         printf("%c  %d|",testage[i],testage[i]);

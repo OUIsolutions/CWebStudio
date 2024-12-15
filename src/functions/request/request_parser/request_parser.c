@@ -236,7 +236,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
     int i = 0;
     while (true) {
 
-        if (i >= MAX_HEADER_LEN) {
+        if (i >= MAX_HEADER_LEN -10) {
             return MAX_HEADER_SIZE_CODE;
         }
         int flag = 0;
@@ -249,10 +249,12 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         if (res <= 0) {
             return READ_ERROR;
         }
-        if (raw_entries[i] >=195){
-            raw_entries[i] = 195;
+        if (raw_entries[i] >= 195 ){
+
             raw_entries[i+1] = raw_entries[i] - 64;
-            i++;
+            raw_entries[i] = 195;
+            i+=1;
+
         }
 
         //line break is \r\n\r\n
