@@ -6,19 +6,13 @@ query parameters, returning files, and text.
 # Try it online
 if you want to try it online , you can do it by using cloning the [Code Sandbox Template](https://codesandbox.io/p/devbox/dmy7xm)
 
-
 # Installation
 
 ## Single File
 CWebSudio is made to be as dumb as possible and adopt the idea of single file library.
 For installation, simply copy the **CWebStudio.h** into your project and compile with gcc/g++ or clang.
 
-[Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v3.002/CWebStudio.h)
-
-if you prefer, you can type the command
-```shell
-curl -L https://github.com/OUIsolutions/CWebStudio/releases/download/v3.002/CWebStudio.h -o CWebStudio.h
-```
+[Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v2.003/CWebStudio.h)
 
 ~~~c
 #include "CWebStudio.h"
@@ -37,15 +31,6 @@ int main(int argc, char *argv[]){
     return 0;
 }
 ~~~
-and you can compile with:
-### Linux:
-```shel
-gcc main.c
-```
-### Windows:
-```shel
-gcc main.c -lws2_32
-```
 
 The Source Code its available here:
 [Source](https://github.com/OUIsolutions/CWebStudio)
@@ -456,7 +441,7 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 
     return cweb.response.send_text("Exemple of Return", 200);
-
+    
 }
 
 int main(int argc, char *argv[]){
@@ -721,7 +706,7 @@ CwebNamespace cweb;
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     return cweb.response.send_text("Hello World", 200);
-
+    
 }
 
 int main(int argc, char *argv[]){
