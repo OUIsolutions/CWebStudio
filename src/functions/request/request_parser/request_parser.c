@@ -310,7 +310,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         }
 
         if(raw_entries[l] == '\r' && raw_entries[l+1] == '\n'){
-            CwebStringArray_add(lines, last_string);
+            CwebStringArray_add(lines, (const char*)last_string);
             memset(last_string, 0, 10000);
             line_index = 0;
             l++;
