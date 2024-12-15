@@ -14,6 +14,10 @@ For installation, simply copy the **CWebStudio.h** into your project and compile
 
 [Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v2.003/CWebStudio.h)
 
+if you prefer , you can run the following command:
+```shell 
+curl -L https://github.com/OUIsolutions/CWebStudio/releases/download/v3.002/CWebStudio.h -o CWebStudio.h
+```
 ~~~c
 #include "CWebStudio.h"
 CwebNamespace cweb;
