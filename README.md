@@ -13,7 +13,12 @@ if you want to try it online , you can do it by using cloning the [Code Sandbox 
 CWebSudio is made to be as dumb as possible and adopt the idea of single file library.
 For installation, simply copy the **CWebStudio.h** into your project and compile with gcc/g++ or clang.
 
-[Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v3.001/CWebStudio.h)
+[Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v3.002/CWebStudio.h)
+
+if you prefer, you can type the command
+```shell
+curl -L https://github.com/OUIsolutions/CWebStudio/releases/download/v3.002/CWebStudio.h -o CWebStudio.h
+```
 
 ~~~c
 #include "CWebStudio.h"
