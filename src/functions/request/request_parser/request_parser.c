@@ -249,13 +249,13 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         if (res <= 0) {
             return READ_ERROR;
         }
-        if (raw_entries[i] >= 195 ){
 
+        if (raw_entries[i] > 195 ){
             raw_entries[i+1] = raw_entries[i] - 64;
             raw_entries[i] = 195;
             i+=1;
-
         }
+
 
         //line break is \r\n\r\n
         if (i >= 3 &&
@@ -272,6 +272,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
     }
 
     if(i <= 4){return READ_ERROR;}
+   // printf("%s\n",raw_entries);
 
 
 

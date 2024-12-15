@@ -6,7 +6,7 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
     unsigned char*testage = (unsigned char *)cweb.request.get_header(request,"Custom-Header");
     printf("%s\n",testage);
 
-    unsigned char real[] = "OlÃ á mundo";
+    unsigned char real[] = "é nois na fita";
     printf("testage size: %ld\n",strlen(testage));
     printf("real size: %ld\n",sizeof(real)/sizeof(char));
     printf("real:    ");
