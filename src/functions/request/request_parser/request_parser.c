@@ -1,5 +1,7 @@
 
 #include "../uniq.definitions_requirements.h"
+#include <stdbool.h>
+#include <stdio.h>
 
 
 void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self, const char *query_params){
@@ -226,6 +228,30 @@ int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, str
 }
 
 
+bool private_cweb_is_valid_utf8(const unsigned char *data, size_t length) {
+    size_t i = 0;
+    while (i < length) {
+        if (data[i] <= 127) {
+            // ASCII (1 byte): 0xxxxxxx
+            i++;
+        } else if ((data[i] & 224) == 192) {
+            // 2 bytes: 110xxxxx 10xxxxxx
+            if (i + 1 >= length || (data[i + 1] & 192) != 128) return false;
+            i += 2;
+        } else if ((data[i] & 240) == 224) {
+            // 3 bytes: 1110xxxx 10xxxxxx 10xxxxxx
+            if (i + 2 >= length || (data[i + 1] & 192) != 128 || (data[i + 2] & 192) != 128) return false;
+            i += 3;
+        } else if ((data[i] & 248) == 240) {
+            // 4 bytes: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+            if (i + 3 >= length || (data[i + 1] & 192) != 128 || (data[i + 2] & 192) != 128 || (data[i + 3] & 192) != 128) return false;
+            i += 4;
+        } else {
+            return false; // Byte inicial inválido
+        }
+    }
+    return true;
+}
 
 int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
@@ -250,19 +276,6 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             return READ_ERROR;
         }
 
-        //==================Unicode conversion========================================
-        // if raw_entries its higher than 127 (max char), it means its uniocde
-        // 195 its the default value if the element its already converted
-        // 64 its the dif we have to subtract to apply the conversion
-        if (raw_entries[i] > 127 ){
-            printf("valor = %d\n",raw_entries[i]);
-            raw_entries[i+1] = (unsigned char)(raw_entries[i] - 64) ;
-            raw_entries[i] = 195;
-            i+=1;
-        }
-
-        //===============================================
-
 
         //line break is \r\n\r\n
         if (i >= 3 &&
@@ -278,10 +291,12 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
 
     }
 
+
+
     if(i <= 4){return READ_ERROR;}
    // printf("%s\n",raw_entries);
 
-
+    bool its_valid_utf8 = private_cweb_is_valid_utf8(raw_entries, i);
 
     unsigned char last_string[MAX_LINE_LEN]= {0};
     struct CwebStringArray *lines = newCwebStringArray();
@@ -301,7 +316,16 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             l++;
             continue;
         }
-
+        if(!its_valid_utf8){
+            // if raw_entries its higher than 127 (max char), it means its uniocde
+            // 64 its the dif we have to subtract to apply the conversion
+            if (raw_entries[l] > 127 ){
+                last_string[line_index+1] = (unsigned char)(raw_entries[l] - 64) ;
+                last_string[line_index] = 195;
+                line_index+=2;
+                continue;
+            }
+        }
 
         last_string[line_index] = raw_entries[l];
         line_index++;

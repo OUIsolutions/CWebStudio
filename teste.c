@@ -5,7 +5,7 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
     unsigned char*testage = (unsigned char *)cweb.request.get_header(request,"Custom-Header");
     printf("%s\n",testage);
-
+    /*
     unsigned char real[] = "ÂÒ i ÔÕÃÁ í %$ ";
     printf("testage size: %ld\n",strlen(testage));
     printf("real size: %ld\n",sizeof(real)/sizeof(char));
@@ -21,7 +21,7 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
         printf("%c  %d|",testage[i],testage[i]);
     }
     printf("\n");
-
+    */
     return cweb.response.send_text("Headers Iterated", 200);
 }
 
