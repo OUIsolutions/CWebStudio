@@ -254,7 +254,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         // if raw_entries its higher than 127 (max char), it means its uniocde
         // 195 its the default value if the element its already converted
         // 64 its the dif we have to subtract to apply the conversion
-        if (raw_entries[i] > 127   ){
+        if (raw_entries[i] > 127 ){
             printf("valor = %d\n",raw_entries[i]);
             raw_entries[i+1] = (unsigned char)(raw_entries[i] - 64) ;
             raw_entries[i] = 195;
