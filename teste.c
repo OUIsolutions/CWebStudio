@@ -11,13 +11,16 @@ CwebHttpResponse *main_sever( CwebHttpRequest *request ){
         printf("%s : %s\n", key, value);
     }
     printf("-------------------------------\n");
-    return cweb.response.send_text("Headers Iterated", 200);
+    printf("body:%s\n",cweb.request.read_content(request,2000));
 
+    return cweb.response.send_text("Headers Iterated", 200);
 }
 
 
 int main(int argc, char *argv[]){
     cweb = newCwebNamespace();
-    CwebServer server = newCwebSever(5000, main_sever);
+    CwebServer server = newCwebSever(5001, main_sever);
+    server.single_process= true;
     cweb.server.start(&server);
-    return
+    return 0;
+}

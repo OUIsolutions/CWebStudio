@@ -224,25 +224,14 @@ int private_CwebHttpRequest_interpret_headders(struct CwebHttpRequest *self, str
     return 0;
 
 }
-bool privateCwebHttpRequest_is_correct_encoded(const char *bytes_sec,int size){
 
-    for(int i = 1; i < size; i++){
-        char current_char = bytes_sec[i];
-        char last_char = bytes_sec[i-1];
-
-        if(current_char < 0 && current_char != CWEB_C_NON_ASSCI_SIGIN  && last_char != CWEB_C_NON_ASSCI_SIGIN ){
-            return  false;
-        }
-    }
-    return  true;
-}
 
 
 int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         //splite lines by "\r\n"
 
 
-    char raw_entries[MAX_HEADER_LEN] ={0};
+    unsigned char raw_entries[MAX_HEADER_LEN] ={0};
 
     int i = 0;
     while (true) {
@@ -278,7 +267,6 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
     if(i <= 4){return READ_ERROR;}
 
 
-    bool its_utf_formated = privateCwebHttpRequest_is_correct_encoded(raw_entries,i);
 
 
     char last_string[MAX_LINE_LEN]= {0};
@@ -299,17 +287,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             l++;
             continue;
         }
-        #ifndef CWEB_NOT_MANIPULATE_UTF
 
-                if(!its_utf_formated && l > 0){
-                    if(raw_entries[l] < 0){
-                        last_string[line_index] = CWEB_C_NON_ASSCI_SIGIN;
-                        last_string[line_index+1] = raw_entries[l] - CWEB_UTF_DECREMENTER;
-                        line_index+=2;
-                        continue;
-                    }
-                }
-        #endif
 
         last_string[line_index] = raw_entries[l];
         line_index++;
