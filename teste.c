@@ -3,15 +3,21 @@ CwebNamespace cweb;
 
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
-    CwebDict *headers = request->headers;
-    for(int i = 0; i < headers->size; i++){
-        struct CwebKeyVal *key_val = headers->keys_vals[i];
-        char *key = key_val->key;
-        char *value = key_val->value;
-        printf("%s : %s\n", key, value);
+     unsigned char*testage = (unsigned char*)cweb.request.get_header(request,"Custom-Header");
+    printf("%s\n",testage);
+    unsigned char real[] = "OlÃ  é mundo";
+    printf("testage size: %ld\n",strlen(testage));
+    printf("real size: %ld\n",sizeof(real)/sizeof(char));
+
+    for(int i = 0; i < strlen(real);i++){
+        printf("%c  %d|",real[i],real[i]);
     }
-    printf("-------------------------------\n");
-    printf("body:%s\n",cweb.request.read_content(request,2000));
+    printf("\n==============\n");
+
+    for(int i = 0; i < strlen(testage);i++){
+        printf("%c  %d|",testage[i],testage[i]);
+    }
+    printf("\n");
 
     return cweb.response.send_text("Headers Iterated", 200);
 }

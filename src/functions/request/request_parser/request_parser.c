@@ -243,12 +243,16 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         #if defined(__linux__)
             flag = UNI_MSG_WAITALL;
         #endif
-        ssize_t res = Universal_recv(self->socket, &raw_entries[i], 1, flag);
+        ssize_t res = Universal_recv(self->socket, &raw_entries[i], sizeof(unsigned char), flag);
         //ssize_t res = read(self->socket, &raw_entries[i],1);
         //printf("v:%d|char:%c\n",raw_entries[i],raw_entries[i]);
-
         if (res <= 0) {
             return READ_ERROR;
+        }
+        if (raw_entries[i] >=195){
+            raw_entries[i] = 195;
+            raw_entries[i+1] = raw_entries[i] - 64;
+            i++;
         }
 
         //line break is \r\n\r\n
@@ -264,12 +268,12 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
         i++;
 
     }
+
     if(i <= 4){return READ_ERROR;}
 
 
 
-
-    char last_string[MAX_LINE_LEN]= {0};
+    unsigned char last_string[MAX_LINE_LEN]= {0};
     struct CwebStringArray *lines = newCwebStringArray();
     int line_index = 0;
 
