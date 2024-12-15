@@ -250,8 +250,9 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             return READ_ERROR;
         }
 
-        if (raw_entries[i] > 195 ){
-            raw_entries[i+1] = raw_entries[i] - 64;
+        if (raw_entries[i] > 127 ){
+            printf("valor = %d\n",raw_entries[i]);
+            raw_entries[i+1] = (unsigned char)(raw_entries[i] - 64);
             raw_entries[i] = 195;
             i+=1;
         }
