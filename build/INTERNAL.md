@@ -56,7 +56,12 @@ int main(int argc, char *argv[]){
 }
 ~~~
 
-
+## Building from scratch
+if you want to build from scracth , just clone the repo and run 
+```shell
+sh pre_build.sh 
+./build.out
+```
 
 # Getting Entries
 
