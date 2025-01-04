@@ -1,4 +1,0 @@
-MSG_WOHANG não implementada
-MSG_WAIT_ALL: não implementado
-macros:
-INET_ADDRSTRLEN
