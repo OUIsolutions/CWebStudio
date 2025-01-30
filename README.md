@@ -3,8 +3,6 @@
 CWebSudio is a micro framework to deal with web aplications in C/C++. It's a
 single header library that provides a lot of functionality such as reading headers,
 query parameters, returning files, and text.
-# Try it online
-if you want to try it online , you can do it by using cloning the [Code Sandbox Template](https://codesandbox.io/p/devbox/dmy7xm)
 
 # Installation
 
@@ -14,10 +12,6 @@ For installation, simply copy the **CWebStudio.h** into your project and compile
 
 [Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v2.003/CWebStudio.h)
 
-if you prefer , you can run the following command:
-```shell 
-curl -L https://github.com/OUIsolutions/CWebStudio/releases/download/v3.002/CWebStudio.h -o CWebStudio.h
-```
 ~~~c
 #include "CWebStudio.h"
 CwebNamespace cweb;

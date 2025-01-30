@@ -51,7 +51,7 @@ trash
 *.su
 *.idb
 *.pdb
-
+teste.c
 # Kernel Module Compile Results
 *.mod*
 *.cmd
@@ -61,6 +61,5 @@ Module.symvers
 Mkfile.old
 dkms.conf
 !build.exe
-!build.out
 .idea
 .vscode
