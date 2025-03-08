@@ -8,7 +8,7 @@ function install_dependencies()
 
     darwin.dtw.remove_any("dependencies")
     os.execute("mkdir dependencies")
-    os.execute()
+    os.execute("curl -L ")
 
 
     local new_hasher = darwin.dtw.newHasher()
