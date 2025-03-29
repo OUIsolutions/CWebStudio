@@ -1,5 +1,0 @@
-#include "admnistrative_methods/admnistrative_methods.c"
-#include "algo_methods/algo_methods.c"
-#include "constructors/constructors.c"
-#include "parsers/parsers.c"
-#include "render_methods/render_methods.c"
