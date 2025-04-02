@@ -7,11 +7,14 @@ for i=1,#files do
     
     local name = path.get_name()
     
-    if darwin.dtw.ends_with(name,",c") then
+    if darwin.dtw.ends_with(name,".c") then
         path.set_name("fdefine."..name)        
     end
-    if darwin.dtw.ends_with(name,",h") then
+    if darwin.dtw.ends_with(name,".h") then
         path.set_name("fdeclare."..name)        
     end
-    darwin.dtw.move_any_overwriting(current,path.get_full_path())
+
+    local new_path = path.get_full_path()
+    print("Renaming "..current.." to "..new_path)
+    darwin.dtw.move_any_overwriting(current,new_path)
 end 
