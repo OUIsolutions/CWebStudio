@@ -1,5 +1,5 @@
 
-local files = darwin.dtw.list_files_recursively("src/types",true)
+local files = darwin.dtw.list_files_recursively("src/config",true)
 
 for i=1,#files do
     local current = files[i]
@@ -8,7 +8,7 @@ for i=1,#files do
     local name = path.get_name()
     
     if darwin.dtw.ends_with(name,".h") then
-        path.set_name("types."..name)        
+        path.set_name("macros."..name)        
     end
 
     local new_path = path.get_full_path()
