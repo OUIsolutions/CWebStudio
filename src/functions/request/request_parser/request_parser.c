@@ -1,8 +1,4 @@
 
-#include "../uniq.definitions_requirements.h"
-#include <stdbool.h>
-#include <stdio.h>
-
 
 void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self, const char *query_params){
     if(!query_params){
