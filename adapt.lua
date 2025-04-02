@@ -1,5 +1,5 @@
 
-local files = darwin.dtw.list_files_recursively("src/functions",true)
+local files = darwin.dtw.list_files_recursively("src/types",true)
 
 for i=1,#files do
     local current = files[i]
@@ -7,11 +7,8 @@ for i=1,#files do
     
     local name = path.get_name()
     
-    if darwin.dtw.ends_with(name,".c") then
-        path.set_name("fdefine."..name)        
-    end
     if darwin.dtw.ends_with(name,".h") then
-        path.set_name("fdeclare."..name)        
+        path.set_name("types."..name)        
     end
 
     local new_path = path.get_full_path()
