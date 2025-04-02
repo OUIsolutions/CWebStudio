@@ -1,7 +1,4 @@
-
-#include "../uniq.definitions_requirements.h"
-
- CwebKeyVal* newCwebKeyVal(const char *key, const  char *value){
+CwebKeyVal* newCwebKeyVal(const char *key, const  char *value){
      CwebKeyVal *self = (struct CwebKeyVal*)malloc(sizeof(struct CwebKeyVal));
     self->key = (char*)malloc(strlen(key)+1);
     strcpy(self->key,key);
