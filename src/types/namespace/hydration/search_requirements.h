@@ -1,10 +1,4 @@
 
-#include "../../hydration/all.h"
-#include "../response.h"
-
-#ifndef PRIVATE_CWEB_HYDRATATION_REQUIREMENTS_NAMESPACE_TYPES
-#define PRIVATE_CWEB_HYDRATATION_REQUIREMENTS_NAMESPACE_TYPES
-
 
 typedef struct CWebHydrationSearchRequirementsNamespace {
 
@@ -95,4 +89,3 @@ typedef struct CWebHydrationSearchRequirementsNamespace {
     void (*add_prompt)(CWebHyDrationSearchRequirements *self, const char *message, ...);
 
 }CWebHydrationSearchRequirementsNamespace;
-#endif

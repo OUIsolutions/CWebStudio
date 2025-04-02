@@ -1,8 +1,3 @@
-#include "../../hydration/all.h"
-#include "bridge.h"
-
-#ifndef PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
-#define PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES
 
 typedef struct CWebHydrationNamespace{
     CWebHyDration *(*newCWebHyDration)(CwebHttpRequest *request);
@@ -18,4 +13,3 @@ typedef struct CWebHydrationNamespace{
     CWebHydrationArgsNamespace args;
 }CWebHydrationNamespace;
 
-#endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES

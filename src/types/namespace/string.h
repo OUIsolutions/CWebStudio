@@ -1,7 +1,3 @@
-#include "../string_array.h"
-
-#ifndef PRIVATE_CWEB_HTTP_NAMESPACE_STRING_TYPES
-#define PRIVATE_CWEB_HTTP_NAMESPACE_STRING_TYPES
 
 typedef struct CwebStringArrayModule{
     CwebStringArray *(*newStringArray)();
@@ -14,4 +10,3 @@ typedef struct CwebStringArrayModule{
     void (*free)(CwebStringArray *self);
 }CwebStringArrayModule;
 
-#endif //PRIVATE_CWEB_HTTP_NAMESPACE_STRING_TYPES

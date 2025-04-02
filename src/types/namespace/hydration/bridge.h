@@ -1,11 +1,3 @@
-#include "../../hydration/all.h"
-#include "search_result.h"
-#include "search_requirements.h"
-#include "args.h"
-#include "actions.h"
-
-#ifndef PRIVATE_CWEB_HYDRATATION_BRIDGE_NAMESPACE_TYPES
-#define PRIVATE_CWEB_HYDRATATION_BRIDGE_NAMESPACE_TYPES
 
 typedef struct CWebHydrationBridgeNamespace{
 
@@ -30,4 +22,3 @@ typedef struct CWebHydrationBridgeNamespace{
 
 }CWebHydrationBridgeNamespace;
 
-#endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_NAMESPACE_TYPES

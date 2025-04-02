@@ -1,9 +1,3 @@
-#include "../uniq.tipes_requirements.h"
-#include "../request.h"
-
-#ifndef PRIVATE_CWEB_HTTP_NAMESPACE_REQUEST_TYPES
-#define PRIVATE_CWEB_HTTP_NAMESPACE_REQUEST_TYPES
-
 
 typedef struct CwebHttpRequestModule{
     CwebHttpRequest *(*newCwebHttpRequest)(int socket);
@@ -40,5 +34,3 @@ typedef struct CwebHttpRequestModule{
     void (*free)(struct CwebHttpRequest *request);
     void (*represent)(struct CwebHttpRequest *request);
 }CwebHttpRequestModule;
-
-#endif //PRIVATE_CWEB_HTTP_NAMESPACE_REQUEST_TYPES

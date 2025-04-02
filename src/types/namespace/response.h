@@ -1,9 +1,3 @@
-#include "../uniq.tipes_requirements.h"
-#include "../response.h"
-
-#ifndef PRIVATE_CWEB_HTTP_NAMESPACE_RESPONSE_TYPES
-#define PRIVATE_CWEB_HTTP_NAMESPACE_RESPONSE_TYPES
-
 
 typedef struct CwebHttpResponseModule{
 
@@ -69,4 +63,3 @@ typedef struct CwebHttpResponseModule{
 
 }CwebHttpResponseModule;
 
-#endif //PRIVATE_CWEB_HTTP_NAMESPACE_RESPONSE_TYPES

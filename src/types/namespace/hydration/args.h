@@ -1,11 +1,4 @@
 
-#include "../../hydration/all.h"
-#include "../response.h"
-
-#ifndef PRIVATE_CWEB_HYDRATATION_ARGS_NAMESPACE_TYPES
-#define PRIVATE_CWEB_HYDRATATION_ARGS_NAMESPACE_TYPES
-
-
 typedef struct CWebHydrationArgsNamespace {
 
     bool   (*is_arg_null)(CWebHyDrationBridge *self,int index);
@@ -20,4 +13,3 @@ typedef struct CWebHydrationArgsNamespace {
     cJSON * (*get_cJSON_arg)(CWebHyDrationBridge *self,int index);
 
 }CWebHydrationArgsNamespace;
-#endif

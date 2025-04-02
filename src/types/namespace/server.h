@@ -1,7 +1,3 @@
-#include "../server.h"
-
-#ifndef PRIVATE_CWEB_HTTP_NAMESPACE_SERVER_TYPES
-#define PRIVATE_CWEB_HTTP_NAMESPACE_SERVER_TYPES
 
 
 typedef struct CwebServerModule{
@@ -9,4 +5,3 @@ typedef struct CwebServerModule{
     int (*start)(struct  CwebServer *self);
 }CwebServerModule;
 
-#endif //PRIVATE_CWEB_HTTP_NAMESPACE_SERVER_TYPES

@@ -1,8 +1,3 @@
-#include "response.h"
-#include "request.h"
-
-#ifndef PRIVATE_CWEB_HTTP_SERVER_TYPES
-#define PRIVATE_CWEB_HTTP_SERVER_TYPES
 
  typedef struct CwebServer{
     int port;
@@ -25,4 +20,3 @@
 
 }CwebServer;
 
-#endif //PRIVATE_CWEB_HTTP_SERVER_TYPES

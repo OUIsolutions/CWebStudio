@@ -1,10 +1,4 @@
 
-#include "../../hydration/all.h"
-#include "../response.h"
-
-#ifndef PRIVATE_CWEB_HYDRATATION_SEARCH_RESULT_NAMESPACE_TYPE
-#define PRIVATE_CWEB_HYDRATATION_SEARCH_RESULT_NAMESPACE_TYPE
-
 
 typedef struct CWebHydrationSearchResultNamespace {
 
@@ -29,4 +23,3 @@ typedef struct CWebHydrationSearchResultNamespace {
     cJSON *  (*get_cJSON)(CWebHyDrationSearchResult *self,int  index);
 
 }CWebHydrationSearchResultNamespace;
-#endif

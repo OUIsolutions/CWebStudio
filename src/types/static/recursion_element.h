@@ -1,5 +1,3 @@
-#ifndef PRIVATE_CWEB_RECURSION_EEMENT_TYPE
-#define PRIVATE_CWEB_RECURSION_EEMENT_TYPE
 
 typedef struct {
     char  *file;
@@ -7,4 +5,3 @@ typedef struct {
 
 }privateCwebRecursionElement;
 
-#endif

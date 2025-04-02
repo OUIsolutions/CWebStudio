@@ -1,10 +1,4 @@
 
-#include "../../hydration/all.h"
-#include "../response.h"
-
-#ifndef PRIVATE_CWEB_HYDRATATION_RESPONSE_NAMESPACE_TYPES
-#define PRIVATE_CWEB_HYDRATATION_RESPONSE_NAMESPACE_TYPES
-
 
 typedef struct CWebHydrationResponseNamespace {
     void (*replace_element_by_query_selector)(
@@ -64,4 +58,3 @@ typedef struct CWebHydrationResponseNamespace {
 
 }CWebHydrationActionsNamespace;
 
-#endif

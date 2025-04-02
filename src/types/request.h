@@ -1,8 +1,3 @@
-#include "dict.h"
-#include "uniq.tipes_requirements.h"
-
-#ifndef PRIVATE_CWEB_HTTP_REQUEST_TYPES
-#define PRIVATE_CWEB_HTTP_REQUEST_TYPES
 
 typedef struct CwebHttpRequest{
 
@@ -23,4 +18,3 @@ typedef struct CwebHttpRequest{
 
 }CwebHttpRequest;
 
-#endif //PRIVATE_CWEB_HTTP_REQUEST_TYPES

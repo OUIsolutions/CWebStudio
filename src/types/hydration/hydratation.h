@@ -1,10 +1,4 @@
 
-#include "../request.h"
-#include "bridge_array.h"
-
-#ifndef PRIVATE_CWEB_HYDRATATION_HYDRATATION_TYPES
-#define PRIVATE_CWEB_HYDRATATION_HYDRATATION_TYPES
-
 typedef struct CWebHyDration {
     CwebHttpRequest *request;
    const  char *error_bridge_name;
@@ -21,4 +15,3 @@ typedef struct CWebHyDration {
 
 }CWebHyDration;
 
-#endif //PRIVATE_CWEB_HYDRATATION_HYDRATATION_TYPES

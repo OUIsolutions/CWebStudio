@@ -1,5 +1,3 @@
-#ifndef PRIVATE_CWEB_HTTP_RESPONSE_TYPES
-#define PRIVATE_CWEB_HTTP_RESPONSE_TYPES
 
 typedef struct CwebHttpResponse{
     int status_code;
@@ -10,4 +8,3 @@ typedef struct CwebHttpResponse{
 
 }CwebHttpResponse;
 
-#endif // PRIVATE_CWEB_HTTP_RESPONSE_TYPES

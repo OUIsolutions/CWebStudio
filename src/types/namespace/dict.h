@@ -1,8 +1,3 @@
-#include "../dict.h"
-#include "keyval.h"
-
-#ifndef PRIVATE_CWEB_HTTP_NAMESPACE_DICT_TYPES
-#define PRIVATE_CWEB_HTTP_NAMESPACE_DICT_TYPES
 
 typedef struct CwebDictModule{
 
@@ -18,4 +13,3 @@ typedef struct CwebDictModule{
 
 }CwebDictModule;
 
-#endif //PRIVATE_CWEB_HTTP_NAMESPACE_DICT_TYPES
