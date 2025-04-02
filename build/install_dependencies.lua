@@ -18,6 +18,8 @@ function install_dependencies()
 
     os.execute("curl -L https://github.com/OUIsolutions/Universal-Garbage-Colector/releases/download/3.0.0/UniversalGarbage.c -o dependencies/UniversalGarbage.c")
     os.execute("curl -L https://github.com/OUIsolutions/Universal-Garbage-Colector/releases/download/3.0.0/UniversalGarbage.h -o dependencies/UniversalGarbage.h")   
+    os.execute("curl -L https://github.com/OUIsolutions/CTextEngine/releases/download/3.0.000/CTextEngine.h -o dependencies/CTextEngine.h")
+    os.execute("curl -L https://github.com/OUIsolutions/CTextEngine/releases/download/3.0.000/CTextEngine.c -o dependencies/CTextEngine.c")
 
 
     local new_hasher = darwin.dtw.newHasher()
