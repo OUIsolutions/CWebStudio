@@ -1,6 +1,4 @@
 
-#include "../uniq.declaration_requirements.h"
-
 
 
 CWebHyDrationSearchResult * private_newCWebHyDrationSearchResult(CWebHyDrationBridge *bridge,cJSON *search);
@@ -28,6 +26,7 @@ cJSON * private_CWebHyDrationSearchResult_get_cJSON_item_verifying_type(
     cJSON_bool (*callback_verifier)( cJSON *  item),
     const char *expected_type
 );
+
 
 
 double CWebHyDrationSearchResult_get_double(CWebHyDrationSearchResult *self,int  index);
