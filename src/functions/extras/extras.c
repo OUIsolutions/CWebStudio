@@ -1,7 +1,4 @@
 
-#include "../uniq.definitions_requirements.h"
-#include <string.h>
-
 
 
 unsigned char *cweb_load_any_content(const char * path,int *size,bool *is_binary){
@@ -60,7 +57,6 @@ unsigned char *cweb_load_binary_content(const char * path,int *size){
     fclose(file);
     return content;
 }
-
 
 
 
