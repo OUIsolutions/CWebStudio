@@ -1,5 +1,4 @@
-#ifndef PRIVATE_CWEB_HTTP_IMPORTS_H
-#define PRIVATE_CWEB_HTTP_IMPORTS_H
+
 #if defined(__linux__)
 #include <sys/wait.h>
 #endif
@@ -14,4 +13,3 @@
 
 #include <stdio.h>
 
-#endif //PRIVATE_CWEB_HTTP_IMPORTS_H
