@@ -4,6 +4,7 @@ out_folder
 CWebStudio_test.h
 src/imports/
 dependencies
+release
 current_teste.c
 *.pyc
 .cache
