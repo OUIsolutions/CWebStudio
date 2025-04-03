@@ -29,7 +29,8 @@ function main()
 
     local only_definition = darwin.camalgamator.generate_amalgamation_with_callback("src/imports/imports.fdefine.h",
         function(import, path)
-            if import == "src/imports/imports.fdeclare.h" then
+
+            if darwin.dtw.ends_with(import,"imports.fdeclare.h") then
                       return "dont-include"
             end
 
