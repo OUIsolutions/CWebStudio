@@ -2,7 +2,7 @@
 //DONT MODIFY THIS COMMENT
 //this import is computationally generated
 //mannaged by SilverChain: https://github.com/OUIsolutions/SilverChain
-#include "../imports/imports.typesB.h"
+#include "../imports/imports.typesD.h"
 //silver_chain_scope_end
 CwebDict *newCwebDict();
 void CwebDict_set(CwebDict *self, const  char *key, const char *value);
