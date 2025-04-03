@@ -67,6 +67,6 @@ function main()
 
     darwin.dtw.write_file("release/CWebStudio.c", only_definition)
 
-    ---os.execute("zip -r release/CWebStudio.zip dependencies src build")
+    os.execute("zip -r release/CWebStudio.zip dependencies src build")
 
 end
