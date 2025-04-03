@@ -4,14 +4,14 @@ function convert_to_number(str)
     for i=1,#str do
         local current_char = string.sub(str, i, i)
         local byte = string.byte(current_char)
-        seq[i] = byte
+        seq[i] = string.format("%d", byte)
     end 
     seq[#seq + 1] = 0
-    return table.concat(seq, ", ")
+    return table.concat(seq, ",")
 end
 
 local function create_hydration()
-    local text = 'const char private_cweb_hydration_js_content[] = {'
+    local text = 'unsigned char private_cweb_hydration_js_content[] = {'
     local file, size = darwin.dtw.list_files_recursively("bin/hydration", true);
 
     for i = 1, size do
@@ -20,14 +20,14 @@ local function create_hydration()
 
     text = text .. ' };\n\n'
 
-    darwin.dtw.write_file("src/hydration/hydration/globals.hydration.c", text)
+    darwin.dtw.write_file("src/hydratation/hydration/globals.hydration.c", text)
 end
 
 function create_globals()
     create_hydration()
 
-    local html404_text = 'const char private_cweb_404[] = {'
-    local html500_text = 'const char private_cweb_500[] = {'
+    local html404_text = 'unsigned char private_cweb_404[] = {'
+    local html500_text = 'unsigned char private_cweb_500[] = {'
 
     html404_text = html404_text ..convert_to_number(darwin.dtw.load_file("bin/404.html")) .. ' };\n\n'
     html500_text = html500_text .. convert_to_number(darwin.dtw.load_file("bin/500.html")) .. ' };\n\n'
