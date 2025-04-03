@@ -38,7 +38,7 @@ i686-w64-mingw32-gcc examples\example_simple.c -o bin\example_simple.exe -lws2_3
 
 For buiding from scratch you need to have [darwin](https://github.com/OUIsolutions/Darwin/) installed on your machine. To install darwin:
 ```bash
-curl -L https://github.com/OUIsolutions/Darwin/releases/download/0.020/darwin.out -o darwin.out && chmod +x darwin.out &&  sudo  mv darwin.out /usr/bin/darwin
+curl -L https://github.com/OUIsolutions/Darwin/releases/download/0.2.0/darwin.out -o darwin.out && chmod +x darwin.out &&  sudo  mv darwin.out /usr/bin/darwin
 ```
 
 Then you can build the project with in the root dir of the project:
@@ -76,5 +76,6 @@ It is useful for  working with dynamic compilation or mocking dependencies.
 #define CWEB_MOCK_UNIVERSAL_GARBAGE_DEFINE
 
 //import the lib only after the flags
-#include "BearHttpsClientOne.c"
+#include "CWebStudioOne.c"
+
 ```
