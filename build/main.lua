@@ -20,12 +20,12 @@ function main()
     local onefile = darwin.camalgamator.generate_amalgamation("src/one.c", MAX_CONNTENT, MAX_RECURSION)
     onefile = lincense .. onefile
 
-    darwin.dtw.write_file("release/CwebStudioOne.c", onefile)
+    darwin.dtw.write_file("release/CWebStudioOne.c", onefile)
 
     local only_declare = darwin.camalgamator.generate_amalgamation("src/imports/imports.fdeclare.h", MAX_CONNTENT,
     MAX_RECURSION)
     only_declare = lincense .. only_declare
-    darwin.dtw.write_file("release/CwebStudio.h", only_declare)
+    darwin.dtw.write_file("release/CWebStudio.h", only_declare)
 
 
     local only_definition = darwin.camalgamator.generate_amalgamation_with_callback("src/imports/imports.fdefine.h",
@@ -61,12 +61,12 @@ function main()
         MAX_RECURSION
     )
 
-    only_definition = '#include "CwebStudio.h"\n' .. only_definition
+    only_definition = '#include "CWebStudio.h"\n' .. only_definition
 
     only_definition = lincense .. only_definition
 
-    darwin.dtw.write_file("release/CwebStudio.c", only_definition)
+    darwin.dtw.write_file("release/CWebStudio.c", only_definition)
 
-    ---os.execute("zip -r release/CwebStudio.zip dependencies src build")
+    ---os.execute("zip -r release/CWebStudio.zip dependencies src build")
 
 end
