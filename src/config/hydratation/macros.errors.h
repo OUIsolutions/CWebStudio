@@ -1,9 +1,3 @@
-//silver_chain_scope_start
-//DONT MODIFY THIS COMMENT
-//this import is computationally generated
-//mannaged by SilverChain: https://github.com/OUIsolutions/SilverChain
-#include "../../imports/imports.dep_declare.h"
-//silver_chain_scope_end
 #define CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED 1
 #define CWEB_HYDRATION_NOT_BODY_JSON_PROVIDED_MSG "json body not provided"
 
