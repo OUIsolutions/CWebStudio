@@ -1,6 +1,6 @@
 function main()
     install_dependencies()
-
+    create_globals()
     darwin.silverchain.generate({
         src = "src",
         tags = { "dep_declare", "macros", "types", "fdeclare","globals", "dep_define","fdefine" },

@@ -9,6 +9,7 @@ current_teste.c
 *.pyc
 .cache
 lua_debug.ua
+src/server/server_functions/globals.not_found.c
 # Object files//
 *.o
 *.ko
