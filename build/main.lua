@@ -4,6 +4,7 @@ function main()
     darwin.silverchain.generate({
         src = "src",
         tags = { "dep_declare", "macros", "types", "fdeclare","globals", "dep_define","fdefine" },
+        project_short_cut = "CWebStudio",
         implement_main = false
     })
 
