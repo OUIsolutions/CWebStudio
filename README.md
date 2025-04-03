@@ -63,3 +63,4 @@ int main(int argc, char *argv[]){
 | [hydration_shortcuts.md](docs/hydration_shortcuts.md) | Shows how to use shortcuts in HyDration |
 | [hydration_handling_args.md](docs/hydration_handling_args.md) | Explains how to pass arguments between bridges |
 | [hydration_handling_numbers.md](docs/hydration_handling_numbers.md) | Demonstrates how to handle numbers in HyDration |
+|[dependencies.md](docs/dependencies.md)| Lists the dependencies required for CWebStudio |
