@@ -12,7 +12,10 @@
 #include <string.h>
 
 #include <stdio.h>
-
+#if !defined(CTextEngine_fdeclare)
+#include "../../dependencies/CTextEngine.h"
+#define CWEB_CTEXT_ENGINE_DECLARATED
+#endif
 
 #if !defined(UniversalSocket_dep)
 #include "../../dependencies/UniversalSocket.h"
