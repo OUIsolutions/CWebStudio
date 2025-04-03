@@ -4,9 +4,8 @@ function convert_to_number(str)
     for i=1,#str do
         local current_char = string.sub(str, i, i)
         local byte = string.byte(current_char)
-        local text = string.format("%d", byte)
         
-        seq[i] = text
+        seq[i] = byte
     end 
     return table.concat(seq, ",")
 end
