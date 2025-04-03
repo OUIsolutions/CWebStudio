@@ -6,6 +6,7 @@ src/imports/
 dependencies
 release
 current_teste.c
+.TreinAiCache
 *.pyc
 .cache
 lua_debug.ua

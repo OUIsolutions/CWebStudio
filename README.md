@@ -1,10 +1,9 @@
+# CWebStudio
 
-# CWebSudio
-CWebSudio is a micro framework to deal with web aplications in C/C++. It's a
-single file library that provides a lot of functionality such as reading headers,
-query parameters, returning files, and text.
+CWebStudio is a  framework for building web applications in C/C++. It's designed to be lightweight and efficient, providing a single-file library that simplifies common web development tasks. With CWebStudio, you can easily handle HTTP requests, parse JSON, manage static files, and even generate dynamic front-end code using the innovative HyDration mechanic. Whether you're building a simple API or a complex web application, CWebStudio offers the tools you need to get started quickly and efficiently.
 
 # Releases
+
 | Item | Description |
 |------|-------------|
 |[CWebStudioOne.c](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudioOne.c)| CWebStudio One file |
@@ -31,6 +30,7 @@ int main(int argc, char *argv[]){
     return 0;
 }
 ~~~
+
 # Documentation
 
 | File | Description |
@@ -65,4 +65,3 @@ int main(int argc, char *argv[]){
 | [hydration_handling_args.md](docs/hydration_handling_args.md) | Explains how to pass arguments between bridges |
 | [hydration_handling_numbers.md](docs/hydration_handling_numbers.md) | Demonstrates how to handle numbers in HyDration |
 |[dependencies.md](docs/dependencies.md)| Lists the dependencies required for CWebStudio |
-
