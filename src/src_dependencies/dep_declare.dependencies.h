@@ -17,7 +17,7 @@
 #define CWEB_CTEXT_ENGINE_DECLARATED
 #endif
 
-#if !defined(UniversalSocket_dep)
+#if !defined(UniversalSocket_dep) && !defined(CWEB_MOCK_UNIVERSAL_SOCKET)
 #include "../../dependencies/UniversalSocket.h"
 #define CWEB_UNIVERSAL_SOCKET_DECLARATED
 #endif 
