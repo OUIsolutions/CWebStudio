@@ -35,6 +35,7 @@ int main(int argc, char *argv[]){
 
 | File | Description |
 |------|-------------|
+|[build_and_install.md](docs/build_and_install.md)| Explains how to build and install CWebStudio |
 | [route_method.md](docs/route_method.md) | Explains how to work with URL parameters |
 | [getting_query_param.md](docs/getting_query_param.md) | Shows how to retrieve query parameters |
 | [iterating_query_params.md](docs/iterating_query_params.md) | Demonstrates iterating through query parameters |
