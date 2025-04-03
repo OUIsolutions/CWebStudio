@@ -10,7 +10,7 @@ query parameters, returning files, and text.
 |[CWebStudioOne.c](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudioOne.c)| CWebStudio One file |
 |[CWebStudio.c](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.c)| Definition|
 |[CWebStudio.h](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.h)| Header|
-|[CWebStudio.zip](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.zip)| Full Folder|
+|[CWebStudio.zip](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.zip)| Full Folder that can be included with **src/one.c**|
 
 ## Most Simple Example
 
