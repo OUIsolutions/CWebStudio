@@ -2,10 +2,12 @@
 //DONT MODIFY THIS COMMENT
 //this import is computationally generated
 //mannaged by SilverChain: https://github.com/OUIsolutions/SilverChain
-#include "../../imports/imports.macros.h"
+#include "../../imports/imports.typesB.h"
 //silver_chain_scope_end
 
-typedef  struct{
-    char *name;
-    CWebHyDrationBridge *bridge;
-} CWebHyDrationSearchRequirements;
+typedef struct privateCWebHyDrationBridgeArray {
+    CWebHyDrationBridge **elments;
+    int size;
+
+}privateCWebHyDrationBridgeArray;
+
