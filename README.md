@@ -1,68 +1,16 @@
 
 # CWebSudio
 CWebSudio is a micro framework to deal with web aplications in C/C++. It's a
-single header library that provides a lot of functionality such as reading headers,
+single file library that provides a lot of functionality such as reading headers,
 query parameters, returning files, and text.
 
-# Installation
-
-## Single File
-CWebSudio is made to be as dumb as possible and adopt the idea of single file library.
-For installation, simply copy the **CWebStudio.h** into your project and compile with gcc/g++ or clang.
-
-[Download Link](https://github.com/OUIsolutions/CWebStudio/releases/download/v2.003/CWebStudio.h)
-
-~~~c
-#include "CWebStudio.h"
-CwebNamespace cweb;
-
-CwebHttpResponse *main_sever(CwebHttpRequest *request ){
-
-    return cweb.response.send_text("Hello World", 200);
-
-}
-
-int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
-    struct CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
-    return 0;
-}
-~~~
-
-The Source Code its available here:
-[Source](https://github.com/OUIsolutions/CWebStudio)
-## Full Folder
-You can also download the entire **CwebStudio** folder to your project and run with the
-
-**#include "src/one.c"** header:
-
-~~~c
-#include "src/one.c"
-CwebNamespace cweb;
-
-CwebHttpResponse *main_sever(CwebHttpRequest *request ){
-
-
-    return cweb.response.send_text("Hello World", 200);
-
-}
-
-int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
-    struct CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
-    return 0;
-}
-~~~
-
-## Building from scratch
-if you want to build from scracth , just clone the repo and run 
-```shell
-sh pre_build.sh 
-./build.out
-```
-
+# Releases
+| Item | Description |
+|------|-------------|
+|[CWebStudioOne.c](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudioOne.c)| CWebStudio One file |
+|[CWebStudio.c](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.c)| Definition|
+|[CWebStudio.h](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.h)| Header|
+|[CWebStudio.zip](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.zip)| CWebStudio Zip|
 # Getting Entries
 
 ## Route a Method
