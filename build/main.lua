@@ -29,12 +29,31 @@ function main()
 
 
     local only_definition = darwin.camalgamator.generate_amalgamation_with_callback("src/imports/imports.fdefine.h",
-        function(import, path)
-
-            if darwin.dtw.ends_with(import,"imports.fdeclare.h") then
-                      return "dont-include"
+        function(import, path)  
+   
+            
+            if darwin.dtw.ends_with(import,"cJSON.h") then
+                return "dont-include"
+            end
+            
+            if darwin.dtw.ends_with(import,"CTextEngine.h") then
+                return "dont-include"
             end
 
+            if darwin.dtw.ends_with(import,"UniversalGarbage.h") then
+                return "dont-include"
+            end
+
+            if darwin.dtw.ends_with(import,"UniversalSocket.h") then
+                return "dont-include"
+            end
+            
+            if darwin.dtw.ends_with(path,"imports.fdeclare.h") then
+                    return "dont-include"
+            end
+
+
+            print(import)
             return "include-once"
         end,
         
