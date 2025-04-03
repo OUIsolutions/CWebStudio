@@ -2,15 +2,15 @@
 
 ## Install
 
-To install the lib just copy the [Amalgamation](https://github.com/OUIsolutions/BearHttpsClient/releases/download/0.2.004/BearHttpsClientOne.c) into your project and include it in your code:
+To install the lib just copy the [Amalgamation](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudioOne.c) into your project and include it in your code:
 ```c
-#include "BearHttpsClientOne.c"
+#include "CWebStudioOne.c"
 ```
 
 
 If  you are on Linux, you can download the lib with:
 ```bash
-curl -L https://github.com/OUIsolutions/BearHttpsClient/releases/download/0.2.004/BearHttpsClientOne.c -o BearHttpsClientOne.c
+curl -L https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudioOne.c -o CWebStudioOne.c
 ```
 
 ## Compile on Linux
