@@ -53,7 +53,7 @@ function main()
             end
 
 
-            print(import)
+
             return "include-once"
         end,
         

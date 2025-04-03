@@ -2,7 +2,7 @@
 //DONT MODIFY THIS COMMENT
 //this import is computationally generated
 //mannaged by SilverChain: https://github.com/OUIsolutions/SilverChain
-#include "../../../imports/imports.dep_define.h"
+#include "../imports/imports.dep_define.h"
 //silver_chain_scope_end
 CwebDict *newCwebDict(){
     CwebDict *self = (CwebDict *)malloc(sizeof(struct CwebDict));
