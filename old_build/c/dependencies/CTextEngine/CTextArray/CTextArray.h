@@ -10,7 +10,6 @@ typedef struct CTextArray{
 
 CTextArray * newCTextArray();
 
-
 void CTextArray_append(CTextArray *self,CTextStack *element);
 
 
