@@ -7,7 +7,6 @@
 
 
 
-
 void private_CWebServer_execute_request(CwebServer *self,int socket,const char *client_ip){
 
     cweb_print("Parsing Request\n");
@@ -73,11 +72,11 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
             }
 
             else{
-                response = cweb_send_var_html(private_cweb_404, 404);
+                response = cweb_send_var_html((const char*)private_cweb_404, 404);
             }
         }
         else{
-            response = cweb_send_var_html(private_cweb_404, 404);
+            response = cweb_send_var_html((const char*)private_cweb_404, 404);
 
         }
 
