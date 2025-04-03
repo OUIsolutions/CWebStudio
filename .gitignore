@@ -10,6 +10,7 @@ current_teste.c
 .cache
 lua_debug.ua
 src/server/server_functions/globals.not_found.c
+src/hydration/hydration/globals.hydration.c
 # Object files//
 *.o
 *.ko
