@@ -19,7 +19,7 @@ Working with URL parameters is very easy, as seen in the following example:
 
 ~~~c
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
 for getting query params its super easy, just use the **cweb.request.get_param** function
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
 To iterate through parameters, the object **CwebDict** may be used like this:
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
@@ -114,7 +114,7 @@ Cweb Studio also supports url parameter encoding. To do so, call the method
 
 ~~~c
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
@@ -145,7 +145,7 @@ for retriving headers use the **cweb.request.get_header** function
 
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -177,7 +177,7 @@ Similar to iterating through URL parameters, iterating through headers is equall
 ~~~c
 
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
@@ -209,7 +209,7 @@ Accessing the body content may be done by calling the function **request->read_c
 The content will be accessible with **request->content** and **request->content_length**:
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -242,7 +242,7 @@ https://github.com/DaveGamble/cJSON.
 
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 CwebHttpResponse *main_sever( CwebHttpRequest *request ){
 
@@ -291,7 +291,7 @@ if you want to return values from cJSON, you can call the **cweb.response.send_c
 **cweb.response.send_cJSON** to return cjson values
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -317,7 +317,7 @@ int main(int argc, char *argv[]){
 
 ~~~c
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -342,7 +342,7 @@ int main(int argc, char *argv[]){
 ## Reading Binary Content
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -385,7 +385,7 @@ int main(int argc, char *argv[]){
 Returning plain text is simple with **cweb_send_text**:
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
@@ -406,7 +406,7 @@ int main(int argc, char *argv[]){
 **cweb_send_text_cleaning_memory** can handle strings:
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -433,7 +433,7 @@ To return rendered HTML, the function **cweb_send_rendered_CTextStack_cleaning_m
 see more at https://github.com/OUIsolutions/CTextEngine
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 
 CwebNamespace cweb;
@@ -475,7 +475,7 @@ int main(int argc, char *argv[]){
 To generate HTML from a file, the **cweb_send_var_html** function may be used:
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -497,7 +497,7 @@ As is done with returning plain text, memory will be automatically cleaned with 
 
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -520,7 +520,7 @@ int main(int argc, char *argv[]){
 Files can be directly returned by referencing the path:
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -546,7 +546,7 @@ int main(int argc, char *argv[]){
 Other formats may be returned like this:
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -606,7 +606,7 @@ Its also possible to generate inline inclusion with:
 Smart caching with rendered text can be done with **private_cweb_smart_static_ref**:
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
@@ -652,7 +652,7 @@ int main(int argc, char *argv[]){
 ~~~c
 
 #define CWEB_DEBUG
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
@@ -674,7 +674,7 @@ if you want to kill the server for any reason, like testing memory leaks or fini
 you can just change the var **cweb_end_server** to true
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 
@@ -701,7 +701,7 @@ Several server configuration parameters may be set:
 
 ~~~c
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 CwebNamespace cweb;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
@@ -750,7 +750,7 @@ of controling the browser by creating javascript
 
 
 ~~~c
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 CwebNamespace cweb;
 CTextStackModule stack;
@@ -881,7 +881,7 @@ actions.alert(bridge,"hello %s",first_result_of_name);
 
 ~~~c
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 
 CwebNamespace cweb;
@@ -995,7 +995,7 @@ id/class that you want to find
 
 ~~~c
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 
 CwebNamespace cweb;
@@ -1122,7 +1122,7 @@ bridge_module.onclick(args_bridge,"10,'second argument'")
 
 ~~~c
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 
 CwebNamespace cweb;
@@ -1260,7 +1260,7 @@ sulfix in functions requirements
 
 ~~~c
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 
 CwebNamespace cweb;
