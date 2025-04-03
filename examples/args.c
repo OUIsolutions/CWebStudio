@@ -1,5 +1,5 @@
 
-#include "CWebStudio.h"
+#include "CWebStudioOne.c"
 
 
 CwebNamespace cweb;
