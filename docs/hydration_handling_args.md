@@ -8,6 +8,8 @@ bridge_module.onclick(args_bridge,"10,'second argument'")
 
 ```c
 
+
+
 #include "CWebStudioOne.c"
 
 
@@ -30,21 +32,21 @@ void args_bridge_callback(CWebHyDrationBridge * bridge){
     long size = hydration_args.get_args_size(bridge);
     for(int i = 0; i < size;i++){
 
-        if(hydration_args.is_arg_number(bridge,i))}{
+        if(hydration_args.is_arg_number(bridge,i)){
         long value = hydration_args.get_long_arg(bridge,i);
             printf("arg %d: %ld\n",i,value);
         }
 
-        if(hydration_args.is_arg_bool(bridge,i))}{
+        if(hydration_args.is_arg_bool(bridge,i)){
             bool value = hydration_args.get_bool_arg(bridge,i);
             printf("arg %d: %s\n",i,value ? "true":"false");
         }
 
-        if(hydration_args.is_arg_string(bridge,i))}{
+        if(hydration_args.is_arg_string(bridge,i)){
             char *value = hydration_args.get_str_arg(bridge,i);
             printf("arg %d: %s\n",i,value);
         }
-        if(hydration_args.is_arg_null(bridge,i))}{
+        if(hydration_args.is_arg_null(bridge,i)){
             printf("arg %d: NULL\n",i);
         }
 
