@@ -4,7 +4,6 @@
 
 #include "CWebStudioOne.c"
 
-
 CwebNamespace cweb;
 CTextStackModule stack;
 CWebHydrationNamespace hydration_module;
@@ -23,7 +22,7 @@ void alert_bridge_callback(CWebHyDrationBridge * bridge){
 
     //means some information were not provided or it's with the
     //wrong type
-    if(bridge_module.has_errors(bridge))}{
+    if(bridge_module.has_errors(bridge)){
         return;
     }
     bool name_its_empty =strcmp(first_result_of_name,"") ==0;
@@ -105,6 +104,8 @@ int main(){
     CwebServer server = newCwebSever(3000, main_server);
     cweb.server.start(&server);
 }
+
+
 
 ```
 
