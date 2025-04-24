@@ -4,6 +4,7 @@ You can also handle numbers because the system will automatically convert all el
 
 ```c
 
+
 #include "CWebStudioOne.c"
 
 
@@ -32,7 +33,7 @@ void num_modifier_bridge_callback(CWebHyDrationBridge * bridge){
     long num_to_increment = hydration_args.get_long_arg(bridge,0);
     //means some information were not provided or it's with the
     //wrong type
-    if(bridge_module.has_errors(bridge))}{
+    if(bridge_module.has_errors(bridge)){
         return;
     }
 
@@ -117,6 +118,7 @@ int main(){
     CwebServer server = newCwebSever(3000, main_server);
     cweb.server.start(&server);
 }
+
 
 ```
 
