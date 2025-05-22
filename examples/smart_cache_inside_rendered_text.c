@@ -1,5 +1,4 @@
 #include "CWebStudioOne.c"
-CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
@@ -24,13 +23,12 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
         m.close(s,CTEXT_BODY);
     m.close(s,CTEXT_HTML);
-    return cweb.response.send_rendered_CTextStack(s,200);
+    return cweb_send_rendered_CTextStack(s,200);
 
 }
 
 int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
     CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
+    CwebServer_start(&server);
     return 0;
 }

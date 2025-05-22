@@ -4,6 +4,7 @@ out_folder
 CWebStudio_test.h
 src/imports/
 dependencies
+CWebStudioOne.c
 release
 current_teste.c
 .TreinAiCache
