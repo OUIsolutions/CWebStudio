@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+context
 out_folder
 CWebStudio_test.h
 src/imports/
@@ -8,6 +9,7 @@ release
 current_teste.c
 .TreinAiCache
 *.pyc
+chalange.md
 .cache
 lua_debug.ua
 src/server/server_functions/globals.not_found.c
