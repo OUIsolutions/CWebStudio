@@ -1,14 +1,12 @@
 ## Returning Values - Rendered HTML
 
-To return rendered HTML, the function **cweb_send_rendered_CTextStack_cleaning_memory** may be used. Memory will be automatically cleaned:
+To return rendered HTML, the function **cweb_send_rendered_CTextStack** may be used. Memory will be automatically cleaned:
 
 See more at https://github.com/OUIsolutions/CTextEngine
 
 ```c
 #include "CWebStudioOne.c"
 
-
-CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
@@ -35,9 +33,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
 
 int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
     CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
+    CwebServer_start(&server);
     return 0;
 }
 

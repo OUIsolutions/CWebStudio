@@ -5,12 +5,10 @@ Accessing the body content may be done by calling the function **request->read_c
 ```c
 #include "CWebStudioOne.c"
 
-CwebNamespace cweb;
-
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
     int one_mega_byte = 1048576;
 
-    unsigned char *body =  cweb.request.read_content(request, one_mega_byte);
+    unsigned char *body =  CwebHttpRequest_read_content(request, one_mega_byte);
 
     if(body){
         printf("body: %s",(char*)body);
@@ -23,9 +21,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 }
 
 int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
     CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
+    CwebServer_start(&server);
     return 0;
 }
 ```

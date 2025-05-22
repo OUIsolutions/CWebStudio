@@ -4,7 +4,6 @@ Similar to iterating through URL parameters, iterating through headers is equall
 
 ```c
 #include "CWebStudioOne.c"
-CwebNamespace cweb;
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
@@ -16,14 +15,13 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
         printf("%s : %s\n", key, value);
     }
     printf("-------------------------------\n");
-    return cweb.response.send_text("Headers Iterated", 200);
+    return cweb_send_text("Headers Iterated", 200);
 
 }
 
 int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
     CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
+    CwebServer_start(&server);
     return 0;
 }
 ```
