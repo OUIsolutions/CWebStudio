@@ -7,10 +7,12 @@ src/imports/
 dependencies
 release
 current_teste.c
+objective.md
 .TreinAiCache
 *.pyc
 chalange.md
 .cache
+prev.md
 lua_debug.ua
 src/server/server_functions/globals.not_found.c
 src/hydratation/hydration/globals.hydration.c
