@@ -1,6 +1,6 @@
 # CWebStudio
 
-CWebStudio is a  framework for building web applications in C/C++. It's designed to be lightweight and efficient, providing a single-file library that simplifies common web development tasks. With CWebStudio, you can easily handle HTTP requests, parse JSON, manage static files, and even generate dynamic front-end code using the innovative HyDration mechanic. Whether you're building a simple API or a complex web application, CWebStudio offers the tools you need to get started quickly and efficiently.
+CWebStudio is a framework for building web applications in C/C++. It's designed to be lightweight and efficient, providing a single-file library that simplifies common web development tasks. With CWebStudio, you can easily handle HTTP requests, parse JSON, manage static files, and even generate dynamic front-end code using the innovative HyDration mechanic. Whether you're building a simple API or a complex web application, CWebStudio offers the tools you need to get started quickly and efficiently.
 
 # Releases
 
@@ -14,19 +14,15 @@ CWebStudio is a  framework for building web applications in C/C++. It's designed
 ## Most Simple Example
 
 ~~~c
-
 #include "CWebStudioOne.c"
-CwebNamespace cweb;
 
-CwebHttpResponse *main_sever(CwebHttpRequest *request ){
-
+CwebHttpResponse *main_sever(CwebHttpRequest *request){
     return cweb_send_text("Hello World", 200);
 }
 
 int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
     CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
+    CwebServer_start(&server);
     return 0;
 }
 ~~~
