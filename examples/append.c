@@ -1,55 +1,38 @@
-
 #include "CWebStudioOne.c"
 
-
-CwebNamespace cweb;
-CTextStackModule stack;
-CWebHydrationNamespace hydration_module;
-CWebHydrationBridgeNamespace bridge_module;
-CWebHydrationActionsNamespace actions;
-CWebHydrationSearchRequirementsNamespace requirements;
-CWebHydrationSearchResultNamespace result_module;
-CWebHydrationArgsNamespace hydration_args;
-
 #define NUM_MODIFIER "num modifier"
-
 
 //components
 void create_num_element(CTextStack *s, int value){
     CTextScope_format(s,CTEXT_H1,"id='num'"){
-        stack.format(s,"%d",value);
+        CTextStack_format(s,"%d",value);
     }
 }
 
 void num_modifier_bridge_callback(CWebHyDrationBridge * bridge){
-
-    long num = result_module.get_long_from_first_element_of_search(bridge,"num");
-    long num_to_increment = hydration_args.get_long_arg(bridge,0);
+    long num = CWebHyDrationBridge_get_long_from_first_element_of_search(bridge,"num");
+    long num_to_increment = CWebHyDrationBridge_get_long_arg(bridge,0);
     //means some information were not provided or its with the
     //wrong type
-    if(bridge_module.has_errors(bridge)){
+    if(CWebHyDrationBridge_has_errors(bridge)){
         return;
     }
 
     long result = num + num_to_increment;
-    CTextStack * created = bridge_module.create_stack(bridge);
+    CTextStack * created = CWebHyDrationBridge_create_stack(bridge);
     create_num_element(created, result);
-    actions.replace_element_by_id(bridge,"num",created->rendered_text);
+    CWebHyDrationBridge_replace_element_by_id(bridge,"num",created->rendered_text);
 }
 
-
-
 CTextStack *create_main_page(CWebHyDration *hydration){
-
-    CTextStack  *main_html =  hydration_module.create_stack(hydration);
+    CTextStack  *main_html =  CWebHyDration_create_stack(hydration);
 
     CTextScope(main_html, CTEXT_HTML){
         CTextScope(main_html, CTEXT_HEAD){
             CTextScope(main_html, CTEXT_HEAD){}
         }
         CTextScope(main_html, CTEXT_BODY){
-
-            CWebHyDrationBridge *num_modifier = bridge_module.get_child_bridge(
+            CWebHyDrationBridge *num_modifier = CWebHyDration_get_child_bridge(
                 hydration,NUM_MODIFIER
             );
             create_num_element(main_html, 0);
@@ -57,21 +40,21 @@ CTextStack *create_main_page(CWebHyDration *hydration){
             CTextScope(main_html, CTEXT_BR){}
 
             CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(num_modifier,"%d",-1)
+                CWebHyDrationBridge_onclick(num_modifier,"%d",-1)
             ){
-                stack.text(main_html,"decrement");
+                CTextStack_text(main_html,"decrement");
             }
 
             CTextScope_format(main_html,CTEXT_BUTTON,
-                bridge_module.onclick(num_modifier,"%d",1)
+                CWebHyDrationBridge_onclick(num_modifier,"%d",1)
             ){
-                stack.text(main_html,"increment");
+                CTextStack_text(main_html,"increment");
             }
 
-            //always ut the script on booton of  html
+            //always put the script on bottom of html
             CTextScope(main_html, CTEXT_SCRIPT){
-                char *script_generation = hydration_module.create_script(hydration);
-                stack.text(main_html,script_generation);
+                char *script_generation = CWebHyDration_create_script(hydration);
+                CTextStack_text(main_html,script_generation);
             }
         }
     }
@@ -79,37 +62,26 @@ CTextStack *create_main_page(CWebHyDration *hydration){
 }
 
 CwebHttpResponse *main_server(CwebHttpRequest *request){
-
-
-    CWebHyDration *hydration = hydration_module.newCWebHyDration(request);
-    CWebHyDrationBridge * num_bridge = bridge_module.create_bridge(
+    CWebHyDration *hydration = newCWebHyDration(request);
+    CWebHyDrationBridge * num_bridge = CWebHyDration_create_bridge(
         hydration,
         NUM_MODIFIER,
         num_modifier_bridge_callback
     );
 
-    requirements.add_elements_by_id_setting_search_as_same_name(num_bridge,"num");
+    CWebHyDrationBridge_add_elements_by_id_setting_search_as_same_name(num_bridge,"num");
 
     //if is
-    if(hydration_module.is_the_trigger(hydration)){
-        return hydration_module.generate_response(hydration);
+    if(CWebHyDration_is_the_trigger(hydration)){
+        return CWebHydration_generate_response(hydration);
     }
 
     CTextStack  *page =  create_main_page(hydration);
-    return cweb.response.send_rendered_CTextStack(page,200);
+    return cweb_send_rendered_CTextStack(page,200);
 }
 
-
 int main(){
-
-    cweb = newCwebNamespace();
-    stack = newCTextStackModule();
-    hydration_module = cweb.hydration;
-    bridge_module = hydration_module.bridge;
-    requirements = hydration_module.search_requirements;
-    result_module  = hydration_module.search_result;
-    hydration_args = hydration_module.args;
-    actions = hydration_module.actions;
     CwebServer server = newCwebSever(3000, main_server);
-    cweb.server.start(&server);
+    CwebServer_start(&server);
+    return 0;
 }

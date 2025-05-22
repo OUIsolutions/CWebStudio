@@ -1,16 +1,10 @@
-
 #include "CWebStudioOne.c"
-CwebNamespace cweb;
 
 struct CwebHttpResponse *main_sever(struct CwebHttpRequest *request ){
-
-    return cweb.response.send_text("Hello World", 200);
-
+    return cweb_send_text("Hello World", 200);
 }
 
 int main(){
-    cweb = newCwebNamespace();
-
     CwebServer server = newCwebSever(5000, main_sever);
     //the higher time of the request handler
     //after that , the sever will return 500
@@ -36,6 +30,6 @@ int main(){
     //define where to loock for static content
     server.static_folder = "static";
 
-    cweb.server.start(&server);
+    CwebServer_start(&server);
     return 0;
 }

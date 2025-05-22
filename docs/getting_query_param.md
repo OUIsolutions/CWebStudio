@@ -1,29 +1,26 @@
 ## Getting Query Param
 
-For getting query params, it's super easy, just use the **cweb.request.get_param** function.
+For getting query params, it's super easy, just use the **CwebHttpRequest_get_param** function.
 
 ```c
 #include "CWebStudioOne.c"
 
-CwebNamespace cweb;
-
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
-    char *name = cweb.request.get_param(request,"name");
+    char *name = CwebHttpRequest_get_param(request, "name");
     if(name){
-        printf("%s\n",name);
+        printf("%s\n", name);
     }
     else{
         printf("name not provided\n");
     }
-    return cweb.response.send_text("Hello World", 200);
+    return cweb_send_text("Hello World", 200);
 
 }
 
 int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
     struct CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
+    CwebServer_start(&server);
     return 0;
 }
 ```

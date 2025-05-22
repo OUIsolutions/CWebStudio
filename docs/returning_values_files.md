@@ -5,8 +5,6 @@ Files can be directly returned by referencing the path:
 ```c
 #include "CWebStudioOne.c"
 
-CwebNamespace cweb;
-
 CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 
     return cweb_send_file(
@@ -18,9 +16,8 @@ CwebHttpResponse *main_sever(CwebHttpRequest *request ){
 }
 
 int main(int argc, char *argv[]){
-    cweb = newCwebNamespace();
     CwebServer server = newCwebSever(5000, main_sever);
-    cweb.server.start(&server);
+    CwebServer_start(&server);
     return 0;
 }
 ```
