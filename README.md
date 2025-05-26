@@ -1,32 +1,19 @@
-# <img src="https://raw.githubusercontent.com/OUIsolutions/CWebStudio/main/graphics/images/logo.png" alt="CWebStudio" height="40"> CWebStudio
+# CWebStudio
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version: 4.0.0](https://img.shields.io/badge/Version-4.0.0-brightgreen.svg)](https://github.com/OUIsolutions/CWebStudio/releases/tag/4.0.0)
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey.svg)](https://github.com/OUIsolutions/CWebStudio)
+CWebStudio is a framework for building web applications in C/C++. It's designed to be lightweight and efficient, providing a single-file library that simplifies common web development tasks. With CWebStudio, you can easily handle HTTP requests, parse JSON, manage static files, and even generate dynamic front-end code using the innovative HyDration mechanic. Whether you're building a simple API or a complex web application, CWebStudio offers the tools you need to get started quickly and efficiently.
 
-## 📋 Overview
+# Releases
 
-CWebStudio is a high-performance framework for building web applications in C/C++. Designed to be lightweight and efficient, it provides a single-file library that simplifies common web development tasks. With CWebStudio, you can:
+| Item | Description |
+|------|-------------|
+|[CWebStudioOne.c](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudioOne.c)| CWebStudio One file |
+|[CWebStudio.c](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.c)| Definition|
+|[CWebStudio.h](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.h)| Header|
+|[CWebStudio.zip](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.zip)| Full Folder that can be included with **src/one.c**|
 
-- ✅ Handle HTTP requests and responses with ease
-- ✅ Parse and generate JSON data
-- ✅ Manage static files with smart caching
-- ✅ Generate dynamic front-end code with the innovative HyDration mechanic
+## Most Simple Example
 
-Whether you're building a simple API or a complex web application, CWebStudio offers the tools you need to get started quickly and efficiently.
-
-## 📦 Downloads
-
-| Component | Description |
-|-----------|-------------|
-| [![Single File](https://img.shields.io/badge/Single%20File-CWebStudioOne.c-orange.svg)](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudioOne.c) | Complete library in a single file |
-| [![Source](https://img.shields.io/badge/Source-CWebStudio.c-blue.svg)](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.c) | Implementation file |
-| [![Header](https://img.shields.io/badge/Header-CWebStudio.h-blue.svg)](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.h) | Header file |
-| [![Full Package](https://img.shields.io/badge/Full%20Package-CWebStudio.zip-green.svg)](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.zip) | Complete package (includes **src/one.c**) |
-
-## 🚀 Quick Start
-
-```c
+~~~c
 #include "CWebStudioOne.c"
 
 CwebHttpResponse *main_sever(CwebHttpRequest *request){
@@ -38,70 +25,39 @@ int main(int argc, char *argv[]){
     CwebServer_start(&server);
     return 0;
 }
-```
+~~~
 
-## 📚 Documentation
+# Documentation
 
-### 🔧 Setup & Configuration
-| Topic | Description |
-|-------|-------------|
-| [📄 Build & Install](docs/build_and_install.md) | How to build and install CWebStudio |
-| [📄 Server Configuration](docs/configuring_the_server.md) | Configure server parameters |
-| [📄 Debug Mode](docs/cweb_debug_flag.md) | Enable debugging with CWEB_DEBUG |
-| [📄 Server Management](docs/killing_the_server.md) | Managing server processes |
-| [📄 Dependencies](docs/dependencies.md) | Required dependencies |
-
-### 🌐 Request Handling
-| Topic | Description |
-|-------|-------------|
-| [📄 Routes & Methods](docs/route_method.md) | Work with URL parameters |
-| [📄 Query Parameters](docs/getting_query_param.md) | Retrieve query parameters |
-| [📄 Iterating Query Parameters](docs/iterating_query_params.md) | Iterate through query parameters |
-| [📄 URL Encoding](docs/url_encode_params.md) | Parse URL encoded parameters |
-| [📄 Headers](docs/getting_headers.md) | Retrieve headers |
-| [📄 Iterating Headers](docs/iterating_headers.md) | Iterate through headers |
-| [📄 Request Body](docs/reading_body_content.md) | Read request body content |
-| [📄 JSON Parsing](docs/parsing_json.md) | Parse JSON from requests |
-| [📄 Binary Content](docs/reading_binary_content.md) | Handle binary content |
-
-### 🖥️ Response Generation
-| Topic | Description |
-|-------|-------------|
-| [📄 Plain Text Responses](docs/returning_values_plain_text.md) | Return plain text |
-| [📄 HTML Responses](docs/returning_values_html.md) | Return HTML content |
-| [📄 Rendered HTML](docs/returning_values_rendered_html.md) | Dynamic HTML with CTextStack |
-| [📄 File Responses](docs/returning_values_files.md) | Serve files directly |
-| [📄 JSON Responses](docs/returning_json_from_cjson.md) | Return JSON objects |
-| [📄 Other Formats](docs/returning_values_other_formats.md) | Return other content types |
-| [📄 Static Files](docs/static_files.md) | Handle static files with caching |
-
-### 💧 HyDration Feature
-| Topic | Description |
-|-------|-------------|
-| [📄 Introduction](docs/hydration.md) | Intro to the HyDration mechanic |
-| [📄 Detailed Explanation](docs/hydration_explanation.md) | The three steps of HyDration |
-| [📄 Complete Example](docs/hydration_full_runnable_example.md) | Full runnable example |
-| [📄 Search Results](docs/hydration_search_result.md) | Retrieve search results |
-| [📄 Search Requirements](docs/hydration_search_requirements.md) | Set up search requirements |
-| [📄 Browser Actions](docs/hydration_actions.md) | Execute browser actions |
-| [📄 Shortcuts](docs/hydration_shortcuts.md) | Use shortcuts in HyDration |
-| [📄 Arguments](docs/hydration_handling_args.md) | Pass arguments between bridges |
-| [📄 Numeric Handling](docs/hydration_handling_numbers.md) | Handle numbers in HyDration |
-
-## 📊 Performance
-
-CWebStudio is designed for maximum performance with minimal overhead. The single-file library model makes integration simple while maintaining high efficiency.
-
-## 📜 License
-
-CWebStudio is available under the [MIT License](LICENSE).
-
-## 👥 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request or open issues to improve the library.
-
-## 🔗 Links
-
-- [GitHub Repository](https://github.com/OUIsolutions/CWebStudio)
-- [Issue Tracker](https://github.com/OUIsolutions/CWebStudio/issues)
-- [Release Notes](https://github.com/OUIsolutions/CWebStudio/releases)
+| File | Description |
+|------|-------------|
+|[build_and_install.md](docs/build_and_install.md)| Explains how to build and install CWebStudio |
+| [route_method.md](docs/route_method.md) | Explains how to work with URL parameters |
+| [getting_query_param.md](docs/getting_query_param.md) | Shows how to retrieve query parameters |
+| [iterating_query_params.md](docs/iterating_query_params.md) | Demonstrates iterating through query parameters |
+| [url_encode_params.md](docs/url_encode_params.md) | Explains how to parse URL encoded parameters |
+| [getting_headers.md](docs/getting_headers.md) | Shows how to retrieve headers |
+| [iterating_headers.md](docs/iterating_headers.md) | Demonstrates iterating through headers |
+| [reading_body_content.md](docs/reading_body_content.md) | Explains how to read the body content of a request |
+| [parsing_json.md](docs/parsing_json.md) | Shows how to parse JSON data from the request body |
+| [returning_json_from_cjson.md](docs/returning_json_from_cjson.md) | Demonstrates returning JSON objects created with cJSON |
+| [reading_binary_content.md](docs/reading_binary_content.md) | Explains how to read binary content from the request |
+| [returning_values_plain_text.md](docs/returning_values_plain_text.md) | Shows how to return plain text responses |
+| [returning_values_rendered_html.md](docs/returning_values_rendered_html.md) | Demonstrates returning rendered HTML using CTextStack |
+| [returning_values_html.md](docs/returning_values_html.md) | Shows how to return HTML responses |
+| [returning_values_files.md](docs/returning_values_files.md) | Explains how to return files directly from the server |
+| [returning_values_other_formats.md](docs/returning_values_other_formats.md) | Demonstrates returning content in other formats |
+| [static_files.md](docs/static_files.md) | Explains how to handle static files and use smart caching |
+| [cweb_debug_flag.md](docs/cweb_debug_flag.md) | Shows how to enable debugging with the CWEB_DEBUG flag |
+| [killing_the_server.md](docs/killing_the_server.md) | Explains how to kill the server using the cweb_kill_single_process_server function |
+| [configuring_the_server.md](docs/configuring_the_server.md) | Demonstrates how to configure various server parameters |
+| [hydration.md](docs/hydration.md) | Introduces the HyDration mechanic for generating front-end code in C |
+| [hydration_explanation.md](docs/hydration_explanation.md) | Explains the three steps of HyDration |
+| [hydration_full_runnable_example.md](docs/hydration_full_runnable_example.md) | Provides a full runnable example of using HyDration |
+| [hydration_search_result.md](docs/hydration_search_result.md) | Shows how to retrieve search results from the browser |
+| [hydration_search_requirements.md](docs/hydration_search_requirements.md) | Explains how to set up search requirements for a bridge |
+| [hydration_actions.md](docs/hydration_actions.md) | Demonstrates how to execute actions in the browser |
+| [hydration_shortcuts.md](docs/hydration_shortcuts.md) | Shows how to use shortcuts in HyDration |
+| [hydration_handling_args.md](docs/hydration_handling_args.md) | Explains how to pass arguments between bridges |
+| [hydration_handling_numbers.md](docs/hydration_handling_numbers.md) | Demonstrates how to handle numbers in HyDration |
+|[dependencies.md](docs/dependencies.md)| Lists the dependencies required for CWebStudio |
