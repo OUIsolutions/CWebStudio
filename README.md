@@ -90,11 +90,6 @@ Explore the comprehensive documentation to learn more about CWebStudio's capabil
 
 ---
 
-## 🛠️ Installation
-
-To get started with CWebStudio, download the latest release and follow the instructions in the **[Build & Install Guide](docs/build_and_install.md)**.
-
----
 
 ## 🤝 Contributing
 
