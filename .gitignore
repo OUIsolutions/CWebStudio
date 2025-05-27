@@ -10,6 +10,7 @@ current_teste.c
 objective.md
 .TreinAiCache
 *.pyc
+.notation_cache
 chalange.md
 .cache
 prev.md
