@@ -108,6 +108,10 @@ const char *cweb_generate_content_type(const char *file_name, bool is_binary) {
     if (strcmp(lower_ext, "rar") == 0) return "application/vnd.rar";
     if (strcmp(lower_ext, "7z") == 0) return "application/x-7z-compressed";
     
+    // WebAssembly
+    if (strcmp(lower_ext, "wasm") == 0) return "application/wasm";
+    if (strcmp(lower_ext, "wat") == 0) return "text/plain";
+    
     // Microsoft Office
     if (strcmp(lower_ext, "doc") == 0) return "application/msword";
     if (strcmp(lower_ext, "docx") == 0) return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
