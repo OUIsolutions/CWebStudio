@@ -82,7 +82,8 @@ CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,
 
     int size = 0;
     unsigned char *content;
-    content = cweb_load_binary_content(file_path, &size);
+    bool is_binary;
+    content = cweb_load_any_content(file_path, &size,&is_binary);
 
     #ifndef CWEB_NO_STATIC
         if(content == NULL){
@@ -103,7 +104,7 @@ CwebHttpResponse* cweb_send_file(const char *file_path,const char *content_type,
 
     const char *content_type_created;
     if(content_type == NULL){
-        content_type_created  = cweb_generate_content_type(file_path);
+        content_type_created  = cweb_generate_content_type(file_path,is_binary);
     }
     else{
         content_type_created = content_type;

@@ -62,7 +62,7 @@ unsigned char *cweb_load_binary_content(const char * path,int *size){
 
 
 
-const char *cweb_generate_content_type(const char *file_name){
+const char *cweb_generate_content_type(const char *file_name,bool is_binary){
         int file_name_size = strlen(file_name);
 
         if(file_name_size < 2){
@@ -105,29 +105,29 @@ const char *cweb_generate_content_type(const char *file_name){
             return "application/pdf";
         }
 
-        else if(strcmp(extension, "css") == 0){
+        if(strcmp(extension, "css") == 0){
             return "text/css";
         }
 
-        else if(strcmp(extension, "js") == 0){
+        if(strcmp(extension, "js") == 0){
             return  "text/javascript";
         }
-        else if(strcmp(extension, "png") == 0){
+        if(strcmp(extension, "png") == 0){
             return "image/png";
         }
-        else if(strcmp(extension, "ico") == 0){
+        if(strcmp(extension, "ico") == 0){
             return "image/x-icon";
         }
 
-        else if(strcmp(extension, "jpg") == 0){
+        if(strcmp(extension, "jpg") == 0){
             return  "image/jpeg";
         }
-        else if(strcmp(extension, "jpeg") == 0){
+        if(strcmp(extension, "jpeg") == 0){
             return "image/jpeg";
         }
-        else{
-            return  "text/plain";
-        }
+        
+        return  "text/plain";
+        
 
 }
 

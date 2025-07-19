@@ -145,7 +145,7 @@ CwebHttpResponse * private_cweb_generate_static_response(struct CwebHttpRequest 
         content = (unsigned char*)new_content;
     }
 
-    char *content_type  = (char*)cweb_generate_content_type(security_path);
+    char *content_type  = (char*)cweb_generate_content_type(security_path,is_binary);
 
     struct CwebHttpResponse * response = cweb_send_any_cleaning_memory(content_type,size,content,200);
 
