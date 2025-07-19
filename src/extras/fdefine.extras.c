@@ -59,76 +59,128 @@ unsigned char *cweb_load_binary_content(const char * path,int *size){
 }
 
 
-
-
-
-const char *cweb_generate_content_type(const char *file_name,bool is_binary){
-        int file_name_size = strlen(file_name);
-
-        if(file_name_size < 2){
-            return  "text/plain";
+const char *cweb_generate_content_type(const char *file_name, bool is_binary) {
+    int file_name_size = strlen(file_name);
+    
+    if (file_name_size < 2) {
+        return is_binary ? "application/octet-stream" : "text/plain";
+    }
+    
+    // Find the extension
+    const char *extension = NULL;
+    for (int i = file_name_size - 1; i >= 0; i--) {
+        if (file_name[i] == '.') {
+            extension = &file_name[i + 1];
+            break;
         }
-
-        //iterate in negative
-        char *extension;
-          for(int i = file_name_size -2; i >= 0;  i--){
-
-           //makes extension to point to i
-
-            extension = (char*)&file_name[i+1];
-            //if found a dot, break
-            if(file_name[i] =='.'){
-                break;
-            }
-        }
-        if(!extension){
-            return  "text/plain";
-        }
-
-        if(strcmp(extension, "html") == 0){
-           return "text/html";
-        }
-        if(strcmp(extension,"mp4") == 0){
-            return "video/mp4";
-        }
-        if(strcmp(extension,"WebM") == 0){
-            return "video/webm";
-        }
-        if(strcmp(extension,"Ogg") == 0){
-            return  "video/ogg";
-        }
-        if(strcmp(extension,"mp3") == 0){
-            return  "audio/mpeg";
-        }
-
-        if(strcmp(extension,"pdf") == 0){
-            return "application/pdf";
-        }
-
-        if(strcmp(extension, "css") == 0){
-            return "text/css";
-        }
-
-        if(strcmp(extension, "js") == 0){
-            return  "text/javascript";
-        }
-        if(strcmp(extension, "png") == 0){
-            return "image/png";
-        }
-        if(strcmp(extension, "ico") == 0){
-            return "image/x-icon";
-        }
-
-        if(strcmp(extension, "jpg") == 0){
-            return  "image/jpeg";
-        }
-        if(strcmp(extension, "jpeg") == 0){
-            return "image/jpeg";
-        }
-        
-        return  "text/plain";
-        
-
+    }
+    
+    if (!extension || strlen(extension) == 0) {
+        return is_binary ? "application/octet-stream" : "text/plain";
+    }
+    
+    // Convert extension to lowercase for case-insensitive comparison
+    char lower_ext[256];
+    int ext_len = strlen(extension);
+    if (ext_len >= sizeof(lower_ext)) {
+        return is_binary ? "application/octet-stream" : "text/plain";
+    }
+    
+    for (int i = 0; i <= ext_len; i++) {
+        lower_ext[i] = tolower(extension[i]);
+    }
+    
+    // Text types
+    if (strcmp(lower_ext, "html") == 0 || strcmp(lower_ext, "htm") == 0) return "text/html";
+    if (strcmp(lower_ext, "css") == 0) return "text/css";
+    if (strcmp(lower_ext, "js") == 0 || strcmp(lower_ext, "mjs") == 0) return "text/javascript";
+    if (strcmp(lower_ext, "txt") == 0) return "text/plain";
+    if (strcmp(lower_ext, "csv") == 0) return "text/csv";
+    if (strcmp(lower_ext, "xml") == 0) return "text/xml";
+    if (strcmp(lower_ext, "md") == 0) return "text/markdown";
+    
+    // Application types
+    if (strcmp(lower_ext, "json") == 0) return "application/json";
+    if (strcmp(lower_ext, "pdf") == 0) return "application/pdf";
+    if (strcmp(lower_ext, "zip") == 0) return "application/zip";
+    if (strcmp(lower_ext, "gz") == 0) return "application/gzip";
+    if (strcmp(lower_ext, "tar") == 0) return "application/x-tar";
+    if (strcmp(lower_ext, "rar") == 0) return "application/vnd.rar";
+    if (strcmp(lower_ext, "7z") == 0) return "application/x-7z-compressed";
+    
+    // Microsoft Office
+    if (strcmp(lower_ext, "doc") == 0) return "application/msword";
+    if (strcmp(lower_ext, "docx") == 0) return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    if (strcmp(lower_ext, "xls") == 0) return "application/vnd.ms-excel";
+    if (strcmp(lower_ext, "xlsx") == 0) return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    if (strcmp(lower_ext, "ppt") == 0) return "application/vnd.ms-powerpoint";
+    if (strcmp(lower_ext, "pptx") == 0) return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+    
+    // Images
+    if (strcmp(lower_ext, "jpg") == 0 || strcmp(lower_ext, "jpeg") == 0) return "image/jpeg";
+    if (strcmp(lower_ext, "png") == 0) return "image/png";
+    if (strcmp(lower_ext, "gif") == 0) return "image/gif";
+    if (strcmp(lower_ext, "bmp") == 0) return "image/bmp";
+    if (strcmp(lower_ext, "ico") == 0) return "image/x-icon";
+    if (strcmp(lower_ext, "svg") == 0) return "image/svg+xml";
+    if (strcmp(lower_ext, "webp") == 0) return "image/webp";
+    if (strcmp(lower_ext, "tiff") == 0 || strcmp(lower_ext, "tif") == 0) return "image/tiff";
+    
+    // Audio
+    if (strcmp(lower_ext, "mp3") == 0) return "audio/mpeg";
+    if (strcmp(lower_ext, "wav") == 0) return "audio/wav";
+    if (strcmp(lower_ext, "ogg") == 0) return "audio/ogg";
+    if (strcmp(lower_ext, "m4a") == 0) return "audio/mp4";
+    if (strcmp(lower_ext, "flac") == 0) return "audio/flac";
+    if (strcmp(lower_ext, "aac") == 0) return "audio/aac";
+    if (strcmp(lower_ext, "wma") == 0) return "audio/x-ms-wma";
+    if (strcmp(lower_ext, "opus") == 0) return "audio/opus";
+    
+    // Video
+    if (strcmp(lower_ext, "mp4") == 0) return "video/mp4";
+    if (strcmp(lower_ext, "webm") == 0) return "video/webm";
+    if (strcmp(lower_ext, "ogg") == 0) return "video/ogg";
+    if (strcmp(lower_ext, "avi") == 0) return "video/x-msvideo";
+    if (strcmp(lower_ext, "mov") == 0) return "video/quicktime";
+    if (strcmp(lower_ext, "wmv") == 0) return "video/x-ms-wmv";
+    if (strcmp(lower_ext, "flv") == 0) return "video/x-flv";
+    if (strcmp(lower_ext, "mkv") == 0) return "video/x-matroska";
+    if (strcmp(lower_ext, "m4v") == 0) return "video/x-m4v";
+    if (strcmp(lower_ext, "3gp") == 0) return "video/3gpp";
+    
+    // Fonts
+    if (strcmp(lower_ext, "ttf") == 0) return "font/ttf";
+    if (strcmp(lower_ext, "otf") == 0) return "font/otf";
+    if (strcmp(lower_ext, "woff") == 0) return "font/woff";
+    if (strcmp(lower_ext, "woff2") == 0) return "font/woff2";
+    if (strcmp(lower_ext, "eot") == 0) return "application/vnd.ms-fontobject";
+    
+    // Programming languages and data
+    if (strcmp(lower_ext, "c") == 0) return "text/x-c";
+    if (strcmp(lower_ext, "cpp") == 0 || strcmp(lower_ext, "cc") == 0) return "text/x-c++";
+    if (strcmp(lower_ext, "h") == 0) return "text/x-h";
+    if (strcmp(lower_ext, "java") == 0) return "text/x-java-source";
+    if (strcmp(lower_ext, "py") == 0) return "text/x-python";
+    if (strcmp(lower_ext, "rb") == 0) return "text/x-ruby";
+    if (strcmp(lower_ext, "go") == 0) return "text/x-go";
+    if (strcmp(lower_ext, "rs") == 0) return "text/x-rust";
+    if (strcmp(lower_ext, "php") == 0) return "text/x-php";
+    if (strcmp(lower_ext, "sh") == 0) return "text/x-shellscript";
+    if (strcmp(lower_ext, "yaml") == 0 || strcmp(lower_ext, "yml") == 0) return "text/yaml";
+    if (strcmp(lower_ext, "toml") == 0) return "text/toml";
+    if (strcmp(lower_ext, "ini") == 0) return "text/plain";
+    
+    // Other common types
+    if (strcmp(lower_ext, "exe") == 0) return "application/x-msdownload";
+    if (strcmp(lower_ext, "dll") == 0) return "application/x-msdownload";
+    if (strcmp(lower_ext, "deb") == 0) return "application/x-debian-package";
+    if (strcmp(lower_ext, "rpm") == 0) return "application/x-rpm";
+    if (strcmp(lower_ext, "dmg") == 0) return "application/x-apple-diskimage";
+    if (strcmp(lower_ext, "pkg") == 0) return "application/x-newton-compatible-pkg";
+    if (strcmp(lower_ext, "apk") == 0) return "application/vnd.android.package-archive";
+    
+    // Default fallback
+    return is_binary ? "application/octet-stream" : "text/plain";
 }
 
 
