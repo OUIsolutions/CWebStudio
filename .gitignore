@@ -1,74 +1,7 @@
-# Prerequisites
-*.d
-context
-out_folder
-CWebStudio_test.h
-src/imports/
 dependencies
 release
-current_teste.c
-objective.md
-.TreinAiCache
-*.pyc
-chalange.md
-.cache
-prev.md
-lua_debug.ua
-src/server/server_functions/globals.not_found.c
-src/hydratation/hydration/globals.hydration.c
-# Object files//
-*.o
-*.ko
-*.obj
-*.elf
-teste.py
-a.png
-current_test.c
-requisicao
-aaa.jpg
-# Linker output
-*.ilk
-*.map
-*.exp
-trash
-# Precompiled Headers
-*.gch
-*.pch
-*.png
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+a.out
 teste.c
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
-!build.exe
-.idea
-.vscode
+src/imports
+globals.hydration.c
+globals.not_found.c
