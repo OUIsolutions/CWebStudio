@@ -5,3 +5,4 @@ teste.c
 src/imports
 globals.hydration.c
 globals.not_found.c
+src/fdeclare.all.h
