@@ -1,9 +1,9 @@
 function main()
     install_dependencies()
     create_globals()
+    darwin.silverchain.remove("src")
 
     os.execute('mdeclare src --startswith "fdefine"  --endswith ".c"  --out src/fdeclare.all.h')
-    darwin.silverchain.remove("src")
     darwin.silverchain.generate({
         src = "src",
         tags = { "dep_declare", "macros", "types", "fdeclare","globals", "dep_define","fdefine" },
@@ -69,7 +69,7 @@ function main()
     only_definition = lincense .. only_definition
 
     darwin.dtw.write_file("release/CWebStudio.c", only_definition)
-
-    os.execute("zip -r release/CWebStudio.zip dependencies src build")
-
+    if not darwin.argv.one_of_args_exist("no_zip") then
+        os.execute("zip -r release/CWebStudio.zip dependencies src build")
+    end
 end

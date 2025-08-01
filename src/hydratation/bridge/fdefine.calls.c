@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 char *privateCWebHyDrationBridge_call_by_vaargss(CWebHyDrationBridge *self,const char *func_args,va_list  args){
