@@ -1,3 +1,0 @@
-
-
-CWebHydrationSearchResultNamespace newCWebHydrationSearchResultNamespace();

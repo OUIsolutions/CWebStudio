@@ -1,2 +1,0 @@
-
-CWebHydrationBridgeNamespace newCWebHydrationBridgetNamespace();

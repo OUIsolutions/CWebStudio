@@ -1,3 +1,0 @@
-
-
-CwebStringArrayModule newCwebStringArrayModule();
