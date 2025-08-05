@@ -1,2 +1,0 @@
-
-CwebServerModule newCwebServerModule();

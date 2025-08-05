@@ -1,2 +1,0 @@
-
-CWebHydrationActionsNamespace newCWebHydrationActionsNamespace();

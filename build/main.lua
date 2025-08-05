@@ -1,6 +1,16 @@
 function main()
     install_dependencies()
     create_globals()
+
+    local content = darwin.mdeclare.transform_dir({
+        dir="src",
+        startswith="fdefine",
+        endswith=".c",
+    })
+
+    darwin.dtw.write_file("src/fdeclare.all.h", content)
+    darwin.silverchain.remove("src/fdeclare.all.h")
+
     darwin.silverchain.generate({
         src = "src",
         tags = { "dep_declare", "macros", "types", "fdeclare","globals", "dep_define","fdefine" },
