@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 int private_CWebServer_run_server_in_single_process(CwebServer *self) {
@@ -64,7 +68,7 @@ int private_CWebServer_run_server_in_single_process(CwebServer *self) {
         );
 
         char client_ip[INET_ADDRSTRLEN] ={0};
-        #if defined(__linux__)
+        #if defined(__linux__) || defined(__APPLE__)
         Universal_inet_ntop(UNI_AF_INET, &(address.sin_addr), client_ip, INET_ADDRSTRLEN);
         #endif
         #if defined(_WIN32)

@@ -1,9 +1,13 @@
 
-#if defined(__linux__)
+#if defined(__linux__) || defined(__APPLE__)
 #include <sys/wait.h>
 #endif
 
-
+#if defined(__APPLE__)
+#define CWEB_LINUX_EMULATION
+#define __linux__
+#define __linux
+#endif
 
 #include <stdio.h>
 #include <sys/stat.h>
@@ -30,4 +34,9 @@
 #if !defined(UniversalGarbage_fdeclare) && !defined(CWEB_MOCK_UNIVERSAL_GARBAGE)
 #include "../../dependencies/UniversalGarbage.h"
 #define CWEB_UNIVERSAL_GARBAGE_DECLARATED
+#endif
+
+#if defined (CWEB_LINUX_EMULATION)
+#undef __linux__
+#undef __linux
 #endif

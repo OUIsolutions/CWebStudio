@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.typesC.h"
+//silver_chain_scope_end
 
  typedef struct CwebServer{
     int port;
@@ -5,7 +9,7 @@
     double client_timeout;
     int max_queue;
 
-    #if defined(__linux__)
+    #if defined(__linux__) || defined(__APPLE__)
         bool single_process;
     #endif
 

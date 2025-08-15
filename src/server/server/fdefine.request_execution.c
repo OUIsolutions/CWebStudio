@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 
@@ -81,7 +85,7 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
     cweb_print("Response created\n");
 
     int flag = 0;
-    #if defined(__linux__)
+    #if defined(__linux__) || defined(__APPLE__)
         flag = MSG_NOSIGNAL;
     #endif
 

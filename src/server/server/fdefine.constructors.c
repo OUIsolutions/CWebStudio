@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
  CwebServer  newCwebSever(int port , CwebHttpResponse *(*request_handler)(CwebHttpRequest *request)){
     struct CwebServer self = {0};
@@ -6,7 +10,7 @@
     self.client_timeout = 5;
     self.max_queue = 100;
 
-    #if defined(__linux__)
+    #if defined(__linux__) || defined(__APPLE__)
         self.single_process = false;
     #endif
 
@@ -21,7 +25,7 @@
     return self;
 }
 
-#if defined(__linux__)
+#if defined(__linux__) || defined(__APPLE__)
 
 int CwebServer_start(CwebServer *self){
     cweb_static_folder = self->static_folder;
