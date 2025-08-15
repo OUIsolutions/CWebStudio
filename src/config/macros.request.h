@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_declare.h"
+//silver_chain_scope_end
 #define INVALID_HTTP -1
 #define MAX_HEADER_SIZE_CODE -2
 #define MAX_HEADER_LEN 20000

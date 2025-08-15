@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 CwebDict *newCwebDict(){
     CwebDict *self = (CwebDict *)malloc(sizeof(struct CwebDict));
     self->keys_vals = (CwebKeyVal**)malloc(1);

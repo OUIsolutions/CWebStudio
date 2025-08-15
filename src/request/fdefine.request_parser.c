@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "../imports/imports.dep_define.h"
+//silver_chain_scope_end
 
 
 void private_CwebHttpRequest_interpret_query_params(struct CwebHttpRequest *self, const char *query_params){
@@ -262,7 +266,7 @@ int  CwebHttpRequest_parse_http_request(struct CwebHttpRequest *self){
             return MAX_HEADER_SIZE_CODE;
         }
         int flag = 0;
-        #if defined(__linux__)
+        #if defined(__linux__) || defined(__APPLE__)
             flag = UNI_MSG_WAITALL;
         #endif
         ssize_t res = Universal_recv(self->socket, &raw_entries[i], sizeof(unsigned char), flag);
