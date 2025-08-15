@@ -1,6 +1,6 @@
 # CWebStudio
 
-![CWebStudio Logo](https://img.shields.io/badge/CWebStudio-4.0.0-blue?style=for-the-badge&logo=c)
+![CWebStudio Logo](https://img.shields.io/badge/CWebStudio-5.0.0-blue?style=for-the-badge&logo=c)
 [![GitHub Release](https://img.shields.io/github/release/OUIsolutions/CWebStudio.svg?style=for-the-badge)](https://github.com/OUIsolutions/CWebStudio/releases)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://github.com/OUIsolutions/CWebStudio/blob/main/LICENSE)
 
@@ -24,10 +24,10 @@
 
 | Item | Description |
 |------|-------------|
-| **[CWebStudioOne.c](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudioOne.c)** | CWebStudio One file (All-in-one solution) |
-| **[CWebStudio.c](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.c)** | Core Definitions |
-| **[CWebStudio.h](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.h)** | Header File |
-| **[CWebStudio.zip](https://github.com/OUIsolutions/CWebStudio/releases/download/4.0.0/CWebStudio.zip)** | Full Folder (Includes `src/one.c`) |
+| **[CWebStudioOne.c](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.0/CWebStudioOne.c)** | CWebStudio One file (All-in-one solution) |
+| **[CWebStudio.c](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.0/CWebStudio.c)** | Core Definitions |
+| **[CWebStudio.h](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.0/CWebStudio.h)** | Header File |
+| **[CWebStudio.zip](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.0/CWebStudio.zip)** | Full Folder (Includes `src/one.c`) |
 
 ---
 
