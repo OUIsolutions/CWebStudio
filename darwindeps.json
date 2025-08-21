@@ -1,20 +1,15 @@
 [
     {
-        "type": "gitrelease",
-        "cli": "curl",
-        "repo": "DaveGamble/cJSON",
-        "file": "cJSON.c",
-        "dest": "dependencies/cJSON.c",
-        "tag": "v1.7.18"
+        "type": "url",
+        "url":"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/heads/master/cJSON.c",
+        "dest":"dependencies/cJSON.c"
     },
     {
-        "type": "gitrelease",
-        "cli": "curl",
-        "repo": "DaveGamble/cJSON",
-        "file": "cJSON.h",
-        "dest": "dependencies/cJSON.h",
-        "tag": "v1.7.18"
+        "type": "url",
+        "url":"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/heads/master/cJSON.h",
+        "dest":"dependencies/cJSON.h"
     },
+
     {
         "type": "gitrelease",
         "cli": "curl",
