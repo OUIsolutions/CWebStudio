@@ -12,8 +12,8 @@ function build_definition()
 
 end 
 darwin.add_recipe({
-    name="definition",
-    description="Builds the CWebStudioOne.c file with the definition of the project",
+    name="onefile",
+    description="Builds the CWebStudioOne.c file with all the dependencies inside",
     callback=build_definition,
     outs={"release/CWebStudioOne.c"}
 })

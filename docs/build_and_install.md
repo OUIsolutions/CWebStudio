@@ -41,11 +41,15 @@ curl -L https://github.com/OUIsolutions/Darwin/releases/download/0.2.0/darwin.ou
 
 Then you can build the project with in the root dir of the project:
 ```bash
-darwin run_blueprint build/ --mode folder
+darwin run_blueprint --target all
 ```
+of if you are building in dir mode , you can just perform the silverchain organization and macro builds with:
 
 It will generate all the **releases** in the **/release** dir.
 
+```bash
+darwin run_blueprint --target dir_project
+```
 
 
 ### Mocking dependencies or dependencies implementations
