@@ -1,4 +1,6 @@
 
+
+
 function convert_to_number(str)
     local seq = {}
     for i=1,#str do
@@ -40,3 +42,30 @@ function create_globals()
 
     darwin.dtw.write_file("src/server/server_functions/globals.not_found.c", text)
 end
+
+
+function src_build()
+    create_globals()
+    local content = darwin.mdeclare.transform_dir({
+        dir="src",
+        startswith="fdefine",
+        endswith=".c",
+    })
+
+    darwin.dtw.write_file("src/fdeclare.all.h", content)
+    darwin.silverchain.remove("src/fdeclare.all.h")
+
+    darwin.silverchain.generate({
+        src = "src",
+        tags = { "dep_declare", "macros", "types", "fdeclare","globals", "dep_define","fdefine" },
+        project_short_cut = "CWebStudio",
+        implement_main = false
+    })
+end 
+
+darwin.add_recipe({
+    name="dir_project",
+    description="Builds the src, with embed vars and perform silverchain organization",
+    callback=src_build,
+    outs={}
+})
