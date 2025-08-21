@@ -25,7 +25,6 @@
 | Item | Description |
 |------|-------------|
 | **[CWebStudioOne.c](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.0/CWebStudioOne.c)** | CWebStudio One file (All-in-one solution) |
-| **[CWebStudio.c](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.0/CWebStudio.c)** | Core Definitions |
 | **[CWebStudio.h](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.0/CWebStudio.h)** | Header File |
 | **[CWebStudio.zip](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.0/CWebStudio.zip)** | Full Folder (Includes `src/one.c`) |
 
