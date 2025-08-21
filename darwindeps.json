@@ -1,0 +1,50 @@
+[
+  {
+    "type": "repo",
+    "cli": "curl -L https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.c -o dependencies/cJSON.c",
+    "repo": "cJSON",
+    "file": "cJSON.c"
+  },
+  {
+    "type": "repo",
+    "cli": "curl -L https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.h -o dependencies/cJSON.h",
+    "repo": "cJSON",
+    "file": "cJSON.h"
+  },
+  {
+    "type": "repo",
+    "cli": "curl -L https://github.com/SamuelHenriqueDeMoraisVitrio/UniversalSocket/releases/download/v0.3.0/UniversalSocket.c -o dependencies/UniversalSocket.c",
+    "repo": "UniversalSocket",
+    "file": "UniversalSocket.c"
+  },
+  {
+    "type": "repo",
+    "cli": "curl -L https://github.com/SamuelHenriqueDeMoraisVitrio/UniversalSocket/releases/download/v0.3.0/UniversalSocket.h -o dependencies/UniversalSocket.h",
+    "repo": "UniversalSocket",
+    "file": "UniversalSocket.h"
+  },
+  {
+    "type": "repo",
+    "cli": "curl -L https://github.com/OUIsolutions/Universal-Garbage-Colector/releases/download/3.0.0/UniversalGarbage.c -o dependencies/UniversalGarbage.c",
+    "repo": "Universal-Garbage-Colector",
+    "file": "UniversalGarbage.c"
+  },
+  {
+    "type": "repo",
+    "cli": "curl -L https://github.com/OUIsolutions/Universal-Garbage-Colector/releases/download/3.0.0/UniversalGarbage.h -o dependencies/UniversalGarbage.h",
+    "repo": "Universal-Garbage-Colector",
+    "file": "UniversalGarbage.h"
+  },
+  {
+    "type": "repo",
+    "cli": "curl -L https://github.com/OUIsolutions/CTextEngine/releases/download/3.0.000/CTextEngine.h -o dependencies/CTextEngine.h",
+    "repo": "CTextEngine",
+    "file": "CTextEngine.h"
+  },
+  {
+    "type": "repo",
+    "cli": "curl -L https://github.com/OUIsolutions/CTextEngine/releases/download/3.0.000/CTextEngine.c -o dependencies/CTextEngine.c",
+    "repo": "CTextEngine",
+    "file": "CTextEngine.c"
+  }
+]
