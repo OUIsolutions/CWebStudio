@@ -1,5 +1,4 @@
 function main()
-    install_dependencies()
     create_globals()
 
     local content = darwin.mdeclare.transform_dir({
