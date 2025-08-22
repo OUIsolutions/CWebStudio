@@ -44,11 +44,10 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
     }
 
 
-    if (self->allow_cors)
-     {
+    
+if (!response && self->allow_cors){
         if (strcmp(request->method,"OPTIONS") == 0) {
-       
-
+    
         response = newCwebHttpResponse();
         CwebHttpResponse_add_header(response,"Access-Control-Allow-Origin","*");
         CwebHttpResponse_add_header(response,"Access-Control-Allow-Methods","*");
@@ -66,16 +65,17 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
     if(!response){
         //lambda que o usuario passa
         response = self->request_handler(request);
+        if(self->allow_cors){
+            // Adiciona os cabeçalhos CORS à resposta
+            CwebHttpResponse_add_header(response,"Access-Control-Allow-Origin","*");
+            CwebHttpResponse_add_header(response,"Access-Control-Allow-Methods","*");
+            CwebHttpResponse_add_header(response,"Access-Control-Allow-Headers","*"); 
+        }
     }
 
-    if(response && self->allow_cors){
-        // Adiciona os cabeçalhos CORS à resposta
-         CwebHttpResponse_add_header(response,"Access-Control-Allow-Origin","*");
-        CwebHttpResponse_add_header(response,"Access-Control-Allow-Methods","*");
-        CwebHttpResponse_add_header(response,"Access-Control-Allow-Headers","*"); 
-       }
-    cweb_print("executed client lambda\n");
 
+
+    
 
     //means that the main function respond nothing
     if (response == NULL){
