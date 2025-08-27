@@ -1,12 +1,12 @@
 [
     {
         "type": "url",
-        "url":"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/heads/master/cJSON.c",
+        "url":"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.c",
         "dest":"dependencies/cJSON.c"
     },
     {
         "type": "url",
-        "url":"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/heads/master/cJSON.h",
+        "url":"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.h",
         "dest":"dependencies/cJSON.h"
     },
 
@@ -14,12 +14,14 @@
         "type": "gitrelease",
         "repo": "SamuelHenriqueDeMoraisVitrio/UniversalSocket",
         "file": "UniversalSocket.c",
+        "tag":"v0.3.0",
         "dest": "dependencies/UniversalSocket.c"
     },
     {
         "type": "gitrelease",
         "repo": "SamuelHenriqueDeMoraisVitrio/UniversalSocket",
         "file": "UniversalSocket.h",
+        "tag":"v0.3.0",
         "dest": "dependencies/UniversalSocket.h"
     },
     {
