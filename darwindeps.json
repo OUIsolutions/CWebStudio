@@ -12,42 +12,36 @@
 
     {
         "type": "gitrelease",
-        "cli": "curl",
         "repo": "SamuelHenriqueDeMoraisVitrio/UniversalSocket",
         "file": "UniversalSocket.c",
         "dest": "dependencies/UniversalSocket.c"
     },
     {
         "type": "gitrelease",
-        "cli": "curl",
         "repo": "SamuelHenriqueDeMoraisVitrio/UniversalSocket",
         "file": "UniversalSocket.h",
         "dest": "dependencies/UniversalSocket.h"
     },
     {
         "type": "gitrelease",
-        "cli": "curl",
         "repo": "OUIsolutions/Universal-Garbage-Colector",
         "file": "UniversalGarbage.c",
         "dest": "dependencies/UniversalGarbage.c"
     },
     {
         "type": "gitrelease",
-        "cli": "curl",
         "repo": "OUIsolutions/Universal-Garbage-Colector",
         "file": "UniversalGarbage.h",
         "dest": "dependencies/UniversalGarbage.h"
     },
     {
         "type": "gitrelease",
-        "cli": "curl",
         "repo": "OUIsolutions/CTextEngine",
         "file": "CTextEngine.h",
         "dest": "dependencies/CTextEngine.h"
     },
     {
         "type": "gitrelease",
-        "cli": "curl",
         "repo": "OUIsolutions/CTextEngine",
         "file": "CTextEngine.c",
         "dest": "dependencies/CTextEngine.c"
