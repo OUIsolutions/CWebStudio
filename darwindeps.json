@@ -28,24 +28,28 @@
         "type": "gitrelease",
         "repo": "OUIsolutions/Universal-Garbage-Colector",
         "file": "UniversalGarbage.c",
+        "tag":"3.0.0",
         "dest": "dependencies/UniversalGarbage.c"
     },
     {
         "type": "gitrelease",
         "repo": "OUIsolutions/Universal-Garbage-Colector",
         "file": "UniversalGarbage.h",
+        "tag":"3.0.0",
         "dest": "dependencies/UniversalGarbage.h"
     },
     {
         "type": "gitrelease",
         "repo": "OUIsolutions/CTextEngine",
         "file": "CTextEngine.h",
+        "tag":"3.0.000",
         "dest": "dependencies/CTextEngine.h"
     },
     {
         "type": "gitrelease",
         "repo": "OUIsolutions/CTextEngine",
         "file": "CTextEngine.c",
+        "tag":"3.0.000",
         "dest": "dependencies/CTextEngine.c"
     }
 ]
