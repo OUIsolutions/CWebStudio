@@ -44,16 +44,38 @@ void private_CWebServer_execute_request(CwebServer *self,int socket,const char *
     }
 
 
+    
+if (!response && self->allow_cors){
+        if (strcmp(request->method,"OPTIONS") == 0) {
+    
+        response = newCwebHttpResponse();
+        CwebHttpResponse_add_header(response,"Access-Control-Allow-Origin","*");
+        CwebHttpResponse_add_header(response,"Access-Control-Allow-Methods","*");
+        CwebHttpResponse_add_header(response,"Access-Control-Allow-Headers","*");
+        CwebHttpResponse_set_content(response,"OK",2);
+        response->status_code = 200;
+
+            cweb_print("CORS preflight request handled\n");
+         }
+     }
+    
+   
+
+
     if(!response){
         //lambda que o usuario passa
         response = self->request_handler(request);
+        if(self->allow_cors){
+            // Adiciona os cabeçalhos CORS à resposta
+            CwebHttpResponse_add_header(response,"Access-Control-Allow-Origin","*");
+            CwebHttpResponse_add_header(response,"Access-Control-Allow-Methods","*");
+            CwebHttpResponse_add_header(response,"Access-Control-Allow-Headers","*"); 
+        }
     }
 
-    if(response && self->allow_cors){
-        private_cweb_generate_cors_response(response);
-    }
-    cweb_print("executed client lambda\n");
 
+
+    
 
     //means that the main function respond nothing
     if (response == NULL){
