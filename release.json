@@ -1,0 +1,11 @@
+{
+	"assets":	["release/CWebStudio.h", "release/CWebStudioOne.c"],
+	"description":	"new release of CWeb Studio available",
+	"release":	"{BIG_VERSION}.{SMALL_VERSION}.{PATCH_VERSION}",
+	"replacers":	{
+		"BIG_VERSION":	"0",
+		"PATCH_VERSION":	"4",
+		"SMALL_VERSION":	"18"
+	},
+	"tag":	"{BIG_VERSION}.{SMALL_VERSION}.{PATCH_VERSION}"
+}
