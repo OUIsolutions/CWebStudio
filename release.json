@@ -3,9 +3,9 @@
 	"description":	"new release of CWeb Studio available",
 	"release":	"{BIG_VERSION}.{SMALL_VERSION}.{PATCH_VERSION}",
 	"replacers":	{
-		"BIG_VERSION":	"0",
-		"PATCH_VERSION":	"4",
-		"SMALL_VERSION":	"18"
+		"BIG_VERSION":	"5",
+		"PATCH_VERSION":	"0",
+		"SMALL_VERSION":	"1"
 	},
 	"tag":	"{BIG_VERSION}.{SMALL_VERSION}.{PATCH_VERSION}"
 }
