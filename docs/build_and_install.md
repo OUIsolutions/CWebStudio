@@ -41,6 +41,7 @@ curl -L https://github.com/OUIsolutions/Darwin/releases/download/0.13.0/darwin_l
 
 Then you can build the project with in the root dir of the project:
 ```bash
+darwin install 
 darwin run_blueprint --target all
 ```
 of if you are building in dir mode , you can just perform the silverchain organization and macro builds with:
@@ -48,6 +49,7 @@ of if you are building in dir mode , you can just perform the silverchain organi
 It will generate all the **releases** in the **/release** dir.
 
 ```bash
+darwin install 
 darwin run_blueprint --target dir_project
 ```
 
