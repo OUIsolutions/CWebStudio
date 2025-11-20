@@ -1,55 +1,51 @@
-[
-    {
-        "type": "url",
-        "url":"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.c",
-        "dest":"dependencies/cJSON.c"
-    },
-    {
-        "type": "url",
-        "url":"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.h",
-        "dest":"dependencies/cJSON.h"
-    },
-
-    {
-        "type": "gitrelease",
-        "repo": "SamuelHenriqueDeMoraisVitrio/UniversalSocket",
-        "file": "UniversalSocket.c",
-        "tag":"v0.3.0",
-        "dest": "dependencies/UniversalSocket.c"
-    },
-    {
-        "type": "gitrelease",
-        "repo": "SamuelHenriqueDeMoraisVitrio/UniversalSocket",
-        "file": "UniversalSocket.h",
-        "tag":"v0.3.0",
-        "dest": "dependencies/UniversalSocket.h"
-    },
-    {
-        "type": "gitrelease",
-        "repo": "OUIsolutions/Universal-Garbage-Colector",
-        "file": "UniversalGarbage.c",
-        "tag":"3.0.0",
-        "dest": "dependencies/UniversalGarbage.c"
-    },
-    {
-        "type": "gitrelease",
-        "repo": "OUIsolutions/Universal-Garbage-Colector",
-        "file": "UniversalGarbage.h",
-        "tag":"3.0.0",
-        "dest": "dependencies/UniversalGarbage.h"
-    },
-    {
-        "type": "gitrelease",
-        "repo": "OUIsolutions/CTextEngine",
-        "file": "CTextEngine.h",
-        "tag":"3.0.000",
-        "dest": "dependencies/CTextEngine.h"
-    },
-    {
-        "type": "gitrelease",
-        "repo": "OUIsolutions/CTextEngine",
-        "file": "CTextEngine.c",
-        "tag":"3.0.000",
-        "dest": "dependencies/CTextEngine.c"
-    }
-]
+[{
+		"dest":	"dependencies/cJSON.c",
+		"type":	"url",
+		"url":	"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.c"
+	}, {
+		"dest":	"dependencies/cJSON.h",
+		"type":	"url",
+		"url":	"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.h"
+	}, {
+		"dest":	"dependencies/UniversalSocket.c",
+		"file":	"UniversalSocket.c",
+		"repo":	"SamuelHenriqueDeMoraisVitrio/UniversalSocket",
+		"tag":	"v0.3.0",
+		"type":	"gitrelease",
+		"updated_at":	"2025-08-15T17:58:35Z"
+	}, {
+		"dest":	"dependencies/UniversalSocket.h",
+		"file":	"UniversalSocket.h",
+		"repo":	"SamuelHenriqueDeMoraisVitrio/UniversalSocket",
+		"tag":	"v0.3.0",
+		"type":	"gitrelease",
+		"updated_at":	"2025-08-15T17:58:36Z"
+	}, {
+		"dest":	"dependencies/UniversalGarbage.c",
+		"file":	"UniversalGarbage.c",
+		"repo":	"OUIsolutions/Universal-Garbage-Colector",
+		"tag":	"3.0.0",
+		"type":	"gitrelease",
+		"updated_at":	"2025-03-28T23:44:13Z"
+	}, {
+		"dest":	"dependencies/UniversalGarbage.h",
+		"file":	"UniversalGarbage.h",
+		"repo":	"OUIsolutions/Universal-Garbage-Colector",
+		"tag":	"3.0.0",
+		"type":	"gitrelease",
+		"updated_at":	"2025-03-28T23:44:13Z"
+	}, {
+		"dest":	"dependencies/CTextEngine.h",
+		"file":	"CTextEngine.h",
+		"repo":	"OUIsolutions/CTextEngine",
+		"tag":	"3.0.000",
+		"type":	"gitrelease",
+		"updated_at":	"2025-03-08T06:54:29Z"
+	}, {
+		"dest":	"dependencies/CTextEngine.c",
+		"file":	"CTextEngine.c",
+		"repo":	"OUIsolutions/CTextEngine",
+		"tag":	"3.0.000",
+		"type":	"gitrelease",
+		"updated_at":	"2025-03-08T06:54:30Z"
+	}]

@@ -3,11 +3,6 @@
 #include <sys/wait.h>
 #endif
 
-#if defined(__APPLE__)
-#define CWEB_LINUX_EMULATION
-#define __linux__
-#define __linux
-#endif
 
 #include <stdio.h>
 #include <sys/stat.h>
@@ -36,7 +31,3 @@
 #define CWEB_UNIVERSAL_GARBAGE_DECLARATED
 #endif
 
-#if defined (CWEB_LINUX_EMULATION)
-#undef __linux__
-#undef __linux
-#endif

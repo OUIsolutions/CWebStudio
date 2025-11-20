@@ -3,12 +3,6 @@
 #include "../imports/imports.globals.h"
 //silver_chain_scope_end
 
-#if defined(__APPLE__)
-#define CWEB_LINUX_EMULATION
-#define __linux__
-#define __linux
-#endif
-
 
 #if !defined(CWEB_MOCK_CTEXT_ENGINE_DEFINE) && defined(CWEB_CTEXT_ENGINE_DECLARATED)
 #include "../../dependencies/CTextEngine.c"
@@ -26,9 +20,4 @@
 
 #if !defined(CWEB_MOCK_UNIVERSAL_GARBAGE_DEFINE) && defined(CWEB_UNIVERSAL_GARBAGE_DECLARATED)
 #include "../../dependencies/UniversalGarbage.c"
-#endif
-
-#if defined (CWEB_LINUX_EMULATION)
-#undef __linux__
-#undef __linux
 #endif
