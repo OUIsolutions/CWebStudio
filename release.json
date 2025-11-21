@@ -5,7 +5,7 @@
 	"replacers":	{
 		"BIG_VERSION":	"5",
 		"PATCH_VERSION":	"0",
-		"SMALL_VERSION":	"1"
+		"SMALL_VERSION":	"2"
 	},
 	"tag":	"{BIG_VERSION}.{SMALL_VERSION}.{PATCH_VERSION}"
 }
