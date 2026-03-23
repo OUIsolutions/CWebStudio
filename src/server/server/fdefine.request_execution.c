@@ -52,7 +52,7 @@ if (!response && self->allow_cors){
         CwebHttpResponse_add_header(response,"Access-Control-Allow-Origin","*");
         CwebHttpResponse_add_header(response,"Access-Control-Allow-Methods","*");
         CwebHttpResponse_add_header(response,"Access-Control-Allow-Headers","*");
-        CwebHttpResponse_set_content(response,"OK",2);
+        CwebHttpResponse_set_content(response,(unsigned char *)"OK",2);
         response->status_code = 200;
 
             cweb_print("CORS preflight request handled\n");
