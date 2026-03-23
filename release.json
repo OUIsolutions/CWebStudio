@@ -1,11 +1,11 @@
 {
 	"assets":	["release/CWebStudio.h", "release/CWebStudioOne.c"],
-	"description":	"new release of CWeb Studio available",
+	"description":	"Fix mac os warnings",
 	"release":	"{BIG_VERSION}.{SMALL_VERSION}.{PATCH_VERSION}",
 	"replacers":	{
 		"BIG_VERSION":	"5",
 		"PATCH_VERSION":	"0",
-		"SMALL_VERSION":	"2"
+		"SMALL_VERSION":	"4"
 	},
 	"tag":	"{BIG_VERSION}.{SMALL_VERSION}.{PATCH_VERSION}"
 }
