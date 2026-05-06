@@ -1,11 +1,17 @@
 [{
-		"dest":	"dependencies/cJSON.c",
-		"type":	"url",
-		"url":	"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.c"
-	}, {
 		"dest":	"dependencies/cJSON.h",
-		"type":	"url",
-		"url":	"https://raw.githubusercontent.com/DaveGamble/cJSON/refs/tags/v1.7.18/cJSON.h"
+		"file":	"cJSON.h",
+		"repo":	"OUIsolutions/cJSON",
+		"tag":	"1.17.9",
+		"type":	"gitrelease",
+		"updated_at":	"2025-10-28T02:32:22Z"
+	}, {
+		"dest":	"dependencies/cJSON.c",
+		"file":	"cJSON.c",
+		"repo":	"OUIsolutions/cJSON",
+		"tag":	"1.17.9",
+		"type":	"gitrelease",
+		"updated_at":	"2025-10-28T02:55:40Z"
 	}, {
 		"dest":	"dependencies/UniversalSocket.c",
 		"file":	"UniversalSocket.c",
