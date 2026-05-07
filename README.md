@@ -24,9 +24,9 @@
 
 | Item | Description |
 |------|-------------|
-| **[CWebStudioOne.c](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.4/CWebStudioOne.c)** | CWebStudio One file (All-in-one solution) |
-| **[CWebStudio.h](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.4/CWebStudio.h)** | Header File |
-| **[CWebStudio.zip](https://github.com/OUIsolutions/CWebStudio/releases/download/5.0.4/CWebStudio.zip)** | Full Folder (Includes `src/one.c`) |
+| **[CWebStudioOne.c](https://github.com/OUIsolutions/CWebStudio/releases/download/5.5.0/CWebStudioOne.c)** | CWebStudio One file (All-in-one solution) |
+| **[CWebStudio.h](https://github.com/OUIsolutions/CWebStudio/releases/download/5.5.0/CWebStudio.h)** | Header File |
+| **[CWebStudio.zip](https://github.com/OUIsolutions/CWebStudio/releases/download/5.5.0/CWebStudio.zip)** | Full Folder (Includes `src/one.c`) |
 
 ---
 
